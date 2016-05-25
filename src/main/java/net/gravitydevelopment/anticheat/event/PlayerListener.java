@@ -197,6 +197,7 @@ public class PlayerListener extends EventListener {
         Player player = event.getPlayer();
         PlayerInventory inv = player.getInventory();
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+        	// TODO: offhand (1.9)
             Material m = inv.getItemInHand().getType();
             if (m == Material.BOW) {
                 getBackend().logBowWindUp(player);
@@ -313,7 +314,7 @@ public class PlayerListener extends EventListener {
                     log(result.getMessage(), player, CheckType.SPRINT);
                 }
             }
-            if (getCheckManager().willCheckQuick(player, CheckType.FLY) && !player.isFlying()) {
+            if (getCheckManager().willCheckQuick(player, CheckType.FLY) && !player.isFlying() && !player.isGliding() /*TODO: ElytraFly check, this is a quick workaround */) {
                 CheckResult result = getBackend().checkFlight(player, distance);
                 if (result.failed()) {
                     if (!silentMode()) {
@@ -343,7 +344,7 @@ public class PlayerListener extends EventListener {
                 if (result.failed()) {
                     if (!silentMode()) {
                         event.setTo(user.getGoodLocation(from.clone()));
-                        player.damage(1); // I added this in here so the player would still receive damage.
+                        /*TODO: player.damage(1); better system for this, too exploitable*/
                     }
                     log(result.getMessage(), player, CheckType.NOFALL);
                 }
@@ -382,6 +383,7 @@ public class PlayerListener extends EventListener {
                             changed = true;
                         }
                     }
+                    TODO
                     */
                 }
                 if (getCheckManager().willCheckQuick(player, CheckType.WATER_WALK)) {
