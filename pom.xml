@@ -11,15 +11,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <repositories>
-        <repository>
-            <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/repositories/public/</url>
-        </repository>
-        <repository>
-            <id>comphenix-repo</id>
-            <name>Comphenix Repository</name>
-            <url>http://repo.comphenix.net/content/groups/public</url>
-        </repository>
+    	<repository>
+        	<id>spigot-repo</id>
+        	<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+   		</repository>
+  <repository>
+    <id>dmulloy2-repo</id>
+    <url>http://repo.dmulloy2.net/content/groups/public/</url>
+  </repository>
+  <!-- And so on -->
         <repository>
             <id>gravity-repo</id>
             <url>http://repo.gravitydevelopment.net</url>
@@ -58,7 +58,7 @@
                 </configuration>
             </plugin>
         </plugins>
-        <finalName>AntiCheat</finalName>
+        <finalName>AntiCheatReloaded</finalName>
         <extensions>
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
@@ -87,25 +87,17 @@
         </profile>
     </profiles>
     <dependencies>
-        <dependency>
+    	<dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.7.2-R0.3</version>
-            <type>jar</type>
+            <version>1.9.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.comphenix.protocol</groupId>
-            <artifactId>ProtocolLib</artifactId>
-            <version>2.7.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.gravitydevelopment.updater</groupId>
-            <artifactId>updater</artifactId>
-            <version>2.1</version>
-            <scope>compile</scope>
-        </dependency>
+    	</dependency>
+  <dependency>
+    <groupId>com.comphenix.protocol</groupId>
+    <artifactId>ProtocolLib-API</artifactId>
+    <version>4.0</version>
+  </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

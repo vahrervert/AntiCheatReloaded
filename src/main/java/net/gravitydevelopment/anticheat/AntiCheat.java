@@ -18,27 +18,30 @@
 
 package net.gravitydevelopment.anticheat;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import com.comphenix.protocol.ProtocolLibrary;
+
 import net.gravitydevelopment.anticheat.command.CommandHandler;
 import net.gravitydevelopment.anticheat.config.Configuration;
-import net.gravitydevelopment.anticheat.event.*;
+import net.gravitydevelopment.anticheat.event.BlockListener;
+import net.gravitydevelopment.anticheat.event.EntityListener;
+import net.gravitydevelopment.anticheat.event.InventoryListener;
+import net.gravitydevelopment.anticheat.event.PlayerListener;
+import net.gravitydevelopment.anticheat.event.VehicleListener;
 import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
 import net.gravitydevelopment.anticheat.manage.PacketManager;
 import net.gravitydevelopment.anticheat.util.User;
 import net.gravitydevelopment.anticheat.util.Utilities;
 import net.gravitydevelopment.anticheat.xray.XRayListener;
 import net.gravitydevelopment.anticheat.xray.XRayTracker;
-import net.gravitydevelopment.updater.Updater;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AntiCheat extends JavaPlugin {
 
@@ -71,7 +74,6 @@ public class AntiCheat extends JavaPlugin {
         setupXray();
         setupEvents();
         setupCommands();
-        setupUpdater();
         // setupProtocol(); TODO
         // Enterprise must come before levels
         setupEnterprise();
@@ -81,8 +83,12 @@ public class AntiCheat extends JavaPlugin {
             public void run() {
                 if (Bukkit.getPluginManager().getPlugin("NoCheatPlus") != null) {
                     getLogger().severe("You are also running NoCheatPlus!");
-                    getLogger().severe("NoCheatPlus has been known to conflict with AntiCheat's results and create false cheat detections.");
+                    getLogger().severe("Multiple anticheats create false cheat detections.");
                     getLogger().severe("Please remove or disable NoCheatPlus to silence this warning.");
+                }else if (Bukkit.getPluginManager().getPlugin("AAC") != null) {
+                    getLogger().severe("You are also running AAC!");
+                    getLogger().severe("Multiple anticheats create false cheat detections.");
+                    getLogger().severe("Please remove or disable AAC to silence this warning.");
                 }
             }
         }, 40L);
@@ -145,25 +151,6 @@ public class AntiCheat extends JavaPlugin {
     private void setupCommands() {
         getCommand("anticheat").setExecutor(new CommandHandler());
         verboseLog("Registered commands.");
-    }
-
-    private void setupUpdater() {
-        if (config.getConfig().autoUpdate.getValue()) {
-            final File file = this.getFile();
-            final Plugin plugin = this;
-            getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
-                @Override
-                public void run() {
-                    verboseLog("Checking for a new update...");
-                    Updater updater = new Updater(plugin, PROJECT_ID, file, Updater.UpdateType.DEFAULT, false);
-                    update = updater.getResult() == Updater.UpdateResult.SUCCESS;
-                    verboseLog("Update available: " + update);
-                    if (update) {
-                        updateDetails = updater.getLatestName() + " for " + updater.getLatestGameVersion();
-                    }
-                }
-            });
-        }
     }
 
     private void setupConfig() {
