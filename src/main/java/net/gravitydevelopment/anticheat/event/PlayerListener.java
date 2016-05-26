@@ -25,6 +25,8 @@ import net.gravitydevelopment.anticheat.check.CheckResult;
 import net.gravitydevelopment.anticheat.util.Distance;
 import net.gravitydevelopment.anticheat.util.Permission;
 import net.gravitydevelopment.anticheat.util.Utilities;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -314,7 +316,7 @@ public class PlayerListener extends EventListener {
                     log(result.getMessage(), player, CheckType.SPRINT);
                 }
             }
-            if (getCheckManager().willCheckQuick(player, CheckType.FLY) && !player.isFlying() && !player.isGliding() /*TODO: ElytraFly check, this is a quick workaround */) {
+            if (getCheckManager().willCheckQuick(player, CheckType.FLY) && !player.isFlying() && (Bukkit.getVersion().contains("1.9") && !player.isGliding()) /*TODO: ElytraFly check, this is a quick workaround */) {
                 CheckResult result = getBackend().checkFlight(player, distance);
                 if (result.failed()) {
                     if (!silentMode()) {
