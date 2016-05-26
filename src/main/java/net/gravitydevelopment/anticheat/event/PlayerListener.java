@@ -18,14 +18,6 @@
 
 package net.gravitydevelopment.anticheat.event;
 
-import net.gravitydevelopment.anticheat.AntiCheat;
-import net.gravitydevelopment.anticheat.check.CheckType;
-import net.gravitydevelopment.anticheat.util.User;
-import net.gravitydevelopment.anticheat.check.CheckResult;
-import net.gravitydevelopment.anticheat.util.Distance;
-import net.gravitydevelopment.anticheat.util.Permission;
-import net.gravitydevelopment.anticheat.util.Utilities;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -38,9 +30,35 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerBedLeaveEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
+import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.inventory.PlayerInventory;
+
+import net.gravitydevelopment.anticheat.AntiCheat;
+import net.gravitydevelopment.anticheat.check.CheckResult;
+import net.gravitydevelopment.anticheat.check.CheckType;
+import net.gravitydevelopment.anticheat.check.movement.FlightCheck;
+import net.gravitydevelopment.anticheat.util.Distance;
+import net.gravitydevelopment.anticheat.util.Permission;
+import net.gravitydevelopment.anticheat.util.User;
+import net.gravitydevelopment.anticheat.util.Utilities;
 
 public class PlayerListener extends EventListener {
 
@@ -317,7 +335,7 @@ public class PlayerListener extends EventListener {
                 }
             }
             if (getCheckManager().willCheckQuick(player, CheckType.FLY) && !player.isFlying() && (Bukkit.getVersion().contains("1.9") && !player.isGliding()) /*TODO: ElytraFly check, this is a quick workaround */) {
-                CheckResult result = getBackend().checkFlight(player, distance);
+                CheckResult result = FlightCheck.runCheck(player, distance);
                 if (result.failed()) {
                     if (!silentMode()) {
                         event.setTo(user.getGoodLocation(from.clone()));

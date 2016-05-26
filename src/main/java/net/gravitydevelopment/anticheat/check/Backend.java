@@ -18,14 +18,12 @@
 
 package net.gravitydevelopment.anticheat.check;
 
-import net.gravitydevelopment.anticheat.AntiCheat;
-import net.gravitydevelopment.anticheat.config.Configuration;
-import net.gravitydevelopment.anticheat.config.providers.Lang;
-import net.gravitydevelopment.anticheat.config.providers.Magic;
-import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
-import net.gravitydevelopment.anticheat.util.User;
-import net.gravitydevelopment.anticheat.util.Distance;
-import net.gravitydevelopment.anticheat.util.Utilities;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -38,7 +36,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
+import net.gravitydevelopment.anticheat.AntiCheat;
+import net.gravitydevelopment.anticheat.check.movement.FlightCheck;
+import net.gravitydevelopment.anticheat.config.Configuration;
+import net.gravitydevelopment.anticheat.config.providers.Lang;
+import net.gravitydevelopment.anticheat.config.providers.Magic;
+import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
+import net.gravitydevelopment.anticheat.util.Distance;
+import net.gravitydevelopment.anticheat.util.User;
+import net.gravitydevelopment.anticheat.util.Utilities;
 
 public class Backend {
     private List<String> isInWater = new ArrayList<String>();
@@ -46,7 +52,6 @@ public class Backend {
     private List<String> isAscending = new ArrayList<String>();
     private Map<String, Integer> interactionCount = new HashMap<String, Integer>();
     private Map<String, Integer> ascensionCount = new HashMap<String, Integer>();
-    private Map<String, Double> blocksOverFlight = new HashMap<String, Double>();
     private Map<String, Integer> chatLevel = new HashMap<String, Integer>();
     private Map<String, Integer> commandLevel = new HashMap<String, Integer>();
     private Map<String, Integer> nofallViolation = new HashMap<String, Integer>();
@@ -77,7 +82,6 @@ public class Backend {
     private Map<String, Long> sprinted = new HashMap<String, Long>();
     private Map<String, Long> brokenBlock = new HashMap<String, Long>();
     private Map<String, Long> placedBlock = new HashMap<String, Long>();
-    private Map<String, Long> movingExempt = new HashMap<String, Long>();
     private Map<String, Long> blockTime = new HashMap<String, Long>();
     private Map<String, Integer> blocksDropped = new HashMap<String, Integer>();
     private Map<String, Long> lastInventoryTime = new HashMap<String, Long>();
@@ -100,6 +104,10 @@ public class Backend {
         lang = manager.getConfiguration().getLang();
         transparent.add((byte) -1);
     }
+    
+    public Magic getMagic() {
+    	return magic;
+    }
 
     public void updateConfig(Configuration config) {
         magic = config.getMagic();
@@ -115,7 +123,7 @@ public class Backend {
 
         blocksDropped.remove(pN);
         blockTime.remove(pN);
-        movingExempt.remove(pN);
+        FlightCheck.movingExempt.remove(pN);
         brokenBlock.remove(pN);
         placedBlock.remove(pN);
         bowWindUp.remove(pN);
@@ -127,7 +135,7 @@ public class Backend {
         instantBreakExempt.remove(pN);
         isAscending.remove(pN);
         ascensionCount.remove(pN);
-        blocksOverFlight.remove(pN);
+        FlightCheck.blocksOverFlight.remove(pN);
         nofallViolation.remove(pN);
         fastBreakViolation.remove(pN);
         yAxisViolations.remove(pN);
@@ -155,7 +163,7 @@ public class Backend {
         sprinted.remove(pN);
         brokenBlock.remove(pN);
         placedBlock.remove(pN);
-        movingExempt.remove(pN);
+        FlightCheck.movingExempt.remove(pN);
         blockTime.remove(pN);
         blocksDropped.remove(pN);
         lastInventoryTime.remove(pN);
@@ -554,36 +562,6 @@ public class Backend {
             }
             return new CheckResult(Result.FAILED, player.getName()+" tried to damage an entity ("+le.getType()+") out of sight ");
         }*/
-        return PASS;
-    }
-
-    public CheckResult checkFlight(Player player, Distance distance) {
-        if (distance.getYDifference() > magic.TELEPORT_MIN()) {
-            // This was a teleport, so we don't care about it.
-            return PASS;
-        }
-        final String name = player.getName();
-        final double y1 = distance.fromY();
-        final double y2 = distance.toY();
-        if (!isMovingExempt(player) && !Utilities.isHoveringOverWater(player.getLocation(), 1) && Utilities.cantStandAtExp(player.getLocation()) && Utilities.blockIsnt(player.getLocation().getBlock().getRelative(BlockFace.DOWN), new Material[]{Material.FENCE, Material.FENCE_GATE, Material.COBBLE_WALL})) {
-
-            if (!blocksOverFlight.containsKey(name)) {
-                blocksOverFlight.put(name, 0D);
-            }
-
-            blocksOverFlight.put(name, (blocksOverFlight.get(name) + distance.getXDifference() + distance.getYDifference() + distance.getZDifference()));
-
-            if (y1 > y2) {
-                blocksOverFlight.put(name, (blocksOverFlight.get(name) - distance.getYDifference()));
-            }
-
-            if (blocksOverFlight.get(name) > magic.FLIGHT_BLOCK_LIMIT() && (y1 <= y2)) {
-                return new CheckResult(CheckResult.Result.FAILED, player.getName() + " flew over " + blocksOverFlight.get(name) + " blocks (max=" + magic.FLIGHT_BLOCK_LIMIT() + ")");
-            }
-        } else {
-            blocksOverFlight.put(name, 0D);
-        }
-
         return PASS;
     }
 
@@ -991,24 +969,24 @@ public class Backend {
                 break;
 
         }
-        movingExempt.put(player.getName(), System.currentTimeMillis() + time);
+        FlightCheck.movingExempt.put(player.getName(), System.currentTimeMillis() + time);
         // Only map in which termination time is calculated beforehand.
     }
 
     public void logEnterExit(final Player player) {
-        movingExempt.put(player.getName(), System.currentTimeMillis() + magic.ENTERED_EXITED_TIME());
+        FlightCheck.movingExempt.put(player.getName(), System.currentTimeMillis() + magic.ENTERED_EXITED_TIME());
     }
 
     public void logToggleSneak(final Player player) {
-        movingExempt.put(player.getName(), System.currentTimeMillis() + magic.SNEAK_TIME());
+        FlightCheck.movingExempt.put(player.getName(), System.currentTimeMillis() + magic.SNEAK_TIME());
     }
 
     public void logTeleport(final Player player) {
-        movingExempt.put(player.getName(), System.currentTimeMillis() + magic.TELEPORT_TIME());
+        FlightCheck.movingExempt.put(player.getName(), System.currentTimeMillis() + magic.TELEPORT_TIME());
 
         /* Data for fly/speed should be reset */
         nofallViolation.remove(player.getName());
-        blocksOverFlight.remove(player.getName());
+        FlightCheck.blocksOverFlight.remove(player.getName());
         yAxisViolations.remove(player.getName());
         yAxisLastViolation.remove(player.getName());
         lastYcoord.remove(player.getName());
@@ -1016,15 +994,15 @@ public class Backend {
     }
 
     public void logExitFly(final Player player) {
-        movingExempt.put(player.getName(), System.currentTimeMillis() + magic.EXIT_FLY_TIME());
+        FlightCheck.movingExempt.put(player.getName(), System.currentTimeMillis() + magic.EXIT_FLY_TIME());
     }
 
     public void logJoin(final Player player) {
-        movingExempt.put(player.getName(), System.currentTimeMillis() + magic.JOIN_TIME());
+        FlightCheck.movingExempt.put(player.getName(), System.currentTimeMillis() + magic.JOIN_TIME());
     }
 
     public boolean isMovingExempt(Player player) {
-        return isDoing(player, movingExempt, -1);
+        return isDoing(player, FlightCheck.movingExempt, -1);
     }
 
     public boolean isAscending(Player player) {

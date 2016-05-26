@@ -24,20 +24,20 @@ import org.bukkit.command.CommandSender;
 
 public class CommandHelp extends CommandBase {
 
-    private static final String NAME = "AntiCheat Help";
+    private static final String NAME = "AntiCheatReloaded Help";
     private static final String COMMAND = "help";
     private static final String USAGE = "anticheat help";
     private static final Permission PERMISSION = Permission.SYSTEM_HELP;
     private static final String[] HELP = {
-            GRAY + "/anti " + AQUA + "help",
-            GRAY + "/anti " + AQUA + "reload",
-            GRAY + "/anti " + AQUA + "update",
-            GRAY + "/anti " + AQUA + "debug " + AQUA + "<user>",
-            GRAY + "/anti " + AQUA + "check " + GOLD + "[check] [on/off]",
-            GRAY + "/anti " + AQUA + "log " + GOLD + "[file/console] [on/off]",
-            GRAY + "/anti " + AQUA + "report " + GOLD + "[group/user]",
-            GRAY + "/anti " + AQUA + "reset " + GOLD + "[user]",
-            GRAY + "/anti " + AQUA + "spy " + GOLD + "[user]",
+            RED + "/anti " + GRAY + "help",
+            RED + "/anti " + GRAY + "reload",
+            RED + "/anti " + GRAY + "update",
+            RED + "/anti " + GRAY + "debug " + WHITE + "<user>",
+            RED + "/anti " + GRAY + "check " + WHITE + "[check] [on/off]",
+            RED + "/anti " + GRAY + "log " + WHITE + "[file/console] [on/off]",
+            RED + "/anti " + GRAY + "report " + WHITE + "[group/user]",
+            RED + "/anti " + GRAY + "reset " + WHITE + "[user]",
+            RED + "/anti " + GRAY + "spy " + WHITE + "[user]",
     };
 
     public CommandHelp() {
