@@ -1,9 +1,10 @@
-AntiCheat
+AntiCheatReloaded
 =============
 
+AntiCheatReloaded is a fork of the old 'AntiCheat' project.
 AntiCheat helps server admins easily identify and block malicious users by monitoring and analyzing the behaviour of their players.
 
-[![Build Status](https://travis-ci.org/gravitylow/AntiCheat.png?branch=master)](https://travis-ci.org/gravitylow/AntiCheat)
+[![Build Status](http://web1.rammelkast.nl:8080/job/AntiCheatReloaded/badge/icon)](http://web1.rammelkast.nl:8080/job/AntiCheatReloaded/)
 
 Usage
 -------
@@ -22,19 +23,14 @@ JavaDocs: https://gravitydevelopment.net/docs/anticheat/
 Bug Reporting/Support/Questions
 ------------
 
-Issues should be filed by hitting the [issues](https://github.com/h31ix/AntiCheat/issues?state=open) tab above. Please make sure you search your issue before opening a new ticket.
+Issues should be filed by hitting the [issues](https://github.com/Rammelkast/AntiCheatReloaded/issues?state=open) tab above. Please make sure you search your issue before opening a new ticket.
 
 All opened tickets that are bug reports require a debug log that includes logs of the issue in question. To obtain this, type `/anticheat debug` on your server. Note that for the debug output to contain valid information and help us diagnose your issue, you need to issue this command AFTER the issue occurs at least once and BEFORE you reload or restart it.
 
 Resources
 -------
-BukkitDev: http://dev.bukkit.org/server-mods/anticheat/
 
-Development Builds: http://ci.gravitydevelopment.net/job/AntiCheat/
-
-Latest release download: http://api.bukget.org/2/bukkit/plugin/anticheat/latest/download
-
-Latest dev download: http://ci.gravitydevelopment.net/job/AntiCheat/lastSuccessfulBuild/artifact/target/AntiCheat.jar
+Development Builds: http://web1.rammelkast.nl:8080/job/AntiCheatReloaded/
 
 Compiling
 -------
