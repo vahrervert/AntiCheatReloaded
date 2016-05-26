@@ -22,8 +22,6 @@ permissions:
     description: Access cheat reports
   anticheat.system.spy:
     description: Access the spy system
-  anticheat.system.xray:
-    description: Access info about xray usage
   anticheat.mod:
     description: Mod helper perm
     children:
@@ -32,7 +30,6 @@ permissions:
       anticheat.system.help: true
       anticheat.system.report: true
       anticheat.system.spy: true
-      anticheat.system.xray: true
   anticheat.system.log:
     description: Access turning console logging on or off
   anticheat.system.reload:
@@ -109,9 +106,6 @@ permissions:
   anticheat.check.forcefield:
     description: Allow players to use a forcefield
     default: false
-  anticheat.check.xray:
-    description: Allow players to bypass xray stats
-    default: false
   anticheat.check.longreach:
     description: Allow players to use longreaching hacks
     default: false
@@ -158,7 +152,6 @@ permissions:
       anticheat.check.fasteat: true
       anticheat.check.fastheal: true
       anticheat.check.forcefield: true
-      anticheat.check.xray: true
       anticheat.check.longreach: true
       anticheat.check.projectile: true
       anticheat.check.itemspam: true

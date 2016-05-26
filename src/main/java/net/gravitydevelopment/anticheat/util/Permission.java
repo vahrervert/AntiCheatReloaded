@@ -42,7 +42,6 @@ public enum Permission {
     CHECK_FASTEAT,
     CHECK_FASTHEAL,
     CHECK_FORCEFIELD,
-    CHECK_XRAY,
     CHECK_LONGREACH,
     CHECK_FASTPROJECTILE,
     CHECK_ITEMSPAM,
@@ -52,7 +51,6 @@ public enum Permission {
 
     /* System Nodes */
     SYSTEM_LOG,
-    SYSTEM_XRAY,
     SYSTEM_RESET,
     SYSTEM_SPY,
     SYSTEM_HELP,

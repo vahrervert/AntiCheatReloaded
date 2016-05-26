@@ -34,11 +34,6 @@ public class Config extends ConfigurationFile {
     public ConfigValue<Boolean> silentMode;
     public ConfigValue<Boolean> exemptOp;
 
-    public ConfigValue<Boolean> checkXRay;
-    public ConfigValue<Boolean> checkCreativeXRay;
-    public ConfigValue<Boolean> alertXRay;
-    public ConfigValue<Integer> alertXRayInterval;
-
     public ConfigValue<Boolean> eventChains;
     public ConfigValue<Boolean> enterprise;
 
@@ -63,11 +58,6 @@ public class Config extends ConfigurationFile {
     @Override
     public void open() {
         logToConsole = new ConfigValue<Boolean>("system.log-to-console");
-
-        checkXRay = new ConfigValue<Boolean>("xray.check-xray");
-        alertXRay = new ConfigValue<Boolean>("xray.alert");
-        alertXRayInterval = new ConfigValue<Integer>("xray.alert-interval");
-        checkCreativeXRay = new ConfigValue<Boolean>("xray.check-creative");
 
         autoUpdate = new ConfigValue<Boolean>("system.auto-update");
         verboseStartup = new ConfigValue<Boolean>("system.verbose-startup");

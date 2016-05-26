@@ -18,16 +18,16 @@
 
 package net.gravitydevelopment.anticheat.manage;
 
-import net.gravitydevelopment.anticheat.AntiCheat;
-import net.gravitydevelopment.anticheat.check.Backend;
-import net.gravitydevelopment.anticheat.config.Configuration;
-import net.gravitydevelopment.anticheat.xray.XRayTracker;
-import org.bukkit.plugin.RegisteredListener;
-
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
+
+import org.bukkit.plugin.RegisteredListener;
+
+import net.gravitydevelopment.anticheat.AntiCheat;
+import net.gravitydevelopment.anticheat.check.Backend;
+import net.gravitydevelopment.anticheat.config.Configuration;
 
 /**
  * The internal hub for all managers.
@@ -36,7 +36,6 @@ import java.util.logging.Logger;
 public class AntiCheatManager {
     private static AntiCheat plugin = null;
     private static Configuration configuration;
-    private static XRayTracker xrayTracker = null;
     private static UserManager userManager = null;
     private static CheckManager checkManager = null;
     private static LoggingManager loggingManager = null;
@@ -46,10 +45,8 @@ public class AntiCheatManager {
 
     public AntiCheatManager(AntiCheat instance, Logger logger) {
         plugin = instance;
-        // now load all the others!!!!!
         configuration = new Configuration(plugin, this);
         loggingManager = new LoggingManager(plugin, logger, configuration);
-        xrayTracker = new XRayTracker();
         userManager = new UserManager(this);
         checkManager = new CheckManager(this);
         backend = new Backend(this);
@@ -113,10 +110,6 @@ public class AntiCheatManager {
 
     public Configuration getConfiguration() {
         return configuration;
-    }
-
-    public XRayTracker getXRayTracker() {
-        return xrayTracker;
     }
 
     public UserManager getUserManager() {

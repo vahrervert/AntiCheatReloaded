@@ -18,16 +18,16 @@
 
 package net.gravitydevelopment.anticheat.api;
 
-import net.gravitydevelopment.anticheat.AntiCheat;
-import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
-import net.gravitydevelopment.anticheat.manage.CheckManager;
-import net.gravitydevelopment.anticheat.check.CheckType;
-import net.gravitydevelopment.anticheat.manage.UserManager;
-import net.gravitydevelopment.anticheat.util.Group;
-import net.gravitydevelopment.anticheat.xray.XRayTracker;
+import java.util.List;
+
 import org.bukkit.entity.Player;
 
-import java.util.List;
+import net.gravitydevelopment.anticheat.AntiCheat;
+import net.gravitydevelopment.anticheat.check.CheckType;
+import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
+import net.gravitydevelopment.anticheat.manage.CheckManager;
+import net.gravitydevelopment.anticheat.manage.UserManager;
+import net.gravitydevelopment.anticheat.util.Group;
 
 /**
  * Developer's interface for all things AntiCheat.
@@ -36,7 +36,6 @@ import java.util.List;
 public class AntiCheatAPI {
     private static CheckManager chk = AntiCheat.getManager().getCheckManager();
     private static UserManager umr = AntiCheat.getManager().getUserManager();
-    private static XRayTracker xtracker = AntiCheat.getManager().getXRayTracker();
 
     // CheckManager API
 
@@ -164,19 +163,6 @@ public class AntiCheatAPI {
      */
     public static List<Group> getGroups() {
         return getManager().getConfiguration().getGroups().getGroups();
-    }
-
-    // XrayTracker API
-
-    /**
-     * Find out if a player is detected as using xray hacks (on any ore)
-     *
-     * @param player Player to check
-     * @return true if the player has any xray anomalies.
-     */
-    public static boolean isXrayer(Player player) {
-        String name = player.getName();
-        return xtracker.sufficientData(name) && xtracker.hasAbnormal(name);
     }
 
     // Advanced Users Only API.

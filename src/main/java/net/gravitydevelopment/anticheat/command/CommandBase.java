@@ -18,24 +18,23 @@
 
 package net.gravitydevelopment.anticheat.command;
 
-import net.gravitydevelopment.anticheat.AntiCheat;
-import net.gravitydevelopment.anticheat.config.Configuration;
-import net.gravitydevelopment.anticheat.manage.CheckManager;
-import net.gravitydevelopment.anticheat.manage.UserManager;
-import net.gravitydevelopment.anticheat.util.Permission;
-import net.gravitydevelopment.anticheat.xray.XRayTracker;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import net.gravitydevelopment.anticheat.AntiCheat;
+import net.gravitydevelopment.anticheat.config.Configuration;
+import net.gravitydevelopment.anticheat.manage.CheckManager;
+import net.gravitydevelopment.anticheat.manage.UserManager;
+import net.gravitydevelopment.anticheat.util.Permission;
+
 public class CommandBase {
 
     public static final Configuration CONFIG = AntiCheat.getManager().getConfiguration();
     public static final UserManager USER_MANAGER = AntiCheat.getManager().getUserManager();
     public static final CheckManager CHECK_MANAGER = AntiCheat.getManager().getCheckManager();
-    public static final XRayTracker XRAY_TRACKER = AntiCheat.getManager().getXRayTracker();
     public static final ChatColor RED = ChatColor.RED;
     public static final ChatColor YELLOW = ChatColor.YELLOW;
     public static final ChatColor GREEN = ChatColor.GREEN;

@@ -44,7 +44,6 @@ public class CommandReset extends CommandBase {
             User user = USER_MANAGER.getUser(args[0]);
             if (user != null) {
                 user.resetLevel();
-                XRAY_TRACKER.reset(args[0]);
                 user.clearMessages();
                 AntiCheat.getManager().getBackend().resetChatLevel(user);
                 cs.sendMessage(args[0] + GREEN + " has been reset.");

@@ -1,14 +1,5 @@
 # AntiCheat configuration file
 # Please report any bugs: https://github.com/gravitylow/AntiCheat/issues
-xray:
-  # Should AntiCheat use calculations to try and find xrayers?
-  check-xray: true
-  # Should a warning be sent to admins when a person is found that could be xraying?
-  alert: false
-  # How often (in seconds) should AntiCheat check for xrayers if alert is true?
-  alert-interval: 60
-  # Should players in creative mode be tracked for possible xray usage?
-  check-creative: true
 spam:
   chat:
     # Should AntiCheat block players spamming messages in chat?

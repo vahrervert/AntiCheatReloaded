@@ -18,13 +18,23 @@
 
 package net.gravitydevelopment.anticheat.command;
 
-import net.gravitydevelopment.anticheat.command.executors.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.gravitydevelopment.anticheat.command.executors.CommandCheck;
+import net.gravitydevelopment.anticheat.command.executors.CommandDebug;
+import net.gravitydevelopment.anticheat.command.executors.CommandDeveloper;
+import net.gravitydevelopment.anticheat.command.executors.CommandHelp;
+import net.gravitydevelopment.anticheat.command.executors.CommandLog;
+import net.gravitydevelopment.anticheat.command.executors.CommandReload;
+import net.gravitydevelopment.anticheat.command.executors.CommandReport;
+import net.gravitydevelopment.anticheat.command.executors.CommandReset;
+import net.gravitydevelopment.anticheat.command.executors.CommandSpy;
+import net.gravitydevelopment.anticheat.command.executors.CommandUpdate;
 
 public class CommandHandler implements CommandExecutor {
 
@@ -42,7 +52,6 @@ public class CommandHandler implements CommandExecutor {
         commands.add(new CommandReset());
         commands.add(new CommandSpy());
         commands.add(new CommandUpdate());
-        commands.add(new CommandXray());
     }
 
     @Override

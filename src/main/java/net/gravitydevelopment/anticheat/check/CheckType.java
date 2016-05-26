@@ -53,7 +53,6 @@ public enum CheckType {
     FAST_EAT(Permission.CHECK_FASTEAT),
     FAST_HEAL(Permission.CHECK_FASTHEAL),
     FORCEFIELD(Permission.CHECK_FORCEFIELD),
-    XRAY(Permission.CHECK_XRAY),
     LONG_REACH(Permission.CHECK_LONGREACH),
     FAST_PROJECTILE(Permission.CHECK_FASTPROJECTILE),
     ITEM_SPAM(Permission.CHECK_ITEMSPAM),

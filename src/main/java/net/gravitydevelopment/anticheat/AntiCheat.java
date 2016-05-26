@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,9 +38,6 @@ import net.gravitydevelopment.anticheat.event.VehicleListener;
 import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
 import net.gravitydevelopment.anticheat.manage.PacketManager;
 import net.gravitydevelopment.anticheat.util.User;
-import net.gravitydevelopment.anticheat.util.Utilities;
-import net.gravitydevelopment.anticheat.xray.XRayListener;
-import net.gravitydevelopment.anticheat.xray.XRayTracker;
 
 public class AntiCheat extends JavaPlugin {
 
@@ -70,8 +66,6 @@ public class AntiCheat extends JavaPlugin {
         eventList.add(new InventoryListener());
         // Order is important in some cases, don't screw with these unless needed, especially config
         setupConfig();
-        // Xray must come before events
-        setupXray();
         setupEvents();
         setupCommands();
         // setupProtocol(); TODO
@@ -111,33 +105,6 @@ public class AntiCheat extends JavaPlugin {
             protocolLib = true;
             packetManager = new PacketManager(ProtocolLibrary.getProtocolManager(), this, manager);
             verboseLog("Hooked into ProtocolLib");
-        }
-    }
-
-    private void setupXray() {
-        final XRayTracker xtracker = manager.getXRayTracker();
-        final int time = config.getConfig().alertXRayInterval.getValue() * 20;
-        if (config.getConfig().checkXRay.getValue()) {
-            eventList.add(new XRayListener());
-            if (config.getConfig().alertXRay.getValue()) {
-                getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
-                    @Override
-                    public void run() {
-                        for (Player player : getServer().getOnlinePlayers()) {
-                            String name = player.getName();
-                            if (!xtracker.hasAlerted(name) && xtracker.sufficientData(name) && xtracker.hasAbnormal(name)) {
-                                List<String> alert = new ArrayList<String>();
-                                alert.add(ChatColor.YELLOW + "[ALERT] " + ChatColor.WHITE + name + ChatColor.YELLOW + " might be using xray.");
-                                alert.add(ChatColor.YELLOW + "[ALERT] Please check their xray stats using " + ChatColor.WHITE + "/anticheat xray " + name + ChatColor.YELLOW + ".");
-                                Utilities.alert(alert);
-                                xtracker.logAlert(name);
-                            }
-                        }
-                    }
-                }, time, time);
-
-                verboseLog("Scheduled the XRay checker.");
-            }
         }
     }
 
