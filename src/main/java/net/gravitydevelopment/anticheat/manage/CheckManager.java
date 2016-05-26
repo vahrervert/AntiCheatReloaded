@@ -174,6 +174,9 @@ public class CheckManager {
                 && !type.checkPermission(player)
                 && !isOpExempt(player);
         AntiCheat.debugLog("Check " + type + (check ? " run " : " not run ") + "on " + player.getName());
+        // TODO temp fix
+        if ((type == CheckType.FLY || type == CheckType.SPEED) && player.isFlying())
+        	return false;
         return check;
     }
 
