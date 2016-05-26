@@ -1,10 +1,8 @@
-AntiCheatReloaded
+AntiCheatReloaded [![Build Status](http://web1.rammelkast.nl:8080/job/AntiCheatReloaded/badge/icon)](http://web1.rammelkast.nl:8080/job/AntiCheatReloaded/)
 =============
 
 AntiCheatReloaded is a fork of the old 'AntiCheat' project.
 AntiCheat helps server admins easily identify and block malicious users by monitoring and analyzing the behaviour of their players.
-
-[![Build Status](http://web1.rammelkast.nl:8080/job/AntiCheatReloaded/badge/icon)](http://web1.rammelkast.nl:8080/job/AntiCheatReloaded/)
 
 Usage
 -------
