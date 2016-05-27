@@ -17,9 +17,6 @@ import net.gravitydevelopment.anticheat.check.CheckResult;
 import net.gravitydevelopment.anticheat.util.Distance;
 import net.gravitydevelopment.anticheat.util.Utilities;
 
-/**
- * The suckishness and false-positives of this check are killing me. TODO TODO TODO FIX THIS!!!1!
- */
 public class YAxisCheck {
 
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);

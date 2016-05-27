@@ -56,6 +56,7 @@ import net.gravitydevelopment.anticheat.check.CheckResult;
 import net.gravitydevelopment.anticheat.check.CheckType;
 import net.gravitydevelopment.anticheat.check.movement.FlightCheck;
 import net.gravitydevelopment.anticheat.check.movement.GlideCheck;
+import net.gravitydevelopment.anticheat.check.movement.WaterWalkCheck;
 import net.gravitydevelopment.anticheat.check.movement.YAxisCheck;
 import net.gravitydevelopment.anticheat.util.Distance;
 import net.gravitydevelopment.anticheat.util.Permission;
@@ -418,7 +419,7 @@ public class PlayerListener extends EventListener {
                     */
                 }
                 if (getCheckManager().willCheckQuick(player, CheckType.WATER_WALK)) {
-                    CheckResult result = getBackend().checkWaterWalk(player, x, y, z);
+                    CheckResult result = WaterWalkCheck.runCheck(player, x, y, z);
                     if (result.failed()) {
                         if (!silentMode()) {
                             player.teleport(user.getGoodLocation(player.getLocation().add(0, -1, 0)));

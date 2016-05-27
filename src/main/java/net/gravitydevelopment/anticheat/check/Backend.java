@@ -38,6 +38,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.check.movement.FlightCheck;
+import net.gravitydevelopment.anticheat.check.movement.WaterWalkCheck;
 import net.gravitydevelopment.anticheat.check.movement.YAxisCheck;
 import net.gravitydevelopment.anticheat.config.Configuration;
 import net.gravitydevelopment.anticheat.config.providers.Lang;
@@ -48,8 +49,6 @@ import net.gravitydevelopment.anticheat.util.User;
 import net.gravitydevelopment.anticheat.util.Utilities;
 
 public class Backend {
-    private List<String> isInWater = new ArrayList<String>();
-    private List<String> isInWaterCache = new ArrayList<String>();
     private List<String> isAscending = new ArrayList<String>();
     private Map<String, Integer> interactionCount = new HashMap<String, Integer>();
     private Map<String, Integer> ascensionCount = new HashMap<String, Integer>();
@@ -65,8 +64,6 @@ public class Backend {
     private Map<String, Long> lastBlockPlaced = new HashMap<String, Long>();
     private Map<String, Long> lastBlockPlaceTime = new HashMap<String, Long>();
     private Map<String, Integer> blockPunches = new HashMap<String, Integer>();
-    private Map<String, Integer> waterAscensionViolation = new HashMap<String, Integer>();
-    private Map<String, Integer> waterSpeedViolation = new HashMap<String, Integer>();
     private Map<String, Integer> projectilesShot = new HashMap<String, Integer>();
     private Map<String, Long> velocitized = new HashMap<String, Long>();
     private Map<String, Integer> velocitytrack = new HashMap<String, Integer>();
@@ -127,8 +124,8 @@ public class Backend {
         startEat.remove(pN);
         lastHeal.remove(pN);
         sprinted.remove(pN);
-        isInWater.remove(pN);
-        isInWaterCache.remove(pN);
+        WaterWalkCheck.isInWater.remove(pN);
+        WaterWalkCheck.isInWaterCache.remove(pN);
         instantBreakExempt.remove(pN);
         isAscending.remove(pN);
         ascensionCount.remove(pN);
@@ -146,8 +143,8 @@ public class Backend {
         lastBlockPlaced.remove(pN);
         lastBlockPlaceTime.remove(pN);
         blockPunches.remove(pN);
-        waterAscensionViolation.remove(pN);
-        waterSpeedViolation.remove(pN);
+        WaterWalkCheck.waterAscensionViolation.remove(pN);
+        WaterWalkCheck.waterSpeedViolation.remove(pN);
         projectilesShot.remove(pN);
         velocitized.remove(pN);
         velocitytrack.remove(pN);
@@ -369,65 +366,6 @@ public class Backend {
         /*if(!isMovingExempt(player) && player.isSprinting() && from.getX() == to.getX() && from.getZ() == to.getZ()) {
             return new CheckResult(Result.FAILED, player.getName()+" sprinted while standing still (xyz = "+(int)from.getX()+","+(int)from.getY()+","+(int)from.getZ()+")");
         }*/
-        return PASS;
-    }
-
-    public CheckResult checkWaterWalk(Player player, double x, double y, double z) {
-        Block block = player.getLocation().getBlock();
-
-        if (player.getVehicle() == null && !player.isFlying()) {
-            if (block.isLiquid()) {
-                if (isInWater.contains(player.getName())) {
-                    if (isInWaterCache.contains(player.getName())) {
-                        if (player.getNearbyEntities(1, 1, 1).isEmpty()) {
-                            boolean b;
-                            if (!Utilities.sprintFly(player)) {
-                                b = x > magic.XZ_SPEED_MAX_WATER() || z > magic.XZ_SPEED_MAX_WATER();
-                            } else {
-                                b = x > magic.XZ_SPEED_MAX_WATER_SPRINT() || z > magic.XZ_SPEED_MAX_WATER_SPRINT();
-                            }
-                            if (!b && !Utilities.isFullyInWater(player.getLocation()) && Utilities.isHoveringOverWater(player.getLocation(), 1) && y == 0D && !block.getType().equals(Material.WATER_LILY)) {
-                                b = true;
-                            }
-                            if (b) {
-                                if (waterSpeedViolation.containsKey(player.getName())) {
-                                    int v = waterSpeedViolation.get(player.getName());
-                                    if (v >= magic.WATER_SPEED_VIOLATION_MAX()) {
-                                        waterSpeedViolation.put(player.getName(), 0);
-                                        return new CheckResult(CheckResult.Result.FAILED, player.getName() + " stood on water " + v + " times (can't stand on " + block.getType() + " or " + block.getRelative(BlockFace.DOWN).getType() + ")");
-                                    } else {
-                                        waterSpeedViolation.put(player.getName(), v + 1);
-                                    }
-                                } else {
-                                    waterSpeedViolation.put(player.getName(), 1);
-                                }
-                            }
-                        }
-                    } else {
-                        isInWaterCache.add(player.getName());
-                        return PASS;
-                    }
-                } else {
-                    isInWater.add(player.getName());
-                    return PASS;
-                }
-            } else if (block.getRelative(BlockFace.DOWN).isLiquid() && isAscending(player) && Utilities.cantStandAt(block) && Utilities.cantStandAt(block.getRelative(BlockFace.DOWN))) {
-                if (waterAscensionViolation.containsKey(player.getName())) {
-                    int v = waterAscensionViolation.get(player.getName());
-                    if (v >= magic.WATER_ASCENSION_VIOLATION_MAX()) {
-                        waterAscensionViolation.put(player.getName(), 0);
-                        return new CheckResult(CheckResult.Result.FAILED, player.getName() + " stood on water " + v + " times (can't stand on " + block.getType() + " or " + block.getRelative(BlockFace.DOWN).getType() + ")");
-                    } else {
-                        waterAscensionViolation.put(player.getName(), v + 1);
-                    }
-                } else {
-                    waterAscensionViolation.put(player.getName(), 1);
-                }
-            } else {
-                isInWater.remove(player.getName());
-                isInWaterCache.remove(player.getName());
-            }
-        }
         return PASS;
     }
 
@@ -817,8 +755,8 @@ public class Backend {
     }
 
     public boolean isHoveringOverWaterAfterViolation(Player player) {
-        if (waterSpeedViolation.containsKey(player.getName())) {
-            if (waterSpeedViolation.get(player.getName()) >= magic.WATER_SPEED_VIOLATION_MAX() && Utilities.isHoveringOverWater(player.getLocation())) {
+        if (WaterWalkCheck.waterSpeedViolation.containsKey(player.getName())) {
+            if (WaterWalkCheck.waterSpeedViolation.get(player.getName()) >= magic.WATER_SPEED_VIOLATION_MAX() && Utilities.isHoveringOverWater(player.getLocation())) {
                 return true;
             }
         }
