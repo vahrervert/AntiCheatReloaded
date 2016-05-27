@@ -49,7 +49,7 @@ public class FlightCheck {
         return PASS;
     }
     
-    private static boolean isMovingExempt(Player player) {
+    public static boolean isMovingExempt(Player player) {
         return isDoing(player, movingExempt, -1);
     }
     

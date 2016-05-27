@@ -55,6 +55,8 @@ import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.check.CheckResult;
 import net.gravitydevelopment.anticheat.check.CheckType;
 import net.gravitydevelopment.anticheat.check.movement.FlightCheck;
+import net.gravitydevelopment.anticheat.check.movement.GlideCheck;
+import net.gravitydevelopment.anticheat.check.movement.YAxisCheck;
 import net.gravitydevelopment.anticheat.util.Distance;
 import net.gravitydevelopment.anticheat.util.Permission;
 import net.gravitydevelopment.anticheat.util.User;
@@ -343,6 +345,15 @@ public class PlayerListener extends EventListener {
                     log(result.getMessage(), player, CheckType.FLY);
                 }
             }
+            if (getCheckManager().willCheckQuick(player, CheckType.GLIDE) && !player.isFlying() && (Bukkit.getVersion().contains("1.9") && !player.isGliding()) /*TODO: ElytraFly check, this is a quick workaround */) {
+                CheckResult result = GlideCheck.runCheck(player, distance);
+                if (result.failed()) {
+                    if (!silentMode()) {
+                        event.setTo(user.getGoodLocation(from.clone()));
+                    }
+                    log(result.getMessage(), player, CheckType.GLIDE);
+                }
+            }
             if (getCheckManager().willCheckQuick(player, CheckType.VCLIP) && event.getFrom().getY() > event.getTo().getY()) {
                 CheckResult result = getBackend().checkVClip(player, new Distance(event.getFrom(), event.getTo()));
                 if (result.failed()) {
@@ -459,7 +470,7 @@ public class PlayerListener extends EventListener {
         }
 
         if (getCheckManager().willCheck(player, CheckType.FLY) && !player.isFlying()) {
-            CheckResult result1 = getBackend().checkYAxis(player, new Distance(from, to));
+            CheckResult result1 = YAxisCheck.runCheck(player, new Distance(from, to));
             CheckResult result2 = getBackend().checkAscension(player, from.getY(), to.getY());
             String log = result1.failed() ? result1.getMessage() : result2.failed() ? result2.getMessage() : "";
             if (!log.equals("")) {

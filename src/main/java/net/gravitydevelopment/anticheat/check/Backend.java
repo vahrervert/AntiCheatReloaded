@@ -38,6 +38,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.check.movement.FlightCheck;
+import net.gravitydevelopment.anticheat.check.movement.YAxisCheck;
 import net.gravitydevelopment.anticheat.config.Configuration;
 import net.gravitydevelopment.anticheat.config.providers.Lang;
 import net.gravitydevelopment.anticheat.config.providers.Magic;
@@ -57,10 +58,6 @@ public class Backend {
     private Map<String, Integer> nofallViolation = new HashMap<String, Integer>();
     private Map<String, Integer> speedViolation = new HashMap<String, Integer>();
     private Map<String, Integer> fastBreakViolation = new HashMap<String, Integer>();
-    private Map<String, Integer> yAxisViolations = new HashMap<String, Integer>();
-    private Map<String, Long> yAxisLastViolation = new HashMap<String, Long>();
-    private Map<String, Double> lastYcoord = new HashMap<String, Double>();
-    private Map<String, Long> lastYtime = new HashMap<String, Long>();
     private Map<String, Integer> fastBreaks = new HashMap<String, Integer>();
     private Map<String, Boolean> blockBreakHolder = new HashMap<String, Boolean>();
     private Map<String, Long> lastBlockBroken = new HashMap<String, Long>();
@@ -138,10 +135,10 @@ public class Backend {
         FlightCheck.blocksOverFlight.remove(pN);
         nofallViolation.remove(pN);
         fastBreakViolation.remove(pN);
-        yAxisViolations.remove(pN);
-        yAxisLastViolation.remove(pN);
-        lastYcoord.remove(pN);
-        lastYtime.remove(pN);
+        YAxisCheck.yAxisViolations.remove(pN);
+        YAxisCheck.yAxisLastViolation.remove(pN);
+        YAxisCheck.lastYcoord.remove(pN);
+        YAxisCheck.lastYtime.remove(pN);
         fastBreaks.remove(pN);
         blockBreakHolder.remove(pN);
         lastBlockBroken.remove(pN);
@@ -449,63 +446,6 @@ public class Backend {
             }
         }
 
-        return PASS;
-    }
-
-    public CheckResult checkYAxis(Player player, Distance distance) {
-        if (distance.getYDifference() > magic.TELEPORT_MIN() || distance.getYDifference() < 0) {
-            return PASS;
-        }
-        if (!isMovingExempt(player) && !Utilities.isClimbableBlock(player.getLocation().getBlock()) && !Utilities.isClimbableBlock(player.getLocation().add(0, -1, 0).getBlock()) && !player.isInsideVehicle() && !Utilities.isInWater(player) && !hasJumpPotion(player)) {
-            double y1 = player.getLocation().getY();
-            String name = player.getName();
-            // Fix Y axis spam.
-            if (!lastYcoord.containsKey(name) || !lastYtime.containsKey(name) || !yAxisLastViolation.containsKey(name) || !yAxisLastViolation.containsKey(name)) {
-                lastYcoord.put(name, y1);
-                yAxisViolations.put(name, 0);
-                yAxisLastViolation.put(name, 0L);
-                lastYtime.put(name, System.currentTimeMillis());
-            } else {
-                if (y1 > lastYcoord.get(name) && yAxisViolations.get(name) > magic.Y_MAXVIOLATIONS() && (System.currentTimeMillis() - yAxisLastViolation.get(name)) < magic.Y_MAXVIOTIME()) {
-                    Location g = player.getLocation();
-                    yAxisViolations.put(name, yAxisViolations.get(name) + 1);
-                    yAxisLastViolation.put(name, System.currentTimeMillis());
-                    if (!silentMode()) {
-                        g.setY(lastYcoord.get(name));
-                        player.sendMessage(ChatColor.RED + "[AntiCheat] Fly hacking on the y-axis detected.  Please wait 5 seconds to prevent getting damage.");
-                        if (g.getBlock().getType() == Material.AIR) {
-                            player.teleport(g);
-                        }
-                    }
-                    return new CheckResult(CheckResult.Result.FAILED, player.getName() + " tried to fly on y-axis " + yAxisViolations.get(name) + " times (max =" + magic.Y_MAXVIOLATIONS() + ")");
-                } else {
-                    if (yAxisViolations.get(name) > magic.Y_MAXVIOLATIONS() && (System.currentTimeMillis() - yAxisLastViolation.get(name)) > magic.Y_MAXVIOTIME()) {
-                        yAxisViolations.put(name, 0);
-                        yAxisLastViolation.put(name, 0L);
-                    }
-                }
-                long i = System.currentTimeMillis() - lastYtime.get(name);
-                double diff = magic.Y_MAXDIFF() + (Utilities.isStair(player.getLocation().add(0, -1, 0).getBlock()) ? 0.5 : 0.0);
-                if ((y1 - lastYcoord.get(name)) > diff && i < magic.Y_TIME()) {
-                    Location g = player.getLocation();
-                    yAxisViolations.put(name, yAxisViolations.get(name) + 1);
-                    yAxisLastViolation.put(name, System.currentTimeMillis());
-                    if (!silentMode()) {
-                        g.setY(lastYcoord.get(name));
-                        if (g.getBlock().getType() == Material.AIR) {
-                            player.teleport(g);
-                        }
-                    }
-                    return new CheckResult(CheckResult.Result.FAILED, player.getName() + " tried to fly on y-axis in " + i + " ms (min =" + magic.Y_TIME() + ")");
-                } else {
-                    if ((y1 - lastYcoord.get(name)) > magic.Y_MAXDIFF() + 1 || (System.currentTimeMillis() - lastYtime.get(name)) > magic.Y_TIME()) {
-                        lastYtime.put(name, System.currentTimeMillis());
-                        lastYcoord.put(name, y1);
-                    }
-                }
-            }
-        }
-        // Fix Y axis spam
         return PASS;
     }
 
@@ -987,10 +927,10 @@ public class Backend {
         /* Data for fly/speed should be reset */
         nofallViolation.remove(player.getName());
         FlightCheck.blocksOverFlight.remove(player.getName());
-        yAxisViolations.remove(player.getName());
-        yAxisLastViolation.remove(player.getName());
-        lastYcoord.remove(player.getName());
-        lastYtime.remove(player.getName());
+        YAxisCheck.yAxisViolations.remove(player.getName());
+        YAxisCheck.yAxisLastViolation.remove(player.getName());
+        YAxisCheck.lastYcoord.remove(player.getName());
+        YAxisCheck.lastYtime.remove(player.getName());
     }
 
     public void logExitFly(final Player player) {

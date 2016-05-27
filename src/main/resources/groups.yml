@@ -1,5 +1,4 @@
-# AntiCheat configuration file
-# Please report any bugs: https://github.com/gravitylow/AntiCheat/issues
+# AntiCheatReloaded configuration file
 groups:
     - 'Medium : 20 : YELLOW : WARN'
     - 'High : 50 : RED : KICK'

@@ -48,6 +48,7 @@ public enum Permission {
     CHECK_VISUAL,
     CHECK_FASTINVENTORY,
     CHECK_AUTOTOOL,
+    CHECK_GLIDE,
 
     /* System Nodes */
     SYSTEM_LOG,
