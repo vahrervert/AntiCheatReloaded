@@ -1,11 +1,14 @@
 package net.gravitydevelopment.anticheat.check.movement;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -34,7 +37,7 @@ public class YAxisCheck {
         if (distance.getYDifference() > AntiCheat.getManager().getBackend().getMagic().TELEPORT_MIN() || distance.getYDifference() < 0) {
             return PASS;
         }
-        if (!FlightCheck.isMovingExempt(player) && !Utilities.isClimbableBlock(player.getLocation().getBlock()) && !Utilities.isClimbableBlock(player.getLocation().add(0, -1, 0).getBlock()) && !player.isInsideVehicle() && !Utilities.isInWater(player) && !hasJumpPotion(player)) {
+        if (!FlightCheck.isMovingExempt(player) && !Utilities.isClimbableBlock(player.getLocation().getBlock()) && !Utilities.isClimbableBlock(player.getLocation().add(0, -1, 0).getBlock()) && !player.isInsideVehicle() && !Utilities.isInWater(player) && !hasJumpPotion(player) && !isMoveUpBlock(player.getLocation().add(0, -1, 0).getBlock())) {
             double y1 = player.getLocation().getY();
             String name = player.getName();
             // Fix Y axis spam.
@@ -86,5 +89,25 @@ public class YAxisCheck {
         // Fix Y axis spam
         return PASS;
     }
+
+	private static boolean isMoveUpBlock(Block block) {
+		return MOVE_UP_BLOCKS.contains(block.getType());
+	}
+	
+	private static final List<Material> MOVE_UP_BLOCKS = Arrays.asList(new Material[]{
+		Material.ACACIA_STAIRS,
+		Material.BIRCH_WOOD_STAIRS,
+		Material.BRICK_STAIRS,
+		Material.COBBLESTONE_STAIRS,
+		Material.DARK_OAK_STAIRS,
+		Material.JUNGLE_WOOD_STAIRS,
+		Material.NETHER_BRICK_STAIRS,
+		Material.QUARTZ_STAIRS,
+		Material.RED_SANDSTONE_STAIRS,
+		Material.SANDSTONE_STAIRS,
+		Material.SMOOTH_STAIRS,
+		Material.SPRUCE_WOOD_STAIRS,
+		Material.WOOD_STAIRS
+	});
 	
 }
