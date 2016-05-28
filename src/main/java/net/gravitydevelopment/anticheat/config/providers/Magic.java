@@ -158,6 +158,10 @@ public interface Magic {
      */
     public int FLIGHT_LIMIT();
     /**
+     * Number of times a player can be caught in-glide before action is taken; Type=INTEGER, Leniency=INCREASE.
+     */
+    public int GLIDE_LIMIT();
+    /**
      * How many blocks you can travel before action is taken; Type=INTEGER, Leniency=INCREASE.
      */
     public double FLIGHT_BLOCK_LIMIT();

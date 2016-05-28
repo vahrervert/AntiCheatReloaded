@@ -307,7 +307,7 @@ public class PlayerListener extends EventListener {
         AntiCheat.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
     }
 
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
         final Player player = event.getPlayer();
         if (getCheckManager().checkInWorld(player) && !getCheckManager().isOpExempt(player)) {
@@ -328,7 +328,7 @@ public class PlayerListener extends EventListener {
                     log(result.getMessage(), player, CheckType.SPRINT);
                 }
             }
-            if (getCheckManager().willCheckQuick(player, CheckType.FLY) && !player.isFlying() && (Bukkit.getVersion().contains("1.9") && !player.isGliding()) /*TODO: ElytraFly check, this is a quick workaround */) {
+            if (getCheckManager().willCheckQuick(player, CheckType.FLY) && !player.isFlying()) /*TODO: ElytraFly fix */ {
                 CheckResult result = FlightCheck.runCheck(player, distance);
                 if (result.failed()) {
                     if (!silentMode()) {
@@ -337,13 +337,11 @@ public class PlayerListener extends EventListener {
                     log(result.getMessage(), player, CheckType.FLY);
                 }
             }
-            if (getCheckManager().willCheckQuick(player, CheckType.GLIDE) && !player.isFlying() && (Bukkit.getVersion().contains("1.9") && !player.isGliding()) /*TODO: ElytraFly check, this is a quick workaround */) {
+            if (getCheckManager().willCheckQuick(player, CheckType.FLY) && !player.isFlying())/*TODO: ElytraFly fix */ {
                 CheckResult result = GlideCheck.runCheck(player, distance);
                 if (result.failed()) {
-                    if (!silentMode()) {
-                        event.setTo(user.getGoodLocation(from.clone()));
-                    }
-                    log(result.getMessage(), player, CheckType.GLIDE);
+                	// NO TELEPORT NEEDED HERE, HANDLED BY CHECK ITSELF
+                    log(result.getMessage(), player, CheckType.FLY);
                 }
             }
             if (getCheckManager().willCheckQuick(player, CheckType.VCLIP) && event.getFrom().getY() > event.getTo().getY()) {

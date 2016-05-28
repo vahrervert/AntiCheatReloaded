@@ -61,6 +61,19 @@ public final class Utilities {
             AntiCheat.getManager().log(msg);
         }
     }
+    
+    /**
+     * Check if only the block beneath them is standable (includes water + lava)
+     * @param block the block to check (under)
+     * @return true if they cannot stand there
+     */
+    public static boolean cantStandAtSingle(Block block)
+    {
+    	// TODO: Implement Better to reduce false positives (done? lets test...)
+    	Block otherBlock = block.getLocation().add(0, -0.5, 0).getBlock();
+    	boolean center = otherBlock.getType() == Material.AIR;
+    	return center;
+    }
 
     /**
      * Determine whether a player cannot stand on or around the given block

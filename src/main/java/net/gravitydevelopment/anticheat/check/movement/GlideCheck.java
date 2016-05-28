@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -25,26 +26,27 @@ public class GlideCheck {
 	
 	public static CheckResult runCheck(Player player, Distance distance) {
     	String name = player.getName();
-    	if(!glideBuffer.containsKey(name))
-    	{
-    		glideBuffer.put(name, 0);
-    	}
     	if(!lastYDelta.containsKey(name))
-    	{
     		lastYDelta.put(name, 0.0);
-    	}
+    	if(!YAxisCheck.lastYcoord.containsKey(name))
+    		YAxisCheck.lastYcoord.put(name, player.getLocation().getY());
     	double currentY = player.getLocation().getY();
     	double math = currentY - YAxisCheck.lastYcoord.get(name);
     	if(math < 0 && !AntiCheat.getManager().getBackend().isMovingExempt(player))
     	{
     		if(math <= lastYDelta.get(name) && !(player.getEyeLocation().getBlock().getType() == Material.LADDER)
     				&& !Utilities.isInWater(player) && !Utilities.isInWeb(player)
-    				&& Utilities.cantStandAt(player.getLocation().getBlock()))
+    				&& Utilities.cantStandAtSingle(player.getLocation().getBlock()))
     		{
+    			if(!glideBuffer.containsKey(name))
+    	    		glideBuffer.put(name, 0);
     			int currentBuffer = glideBuffer.get(name);
     			glideBuffer.put(name, currentBuffer + 1);
-    			if((currentBuffer + 1) >= AntiCheat.getManager().getBackend().getMagic().FLIGHT_LIMIT())
+    			if((currentBuffer + 1) >= AntiCheat.getManager().getBackend().getMagic().GLIDE_LIMIT())
     			{
+        			double fallDist = distanceToFall(player.getLocation());
+        			player.teleport(player.getLocation().add(0, -fallDist, 0));
+        			player.setFallDistance((float) fallDist);
     				if(!AntiCheat.getManager().getBackend().silentMode())
     				{
     					player.sendMessage(ChatColor.RED + "[AntiCheat] Glide/Fly hacking detected.");
@@ -55,7 +57,14 @@ public class GlideCheck {
     		}
     	}
     	lastYDelta.put(name, math);
-		return PASS;
+    	return PASS;
+	}
+
+	private static double distanceToFall(Location location) {
+		double firstY = location.getY();
+		while (location.clone().add(0, -0.1, 0).getBlock().getType() == Material.AIR)
+			location.add(0, -0.1, 0);
+		return firstY - location.getY();
 	}
 
 }
