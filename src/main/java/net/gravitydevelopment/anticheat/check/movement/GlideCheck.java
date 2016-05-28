@@ -32,7 +32,7 @@ public class GlideCheck {
     		YAxisCheck.lastYcoord.put(name, player.getLocation().getY());
     	double currentY = player.getLocation().getY();
     	double math = currentY - YAxisCheck.lastYcoord.get(name);
-    	if(math < 0 && !AntiCheat.getManager().getBackend().isMovingExempt(player))
+    	if((math < 0 && math > AntiCheat.getManager().getBackend().getMagic().GLIDE_MAX()) && !AntiCheat.getManager().getBackend().isMovingExempt(player))
     	{
     		if(math <= lastYDelta.get(name) && !(player.getEyeLocation().getBlock().getType() == Material.LADDER)
     				&& !Utilities.isInWater(player) && !Utilities.isInWeb(player)
