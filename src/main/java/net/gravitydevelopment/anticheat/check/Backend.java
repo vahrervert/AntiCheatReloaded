@@ -38,6 +38,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.check.movement.FlightCheck;
+import net.gravitydevelopment.anticheat.check.movement.GlideCheck;
 import net.gravitydevelopment.anticheat.check.movement.WaterWalkCheck;
 import net.gravitydevelopment.anticheat.check.movement.YAxisCheck;
 import net.gravitydevelopment.anticheat.config.Configuration;
@@ -164,6 +165,8 @@ public class Backend {
         inventoryTime.remove(pN);
         inventoryClicks.remove(pN);
         lastFallPacket.remove(pN);
+        GlideCheck.lastYDelta.remove(pN);
+        GlideCheck.glideBuffer.remove(pN);
     }
 
     public CheckResult checkFastBow(Player player, float force) {
@@ -860,6 +863,8 @@ public class Backend {
         YAxisCheck.yAxisLastViolation.remove(player.getName());
         YAxisCheck.lastYcoord.remove(player.getName());
         YAxisCheck.lastYtime.remove(player.getName());
+        GlideCheck.lastYDelta.remove(player.getName());
+        GlideCheck.glideBuffer.remove(player.getName());
     }
 
     public void logExitFly(final Player player) {

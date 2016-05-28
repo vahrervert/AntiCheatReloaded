@@ -34,7 +34,7 @@ public class YAxisCheck {
         if (distance.getYDifference() > AntiCheat.getManager().getBackend().getMagic().TELEPORT_MIN() || distance.getYDifference() < 0) {
             return PASS;
         }
-        if (!FlightCheck.isMovingExempt(player) && !Utilities.isClimbableBlock(player.getLocation().getBlock()) && !Utilities.isClimbableBlock(player.getLocation().add(0, -1, 0).getBlock()) && !player.isInsideVehicle() && !Utilities.isInWater(player) && !hasJumpPotion(player) && !isMoveUpBlock(player.getLocation().add(0, -1, 0).getBlock())) {
+        if (!FlightCheck.isMovingExempt(player) && !Utilities.isClimbableBlock(player.getLocation().getBlock()) && !Utilities.isClimbableBlock(player.getLocation().add(0, -1, 0).getBlock()) && !player.isInsideVehicle() && !Utilities.isInWater(player) && !hasJumpPotion(player) && !isMoveUpBlock(player.getLocation().add(0, -1, 0).getBlock()) && !isMoveUpBlock(player.getLocation().add(0, -1.5, 0).getBlock())) {
             double y1 = player.getLocation().getY();
             String name = player.getName();
             // Fix Y axis spam.
