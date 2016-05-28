@@ -55,6 +55,9 @@ public class GlideCheck {
     				return new CheckResult(CheckResult.Result.FAILED, name + " attempted to fall too slowly!");
     			}
     		}
+    	}else {
+			if(glideBuffer.containsKey(name))
+	    		glideBuffer.remove(name);
     	}
     	lastYDelta.put(name, math);
     	return PASS;
