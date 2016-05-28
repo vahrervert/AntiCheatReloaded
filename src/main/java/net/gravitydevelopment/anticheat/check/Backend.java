@@ -166,15 +166,6 @@ public class Backend {
         lastFallPacket.remove(pN);
     }
 
-    public CheckResult checkFreeze(Player player, double from, double to) {
-        // TODO: Fix! This is causing false-positives
-        /*
-         * if((from-to) > 0) { boolean flag = false; if(lastFallPacket.containsKey(player.getName()) && lastFallPacket.get(player.getName()) > 0) { flag = (System.currentTimeMillis()-lastFallPacket.get(player.getName())) > 1000; } lastFallPacket.put(player.getName(), System.currentTimeMillis());
-         * return flag; } else { lastFallPacket.put(player.getName(), -1L); }
-         */
-        return PASS;
-    }
-
     public CheckResult checkFastBow(Player player, float force) {
         // Ignore magic numbers here, they are minecrafty vanilla stuff.
         int ticks = (int) ((((System.currentTimeMillis() - bowWindUp.get(player.getName())) * 20) / 1000) + 3);

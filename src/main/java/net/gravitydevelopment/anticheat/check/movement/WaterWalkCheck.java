@@ -65,7 +65,7 @@ public class WaterWalkCheck {
                     isInWater.add(player.getName());
                     return PASS;
                 }
-            } else if (block.getRelative(BlockFace.DOWN).isLiquid() && AntiCheat.getManager().getBackend().isAscending(player) && Utilities.cantStandAt(block) && Utilities.cantStandAt(block.getRelative(BlockFace.DOWN))) {
+            } else if (block.getRelative(BlockFace.DOWN).isLiquid() && !AntiCheat.getManager().getBackend().isAscending(player) && Utilities.cantStandAt(block) && Utilities.cantStandAt(block.getRelative(BlockFace.DOWN))) {
                 if (waterAscensionViolation.containsKey(player.getName())) {
                     int v = waterAscensionViolation.get(player.getName());
                     if (v >= AntiCheat.getManager().getBackend().getMagic().WATER_ASCENSION_VIOLATION_MAX()) {

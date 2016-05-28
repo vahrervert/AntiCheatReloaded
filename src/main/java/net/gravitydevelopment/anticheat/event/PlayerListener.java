@@ -320,16 +320,7 @@ public class PlayerListener extends EventListener {
 
             final User user = getUserManager().getUser(player.getName());
             user.setTo(to.getX(), to.getY(), to.getZ());
-
-            if (getCheckManager().willCheckQuick(player, CheckType.SPEED)) {
-                CheckResult result = getBackend().checkFreeze(player, from.getY(), to.getY());
-                if (result.failed()) {
-                    log(result.getMessage(), player, CheckType.SPEED);
-                    if (!silentMode()) {
-                        player.kickPlayer("Freezing client");
-                    }
-                }
-            }
+            
             if (getCheckManager().willCheckQuick(player, CheckType.SPRINT)) {
                 CheckResult result = getBackend().checkSprintStill(player, from, to);
                 if (result.failed()) {
@@ -422,7 +413,7 @@ public class PlayerListener extends EventListener {
                     CheckResult result = WaterWalkCheck.runCheck(player, x, y, z);
                     if (result.failed()) {
                         if (!silentMode()) {
-                            player.teleport(user.getGoodLocation(player.getLocation().add(0, -1, 0)));
+                            player.teleport(user.getGoodLocation(player.getLocation().add(0, -1.5, 0)));
                         }
                         log(result.getMessage(), player, CheckType.WATER_WALK);
                         changed = true;
