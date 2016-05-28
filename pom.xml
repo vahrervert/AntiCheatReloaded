@@ -3,9 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.gravitydevelopment.anticheat</groupId>
     <artifactId>AntiCheat</artifactId>
-    <version>1.0.0-ALPHA</version>
-    <name>AntiCheat</name>
-    <url>http://gravitydevelopment.net</url>
+    <version>1.1.0-ALPHA</version>
+    <name>AntiCheatReloaded</name>
+    <url>https://rammelkast.com</url>
     <properties>
         <project.build.version>${project.version}</project.build.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
