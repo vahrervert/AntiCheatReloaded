@@ -42,7 +42,7 @@ public class GlideCheck {
     	    		glideBuffer.put(name, 0);
     			int currentBuffer = glideBuffer.get(name);
     			glideBuffer.put(name, currentBuffer + 1);
-    			if((currentBuffer + 1) >= AntiCheat.getManager().getBackend().getMagic().GLIDE_LIMIT())
+    			if(currentBuffer >= AntiCheat.getManager().getBackend().getMagic().GLIDE_LIMIT())
     			{
         			double fallDist = distanceToFall(player.getLocation());
         			player.teleport(player.getLocation().add(0, -fallDist, 0));

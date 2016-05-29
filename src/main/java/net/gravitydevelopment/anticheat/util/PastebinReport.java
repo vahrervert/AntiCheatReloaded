@@ -38,7 +38,7 @@ import java.util.List;
 
 public class PastebinReport {
     private static final String DATE = new SimpleDateFormat("yyyy-MM-dd kk:mm Z").format(new Date());
-    private static final String API_KEY = "6eeace09c2742f8463b9db9b0c467605";
+    private static final String API_KEY = "d5ac92da966edb97a97860e6a052784f";
 
     private StringBuilder report = new StringBuilder();
     private String url = "";
@@ -142,13 +142,12 @@ public class PastebinReport {
     private void appendMagicDiff() {
         // This is hacky, and I like it
         Magic magic = AntiCheat.getManager().getConfiguration().getMagic();
-        FileConfiguration file = YamlConfiguration.loadConfiguration(AntiCheat.getPlugin().getResource("magic.yml"));
+        FileConfiguration file = YamlConfiguration.loadConfiguration(new File(AntiCheat.getPlugin().getDataFolder(), "magic.yml"));
         boolean changed = false;
         for (Field field : Magic.class.getFields()) {
             Object defaultValue = file.get(field.getName());
             try {
                 Field value = magic.getClass().getDeclaredField(field.getName());
-                boolean x = false;
                 String s1 = value.get(magic).toString();
                 String s2 = defaultValue.toString();
                 if (!s1.equals(s2) && !s1.equals(s2 + ".0")) {
