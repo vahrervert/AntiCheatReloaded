@@ -13,7 +13,7 @@
     <repositories>
     	<repository>
         	<id>spigot-repo</id>
-        	<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        	<url>http://maven.elmakers.com/repository/</url>
    		</repository>
   <repository>
     <id>dmulloy2-repo</id>
@@ -89,8 +89,14 @@
     <dependencies>
     	<dependency>
             <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
+            <artifactId>craftbukkit</artifactId>
             <version>1.9.4-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+    	</dependency>
+    	<dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
     	</dependency>
   <dependency>
