@@ -17,11 +17,11 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
 import net.minecraft.server.v1_8_R3.PlayerInteractManager;
 
-public class NPC_1_8_R3 {
+public class NPC {
 
 	private final EntityPlayer npc;
 	
-	public NPC_1_8_R3(String name, World w, Player owner) {
+	public NPC(String name, World w, Player owner) {
 		this.npc = new EntityPlayer(((CraftServer) Bukkit.getServer()).getServer(), ((CraftWorld) w).getHandle(), new GameProfile(UUID.randomUUID(), name), new PlayerInteractManager(((CraftWorld) w).getHandle()));
 		((CraftPlayer)owner).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, new EntityPlayer[]{this.npc}));
 		((CraftPlayer)owner).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(this.npc));
