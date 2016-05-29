@@ -56,8 +56,7 @@ public class GlideCheck {
     			}
     		}
     	}else {
-			if(glideBuffer.containsKey(name))
-	    		glideBuffer.remove(name);
+	    	glideBuffer.remove(name);
     	}
     	lastYDelta.put(name, math);
     	return PASS;

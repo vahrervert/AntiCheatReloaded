@@ -1,8 +1,9 @@
 package net.gravitydevelopment.anticheat.check.movement;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
@@ -91,7 +92,7 @@ public class YAxisCheck {
 		return MOVE_UP_BLOCKS.contains(block.getType());
 	}
 	
-	private static final List<Material> MOVE_UP_BLOCKS = Arrays.asList(new Material[]{
+	private static final EnumSet<Material> MOVE_UP_BLOCKS = EnumSet.of(
 		Material.ACACIA_STAIRS,
 		Material.BIRCH_WOOD_STAIRS,
 		Material.BRICK_STAIRS,
@@ -105,6 +106,6 @@ public class YAxisCheck {
 		Material.SMOOTH_STAIRS,
 		Material.SPRUCE_WOOD_STAIRS,
 		Material.WOOD_STAIRS
-	});
+	);
 	
 }
