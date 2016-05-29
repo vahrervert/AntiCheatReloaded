@@ -18,19 +18,25 @@
 
 package net.gravitydevelopment.anticheat.event;
 
-import net.gravitydevelopment.anticheat.AntiCheat;
-import net.gravitydevelopment.anticheat.check.CheckType;
-import net.gravitydevelopment.anticheat.check.CheckResult;
-import net.gravitydevelopment.anticheat.util.Distance;
-import net.gravitydevelopment.anticheat.util.Utilities;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
+
+import net.gravitydevelopment.anticheat.AntiCheat;
+import net.gravitydevelopment.anticheat.check.CheckResult;
+import net.gravitydevelopment.anticheat.check.CheckType;
+import net.gravitydevelopment.anticheat.check.combat.KillAuraCheck;
+import net.gravitydevelopment.anticheat.util.Distance;
+import net.gravitydevelopment.anticheat.util.Utilities;
 
 public class EntityListener extends EventListener {
 
@@ -95,6 +101,9 @@ public class EntityListener extends EventListener {
         boolean noHack = true;
         if (event instanceof EntityDamageByEntityEvent) {
             EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) event;
+            if (e.getDamager() instanceof Player) {
+            	KillAuraCheck.doDamageEvent(e, (Player)e.getDamager());
+            }
             if (event.getEntity() instanceof Player) {
                 Player player = (Player) event.getEntity();
                 // Keep players from shooting an arrow at themselves in order to fly

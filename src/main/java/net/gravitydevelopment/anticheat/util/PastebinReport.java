@@ -120,6 +120,7 @@ public class PastebinReport {
         append("Server Version: " + Bukkit.getVersion());
         append("Server Implementation: " + Bukkit.getName());
         append("Server ID: " + Bukkit.getServerId());
+        append("NMS Version: " + VersionUtil.getVersion());
         append("Java Version: " + System.getProperty("java.vendor") + " " + System.getProperty("java.version"));
         append("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
         append("Free Memory: " + runtime.freeMemory() / 1024 / 1024 + "MB");

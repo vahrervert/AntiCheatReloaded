@@ -37,6 +37,7 @@ import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.potion.PotionEffectType;
 
 import net.gravitydevelopment.anticheat.AntiCheat;
+import net.gravitydevelopment.anticheat.check.combat.KillAuraCheck;
 import net.gravitydevelopment.anticheat.check.movement.FlightCheck;
 import net.gravitydevelopment.anticheat.check.movement.GlideCheck;
 import net.gravitydevelopment.anticheat.check.movement.WaterWalkCheck;
@@ -116,6 +117,7 @@ public class Backend {
     public void garbageClean(Player player) {
         String pN = player.getName();
 
+        KillAuraCheck.cleanPlayer(player);
         blocksDropped.remove(pN);
         blockTime.remove(pN);
         FlightCheck.movingExempt.remove(pN);

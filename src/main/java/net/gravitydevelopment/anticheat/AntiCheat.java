@@ -38,6 +38,7 @@ import net.gravitydevelopment.anticheat.event.VehicleListener;
 import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
 import net.gravitydevelopment.anticheat.manage.PacketManager;
 import net.gravitydevelopment.anticheat.util.User;
+import net.gravitydevelopment.anticheat.util.VersionUtil;
 
 public class AntiCheat extends JavaPlugin {
 
@@ -88,6 +89,7 @@ public class AntiCheat extends JavaPlugin {
         }, 40L);
         // End tests
         verboseLog("Finished loading.");
+        getLogger().info("Running version " + VersionUtil.getVersion() + "...");
     }
 
     @Override
