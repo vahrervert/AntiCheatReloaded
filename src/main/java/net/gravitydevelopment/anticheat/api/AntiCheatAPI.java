@@ -44,8 +44,8 @@ public class AntiCheatAPI {
      *
      * @param type Check to start watching for
      */
-    public static void activateCheck(CheckType type) {
-        chk.activateCheck(type, getCallingClass());
+    public static void activateCheck(CheckType type, Class caller) {
+        chk.activateCheck(type, caller.getName());
     }
 
     /**
@@ -53,8 +53,8 @@ public class AntiCheatAPI {
      *
      * @param type Check to stop watching for
      */
-    public static void deactivateCheck(CheckType type) {
-        chk.deactivateCheck(type, getCallingClass());
+    public static void deactivateCheck(CheckType type, Class caller) {
+        chk.deactivateCheck(type, caller.getName());
     }
 
     /**
@@ -73,8 +73,8 @@ public class AntiCheatAPI {
      * @param player Player to stop watching
      * @param type   Check to stop watching for
      */
-    public static void exemptPlayer(Player player, CheckType type) {
-        chk.exemptPlayer(player, type, getCallingClass());
+    public static void exemptPlayer(Player player, CheckType type, Class caller) {
+        chk.exemptPlayer(player, type, caller.getName());
     }
 
     /**
@@ -83,8 +83,8 @@ public class AntiCheatAPI {
      * @param player Player to start watching
      * @param type   Check to start watching for
      */
-    public static void unexemptPlayer(Player player, CheckType type) {
-        chk.unexemptPlayer(player, type, getCallingClass());
+    public static void unexemptPlayer(Player player, CheckType type, Class caller) {
+        chk.unexemptPlayer(player, type, caller.getName());
     }
 
     /**
@@ -176,7 +176,5 @@ public class AntiCheatAPI {
         return AntiCheat.getManager();
     }
 
-    private static String getCallingClass() {
-        return sun.reflect.Reflection.getCallerClass(2).getName();
-    }
+
 }
