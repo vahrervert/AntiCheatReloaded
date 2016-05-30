@@ -23,6 +23,8 @@ public class CheckerNPCS {
 		Vector vec = e.getPlayer().getLocation().getDirection();
 		Vector newVec = new Vector(vec.getX() * -2, vec.getY() * -2, vec.getZ() * -2);
 		Location backLocation = eyeLocation.add(newVec);
+		if (e.getPlayer().getLocation().getPitch() <= -45) // TODO better fix for this
+			backLocation.add(0, -2.5, 0);
 		one.move(backLocation, e.getPlayer());
 	}
 	
