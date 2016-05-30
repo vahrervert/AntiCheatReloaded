@@ -34,7 +34,6 @@ import net.gravitydevelopment.anticheat.command.executors.CommandReload;
 import net.gravitydevelopment.anticheat.command.executors.CommandReport;
 import net.gravitydevelopment.anticheat.command.executors.CommandReset;
 import net.gravitydevelopment.anticheat.command.executors.CommandSpy;
-import net.gravitydevelopment.anticheat.command.executors.CommandUpdate;
 
 public class CommandHandler implements CommandExecutor {
 
@@ -50,7 +49,6 @@ public class CommandHandler implements CommandExecutor {
         commands.add(new CommandReport());
         commands.add(new CommandReset());
         commands.add(new CommandSpy());
-        commands.add(new CommandUpdate());
     }
 
     @Override

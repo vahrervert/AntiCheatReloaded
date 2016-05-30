@@ -116,7 +116,7 @@ public class PastebinReport {
     private void appendSystemInfo() {
         Runtime runtime = Runtime.getRuntime();
         Configuration config = AntiCheat.getManager().getConfiguration();
-        append("AntiCheat Version: " + AntiCheat.getVersion() + (AntiCheat.isUpdated() ? "" : " (OUTDATED)"));
+        append("AntiCheat Version: " + AntiCheat.getVersion());
         append("Server Version: " + Bukkit.getVersion());
         append("Server Implementation: " + Bukkit.getName());
         append("Server ID: " + Bukkit.getServerId());

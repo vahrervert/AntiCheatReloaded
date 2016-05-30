@@ -49,8 +49,6 @@ public class AntiCheat extends JavaPlugin {
     private static AntiCheatManager manager;
     private static AntiCheat plugin;
     private static List<Listener> eventList = new ArrayList<Listener>();
-    private static boolean update = false;
-    private static String updateDetails = null;
     private static Configuration config;
     private static boolean verbose;
     private static boolean developer;
@@ -73,7 +71,6 @@ public class AntiCheat extends JavaPlugin {
         setupConfig();
         setupEvents();
         setupCommands();
-        setupUpdater();
         setupProtocol();
         // Enterprise must come before levels
         setupEnterprise();
@@ -99,25 +96,6 @@ public class AntiCheat extends JavaPlugin {
         // Enable packetlisteners
         if (VersionUtil.getVersion().equals("v1_8_R3"))
         	KillAuraCheck.listenPackets();
-    }
-
-    private void setupUpdater() {
-        if (config.getConfig().autoUpdate.getValue()) {
-            final File file = this.getFile();
-            final Plugin plugin = this;
-            getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
-                @Override
-                public void run() {
-                    verboseLog("Checking for a new update...");
-                    Updater updater = new Updater(plugin, PROJECT_ID, file, Updater.UpdateType.DEFAULT, false);
-                    update = updater.getResult() == Updater.UpdateResult.SUCCESS;
-                    verboseLog("Update available: " + update);
-                    if (update) {
-                        updateDetails = updater.getLatestName() + " for " + updater.getLatestGameVersion();
-                    }
-                }
-            });
-        }
     }
 
 	@Override
@@ -182,14 +160,6 @@ public class AntiCheat extends JavaPlugin {
 
     public static AntiCheatManager getManager() {
         return manager;
-    }
-
-    public static boolean isUpdated() {
-        return !update;
-    }
-
-    public static String getUpdateDetails() {
-        return updateDetails;
     }
 
     public static String getVersion() {
