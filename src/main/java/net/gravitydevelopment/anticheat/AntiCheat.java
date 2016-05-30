@@ -18,12 +18,14 @@
 
 package net.gravitydevelopment.anticheat;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -38,9 +40,9 @@ import net.gravitydevelopment.anticheat.event.InventoryListener;
 import net.gravitydevelopment.anticheat.event.PlayerListener;
 import net.gravitydevelopment.anticheat.event.VehicleListener;
 import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
-import net.gravitydevelopment.anticheat.manage.PacketManager;
 import net.gravitydevelopment.anticheat.util.User;
 import net.gravitydevelopment.anticheat.util.VersionUtil;
+import net.gravitydevelopment.updater.Updater;
 
 public class AntiCheat extends JavaPlugin {
 
@@ -52,7 +54,7 @@ public class AntiCheat extends JavaPlugin {
     private static Configuration config;
     private static boolean verbose;
     private static boolean developer;
-    private static final int PROJECT_ID = 38723;
+    private static final int PROJECT_ID = 100229;
     private static ProtocolManager protocolManager;
     private static boolean protocolLib = false;
     private static Long loadTime;
@@ -71,6 +73,7 @@ public class AntiCheat extends JavaPlugin {
         setupConfig();
         setupEvents();
         setupCommands();
+        setupUpdater();
         setupProtocol();
         // Enterprise must come before levels
         setupEnterprise();
@@ -98,7 +101,26 @@ public class AntiCheat extends JavaPlugin {
         	KillAuraCheck.listenPackets();
     }
 
-    @Override
+    private void setupUpdater() {
+        if (config.getConfig().autoUpdate.getValue()) {
+            final File file = this.getFile();
+            final Plugin plugin = this;
+            getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
+                @Override
+                public void run() {
+                    verboseLog("Checking for a new update...");
+                    Updater updater = new Updater(plugin, PROJECT_ID, file, Updater.UpdateType.DEFAULT, false);
+                    update = updater.getResult() == Updater.UpdateResult.SUCCESS;
+                    verboseLog("Update available: " + update);
+                    if (update) {
+                        updateDetails = updater.getLatestName() + " for " + updater.getLatestGameVersion();
+                    }
+                }
+            });
+        }
+    }
+
+	@Override
     public void onDisable() {
         verboseLog("Saving user levels...");
         config.getLevels().saveLevelsFromUsers(getManager().getUserManager().getUsers());

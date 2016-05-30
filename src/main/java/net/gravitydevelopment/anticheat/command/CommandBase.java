@@ -43,7 +43,7 @@ public class CommandBase {
     public static final ChatColor GOLD = ChatColor.GOLD;
     public static final ChatColor AQUA = ChatColor.AQUA;
     public static final Server SERVER = Bukkit.getServer();
-    public static final String PERMISSIONS_ERROR = RED + "Insufficient Permissions.";
+    public static final String PERMISSIONS_ERROR = RED + "You don't have the permissions to use this command.";
     public static final String MENU_END = "-----------------------------------------------------";
 
     private final String name;
@@ -73,9 +73,9 @@ public class CommandBase {
     }
 
     public void sendHelp(CommandSender cs) {
-        cs.sendMessage(GREEN + "== " + GRAY + getName() + GREEN + " ==");
-        cs.sendMessage(GREEN + "Usage: " + GRAY + (cs instanceof Player ? "/" : "") + getUsage());
-        cs.sendMessage(GREEN + "Permission: " + GRAY + getPermission().toString());
+        cs.sendMessage(RED + "== " + GRAY + getName() + RED + " ==");
+        cs.sendMessage(RED + "Usage: " + GRAY + (cs instanceof Player ? "/" : "") + getUsage());
+        cs.sendMessage(RED + "Permission: " + GRAY + getPermission().toString());
         for (String string : getHelp()) {
             cs.sendMessage(string);
         }

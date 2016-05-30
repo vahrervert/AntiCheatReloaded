@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -40,7 +41,7 @@ public class KillAuraCheck {
 			@Override
 			public void onPacketReceiving(PacketEvent e) {
 				Player p = e.getPlayer();
-				if (!CHECKER_NPCS.containsKey(p.getUniqueId()))
+				if (!CHECKER_NPCS.containsKey(p.getUniqueId()) || AntiCheat.getManager().getCheckManager().isOpExempt(p) || AntiCheat.getManager().getCheckManager().isExempt(p, CheckType.KILLAURA))
 					return;
 				int entityId = ((Integer)e.getPacket().getIntegers().read(0));
 				boolean isBot = CHECKER_NPCS.get(p.getUniqueId()).onHit(entityId);
@@ -60,6 +61,8 @@ public class KillAuraCheck {
 	}
 
 	public static void doDamageEvent(EntityDamageByEntityEvent e, Player p) {
+		if (AntiCheat.getManager().getCheckManager().isOpExempt(p) || AntiCheat.getManager().getCheckManager().isExempt(p, CheckType.KILLAURA))
+			return;
 		if (VersionUtil.getVersion().equals("v1_8_R3")) { // TODO 1.9 support
 			if (!CHECKER_NPCS.containsKey(p.getUniqueId())) { // Enable killaura check after player damaged other player, this is more efficient
 				CHECKER_NPCS.put(p.getUniqueId(), new CheckerNPCS(p));
@@ -69,6 +72,10 @@ public class KillAuraCheck {
 	
 	public static void doMove(PlayerMoveEvent e) {
 		if (CHECKER_NPCS.containsKey(e.getPlayer().getUniqueId())) { 
+			if (AntiCheat.getManager().getCheckManager().isOpExempt(e.getPlayer()) || AntiCheat.getManager().getCheckManager().isExempt(e.getPlayer(), CheckType.KILLAURA)) {
+				cleanPlayer(e.getPlayer());
+				return;
+			}
 			CHECKER_NPCS.get(e.getPlayer().getUniqueId()).doMove(e);
 		}
 	}

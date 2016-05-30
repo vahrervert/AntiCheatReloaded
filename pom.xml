@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.gravitydevelopment.anticheat</groupId>
     <artifactId>AntiCheat</artifactId>
-    <version>1.1.0-ALPHA</version>
+    <version>1.2.0-ALPHA</version>
     <name>AntiCheatReloaded</name>
     <url>https://rammelkast.com</url>
     <properties>
@@ -93,6 +93,12 @@
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
     	</dependency>
+    	<dependency>
+            <groupId>net.gravitydevelopment.updater</groupId>
+            <artifactId>updater</artifactId>
+            <version>2.1</version>
+            <scope>compile</scope>
+        </dependency>
   <dependency>
     <groupId>com.comphenix.protocol</groupId>
     <artifactId>ProtocolLib-API</artifactId>
