@@ -37,5 +37,11 @@ public class CheckerNPCS {
 				return true;
 		return false;
 	}
+
+	public void clean(Player p) {
+		for (NPC npc : NPCS)
+			npc.destroy(p);
+		NPCS.clear();
+	}
 	
 }

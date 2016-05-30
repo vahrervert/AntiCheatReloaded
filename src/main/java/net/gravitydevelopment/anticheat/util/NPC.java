@@ -14,6 +14,7 @@ import org.bukkit.util.Vector;
 import com.mojang.authlib.GameProfile;
 
 import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityTeleport;
 import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
@@ -47,6 +48,11 @@ public class NPC {
 	public void move(Location loc, Player owner) {
 		this.npc.setLocation(loc.getX(), loc.getY(), loc.getZ(), 0, 0);
 		((CraftPlayer)owner).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityTeleport(this.npc));
+	}
+
+	public void destroy(Player p) {
+		((CraftPlayer)p).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, new EntityPlayer[] { this.npc }));
+		((CraftPlayer)p).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(new int[] { this.npc.getId() }));
 	}
 	
 }

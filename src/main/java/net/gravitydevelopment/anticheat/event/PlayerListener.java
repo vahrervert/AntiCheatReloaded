@@ -29,6 +29,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
@@ -449,6 +450,11 @@ public class PlayerListener extends EventListener {
         AntiCheat.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
     }
 
+    @EventHandler(priority=EventPriority.HIGHEST)
+    public void onDeath(PlayerDeathEvent e) {
+    	KillAuraCheck.cleanPlayer(e.getEntity());
+    }
+    
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void checkFly(PlayerMoveEvent event) {
         // Check flight on highest to make sure other plugins have a chance to change the values first.

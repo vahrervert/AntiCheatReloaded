@@ -30,7 +30,9 @@ public class KillAuraCheck {
 	private static final Map<UUID, Integer> VL_COUNT = new HashMap<UUID, Integer>();
 	
 	public static void cleanPlayer(Player p) {
+		CHECKER_NPCS.get(p.getUniqueId()).clean(p);
 		CHECKER_NPCS.remove(p.getUniqueId());
+		VL_COUNT.remove(p.getUniqueId());
 	}
 	
 	public static void listenPackets() {
