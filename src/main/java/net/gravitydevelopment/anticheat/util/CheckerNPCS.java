@@ -20,12 +20,22 @@ public class CheckerNPCS {
 	public void doMove(PlayerMoveEvent e) {
 		NPC one = NPCS.get(0);
 		Location eyeLocation = e.getPlayer().getEyeLocation();
-		Vector vec = e.getPlayer().getLocation().getDirection();
+		Vector vec = e.getFrom().getDirection();
 		Vector newVec = new Vector(vec.getX() * -2, vec.getY() * -2, vec.getZ() * -2);
 		Location backLocation = eyeLocation.add(newVec);
-		if (e.getPlayer().getLocation().getPitch() <= -45) // TODO better fix for this
-			backLocation.add(0, -2.5, 0);
+		if (e.getPlayer().getLocation().getPitch() <= -45) {// TODO better fix for this
+			Vector direction = e.getFrom().getDirection();
+			Vector addVector = direction.setX(direction.getX() * -2).setY(direction.getY() * -2).setZ(direction.getZ() * -2);
+			backLocation.add(addVector);
+		}
 		one.move(backLocation, e.getPlayer());
+	}
+
+	public boolean onHit(int entityId) {
+		for (NPC npc : NPCS)
+			if (npc.getEntityId() == entityId)
+				return true;
+		return false;
 	}
 	
 }

@@ -27,7 +27,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 
+import net.gravitydevelopment.anticheat.check.combat.KillAuraCheck;
 import net.gravitydevelopment.anticheat.command.CommandHandler;
 import net.gravitydevelopment.anticheat.config.Configuration;
 import net.gravitydevelopment.anticheat.event.BlockListener;
@@ -51,7 +53,7 @@ public class AntiCheat extends JavaPlugin {
     private static boolean verbose;
     private static boolean developer;
     private static final int PROJECT_ID = 38723;
-    private static PacketManager packetManager;
+    private static ProtocolManager protocolManager;
     private static boolean protocolLib = false;
     private static Long loadTime;
 
@@ -69,7 +71,7 @@ public class AntiCheat extends JavaPlugin {
         setupConfig();
         setupEvents();
         setupCommands();
-        // setupProtocol(); TODO
+        setupProtocol();
         // Enterprise must come before levels
         setupEnterprise();
         restoreLevels();
@@ -90,6 +92,10 @@ public class AntiCheat extends JavaPlugin {
         // End tests
         verboseLog("Finished loading.");
         getLogger().info("Running version " + VersionUtil.getVersion() + "...");
+        
+        // Enable packetlisteners
+        if (VersionUtil.getVersion().equals("v1_8_R3"))
+        	KillAuraCheck.listenPackets();
     }
 
     @Override
@@ -105,7 +111,7 @@ public class AntiCheat extends JavaPlugin {
     private void setupProtocol() {
         if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
             protocolLib = true;
-            packetManager = new PacketManager(ProtocolLibrary.getProtocolManager(), this, manager);
+            protocolManager = ProtocolLibrary.getProtocolManager();
             verboseLog("Hooked into ProtocolLib");
         }
     }
@@ -209,4 +215,9 @@ public class AntiCheat extends JavaPlugin {
     public Long getLoadTime() {
         return loadTime;
     }
+
+	public static ProtocolManager getProtocolManager() {
+		return protocolManager;
+	}
+
 }

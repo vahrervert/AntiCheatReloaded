@@ -373,4 +373,8 @@ public interface Magic {
      * Minimum travel distance for move to be considered a teleport and subsequently be ignored; Type=INTEGER, Leniency=INCREASE.
      */
     public int TELEPORT_MIN();
+    /**
+     * Maximum amount of times a player can hit a killaura bot; Type=INTEGER, Leniency=INCREASE.
+     */
+    public int KILLAURA_BOTHITS();
 }

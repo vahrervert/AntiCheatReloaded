@@ -40,6 +40,10 @@ public class NPC {
 		((CraftPlayer)owner).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(this.npc));
 	}
 	
+	public int getEntityId() {
+		return npc.getId();
+	}
+	
 	public void move(Location loc, Player owner) {
 		this.npc.setLocation(loc.getX(), loc.getY(), loc.getZ(), 0, 0);
 		((CraftPlayer)owner).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityTeleport(this.npc));
