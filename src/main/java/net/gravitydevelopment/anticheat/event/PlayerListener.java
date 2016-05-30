@@ -54,6 +54,7 @@ import org.bukkit.inventory.PlayerInventory;
 import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.check.CheckResult;
 import net.gravitydevelopment.anticheat.check.CheckType;
+import net.gravitydevelopment.anticheat.check.combat.KillAuraCheck;
 import net.gravitydevelopment.anticheat.check.movement.FlightCheck;
 import net.gravitydevelopment.anticheat.check.movement.GlideCheck;
 import net.gravitydevelopment.anticheat.check.movement.WaterWalkCheck;
@@ -320,6 +321,8 @@ public class PlayerListener extends EventListener {
 
             final User user = getUserManager().getUser(player.getName());
             user.setTo(to.getX(), to.getY(), to.getZ());
+            
+            KillAuraCheck.doMove(event);
             
             if (getCheckManager().willCheckQuick(player, CheckType.SPRINT)) {
                 CheckResult result = getBackend().checkSprintStill(player, from, to);

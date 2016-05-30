@@ -6,8 +6,10 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 import net.gravitydevelopment.anticheat.util.CheckerNPCS;
+import net.gravitydevelopment.anticheat.util.VersionUtil;
 
 /**
  * @author Marco
@@ -22,8 +24,16 @@ public class KillAuraCheck {
 	}
 
 	public static void doDamageEvent(EntityDamageByEntityEvent e, Player p) {
-		if (!CHECKER_NPCS.containsKey(p.getUniqueId())) { // Enable killaura check after player damaged other player, this is more efficient
-			
+		if (VersionUtil.getVersion().equals("v1_8_R3")) { // TODO 1.9 support
+			if (!CHECKER_NPCS.containsKey(p.getUniqueId())) { // Enable killaura check after player damaged other player, this is more efficient
+				CHECKER_NPCS.put(p.getUniqueId(), new CheckerNPCS(p));
+			}
+		}
+	}
+	
+	public static void doMove(PlayerMoveEvent e) {
+		if (CHECKER_NPCS.containsKey(e.getPlayer().getUniqueId())) { 
+			CHECKER_NPCS.get(e.getPlayer().getUniqueId()).doMove(e);
 		}
 	}
 	
