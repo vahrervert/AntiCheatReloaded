@@ -47,8 +47,10 @@ public class KillAuraCheck {
 						VL_COUNT.put(p.getUniqueId(), 1);
 					else {
 						VL_COUNT.put(p.getUniqueId(), VL_COUNT.get(p.getUniqueId()) + 1);
-						if (VL_COUNT.get(p.getUniqueId()) >= AntiCheat.getManager().getBackend().getMagic().KILLAURA_BOTHITS())
+						if (VL_COUNT.get(p.getUniqueId()) >= AntiCheat.getManager().getBackend().getMagic().KILLAURA_BOTHITS()) {
 							EventListener.log(new CheckResult(CheckResult.Result.FAILED, p.getName() + " failed Killaura, hit the bot " + VL_COUNT.get(p.getUniqueId()) + " times (max=" + AntiCheat.getManager().getBackend().getMagic().KILLAURA_BOTHITS() + ")").getMessage(), p, CheckType.KILLAURA);
+							VL_COUNT.remove(p.getUniqueId());
+						}
 					}
 				}
 			}
