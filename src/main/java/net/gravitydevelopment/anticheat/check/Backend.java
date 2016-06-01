@@ -38,6 +38,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.check.combat.KillAuraCheck;
+import net.gravitydevelopment.anticheat.check.combat.VelocityCheck;
 import net.gravitydevelopment.anticheat.check.movement.BlinkCheck;
 import net.gravitydevelopment.anticheat.check.movement.FlightCheck;
 import net.gravitydevelopment.anticheat.check.movement.GlideCheck;
@@ -118,6 +119,7 @@ public class Backend {
     public void garbageClean(Player player) {
         String pN = player.getName();
 
+        VelocityCheck.cleanPlayer(player);
         KillAuraCheck.cleanPlayer(player);
         BlinkCheck.MOVE_COUNT.remove(player.getUniqueId());
         blocksDropped.remove(pN);

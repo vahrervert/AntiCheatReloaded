@@ -381,4 +381,8 @@ public interface Magic {
      * Maximum amount of packets a player can send in a second; Type=INTEGER, Leniency=INCREASE.
      */
     public int BLINK_PACKET();
+    /**
+     * Maximum amount of low/zero velocity before flagging; Type=INTEGER, Leniency=INCREASE.
+     */
+    public int VELOCITY_AMT();
 }

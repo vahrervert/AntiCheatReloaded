@@ -59,7 +59,8 @@ public enum CheckType {
     FAST_INVENTORY(Permission.CHECK_FASTINVENTORY),
     AUTOTOOL(Permission.CHECK_AUTOTOOL),
     KILLAURA(Permission.CHECK_KILLAURA), 
-    BLINK(Permission.CHECK_BLINK);
+    BLINK(Permission.CHECK_BLINK),
+	VELOCITY(Permission.VELOCITY);
 
     private final Permission permission;
     private final Map<String, Integer> level = new HashMap<String, Integer>();

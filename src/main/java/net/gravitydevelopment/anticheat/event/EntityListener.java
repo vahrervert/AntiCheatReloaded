@@ -24,6 +24,7 @@ import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
@@ -35,6 +36,7 @@ import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.check.CheckResult;
 import net.gravitydevelopment.anticheat.check.CheckType;
 import net.gravitydevelopment.anticheat.check.combat.KillAuraCheck;
+import net.gravitydevelopment.anticheat.check.combat.VelocityCheck;
 import net.gravitydevelopment.anticheat.util.Distance;
 import net.gravitydevelopment.anticheat.util.Utilities;
 
@@ -96,7 +98,7 @@ public class EntityListener extends EventListener {
         AntiCheat.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
         boolean noHack = true;
         if (event instanceof EntityDamageByEntityEvent) {
@@ -106,13 +108,7 @@ public class EntityListener extends EventListener {
             }
             if (event.getEntity() instanceof Player) {
                 Player player = (Player) event.getEntity();
-                // Keep players from shooting an arrow at themselves in order to fly
-                if (e.getDamager() instanceof Arrow) {
-                    Arrow arrow = (Arrow) e.getDamager();
-                    if (arrow.getShooter() instanceof Player && event.getEntity() == arrow.getShooter()) {
-                        event.setCancelled(true);
-                    }
-                }
+                VelocityCheck.runCheck(e, player);
                 if (Utilities.hasArmorEnchantment(player, Enchantment.THORNS)) {
                     getBackend().logAnimation(player);
                 }

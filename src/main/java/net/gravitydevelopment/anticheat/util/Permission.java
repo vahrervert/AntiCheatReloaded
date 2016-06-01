@@ -61,7 +61,7 @@ public enum Permission {
     SYSTEM_CALIBRATE,
     SYSTEM_CHECK,
     SYSTEM_DEBUG,
-    SYSTEM_RELOAD, CHECK_KILLAURA, CHECK_BLINK;
+    SYSTEM_RELOAD, CHECK_KILLAURA, CHECK_BLINK, VELOCITY;
 
     private static final String PERMISSION_ALL = "anticheat.*";
     private static final String PERMISSION_SPAM = "anticheat.check.spam";
