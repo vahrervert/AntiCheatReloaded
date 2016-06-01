@@ -30,11 +30,6 @@ public class BlinkCheck {
 			@Override
 			public void run() {
 				for (Player p : Bukkit.getOnlinePlayers()) {
-					if (AntiCheat.getManager().getCheckManager().checkInWorld(p) && !AntiCheat.getManager().getCheckManager().isOpExempt(p) && AntiCheat.getManager().getCheckManager().isExempt(p, CheckType.BLINK))
-						if (MOVE_COUNT.containsKey(p.getUniqueId()))
-							if (MOVE_COUNT.get(p.getUniqueId()) > AntiCheat.getManager().getBackend().getMagic().BLINK_PACKET()) {
-								EventListener.log(new CheckResult(CheckResult.Result.FAILED, p.getName() + " failed Blink, sent " + MOVE_COUNT.get(p.getUniqueId()) + "packets in one second (max=" + AntiCheat.getManager().getBackend().getMagic().BLINK_PACKET() + ")").getMessage(), p, CheckType.BLINK);
-							}
 					MOVE_COUNT.remove(p.getUniqueId());
 				}
 			}
