@@ -33,7 +33,7 @@ public class BlinkCheck {
 					if (AntiCheat.getManager().getCheckManager().checkInWorld(p) && !AntiCheat.getManager().getCheckManager().isOpExempt(p) && AntiCheat.getManager().getCheckManager().isExempt(p, CheckType.BLINK))
 						if (MOVE_COUNT.containsKey(p.getUniqueId()))
 							if (MOVE_COUNT.get(p.getUniqueId()) > AntiCheat.getManager().getBackend().getMagic().BLINK_PACKET()) {
-								EventListener.log(new CheckResult(CheckResult.Result.FAILED, p.getName() + " failed Blink, sent " + MOVE_COUNT.get(p.getUniqueId()) + "packets in one second (max=" + AntiCheat.getManager().getBackend().getMagic().BLINK_PACKET() + ")").getMessage(), p, CheckType.KILLAURA);
+								EventListener.log(new CheckResult(CheckResult.Result.FAILED, p.getName() + " failed Blink, sent " + MOVE_COUNT.get(p.getUniqueId()) + "packets in one second (max=" + AntiCheat.getManager().getBackend().getMagic().BLINK_PACKET() + ")").getMessage(), p, CheckType.BLINK);
 							}
 					MOVE_COUNT.remove(p.getUniqueId());
 				}
@@ -50,8 +50,12 @@ public class BlinkCheck {
 					MOVE_COUNT.put(p.getUniqueId(), 1);
 				else {
 					MOVE_COUNT.put(p.getUniqueId(), MOVE_COUNT.get(p.getUniqueId()) + 1);
-					if (MOVE_COUNT.get(p.getUniqueId()) > AntiCheat.getManager().getBackend().getMagic().BLINK_PACKET())
-						e.setCancelled(true);
+					if (AntiCheat.getManager().getCheckManager().checkInWorld(p) && !AntiCheat.getManager().getCheckManager().isOpExempt(p) && !AntiCheat.getManager().getCheckManager().isExempt(p, CheckType.BLINK))
+						if (MOVE_COUNT.get(p.getUniqueId()) > AntiCheat.getManager().getBackend().getMagic().BLINK_PACKET()) {
+							EventListener.log(new CheckResult(CheckResult.Result.FAILED, p.getName() + " failed Blink, sent " + MOVE_COUNT.get(p.getUniqueId()) + "packets in one second (max=" + AntiCheat.getManager().getBackend().getMagic().BLINK_PACKET() + ")").getMessage(), p, CheckType.BLINK);
+							MOVE_COUNT.remove(p.getUniqueId());
+							e.setCancelled(true);
+						}
 				}
 			}
 		});
