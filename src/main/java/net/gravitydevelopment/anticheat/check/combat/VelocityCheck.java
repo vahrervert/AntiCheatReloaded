@@ -29,14 +29,16 @@ public class VelocityCheck {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
+				if (!p.isOnline())
+					return;
 				if (then.distance(p.getLocation()) < 0.125) {
 					if (!VL_COUNT.containsKey(p.getUniqueId()))
 						VL_COUNT.put(p.getUniqueId(), 1);
 					else {
 						VL_COUNT.put(p.getUniqueId(), VL_COUNT.get(p.getUniqueId()) + 1);
 						if (VL_COUNT.get(p.getUniqueId()) > AntiCheat.getManager().getBackend().getMagic().VELOCITY_AMT()) {
-							VL_COUNT.remove(p.getUniqueId());
 							EventListener.log(new CheckResult(CheckResult.Result.FAILED, p.getName() + " failed Velocity, had zero/low velocity " + VL_COUNT.get(p.getUniqueId()) + " times (max=" + AntiCheat.getManager().getBackend().getMagic().VELOCITY_AMT() + ")").getMessage(), p, CheckType.VELOCITY);
+							VL_COUNT.remove(p.getUniqueId());
 						}
 					}
 				}else {
