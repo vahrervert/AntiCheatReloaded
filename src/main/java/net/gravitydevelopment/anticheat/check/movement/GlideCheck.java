@@ -36,7 +36,7 @@ public class GlideCheck {
     	{
     		if(math <= lastYDelta.get(name) && !(player.getEyeLocation().getBlock().getType() == Material.LADDER)
     				&& !Utilities.isInWater(player) && !Utilities.isInWeb(player)
-    				&& Utilities.cantStandAtSingle(player.getLocation().getBlock()))
+    				&& Utilities.cantStandAt(player.getLocation().getBlock()))
     		{
     			if(!glideBuffer.containsKey(name))
     	    		glideBuffer.put(name, 0);

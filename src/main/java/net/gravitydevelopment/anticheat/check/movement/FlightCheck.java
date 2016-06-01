@@ -12,6 +12,11 @@ import net.gravitydevelopment.anticheat.check.CheckResult;
 import net.gravitydevelopment.anticheat.util.Distance;
 import net.gravitydevelopment.anticheat.util.Utilities;
 
+/**
+ * 
+ *  @author Marco
+ *  TODO rewrite this check
+ */
 public class FlightCheck {
 
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
