@@ -51,8 +51,6 @@ public class NPC {
 	}
 
 	public void destroy(Player p) {
-		if (!p.isOnline())
-			return;
 		((CraftPlayer)p).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, new EntityPlayer[] { this.npc }));
 		((CraftPlayer)p).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(new int[] { this.npc.getId() }));
 	}

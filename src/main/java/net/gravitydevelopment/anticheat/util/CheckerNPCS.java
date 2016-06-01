@@ -39,6 +39,8 @@ public class CheckerNPCS {
 	}
 
 	public void clean(Player p) {
+		if (!p.isOnline())
+			return;
 		for (NPC npc : NPCS)
 			npc.destroy(p);
 		NPCS.clear();
