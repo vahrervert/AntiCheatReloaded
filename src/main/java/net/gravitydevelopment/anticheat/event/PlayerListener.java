@@ -452,7 +452,7 @@ public class PlayerListener extends EventListener {
 
     @EventHandler(priority=EventPriority.HIGHEST)
     public void onDeath(PlayerDeathEvent e) {
-    	KillAuraCheck.cleanPlayer(e.getEntity());
+    	KillAuraCheck.cleanPlayer(e.getEntity()); // Remove bots on death to reduce lag
     }
     
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

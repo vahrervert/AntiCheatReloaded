@@ -58,7 +58,8 @@ public enum CheckType {
     ITEM_SPAM(Permission.CHECK_ITEMSPAM),
     FAST_INVENTORY(Permission.CHECK_FASTINVENTORY),
     AUTOTOOL(Permission.CHECK_AUTOTOOL),
-    KILLAURA(Permission.CHECK_KILLAURA);
+    KILLAURA(Permission.CHECK_KILLAURA), 
+    BLINK(Permission.CHECK_BLINK);
 
     private final Permission permission;
     private final Map<String, Integer> level = new HashMap<String, Integer>();

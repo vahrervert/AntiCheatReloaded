@@ -32,6 +32,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
 import net.gravitydevelopment.anticheat.check.combat.KillAuraCheck;
+import net.gravitydevelopment.anticheat.check.movement.BlinkCheck;
 import net.gravitydevelopment.anticheat.command.CommandHandler;
 import net.gravitydevelopment.anticheat.config.Configuration;
 import net.gravitydevelopment.anticheat.event.BlockListener;
@@ -96,6 +97,9 @@ public class AntiCheat extends JavaPlugin {
         // Enable packetlisteners
         if (VersionUtil.getVersion().equals("v1_8_R3"))
         	KillAuraCheck.listenPackets();
+        
+        BlinkCheck.startTimer();
+        BlinkCheck.listenPackets();
     }
 
 	@Override

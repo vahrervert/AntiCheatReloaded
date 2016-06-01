@@ -377,4 +377,8 @@ public interface Magic {
      * Maximum amount of times a player can hit a killaura bot; Type=INTEGER, Leniency=INCREASE.
      */
     public int KILLAURA_BOTHITS();
+    /**
+     * Maximum amount of packets a player can send in a second; Type=INTEGER, Leniency=INCREASE.
+     */
+    public int BLINK_PACKET();
 }

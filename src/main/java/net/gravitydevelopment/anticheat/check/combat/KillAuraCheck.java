@@ -22,8 +22,7 @@ import net.gravitydevelopment.anticheat.util.CheckerNPCS;
 import net.gravitydevelopment.anticheat.util.VersionUtil;
 
 /**
- * @author Marco
- * STILL IN HEAVY DEVELOPMENT!
+ * @author Rammelkast
  */
 public class KillAuraCheck {
 
