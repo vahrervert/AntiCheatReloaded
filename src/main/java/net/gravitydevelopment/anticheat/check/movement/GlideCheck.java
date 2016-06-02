@@ -36,13 +36,13 @@ public class GlideCheck {
     	{
     		if(math <= lastYDelta.get(name) && !(player.getEyeLocation().getBlock().getType() == Material.LADDER)
     				&& !Utilities.isInWater(player) && !Utilities.isInWeb(player)
-    				&& Utilities.cantStandAt(player.getLocation().getBlock()))
+    				&& Utilities.cantStandAt(player.getLocation().getBlock()) && !Utilities.cantStandAtSingle(player.getLocation().getBlock()))
     		{
     			if(!glideBuffer.containsKey(name))
     	    		glideBuffer.put(name, 0);
     			int currentBuffer = glideBuffer.get(name);
     			glideBuffer.put(name, currentBuffer + 1);
-    			if(currentBuffer >= AntiCheat.getManager().getBackend().getMagic().GLIDE_LIMIT())
+    			if(currentBuffer + 1 >= AntiCheat.getManager().getBackend().getMagic().GLIDE_LIMIT())
     			{
         			double fallDist = distanceToFall(player.getLocation());
         			player.teleport(player.getLocation().add(0, -fallDist, 0));
