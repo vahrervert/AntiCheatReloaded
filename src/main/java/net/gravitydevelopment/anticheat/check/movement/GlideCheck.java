@@ -6,6 +6,7 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 import net.gravitydevelopment.anticheat.AntiCheat;
@@ -16,6 +17,7 @@ import net.gravitydevelopment.anticheat.util.Utilities;
 /**
  * 
  * @author Marco STILL IN ALPHA TESTING!
+ * TODO fix false positives
  */
 public class GlideCheck {
 
@@ -36,13 +38,13 @@ public class GlideCheck {
     	{
     		if(math <= lastYDelta.get(name) && !(player.getEyeLocation().getBlock().getType() == Material.LADDER)
     				&& !Utilities.isInWater(player) && !Utilities.isInWeb(player)
-    				&& Utilities.cantStandAt(player.getLocation().getBlock()) && !Utilities.cantStandAtSingle(player.getLocation().getBlock()))
+    				&& Utilities.cantStandAt(player.getLocation().getBlock()) && !Utilities.cantStandAtSingle(player.getLocation().getBlock()) && !!Utilities.cantStandAtSingle(player.getLocation().getBlock().getRelative(BlockFace.DOWN)))
     		{
     			if(!glideBuffer.containsKey(name))
     	    		glideBuffer.put(name, 0);
     			int currentBuffer = glideBuffer.get(name);
     			glideBuffer.put(name, currentBuffer + 1);
-    			if(currentBuffer + 1 >= AntiCheat.getManager().getBackend().getMagic().GLIDE_LIMIT())
+    			if(currentBuffer >= AntiCheat.getManager().getBackend().getMagic().GLIDE_LIMIT())
     			{
         			double fallDist = distanceToFall(player.getLocation());
         			player.teleport(player.getLocation().add(0, -fallDist, 0));
