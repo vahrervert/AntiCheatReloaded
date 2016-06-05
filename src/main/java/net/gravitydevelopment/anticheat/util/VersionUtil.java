@@ -17,7 +17,7 @@ public class VersionUtil {
 		if (getVersion().equals("v1_8_R3")) {
 			return p.isFlying();
 		}else if (getVersion().equals("v1_9_R1")) {
-			return p.isFlying() || ElytraUtil_R1.isGliding(p);
+			return p.isFlying() || ElytraUtil.isGliding(p);
 		}else {
 			return p.isFlying();
 		}

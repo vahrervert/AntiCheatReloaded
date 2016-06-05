@@ -63,7 +63,7 @@ public class KillAuraCheck {
 	public static void doDamageEvent(EntityDamageByEntityEvent e, Player p) {
 		if (AntiCheat.getManager().getCheckManager().isOpExempt(p) || AntiCheat.getManager().getCheckManager().isExempt(p, CheckType.KILLAURA))
 			return;
-		if (VersionUtil.getVersion().equals("v1_8_R3")) { // TODO 1.9 support
+		if (VersionUtil.getVersion().equals("v1_9_R1")) { // TODO 1.9 R2 support
 			if (!CHECKER_NPCS.containsKey(p.getUniqueId())) { // Enable killaura check after player damaged other player, this is more efficient
 				CHECKER_NPCS.put(p.getUniqueId(), new CheckerNPCS(p));
 			}

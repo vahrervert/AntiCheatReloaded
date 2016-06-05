@@ -18,14 +18,12 @@
 
 package net.gravitydevelopment.anticheat;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -43,7 +41,6 @@ import net.gravitydevelopment.anticheat.event.VehicleListener;
 import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
 import net.gravitydevelopment.anticheat.util.User;
 import net.gravitydevelopment.anticheat.util.VersionUtil;
-import net.gravitydevelopment.updater.Updater;
 
 public class AntiCheat extends JavaPlugin {
 
@@ -95,7 +92,7 @@ public class AntiCheat extends JavaPlugin {
         getLogger().info("Running version " + VersionUtil.getVersion() + "...");
         
         // Enable packetlisteners
-        if (VersionUtil.getVersion().equals("v1_8_R3"))
+        if (VersionUtil.getVersion().equals("v1_9_R1"))
         	KillAuraCheck.listenPackets();
         
         BlinkCheck.startTimer();
