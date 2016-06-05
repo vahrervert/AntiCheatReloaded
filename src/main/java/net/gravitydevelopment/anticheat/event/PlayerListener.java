@@ -64,6 +64,7 @@ import net.gravitydevelopment.anticheat.util.Distance;
 import net.gravitydevelopment.anticheat.util.Permission;
 import net.gravitydevelopment.anticheat.util.User;
 import net.gravitydevelopment.anticheat.util.Utilities;
+import net.gravitydevelopment.anticheat.util.VersionUtil;
 
 public class PlayerListener extends EventListener {
 
@@ -332,7 +333,7 @@ public class PlayerListener extends EventListener {
                     log(result.getMessage(), player, CheckType.SPRINT);
                 }
             }
-            if (getCheckManager().willCheckQuick(player, CheckType.FLY) && !player.isFlying()) /*TODO: ElytraFly fix */ {
+            if (getCheckManager().willCheckQuick(player, CheckType.FLY) && !VersionUtil.isFlying(player)) {
                 CheckResult result = FlightCheck.runCheck(player, distance);
                 if (result.failed()) {
                     if (!silentMode()) {
@@ -341,7 +342,7 @@ public class PlayerListener extends EventListener {
                     log(result.getMessage(), player, CheckType.FLY);
                 }
             }
-            if (getCheckManager().willCheckQuick(player, CheckType.FLY) && !player.isFlying())/*TODO: ElytraFly fix */ {
+            if (getCheckManager().willCheckQuick(player, CheckType.FLY) && !VersionUtil.isFlying(player)) {
                 CheckResult result = GlideCheck.runCheck(player, distance);
                 if (result.failed()) {
                 	// NO TELEPORT NEEDED HERE, HANDLED BY CHECK ITSELF
