@@ -202,8 +202,12 @@ public enum BlockHardness {
     }
 
     public static double getBlockHardness(Material m) {
-        BlockHardness h = getHardness(m);
-        return h == null ? 0D : h.hardness;
+       try {
+    	   BlockHardness h = getHardness(m);
+           return h == null ? 0D : h.hardness;
+       }catch(Exception e) {
+    	   return 0D;
+       }
     }
 
     public static boolean hasBlockHardness(Material m) {
