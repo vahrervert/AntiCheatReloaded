@@ -273,8 +273,6 @@ public class PlayerListener extends EventListener {
 
     @EventHandler
     public void onPlayerAnimation(PlayerAnimationEvent event) {
-        getBackend().logAnimation(event.getPlayer());
-
         AntiCheat.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
     }
 

@@ -71,7 +71,6 @@ public class Backend {
     private Map<String, Integer> projectilesShot = new HashMap<String, Integer>();
     private Map<String, Long> velocitized = new HashMap<String, Long>();
     private Map<String, Integer> velocitytrack = new HashMap<String, Integer>();
-    private Map<String, Long> animated = new HashMap<String, Long>();
     private Map<String, Long> startEat = new HashMap<String, Long>();
     private Map<String, Long> lastHeal = new HashMap<String, Long>();
     private Map<String, Long> projectileTime = new HashMap<String, Long>();
@@ -155,7 +154,6 @@ public class Backend {
         projectilesShot.remove(pN);
         velocitized.remove(pN);
         velocitytrack.remove(pN);
-        animated.remove(pN);
         startEat.remove(pN);
         lastHeal.remove(pN);
         projectileTime.remove(pN);
@@ -703,14 +701,6 @@ public class Backend {
         }
     }
 
-    public CheckResult checkAnimation(Player player, Entity e) {
-        if (!justAnimated(player)) {
-            return new CheckResult(CheckResult.Result.FAILED, player.getName() + " didn't animate before damaging a " + e.getType());
-        } else {
-            return PASS;
-        }
-    }
-
     public CheckResult checkFastHeal(Player player) {
         if (lastHeal.containsKey(player.getName())) // Otherwise it was modified by a plugin, don't worry about it.
         {
@@ -733,13 +723,6 @@ public class Backend {
             }
         }
         return PASS;
-    }
-
-    public void logAnimation(final Player player) {
-        animated.put(player.getName(), System.currentTimeMillis());
-        increment(player, blockPunches, magic.BLOCK_PUNCH_MIN());
-        itemInHand.put(player.getName(), player.getItemInHand().getType());
-        interactionCount.put(player.getName(), 0);
     }
 
     public void logInstantBreak(final Player player) {
@@ -765,7 +748,6 @@ public class Backend {
 
     public void logBlockBreak(final Player player) {
         brokenBlock.put(player.getName(), System.currentTimeMillis());
-        resetAnimation(player);
     }
 
     public boolean justBroke(Player player) {
@@ -807,29 +789,6 @@ public class Backend {
     public boolean justPlaced(Player player) {
         return isDoing(player, placedBlock, magic.BLOCK_PLACE_MIN());
     }
-
-    public void resetAnimation(final Player player) {
-        animated.remove(player.getName());
-        blockPunches.put(player.getName(), 0);
-    }
-
-    private boolean justAnimated(Player player) {
-        String name = player.getName();
-        if (animated.containsKey(name)) {
-            long time = System.currentTimeMillis() - animated.get(name);
-            int count = interactionCount.get(player.getName()) + 1;
-            interactionCount.put(player.getName(), count);
-
-            if (count > magic.ANIMATION_INTERACT_MAX()) {
-                animated.remove(player.getName());
-                return false;
-            }
-            return time < magic.ANIMATION_MIN();
-        } else {
-            return false;
-        }
-    }
-
     public void logDamage(final Player player, int type) {
         long time;
         switch (type) {

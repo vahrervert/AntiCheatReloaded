@@ -109,9 +109,6 @@ public class EntityListener extends EventListener {
             if (event.getEntity() instanceof Player) {
                 Player player = (Player) event.getEntity();
                 VelocityCheck.runCheck(e, player);
-                if (Utilities.hasArmorEnchantment(player, Enchantment.THORNS)) {
-                    getBackend().logAnimation(player);
-                }
                 if (e.getDamager() instanceof Player) {
                     Player p = (Player) e.getDamager();
                     getBackend().logDamage(p, 1);
@@ -150,14 +147,6 @@ public class EntityListener extends EventListener {
                     if (result.failed()) {
                         event.setCancelled(!silentMode());
                         log(result.getMessage(), player, CheckType.FORCEFIELD);
-                        noHack = false;
-                    }
-                }
-                if (getCheckManager().willCheck(player, CheckType.NO_SWING)) {
-                    CheckResult result = getBackend().checkAnimation(player, event.getEntity());
-                    if (result.failed()) {
-                        event.setCancelled(!silentMode());
-                        log(result.getMessage(), player, CheckType.NO_SWING);
                         noHack = false;
                     }
                 }
