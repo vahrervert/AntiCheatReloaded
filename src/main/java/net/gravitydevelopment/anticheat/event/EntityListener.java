@@ -35,6 +35,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.check.CheckResult;
 import net.gravitydevelopment.anticheat.check.CheckType;
+import net.gravitydevelopment.anticheat.check.combat.CriticalsCheck;
 import net.gravitydevelopment.anticheat.check.combat.KillAuraCheck;
 import net.gravitydevelopment.anticheat.check.combat.VelocityCheck;
 import net.gravitydevelopment.anticheat.util.Distance;
@@ -104,7 +105,11 @@ public class EntityListener extends EventListener {
         if (event instanceof EntityDamageByEntityEvent) {
             EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) event;
             if (e.getDamager() instanceof Player) {
-            	KillAuraCheck.doDamageEvent(e, (Player)e.getDamager());
+            	if (getCheckManager().willCheck((Player)e.getDamager(), CheckType.KILLAURA)) {
+                	KillAuraCheck.doDamageEvent(e, (Player)e.getDamager());
+            	}else if (getCheckManager().willCheck((Player)e.getDamager(), CheckType.CRITICALS)) {
+                	CriticalsCheck.doDamageEvent(e, (Player)e.getDamager());	 
+            	}
             }
             if (event.getEntity() instanceof Player) {
                 Player player = (Player) event.getEntity();

@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -53,9 +54,8 @@ import net.gravitydevelopment.anticheat.util.User;
 import net.gravitydevelopment.anticheat.util.Utilities;
 
 public class Backend {
-    private List<String> isAscending = new ArrayList<String>();
-    private Map<String, Integer> interactionCount = new HashMap<String, Integer>();
-    private Map<String, Integer> ascensionCount = new HashMap<String, Integer>();
+    private List<UUID> isAscending = new ArrayList<UUID>();
+    private Map<UUID, Integer> ascensionCount = new HashMap<UUID, Integer>();
     private Map<String, Integer> chatLevel = new HashMap<String, Integer>();
     private Map<String, Integer> commandLevel = new HashMap<String, Integer>();
     private Map<String, Integer> nofallViolation = new HashMap<String, Integer>();
@@ -133,8 +133,8 @@ public class Backend {
         WaterWalkCheck.isInWater.remove(pN);
         WaterWalkCheck.isInWaterCache.remove(pN);
         instantBreakExempt.remove(pN);
-        isAscending.remove(pN);
-        ascensionCount.remove(pN);
+        isAscending.remove(player.getUniqueId());
+        ascensionCount.remove(player.getUniqueId());
         FlightCheck.blocksOverFlight.remove(pN);
         nofallViolation.remove(pN);
         fastBreakViolation.remove(pN);
@@ -188,7 +188,7 @@ public class Backend {
     }
 
     public CheckResult checkProjectile(Player player) {
-        increment(player, projectilesShot, 10);
+    	incrementOld(player, projectilesShot, 10);
         if (!projectileTime.containsKey(player.getName())) {
             projectileTime.put(player.getName(), System.currentTimeMillis());
             return new CheckResult(CheckResult.Result.PASSED);
@@ -204,7 +204,7 @@ public class Backend {
     }
 
     public CheckResult checkFastDrop(Player player) {
-        increment(player, blocksDropped, 10);
+    	incrementOld(player, blocksDropped, 10);
         if (!blockTime.containsKey(player.getName())) {
             blockTime.put(player.getName(), System.currentTimeMillis());
             return new CheckResult(CheckResult.Result.PASSED);
@@ -323,7 +323,7 @@ public class Backend {
             max += speed > 0 ? player.getWalkSpeed() - 0.2f : 0;
 
             if (x > max || z > max) {
-                int num = this.increment(player, speedViolation, magic.SPEED_MAX());
+                int num = this.incrementOld(player, speedViolation, magic.SPEED_MAX());
                 if (num >= magic.SPEED_MAX()) {
                     return new CheckResult(CheckResult.Result.FAILED, player.getName() + "'s speed was too high " + reason + num + " times in a row (max=" + magic.SPEED_MAX() + ", speed=" + (x > z ? x : z) + ", max speed=" + max + ")");
                 } else {
@@ -394,7 +394,7 @@ public class Backend {
         if (step == 1) {
             stepTime.put(name, System.currentTimeMillis());
         }
-        increment(player, steps, step);
+        incrementOld(player, steps, step);
         if (step == magic.TIMER_STEP_CHECK()) {
             long time = System.currentTimeMillis() - stepTime.get(name);
             steps.put(name, 0);
@@ -442,7 +442,7 @@ public class Backend {
     }
 
     public void logAscension(Player player, double y1, double y2) {
-        String name = player.getName();
+        UUID name = player.getUniqueId();
         if (y1 < y2 && !isAscending.contains(name)) {
             isAscending.add(name);
         } else {
@@ -463,12 +463,12 @@ public class Backend {
             if (y1 < y2) {
                 if (!block.getRelative(BlockFace.NORTH).isLiquid() && !block.getRelative(BlockFace.SOUTH).isLiquid() && !block.getRelative(BlockFace.EAST).isLiquid() && !block.getRelative(BlockFace.WEST).isLiquid()) {
                     increment(player, ascensionCount, max);
-                    if (ascensionCount.get(name) >= max) {
+                    if (ascensionCount.get(player.getUniqueId()) >= max) {
                         return new CheckResult(CheckResult.Result.FAILED, player.getName() + " ascended " + ascensionCount.get(name) + " times in a row (max = " + max + string + ")");
                     }
                 }
             } else {
-                ascensionCount.put(name, 0);
+                ascensionCount.put(player.getUniqueId(), 0);
             }
         }
         return PASS;
@@ -903,18 +903,35 @@ public class Backend {
         commandLevel.put(user.getName(), level + 1);
     }
 
-    public int increment(Player player, Map<String, Integer> map, int num) {
-        String name = player.getName();
-        if (map.get(name) == null) {
-            map.put(name, 1);
+    public int increment(Player player, Map<UUID, Integer> ascensionCount2, int num) {
+        UUID name = player.getUniqueId();
+        if (ascensionCount2.get(name) == null) {
+            ascensionCount2.put(name, 1);
             return 1;
         } else {
-            int amount = map.get(name) + 1;
+            int amount = ascensionCount2.get(name) + 1;
             if (amount < num + 1) {
-                map.put(name, amount);
+                ascensionCount2.put(name, amount);
                 return amount;
             } else {
-                map.put(name, num);
+                ascensionCount2.put(name, num);
+                return num;
+            }
+        }
+    }
+    
+    public int incrementOld(Player player, Map<String, Integer> ascensionCount2, int num) {
+        String name = player.getName();
+        if (ascensionCount2.get(name) == null) {
+            ascensionCount2.put(name, 1);
+            return 1;
+        } else {
+            int amount = ascensionCount2.get(name) + 1;
+            if (amount < num + 1) {
+                ascensionCount2.put(name, amount);
+                return amount;
+            } else {
+                ascensionCount2.put(name, num);
                 return num;
             }
         }
