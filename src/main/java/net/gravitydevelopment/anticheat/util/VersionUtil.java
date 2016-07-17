@@ -6,20 +6,14 @@ import org.bukkit.entity.Player;
 public class VersionUtil {
 
 	public static String getVersion() {
-		String version = "";
-        try {
-            version = Bukkit.getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3];
-        } catch (ArrayIndexOutOfBoundsException whatVersionAreYouUsingException) {}
-        return version;
+		return Bukkit.getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3];
 	}
 	
 	public static boolean isFlying(Player p) {
 		if (getVersion().equals("v1_8_R3")) {
 			return p.isFlying();
-		}else if (getVersion().equals("v1_9_R1")) {
-			return p.isFlying() || ElytraUtil.isGliding(p);
 		}else {
-			return p.isFlying();
+			return p.isFlying() || p.isGliding();
 		}
 	}
 	

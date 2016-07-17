@@ -105,7 +105,8 @@ public class YAxisCheck {
 		Material.SANDSTONE_STAIRS,
 		Material.SMOOTH_STAIRS,
 		Material.SPRUCE_WOOD_STAIRS,
-		Material.WOOD_STAIRS
+		Material.WOOD_STAIRS,
+		Material.PURPUR_STAIRS
 	);
 	
 }
