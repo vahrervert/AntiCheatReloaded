@@ -88,7 +88,7 @@ public class YAxisCheck {
         return PASS;
     }
 
-	private static boolean isMoveUpBlock(Block block) {
+	public static boolean isMoveUpBlock(Block block) {
 		return MOVE_UP_BLOCKS.contains(block.getType());
 	}
 	

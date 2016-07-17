@@ -107,7 +107,8 @@ public class EntityListener extends EventListener {
             if (e.getDamager() instanceof Player) {
             	if (getCheckManager().willCheck((Player)e.getDamager(), CheckType.KILLAURA)) {
                 	KillAuraCheck.doDamageEvent(e, (Player)e.getDamager());
-            	}else if (getCheckManager().willCheck((Player)e.getDamager(), CheckType.CRITICALS)) {
+            	}
+            	if (getCheckManager().willCheck((Player)e.getDamager(), CheckType.CRITICALS)) {
                 	CriticalsCheck.doDamageEvent(e, (Player)e.getDamager());	 
             	}
             }
