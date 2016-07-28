@@ -92,9 +92,7 @@ public class AntiCheat extends JavaPlugin {
         getLogger().info("Running version " + VersionUtil.getVersion() + "...");
         
         // Enable packetlisteners
-        if (VersionUtil.getVersion().equals("v1_9_R1"))
-        	KillAuraCheck.listenPackets();
-        
+        KillAuraCheck.listenPackets();
         BlinkCheck.startTimer();
         BlinkCheck.listenPackets();
     }

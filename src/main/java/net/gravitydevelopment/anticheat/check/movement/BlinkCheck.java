@@ -30,9 +30,7 @@ public class BlinkCheck {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				for (Player p : Bukkit.getOnlinePlayers()) {
-					MOVE_COUNT.remove(p.getUniqueId());
-				}
+				MOVE_COUNT.clear();
 			}
 		}.runTaskTimer(AntiCheat.getPlugin(), 0, 20);
 	}
