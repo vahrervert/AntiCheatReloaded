@@ -17,6 +17,7 @@ import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.check.CheckResult;
 import net.gravitydevelopment.anticheat.util.Distance;
 import net.gravitydevelopment.anticheat.util.Utilities;
+import net.gravitydevelopment.anticheat.util.VersionUtil;
 
 public class YAxisCheck {
 
@@ -32,7 +33,7 @@ public class YAxisCheck {
     }
     
 	public static CheckResult runCheck(Player player, Distance distance) {
-        if (distance.getYDifference() > AntiCheat.getManager().getBackend().getMagic().TELEPORT_MIN() || distance.getYDifference() < 0) {
+        if (distance.getYDifference() > AntiCheat.getManager().getBackend().getMagic().TELEPORT_MIN() || distance.getYDifference() < 0 || VersionUtil.isFlying(player)) {
             return PASS;
         }
         if (!FlightCheck.isMovingExempt(player) && !Utilities.isClimbableBlock(player.getLocation().getBlock()) && !Utilities.isClimbableBlock(player.getLocation().add(0, -1, 0).getBlock()) && !player.isInsideVehicle() && !Utilities.isInWater(player) && !hasJumpPotion(player) && !isMoveUpBlock(player.getLocation().add(0, -1, 0).getBlock()) && !isMoveUpBlock(player.getLocation().add(0, -1.5, 0).getBlock())) {
