@@ -5,7 +5,7 @@ AntiCheatReloaded is a fork of the old 'AntiCheat' project.
 AntiCheat helps server admins easily identify and block malicious users by monitoring and analyzing the behaviour of their players.
 
 ###Hacks blocked
---------
+-------
 * Blink
 * Flight
 * Glide
