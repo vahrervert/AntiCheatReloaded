@@ -30,15 +30,7 @@ AntiCheat helps server admins easily identify and block malicious users by monit
 
 Usage
 -------
-Simply drag and drop the plugin into your Plugins folder. Optional configuration and permissions are available:
-
-http://dev.bukkit.org/server-mods/anticheat/pages/configuration/
-
-http://dev.bukkit.org/server-mods/anticheat/pages/permissions/
-
-Developer Resources
--------
-API Usage: http://dev.bukkit.org/server-mods/anticheat/pages/api-documentation/ (might be outdated)
+Simply drag and drop the plugin and the ProtoclLib into your Plugins folder.
 
 Bug Reporting/Support/Questions
 ------------
