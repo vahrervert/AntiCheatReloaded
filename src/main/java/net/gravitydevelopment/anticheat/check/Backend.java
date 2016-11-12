@@ -52,6 +52,7 @@ import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
 import net.gravitydevelopment.anticheat.util.Distance;
 import net.gravitydevelopment.anticheat.util.User;
 import net.gravitydevelopment.anticheat.util.Utilities;
+import net.gravitydevelopment.anticheat.util.VersionUtil;
 
 public class Backend {
     private List<UUID> isAscending = new ArrayList<UUID>();
@@ -848,7 +849,7 @@ public class Backend {
     }
 
     public boolean isSpeedExempt(Player player) {
-        return isMovingExempt(player) || justVelocity(player);
+        return isMovingExempt(player) || justVelocity(player) || VersionUtil.isFlying(player);
     }
 
     private boolean isDoing(Player player, Map<String, Long> map, double max) {
