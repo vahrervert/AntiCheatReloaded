@@ -43,6 +43,7 @@ import net.gravitydevelopment.anticheat.check.combat.VelocityCheck;
 import net.gravitydevelopment.anticheat.check.movement.BlinkCheck;
 import net.gravitydevelopment.anticheat.check.movement.FlightCheck;
 import net.gravitydevelopment.anticheat.check.movement.GlideCheck;
+import net.gravitydevelopment.anticheat.check.movement.SpeedCheck;
 import net.gravitydevelopment.anticheat.check.movement.WaterWalkCheck;
 import net.gravitydevelopment.anticheat.check.movement.YAxisCheck;
 import net.gravitydevelopment.anticheat.config.Configuration;
@@ -60,7 +61,6 @@ public class Backend {
     private Map<String, Integer> chatLevel = new HashMap<String, Integer>();
     private Map<String, Integer> commandLevel = new HashMap<String, Integer>();
     private Map<String, Integer> nofallViolation = new HashMap<String, Integer>();
-    private Map<String, Integer> speedViolation = new HashMap<String, Integer>();
     private Map<String, Integer> fastBreakViolation = new HashMap<String, Integer>();
     private Map<String, Integer> fastBreaks = new HashMap<String, Integer>();
     private Map<String, Boolean> blockBreakHolder = new HashMap<String, Boolean>();
@@ -172,6 +172,7 @@ public class Backend {
         lastFallPacket.remove(pN);
         GlideCheck.lastYDelta.remove(pN);
         GlideCheck.glideBuffer.remove(pN);
+        SpeedCheck.speedViolation.remove(player.getUniqueId());
     }
 
     public CheckResult checkFastBow(Player player, float force) {
@@ -287,56 +288,6 @@ public class Backend {
             }
         }
         return PASS;
-    }
-
-    public CheckResult checkXZSpeed(Player player, double x, double z) {
-        if (!isSpeedExempt(player) && player.getVehicle() == null) {
-            String reason = "";
-            double max = magic.XZ_SPEED_MAX();
-            if (player.getLocation().getBlock().getType() == Material.SOUL_SAND) {
-                if (player.isSprinting()) {
-                    reason = "on soulsand while sprinting ";
-                    max = magic.XZ_SPEED_MAX_SOULSAND_SPRINT();
-                } else if (player.hasPotionEffect(PotionEffectType.SPEED)) {
-                    reason = "on soulsand with speed potion ";
-                    max = magic.XZ_SPEED_MAX_SOULSAND_POTION();
-                } else {
-                    reason = "on soulsand ";
-                    max = magic.XZ_SPEED_MAX_SOULSAND();
-                }
-            } else if (player.isFlying()) {
-                reason = "while flying ";
-                max = magic.XZ_SPEED_MAX_FLY();
-            } else if (player.hasPotionEffect(PotionEffectType.SPEED)) {
-                if (player.isSprinting()) {
-                    reason = "with speed potion while sprinting ";
-                    max = magic.XZ_SPEED_MAX_POTION_SPRINT();
-                } else {
-                    reason = "with speed potion ";
-                    max = magic.XZ_SPEED_MAX_POTION();
-                }
-            } else if (player.isSprinting()) {
-                reason = "while sprinting ";
-                max = magic.XZ_SPEED_MAX_SPRINT();
-            }
-
-            float speed = player.getWalkSpeed();
-            max += speed > 0 ? player.getWalkSpeed() - 0.2f : 0;
-
-            if (x > max || z > max) {
-                int num = this.incrementOld(player, speedViolation, magic.SPEED_MAX());
-                if (num >= magic.SPEED_MAX()) {
-                    return new CheckResult(CheckResult.Result.FAILED, player.getName() + "'s speed was too high " + reason + num + " times in a row (max=" + magic.SPEED_MAX() + ", speed=" + (x > z ? x : z) + ", max speed=" + max + ")");
-                } else {
-                    return PASS;
-                }
-            } else {
-                speedViolation.put(player.getName(), 0);
-                return PASS;
-            }
-        } else {
-            return PASS;
-        }
     }
 
     public CheckResult checkSneak(Player player, double x, double z) {
@@ -846,10 +797,6 @@ public class Backend {
 
     public boolean isAscending(Player player) {
         return isAscending.contains(player.getName());
-    }
-
-    public boolean isSpeedExempt(Player player) {
-        return isMovingExempt(player) || justVelocity(player) || VersionUtil.isFlying(player);
     }
 
     private boolean isDoing(Player player, Map<String, Long> map, double max) {

@@ -18,7 +18,6 @@
 
 package net.gravitydevelopment.anticheat.event;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -58,6 +57,7 @@ import net.gravitydevelopment.anticheat.check.CheckType;
 import net.gravitydevelopment.anticheat.check.combat.KillAuraCheck;
 import net.gravitydevelopment.anticheat.check.movement.FlightCheck;
 import net.gravitydevelopment.anticheat.check.movement.GlideCheck;
+import net.gravitydevelopment.anticheat.check.movement.SpeedCheck;
 import net.gravitydevelopment.anticheat.check.movement.WaterWalkCheck;
 import net.gravitydevelopment.anticheat.check.movement.YAxisCheck;
 import net.gravitydevelopment.anticheat.util.Distance;
@@ -154,7 +154,7 @@ public class PlayerListener extends EventListener {
         if (getCheckManager().willCheck(player, CheckType.FLY)) {
             if (getBackend().justVelocity(player) && getBackend().extendVelocityTime(player)) {
                 event.setCancelled(!silentMode());
-                return; // don't log it lol.
+                return;
             }
             getBackend().logVelocity(player);
         }
@@ -223,7 +223,6 @@ public class PlayerListener extends EventListener {
         Player player = event.getPlayer();
         PlayerInventory inv = player.getInventory();
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-        	// TODO: offhand (1.9)
             Material m = inv.getItemInHand().getType();
             if (m == Material.BOW) {
                 getBackend().logBowWindUp(player);
@@ -389,7 +388,7 @@ public class PlayerListener extends EventListener {
                             changed = true;
                         }
                     }
-                    CheckResult result = getBackend().checkXZSpeed(player, x, z);
+                    CheckResult result = SpeedCheck.checkXZSpeed(player, x, z);
                     if (result.failed()) {
                         if (!silentMode()) {
                             event.setTo(user.getGoodLocation(from.clone()));
@@ -397,18 +396,6 @@ public class PlayerListener extends EventListener {
                         log(result.getMessage(), player, CheckType.SPEED);
                         changed = true;
                     }
-                    /*if ((event.getFrom().getX() != event.getTo().getX() || event.getFrom().getZ() != event.getTo().getZ())) {
-                        result = backend.checkTimer(player);
-                        if(result.failed()) {
-                            if (!config.silentMode()) {
-                                event.setTo(user.getGoodLocation(from.clone()));
-                            }
-                            log("tried to alter their timer.", player, CheckType.SPEED);
-                            changed = true;
-                        }
-                    }
-                    TODO
-                    */
                 }
                 if (getCheckManager().willCheckQuick(player, CheckType.WATER_WALK)) {
                     CheckResult result = WaterWalkCheck.runCheck(player, x, y, z);
