@@ -22,6 +22,8 @@ import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.command.CommandBase;
 import net.gravitydevelopment.anticheat.util.Permission;
 import net.gravitydevelopment.anticheat.util.User;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 public class CommandReset extends CommandBase {
@@ -41,7 +43,7 @@ public class CommandReset extends CommandBase {
     @Override
     protected void execute(CommandSender cs, String[] args) {
         if (args.length == 1) {
-            User user = USER_MANAGER.getUser(args[0]);
+            User user = USER_MANAGER.getUser(Bukkit.getPlayer(args[0]).getUniqueId());
             if (user != null) {
                 user.resetLevel();
                 user.clearMessages();

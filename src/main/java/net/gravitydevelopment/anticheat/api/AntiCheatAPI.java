@@ -120,7 +120,7 @@ public class AntiCheatAPI {
      */
     @Deprecated
     public static int getLevel(Player player) {
-        return umr.safeGetLevel(player.getName());
+        return umr.safeGetLevel(player.getUniqueId());
     }
 
 
@@ -133,7 +133,7 @@ public class AntiCheatAPI {
      */
     @Deprecated
     public static void setLevel(Player player, int level) {
-        umr.safeSetLevel(player.getName(), level);
+        umr.safeSetLevel(player.getUniqueId(), level);
     }
 
     /**
@@ -142,7 +142,7 @@ public class AntiCheatAPI {
      * @param player Player to reset
      */
     public static void resetPlayer(Player player) {
-        umr.getUser(player.getName()).resetLevel();
+        umr.getUser(player.getUniqueId()).resetLevel();
     }
 
     /**
@@ -152,7 +152,7 @@ public class AntiCheatAPI {
      * @return The player's group
      */
     public static Group getGroup(Player player) {
-        return umr.getUser(player.getName()).getGroup();
+        return umr.getUser(player.getUniqueId()).getGroup();
     }
 
     /**

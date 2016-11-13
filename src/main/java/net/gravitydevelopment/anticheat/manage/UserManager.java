@@ -29,6 +29,7 @@ import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class UserManager {
     private List<User> users = new ArrayList<User>();
@@ -49,19 +50,19 @@ public class UserManager {
     }
 
     /**
-     * Get a user with the given name
+     * Get a user with the given UUID
      *
-     * @param name Name
-     * @return User with name
+     * @param uuid UUID
+     * @return User with UUID
      */
-    public User getUser(String name) {
+    public User getUser(UUID uuid) {
         for (User user : users) {
-            if (user.getName().equalsIgnoreCase(name)) {
+            if (user.getUUID().equals(uuid)) {
                 return user;
             }
         }
         // Otherwise try to load them
-        User user = new User(name);
+        User user = new User(uuid);
         user.setIsWaitingOnLevelSync(true);
         config.getLevels().loadLevelToUser(user);
         return user;
@@ -121,11 +122,11 @@ public class UserManager {
     /**
      * Get a user's level, or 0 if the player isn't found
      *
-     * @param name Name of the player
+     * @param uuid UUID of the player
      * @return player level
      */
-    public int safeGetLevel(String name) {
-        User user = getUser(name);
+    public int safeGetLevel(UUID uuid) {
+        User user = getUser(uuid);
         if (user == null) {
             return 0;
         } else {
@@ -136,11 +137,11 @@ public class UserManager {
     /**
      * Set a user's level
      *
-     * @param name  Name of the player
+     * @param uuid UUID of the player
      * @param level Group to set
      */
-    public void safeSetLevel(String name, int level) {
-        User user = getUser(name);
+    public void safeSetLevel(UUID uuid, int level) {
+        User user = getUser(uuid);
         if (user != null) {
             user.setLevel(level);
         }
@@ -149,10 +150,10 @@ public class UserManager {
     /**
      * Reset a user
      *
-     * @param name Name of the user
+     * @param uuid UUID of the user
      */
-    public void safeReset(String name) {
-        User user = getUser(name);
+    public void safeReset(UUID uuid) {
+        User user = getUser(uuid);
         if (user != null) {
             user.resetLevel();
         }

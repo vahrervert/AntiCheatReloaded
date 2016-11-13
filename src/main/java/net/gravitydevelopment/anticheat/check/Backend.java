@@ -58,38 +58,38 @@ import net.gravitydevelopment.anticheat.util.VersionUtil;
 public class Backend {
     private List<UUID> isAscending = new ArrayList<UUID>();
     private Map<UUID, Integer> ascensionCount = new HashMap<UUID, Integer>();
-    private Map<String, Integer> chatLevel = new HashMap<String, Integer>();
-    private Map<String, Integer> commandLevel = new HashMap<String, Integer>();
-    private Map<String, Integer> nofallViolation = new HashMap<String, Integer>();
-    private Map<String, Integer> fastBreakViolation = new HashMap<String, Integer>();
-    private Map<String, Integer> fastBreaks = new HashMap<String, Integer>();
-    private Map<String, Boolean> blockBreakHolder = new HashMap<String, Boolean>();
-    private Map<String, Long> lastBlockBroken = new HashMap<String, Long>();
-    private Map<String, Integer> fastPlaceViolation = new HashMap<String, Integer>();
-    private Map<String, Long> lastBlockPlaced = new HashMap<String, Long>();
-    private Map<String, Long> lastBlockPlaceTime = new HashMap<String, Long>();
-    private Map<String, Integer> blockPunches = new HashMap<String, Integer>();
-    private Map<String, Integer> projectilesShot = new HashMap<String, Integer>();
-    private Map<String, Long> velocitized = new HashMap<String, Long>();
-    private Map<String, Integer> velocitytrack = new HashMap<String, Integer>();
-    private Map<String, Long> startEat = new HashMap<String, Long>();
-    private Map<String, Long> lastHeal = new HashMap<String, Long>();
-    private Map<String, Long> projectileTime = new HashMap<String, Long>();
-    private Map<String, Long> bowWindUp = new HashMap<String, Long>();
-    private Map<String, Long> instantBreakExempt = new HashMap<String, Long>();
-    private Map<String, Long> sprinted = new HashMap<String, Long>();
-    private Map<String, Long> brokenBlock = new HashMap<String, Long>();
-    private Map<String, Long> placedBlock = new HashMap<String, Long>();
-    private Map<String, Long> blockTime = new HashMap<String, Long>();
-    private Map<String, Integer> blocksDropped = new HashMap<String, Integer>();
-    private Map<String, Long> lastInventoryTime = new HashMap<String, Long>();
-    private Map<String, Long> inventoryTime = new HashMap<String, Long>();
-    private Map<String, Integer> inventoryClicks = new HashMap<String, Integer>();
-    private Map<String, Material> itemInHand = new HashMap<String, Material>();
-    private Map<String, Integer> steps = new HashMap<String, Integer>();
-    private Map<String, Long> stepTime = new HashMap<String, Long>();
+    private Map<UUID, Integer> chatLevel = new HashMap<UUID, Integer>();
+    private Map<UUID, Integer> commandLevel = new HashMap<UUID, Integer>();
+    private Map<UUID, Integer> nofallViolation = new HashMap<UUID, Integer>();
+    private Map<UUID, Integer> fastBreakViolation = new HashMap<UUID, Integer>();
+    private Map<UUID, Integer> fastBreaks = new HashMap<UUID, Integer>();
+    private Map<UUID, Boolean> blockBreakHolder = new HashMap<UUID, Boolean>();
+    private Map<UUID, Long> lastBlockBroken = new HashMap<UUID, Long>();
+    private Map<UUID, Integer> fastPlaceViolation = new HashMap<UUID, Integer>();
+    private Map<UUID, Long> lastBlockPlaced = new HashMap<UUID, Long>();
+    private Map<UUID, Long> lastBlockPlaceTime = new HashMap<UUID, Long>();
+    private Map<UUID, Integer> blockPunches = new HashMap<UUID, Integer>();
+    private Map<UUID, Integer> projectilesShot = new HashMap<UUID, Integer>();
+    private Map<UUID, Long> velocitized = new HashMap<UUID, Long>();
+    private Map<UUID, Integer> velocitytrack = new HashMap<UUID, Integer>();
+    private Map<UUID, Long> startEat = new HashMap<UUID, Long>();
+    private Map<UUID, Long> lastHeal = new HashMap<UUID, Long>();
+    private Map<UUID, Long> projectileTime = new HashMap<UUID, Long>();
+    private Map<UUID, Long> bowWindUp = new HashMap<UUID, Long>();
+    private Map<UUID, Long> instantBreakExempt = new HashMap<UUID, Long>();
+    private Map<UUID, Long> sprinted = new HashMap<UUID, Long>();
+    private Map<UUID, Long> brokenBlock = new HashMap<UUID, Long>();
+    private Map<UUID, Long> placedBlock = new HashMap<UUID, Long>();
+    private Map<UUID, Long> blockTime = new HashMap<UUID, Long>();
+    private Map<UUID, Integer> blocksDropped = new HashMap<UUID, Integer>();
+    private Map<UUID, Long> lastInventoryTime = new HashMap<UUID, Long>();
+    private Map<UUID, Long> inventoryTime = new HashMap<UUID, Long>();
+    private Map<UUID, Integer> inventoryClicks = new HashMap<UUID, Integer>();
+    private Map<UUID, Material> itemInHand = new HashMap<UUID, Material>();
+    private Map<UUID, Integer> steps = new HashMap<UUID, Integer>();
+    private Map<UUID, Long> stepTime = new HashMap<UUID, Long>();
     private HashSet<Byte> transparent = new HashSet<Byte>();
-    private Map<String, Long> lastFallPacket = new HashMap<String, Long>();
+    private Map<UUID, Long> lastFallPacket = new HashMap<UUID, Long>();
 
     private Magic magic;
     private AntiCheatManager manager = null;
@@ -113,77 +113,77 @@ public class Backend {
     }
 
     public void resetChatLevel(User user) {
-        chatLevel.put(user.getName(), 0);
+        chatLevel.put(user.getUUID(), 0);
     }
 
     public void garbageClean(Player player) {
-        String pN = player.getName();
+        UUID pU = player.getUniqueId();
 
         VelocityCheck.cleanPlayer(player);
         KillAuraCheck.cleanPlayer(player);
         BlinkCheck.MOVE_COUNT.remove(player.getUniqueId());
-        blocksDropped.remove(pN);
-        blockTime.remove(pN);
-        FlightCheck.movingExempt.remove(pN);
-        brokenBlock.remove(pN);
-        placedBlock.remove(pN);
-        bowWindUp.remove(pN);
-        startEat.remove(pN);
-        lastHeal.remove(pN);
-        sprinted.remove(pN);
-        WaterWalkCheck.isInWater.remove(pN);
-        WaterWalkCheck.isInWaterCache.remove(pN);
-        instantBreakExempt.remove(pN);
+        blocksDropped.remove(pU);
+        blockTime.remove(pU);
+        FlightCheck.movingExempt.remove(pU);
+        brokenBlock.remove(pU);
+        placedBlock.remove(pU);
+        bowWindUp.remove(pU);
+        startEat.remove(pU);
+        lastHeal.remove(pU);
+        sprinted.remove(pU);
+        WaterWalkCheck.isInWater.remove(pU);
+        WaterWalkCheck.isInWaterCache.remove(pU);
+        instantBreakExempt.remove(pU);
         isAscending.remove(player.getUniqueId());
         ascensionCount.remove(player.getUniqueId());
-        FlightCheck.blocksOverFlight.remove(pN);
-        nofallViolation.remove(pN);
-        fastBreakViolation.remove(pN);
-        YAxisCheck.yAxisViolations.remove(pN);
-        YAxisCheck.yAxisLastViolation.remove(pN);
-        YAxisCheck.lastYcoord.remove(pN);
-        YAxisCheck.lastYtime.remove(pN);
-        fastBreaks.remove(pN);
-        blockBreakHolder.remove(pN);
-        lastBlockBroken.remove(pN);
-        fastPlaceViolation.remove(pN);
-        lastBlockPlaced.remove(pN);
-        lastBlockPlaceTime.remove(pN);
-        blockPunches.remove(pN);
-        WaterWalkCheck.waterAscensionViolation.remove(pN);
-        WaterWalkCheck.waterSpeedViolation.remove(pN);
-        projectilesShot.remove(pN);
-        velocitized.remove(pN);
-        velocitytrack.remove(pN);
-        startEat.remove(pN);
-        lastHeal.remove(pN);
-        projectileTime.remove(pN);
-        bowWindUp.remove(pN);
-        instantBreakExempt.remove(pN);
-        sprinted.remove(pN);
-        brokenBlock.remove(pN);
-        placedBlock.remove(pN);
-        FlightCheck.movingExempt.remove(pN);
-        blockTime.remove(pN);
-        blocksDropped.remove(pN);
-        lastInventoryTime.remove(pN);
-        inventoryTime.remove(pN);
-        inventoryClicks.remove(pN);
-        lastFallPacket.remove(pN);
-        GlideCheck.lastYDelta.remove(pN);
-        GlideCheck.glideBuffer.remove(pN);
+        FlightCheck.blocksOverFlight.remove(pU);
+        nofallViolation.remove(pU);
+        fastBreakViolation.remove(pU);
+        YAxisCheck.yAxisViolations.remove(pU);
+        YAxisCheck.yAxisLastViolation.remove(pU);
+        YAxisCheck.lastYcoord.remove(pU);
+        YAxisCheck.lastYtime.remove(pU);
+        fastBreaks.remove(pU);
+        blockBreakHolder.remove(pU);
+        lastBlockBroken.remove(pU);
+        fastPlaceViolation.remove(pU);
+        lastBlockPlaced.remove(pU);
+        lastBlockPlaceTime.remove(pU);
+        blockPunches.remove(pU);
+        WaterWalkCheck.waterAscensionViolation.remove(pU);
+        WaterWalkCheck.waterSpeedViolation.remove(pU);
+        projectilesShot.remove(pU);
+        velocitized.remove(pU);
+        velocitytrack.remove(pU);
+        startEat.remove(pU);
+        lastHeal.remove(pU);
+        projectileTime.remove(pU);
+        bowWindUp.remove(pU);
+        instantBreakExempt.remove(pU);
+        sprinted.remove(pU);
+        brokenBlock.remove(pU);
+        placedBlock.remove(pU);
+        FlightCheck.movingExempt.remove(pU);
+        blockTime.remove(pU);
+        blocksDropped.remove(pU);
+        lastInventoryTime.remove(pU);
+        inventoryTime.remove(pU);
+        inventoryClicks.remove(pU);
+        lastFallPacket.remove(pU);
+        GlideCheck.lastYDelta.remove(pU);
+        GlideCheck.glideBuffer.remove(pU);
         SpeedCheck.speedViolation.remove(player.getUniqueId());
     }
 
     public CheckResult checkFastBow(Player player, float force) {
         // Ignore magic numbers here, they are minecrafty vanilla stuff.
-        int ticks = (int) ((((System.currentTimeMillis() - bowWindUp.get(player.getName())) * 20) / 1000) + 3);
-        bowWindUp.remove(player.getName());
+        int ticks = (int) ((((System.currentTimeMillis() - bowWindUp.get(player.getUniqueId())) * 20) / 1000) + 3);
+        bowWindUp.remove(player.getUniqueId());
         float f = (float) ticks / 20.0F;
         f = (f * f + f * 2.0F) / 3.0F;
         f = f > 1.0F ? 1.0F : f;
         if (Math.abs(force - f) > magic.BOW_ERROR()) {
-            return new CheckResult(CheckResult.Result.FAILED, player.getName() + " fired their bow too fast (actual force=" + force + ", calculated force=" + f + ")");
+            return new CheckResult(CheckResult.Result.FAILED, player.getUniqueId() + " fired their bow too fast (actual force=" + force + ", calculated force=" + f + ")");
         } else {
             return PASS;
         }
@@ -191,13 +191,13 @@ public class Backend {
 
     public CheckResult checkProjectile(Player player) {
     	incrementOld(player, projectilesShot, 10);
-        if (!projectileTime.containsKey(player.getName())) {
-            projectileTime.put(player.getName(), System.currentTimeMillis());
+        if (!projectileTime.containsKey(player.getUniqueId())) {
+            projectileTime.put(player.getUniqueId(), System.currentTimeMillis());
             return new CheckResult(CheckResult.Result.PASSED);
-        } else if (projectilesShot.get(player.getName()) == magic.PROJECTILE_CHECK()) {
-            long time = System.currentTimeMillis() - projectileTime.get(player.getName());
-            projectileTime.remove(player.getName());
-            projectilesShot.remove(player.getName());
+        } else if (projectilesShot.get(player.getUniqueId()) == magic.PROJECTILE_CHECK()) {
+            long time = System.currentTimeMillis() - projectileTime.get(player.getUniqueId());
+            projectileTime.remove(player.getUniqueId());
+            projectilesShot.remove(player.getUniqueId());
             if (time < magic.PROJECTILE_TIME_MIN()) {
                 return new CheckResult(CheckResult.Result.FAILED, player.getName() + " wound up a bow too fast (actual time=" + time + ", min time=" + magic.PROJECTILE_TIME_MIN() + ")");
             }
@@ -207,13 +207,13 @@ public class Backend {
 
     public CheckResult checkFastDrop(Player player) {
     	incrementOld(player, blocksDropped, 10);
-        if (!blockTime.containsKey(player.getName())) {
-            blockTime.put(player.getName(), System.currentTimeMillis());
+        if (!blockTime.containsKey(player.getUniqueId())) {
+            blockTime.put(player.getUniqueId(), System.currentTimeMillis());
             return new CheckResult(CheckResult.Result.PASSED);
-        } else if (blocksDropped.get(player.getName()) == magic.DROP_CHECK()) {
-            long time = System.currentTimeMillis() - blockTime.get(player.getName());
-            blockTime.remove(player.getName());
-            blocksDropped.remove(player.getName());
+        } else if (blocksDropped.get(player.getUniqueId()) == magic.DROP_CHECK()) {
+            long time = System.currentTimeMillis() - blockTime.get(player.getUniqueId());
+            blockTime.remove(player.getUniqueId());
+            blocksDropped.remove(player.getUniqueId());
             if (time < magic.DROP_TIME_MIN()) {
                 return new CheckResult(CheckResult.Result.FAILED, player.getName() + " dropped an item too fast (actual time=" + time + ", min time=" + magic.DROP_TIME_MIN() + ")");
             }
@@ -266,24 +266,24 @@ public class Backend {
     }
 
     public CheckResult checkNoFall(Player player, double y) {
-        String name = player.getName();
+        UUID uuid = player.getUniqueId();
         if (player.getGameMode() != GameMode.CREATIVE && !player.isInsideVehicle() && !player.isSleeping() && !isMovingExempt(player) && !justPlaced(player) && !Utilities.isInWater(player) && !Utilities.isInWeb(player)) {
             if (player.getFallDistance() == 0) {
-                if (nofallViolation.get(name) == null) {
-                    nofallViolation.put(name, 1);
+                if (nofallViolation.get(uuid) == null) {
+                    nofallViolation.put(uuid, 1);
                 } else {
-                    nofallViolation.put(name, nofallViolation.get(player.getName()) + 1);
+                    nofallViolation.put(uuid, nofallViolation.get(player.getUniqueId()) + 1);
                 }
 
-                int i = nofallViolation.get(name);
+                int i = nofallViolation.get(uuid);
                 if (i >= magic.NOFALL_LIMIT()) {
-                    nofallViolation.put(player.getName(), 1);
+                    nofallViolation.put(player.getUniqueId(), 1);
                     return new CheckResult(CheckResult.Result.FAILED, player.getName() + " tried to avoid fall damage (fall distance = 0 " + i + " times in a row, max=" + magic.NOFALL_LIMIT() + ")");
                 } else {
                     return PASS;
                 }
             } else {
-                nofallViolation.put(name, 0);
+                nofallViolation.put(uuid, 0);
                 return PASS;
             }
         }
@@ -338,18 +338,18 @@ public class Backend {
     }
 
     public CheckResult checkTimer(Player player) {
-        String name = player.getName();
+        UUID uuid = player.getUniqueId();
         int step = 1;
-        if (steps.containsKey(name)) {
-            step = steps.get(name) + 1;
+        if (steps.containsKey(uuid)) {
+            step = steps.get(uuid) + 1;
         }
         if (step == 1) {
-            stepTime.put(name, System.currentTimeMillis());
+            stepTime.put(uuid, System.currentTimeMillis());
         }
         incrementOld(player, steps, step);
         if (step == magic.TIMER_STEP_CHECK()) {
-            long time = System.currentTimeMillis() - stepTime.get(name);
-            steps.put(name, 0);
+            long time = System.currentTimeMillis() - stepTime.get(uuid);
+            steps.put(uuid, 0);
             if (time < magic.TIMER_TIMEMIN()) {
                 return new CheckResult(CheckResult.Result.FAILED, player.getName() + " tried to alter their timer, took " + step + " steps in " + time + " ms (min = " + magic.TIMER_TIMEMIN() + " ms)");
             }
@@ -426,15 +426,15 @@ public class Backend {
     }
 
     public CheckResult checkSwing(Player player, Block block) {
-        String name = player.getName();
+        UUID uuid = player.getUniqueId();
         if (!isInstantBreakExempt(player)) {
             if (!player.getInventory().getItemInHand().containsEnchantment(Enchantment.DIG_SPEED) && !(player.getInventory().getItemInHand().getType() == Material.SHEARS && block.getType() == Material.LEAVES)) {
-                if (blockPunches.get(name) != null && player.getGameMode() != GameMode.CREATIVE) {
-                    int i = blockPunches.get(name);
+                if (blockPunches.get(uuid) != null && player.getGameMode() != GameMode.CREATIVE) {
+                    int i = blockPunches.get(uuid);
                     if (i < magic.BLOCK_PUNCH_MIN()) {
                         return new CheckResult(CheckResult.Result.FAILED, player.getName() + " tried to break a block of " + block.getType() + " after only " + i + " punches (min=" + magic.BLOCK_PUNCH_MIN() + ")");
                     } else {
-                        blockPunches.put(name, 0); // it should reset after EACH block break.
+                        blockPunches.put(uuid, 0); // it should reset after EACH block break.
                     }
                 }
             }
@@ -449,118 +449,118 @@ public class Backend {
             violations = magic.FASTBREAK_MAXVIOLATIONS_CREATIVE();
             timemax = magic.FASTBREAK_TIMEMAX_CREATIVE();
         }
-        String name = player.getName();
-        if (!fastBreakViolation.containsKey(name)) {
-            fastBreakViolation.put(name, 0);
+        UUID uuid = player.getUniqueId();
+        if (!fastBreakViolation.containsKey(uuid)) {
+            fastBreakViolation.put(uuid, 0);
         } else {
-            Long math = System.currentTimeMillis() - lastBlockBroken.get(name);
-            int i = fastBreakViolation.get(name);
+            Long math = System.currentTimeMillis() - lastBlockBroken.get(uuid);
+            int i = fastBreakViolation.get(uuid);
             if (i > violations && math < magic.FASTBREAK_MAXVIOLATIONTIME()) {
-                lastBlockBroken.put(name, System.currentTimeMillis());
+                lastBlockBroken.put(uuid, System.currentTimeMillis());
                 if (!silentMode()) {
                     player.sendMessage(ChatColor.RED + "[AntiCheat] Fastbreaking detected. Please wait 10 seconds before breaking blocks.");
                 }
                 return new CheckResult(CheckResult.Result.FAILED, player.getName() + " broke blocks too fast " + i + " times in a row (max=" + violations + ")");
-            } else if (fastBreakViolation.get(name) > 0 && math > magic.FASTBREAK_MAXVIOLATIONTIME()) {
-                fastBreakViolation.put(name, 0);
+            } else if (fastBreakViolation.get(uuid) > 0 && math > magic.FASTBREAK_MAXVIOLATIONTIME()) {
+                fastBreakViolation.put(uuid, 0);
             }
         }
-        if (!fastBreaks.containsKey(name) || !lastBlockBroken.containsKey(name)) {
-            if (!lastBlockBroken.containsKey(name)) {
-                lastBlockBroken.put(name, System.currentTimeMillis());
+        if (!fastBreaks.containsKey(uuid) || !lastBlockBroken.containsKey(uuid)) {
+            if (!lastBlockBroken.containsKey(uuid)) {
+                lastBlockBroken.put(uuid, System.currentTimeMillis());
             }
-            if (!fastBreaks.containsKey(name)) {
-                fastBreaks.put(name, 0);
+            if (!fastBreaks.containsKey(uuid)) {
+                fastBreaks.put(uuid, 0);
             }
         } else {
-            Long math = System.currentTimeMillis() - lastBlockBroken.get(name);
+            Long math = System.currentTimeMillis() - lastBlockBroken.get(uuid);
             if ((math != 0L && timemax != 0L)) {
                 if (math < timemax) {
-                    if (fastBreakViolation.containsKey(name) && fastBreakViolation.get(name) > 0) {
-                        fastBreakViolation.put(name, fastBreakViolation.get(name) + 1);
+                    if (fastBreakViolation.containsKey(uuid) && fastBreakViolation.get(uuid) > 0) {
+                        fastBreakViolation.put(uuid, fastBreakViolation.get(uuid) + 1);
                     } else {
-                        fastBreaks.put(name, fastBreaks.get(name) + 1);
+                        fastBreaks.put(uuid, fastBreaks.get(uuid) + 1);
                     }
-                    blockBreakHolder.put(name, false);
+                    blockBreakHolder.put(uuid, false);
                 }
-                if (fastBreaks.get(name) >= magic.FASTBREAK_LIMIT() && math < timemax) {
-                    int i = fastBreaks.get(name);
-                    fastBreaks.put(name, 0);
-                    fastBreakViolation.put(name, fastBreakViolation.get(name) + 1);
+                if (fastBreaks.get(uuid) >= magic.FASTBREAK_LIMIT() && math < timemax) {
+                    int i = fastBreaks.get(uuid);
+                    fastBreaks.put(uuid, 0);
+                    fastBreakViolation.put(uuid, fastBreakViolation.get(uuid) + 1);
                     return new CheckResult(CheckResult.Result.FAILED, player.getName() + " tried to break " + i + " blocks in " + math + " ms (max=" + magic.FASTBREAK_LIMIT() + " in " + timemax + " ms)");
-                } else if (fastBreaks.get(name) >= magic.FASTBREAK_LIMIT() || fastBreakViolation.get(name) > 0) {
-                    if (!blockBreakHolder.containsKey(name) || !blockBreakHolder.get(name)) {
-                        blockBreakHolder.put(name, true);
+                } else if (fastBreaks.get(uuid) >= magic.FASTBREAK_LIMIT() || fastBreakViolation.get(uuid) > 0) {
+                    if (!blockBreakHolder.containsKey(uuid) || !blockBreakHolder.get(uuid)) {
+                        blockBreakHolder.put(uuid, true);
                     } else {
-                        fastBreaks.put(name, fastBreaks.get(name) - 1);
-                        if (fastBreakViolation.get(name) > 0) {
-                            fastBreakViolation.put(name, fastBreakViolation.get(name) - 1);
+                        fastBreaks.put(uuid, fastBreaks.get(uuid) - 1);
+                        if (fastBreakViolation.get(uuid) > 0) {
+                            fastBreakViolation.put(uuid, fastBreakViolation.get(uuid) - 1);
                         }
-                        blockBreakHolder.put(name, false);
+                        blockBreakHolder.put(uuid, false);
                     }
                 }
             }
         }
 
-        lastBlockBroken.put(name, System.currentTimeMillis()); // always keep a log going.
+        lastBlockBroken.put(uuid, System.currentTimeMillis()); // always keep a log going.
         return PASS;
     }
 
     public CheckResult checkFastPlace(Player player) {
         int violations = player.getGameMode() == GameMode.CREATIVE ? magic.FASTPLACE_MAXVIOLATIONS_CREATIVE() : magic.FASTPLACE_MAXVIOLATIONS();
         long time = System.currentTimeMillis();
-        String name = player.getName();
-        if (!lastBlockPlaceTime.containsKey(name) || !fastPlaceViolation.containsKey(name)) {
-            lastBlockPlaceTime.put(name, 0L);
-            if (!fastPlaceViolation.containsKey(name)) {
-                fastPlaceViolation.put(name, 0);
+        UUID uuid = player.getUniqueId();
+        if (!lastBlockPlaceTime.containsKey(uuid) || !fastPlaceViolation.containsKey(uuid)) {
+            lastBlockPlaceTime.put(uuid, 0L);
+            if (!fastPlaceViolation.containsKey(uuid)) {
+                fastPlaceViolation.put(uuid, 0);
             }
-        } else if (fastPlaceViolation.containsKey(name) && fastPlaceViolation.get(name) > violations) {
-            AntiCheat.debugLog("Noted that fastPlaceViolation contains key " + name + " with value " + fastPlaceViolation.get(name));
-            Long math = System.currentTimeMillis() - lastBlockPlaced.get(name);
+        } else if (fastPlaceViolation.containsKey(uuid) && fastPlaceViolation.get(uuid) > violations) {
+            AntiCheat.debugLog("Noted that fastPlaceViolation contains key " + uuid + " with value " + fastPlaceViolation.get(uuid));
+            Long math = System.currentTimeMillis() - lastBlockPlaced.get(uuid);
             AntiCheat.debugLog("Player lastBlockPlaced value = " + lastBlockPlaced + ", diff=" + math);
-            if (lastBlockPlaced.get(name) > 0 && math < magic.FASTPLACE_MAXVIOLATIONTIME()) {
-                lastBlockPlaced.put(name, time);
+            if (lastBlockPlaced.get(uuid) > 0 && math < magic.FASTPLACE_MAXVIOLATIONTIME()) {
+                lastBlockPlaced.put(uuid, time);
                 if (!silentMode()) {
                     player.sendMessage(ChatColor.RED + "[AntiCheat] Fastplacing detected. Please wait 10 seconds before placing blocks.");
                 }
-                return new CheckResult(CheckResult.Result.FAILED, player.getName() + " placed blocks too fast " + fastBreakViolation.get(name) + " times in a row (max=" + violations + ")");
-            } else if (lastBlockPlaced.get(name) > 0 && math > magic.FASTPLACE_MAXVIOLATIONTIME()) {
-                AntiCheat.debugLog("Reset facePlaceViolation for " + name);
-                fastPlaceViolation.put(name, 0);
+                return new CheckResult(CheckResult.Result.FAILED, player.getName() + " placed blocks too fast " + fastBreakViolation.get(uuid) + " times in a row (max=" + violations + ")");
+            } else if (lastBlockPlaced.get(uuid) > 0 && math > magic.FASTPLACE_MAXVIOLATIONTIME()) {
+                AntiCheat.debugLog("Reset facePlaceViolation for " + uuid);
+                fastPlaceViolation.put(uuid, 0);
             }
-        } else if (lastBlockPlaced.containsKey(name)) {
-            long last = lastBlockPlaced.get(name);
-            long lastTime = lastBlockPlaceTime.get(name);
+        } else if (lastBlockPlaced.containsKey(uuid)) {
+            long last = lastBlockPlaced.get(uuid);
+            long lastTime = lastBlockPlaceTime.get(uuid);
             long thisTime = time - last;
 
             if (lastTime != 0 && thisTime < magic.FASTPLACE_TIMEMIN()) {
-                lastBlockPlaceTime.put(name, (time - last));
-                lastBlockPlaced.put(name, time);
-                fastPlaceViolation.put(name, fastPlaceViolation.get(name) + 1);
+                lastBlockPlaceTime.put(uuid, (time - last));
+                lastBlockPlaced.put(uuid, time);
+                fastPlaceViolation.put(uuid, fastPlaceViolation.get(uuid) + 1);
                 return new CheckResult(CheckResult.Result.FAILED, player.getName() + " tried to place a block " + thisTime + " ms after the last one (min=" + magic.FASTPLACE_TIMEMIN() + " ms)");
             }
-            lastBlockPlaceTime.put(name, (time - last));
+            lastBlockPlaceTime.put(uuid, (time - last));
         }
-        lastBlockPlaced.put(name, time);
+        lastBlockPlaced.put(uuid, time);
         return PASS;
     }
 
     public void logBowWindUp(Player player) {
-        bowWindUp.put(player.getName(), System.currentTimeMillis());
+        bowWindUp.put(player.getUniqueId(), System.currentTimeMillis());
     }
 
     public void logEatingStart(Player player) {
-        startEat.put(player.getName(), System.currentTimeMillis());
+        startEat.put(player.getUniqueId(), System.currentTimeMillis());
     }
 
     public void logHeal(Player player) {
-        lastHeal.put(player.getName(), System.currentTimeMillis());
+        lastHeal.put(player.getUniqueId(), System.currentTimeMillis());
     }
 
     public CheckResult checkChatSpam(Player player, String msg) {
-        String name = player.getName();
-        User user = manager.getUserManager().getUser(name);
+        UUID uuid = player.getUniqueId();
+        User user = manager.getUserManager().getUser(uuid);
         if (user.getLastMessageTime() != -1) {
             for (int i = 0; i < 2; i++) {
                 String m = user.getMessage(i);
@@ -588,8 +588,8 @@ public class Backend {
     }
 
     public CheckResult checkCommandSpam(Player player, String cmd) {
-        String name = player.getName();
-        User user = manager.getUserManager().getUser(name);
+        UUID uuid = player.getUniqueId();
+        User user = manager.getUserManager().getUser(uuid);
         if (user.getLastCommandTime() != -1) {
             for (int i = 0; i < 2; i++) {
                 String m = user.getCommand(i);
@@ -618,17 +618,17 @@ public class Backend {
         if (player.getGameMode() == GameMode.CREATIVE) {
             return PASS;
         }
-        String name = player.getName();
+        UUID uuid = player.getUniqueId();
         int clicks = 1;
-        if (inventoryClicks.containsKey(name)) {
-            clicks = inventoryClicks.get(name) + 1;
+        if (inventoryClicks.containsKey(uuid)) {
+            clicks = inventoryClicks.get(uuid) + 1;
         }
-        inventoryClicks.put(name, clicks);
+        inventoryClicks.put(uuid, clicks);
         if (clicks == 1) {
-            inventoryTime.put(name, System.currentTimeMillis());
+            inventoryTime.put(uuid, System.currentTimeMillis());
         } else if (clicks == magic.INVENTORY_CHECK()) {
-            long time = System.currentTimeMillis() - inventoryTime.get(name);
-            inventoryClicks.put(name, 0);
+            long time = System.currentTimeMillis() - inventoryTime.get(uuid);
+            inventoryClicks.put(uuid, 0);
             if (time < magic.INVENTORY_TIMEMIN()) {
                 return new CheckResult(CheckResult.Result.FAILED, player.getName() + " clicked inventory slots " + clicks + " times in " + time + " ms (max=" + magic.INVENTORY_CHECK() + " in " + magic.INVENTORY_TIMEMIN() + " ms)");
             }
@@ -637,7 +637,7 @@ public class Backend {
     }
 
     public CheckResult checkAutoTool(Player player) {
-        if (itemInHand.containsKey(player.getName()) && itemInHand.get(player.getName()) != player.getItemInHand().getType()) {
+        if (itemInHand.containsKey(player.getUniqueId()) && itemInHand.get(player.getUniqueId()) != player.getItemInHand().getType()) {
             return new CheckResult(CheckResult.Result.FAILED, player.getName() + " switched tools too fast (had " + itemInHand.get(player.getName()) + ", has " + player.getItemInHand().getType() + ")");
         } else {
             return PASS;
@@ -653,10 +653,10 @@ public class Backend {
     }
 
     public CheckResult checkFastHeal(Player player) {
-        if (lastHeal.containsKey(player.getName())) // Otherwise it was modified by a plugin, don't worry about it.
+        if (lastHeal.containsKey(player.getUniqueId())) // Otherwise it was modified by a plugin, don't worry about it.
         {
-            long l = lastHeal.get(player.getName());
-            lastHeal.remove(player.getName());
+            long l = lastHeal.get(player.getUniqueId());
+            lastHeal.remove(player.getUniqueId());
             if ((System.currentTimeMillis() - l) < magic.HEAL_TIME_MIN()) {
                 return new CheckResult(CheckResult.Result.FAILED, player.getName() + " healed too quickly (time=" + (System.currentTimeMillis() - l) + " ms, min=" + magic.HEAL_TIME_MIN() + " ms)");
             }
@@ -665,10 +665,10 @@ public class Backend {
     }
 
     public CheckResult checkFastEat(Player player) {
-        if (startEat.containsKey(player.getName())) // Otherwise it was modified by a plugin, don't worry about it.
+        if (startEat.containsKey(player.getUniqueId())) // Otherwise it was modified by a plugin, don't worry about it.
         {
-            long l = startEat.get(player.getName());
-            startEat.remove(player.getName());
+            long l = startEat.get(player.getUniqueId());
+            startEat.remove(player.getUniqueId());
             if ((System.currentTimeMillis() - l) < magic.EAT_TIME_MIN()) {
                 return new CheckResult(CheckResult.Result.FAILED, player.getName() + " ate too quickly (time=" + (System.currentTimeMillis() - l) + " ms, min=" + magic.EAT_TIME_MIN() + " ms)");
             }
@@ -677,7 +677,7 @@ public class Backend {
     }
 
     public void logInstantBreak(final Player player) {
-        instantBreakExempt.put(player.getName(), System.currentTimeMillis());
+        instantBreakExempt.put(player.getUniqueId(), System.currentTimeMillis());
     }
 
     public boolean isInstantBreakExempt(Player player) {
@@ -685,12 +685,12 @@ public class Backend {
     }
 
     public void logSprint(final Player player) {
-        sprinted.put(player.getName(), System.currentTimeMillis());
+        sprinted.put(player.getUniqueId(), System.currentTimeMillis());
     }
 
     public boolean isHoveringOverWaterAfterViolation(Player player) {
-        if (WaterWalkCheck.waterSpeedViolation.containsKey(player.getName())) {
-            if (WaterWalkCheck.waterSpeedViolation.get(player.getName()) >= magic.WATER_SPEED_VIOLATION_MAX() && Utilities.isHoveringOverWater(player.getLocation())) {
+        if (WaterWalkCheck.waterSpeedViolation.containsKey(player.getUniqueId())) {
+            if (WaterWalkCheck.waterSpeedViolation.get(player.getUniqueId()) >= magic.WATER_SPEED_VIOLATION_MAX() && Utilities.isHoveringOverWater(player.getLocation())) {
                 return true;
             }
         }
@@ -698,7 +698,7 @@ public class Backend {
     }
 
     public void logBlockBreak(final Player player) {
-        brokenBlock.put(player.getName(), System.currentTimeMillis());
+        brokenBlock.put(player.getUniqueId(), System.currentTimeMillis());
     }
 
     public boolean justBroke(Player player) {
@@ -706,35 +706,35 @@ public class Backend {
     }
 
     public void logVelocity(final Player player) {
-        velocitized.put(player.getName(), System.currentTimeMillis());
+        velocitized.put(player.getUniqueId(), System.currentTimeMillis());
     }
 
     public boolean justVelocity(Player player) {
-        return (velocitized.containsKey(player.getName()) ? (System.currentTimeMillis() - velocitized.get(player.getName())) < magic.VELOCITY_CHECKTIME() : false);
+        return (velocitized.containsKey(player.getUniqueId()) ? (System.currentTimeMillis() - velocitized.get(player.getUniqueId())) < magic.VELOCITY_CHECKTIME() : false);
     }
 
     public boolean extendVelocityTime(final Player player) {
-        if (velocitytrack.containsKey(player.getName())) {
-            velocitytrack.put(player.getName(), velocitytrack.get(player.getName()) + 1);
-            if (velocitytrack.get(player.getName()) > magic.VELOCITY_MAXTIMES()) {
-                velocitized.put(player.getName(), System.currentTimeMillis() + magic.VELOCITY_PREVENT());
+        if (velocitytrack.containsKey(player.getUniqueId())) {
+            velocitytrack.put(player.getUniqueId(), velocitytrack.get(player.getUniqueId()) + 1);
+            if (velocitytrack.get(player.getUniqueId()) > magic.VELOCITY_MAXTIMES()) {
+                velocitized.put(player.getUniqueId(), System.currentTimeMillis() + magic.VELOCITY_PREVENT());
                 manager.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(manager.getPlugin(), new Runnable() {
                     @Override
                     public void run() {
-                        velocitytrack.put(player.getName(), 0);
+                        velocitytrack.put(player.getUniqueId(), 0);
                     }
                 }, magic.VELOCITY_SCHETIME() * 20L);
                 return true;
             }
         } else {
-            velocitytrack.put(player.getName(), 0);
+            velocitytrack.put(player.getUniqueId(), 0);
         }
 
         return false;
     }
 
     public void logBlockPlace(final Player player) {
-        placedBlock.put(player.getName(), System.currentTimeMillis());
+        placedBlock.put(player.getUniqueId(), System.currentTimeMillis());
     }
 
     public boolean justPlaced(Player player) {
@@ -757,38 +757,38 @@ public class Backend {
                 break;
 
         }
-        FlightCheck.movingExempt.put(player.getName(), System.currentTimeMillis() + time);
+        FlightCheck.movingExempt.put(player.getUniqueId(), System.currentTimeMillis() + time);
         // Only map in which termination time is calculated beforehand.
     }
 
     public void logEnterExit(final Player player) {
-        FlightCheck.movingExempt.put(player.getName(), System.currentTimeMillis() + magic.ENTERED_EXITED_TIME());
+        FlightCheck.movingExempt.put(player.getUniqueId(), System.currentTimeMillis() + magic.ENTERED_EXITED_TIME());
     }
 
     public void logToggleSneak(final Player player) {
-        FlightCheck.movingExempt.put(player.getName(), System.currentTimeMillis() + magic.SNEAK_TIME());
+        FlightCheck.movingExempt.put(player.getUniqueId(), System.currentTimeMillis() + magic.SNEAK_TIME());
     }
 
     public void logTeleport(final Player player) {
-        FlightCheck.movingExempt.put(player.getName(), System.currentTimeMillis() + magic.TELEPORT_TIME());
+        FlightCheck.movingExempt.put(player.getUniqueId(), System.currentTimeMillis() + magic.TELEPORT_TIME());
 
         /* Data for fly/speed should be reset */
-        nofallViolation.remove(player.getName());
-        FlightCheck.blocksOverFlight.remove(player.getName());
-        YAxisCheck.yAxisViolations.remove(player.getName());
-        YAxisCheck.yAxisLastViolation.remove(player.getName());
-        YAxisCheck.lastYcoord.remove(player.getName());
-        YAxisCheck.lastYtime.remove(player.getName());
-        GlideCheck.lastYDelta.remove(player.getName());
-        GlideCheck.glideBuffer.remove(player.getName());
+        nofallViolation.remove(player.getUniqueId());
+        FlightCheck.blocksOverFlight.remove(player.getUniqueId());
+        YAxisCheck.yAxisViolations.remove(player.getUniqueId());
+        YAxisCheck.yAxisLastViolation.remove(player.getUniqueId());
+        YAxisCheck.lastYcoord.remove(player.getUniqueId());
+        YAxisCheck.lastYtime.remove(player.getUniqueId());
+        GlideCheck.lastYDelta.remove(player.getUniqueId());
+        GlideCheck.glideBuffer.remove(player.getUniqueId());
     }
 
     public void logExitFly(final Player player) {
-        FlightCheck.movingExempt.put(player.getName(), System.currentTimeMillis() + magic.EXIT_FLY_TIME());
+        FlightCheck.movingExempt.put(player.getUniqueId(), System.currentTimeMillis() + magic.EXIT_FLY_TIME());
     }
 
     public void logJoin(final Player player) {
-        FlightCheck.movingExempt.put(player.getName(), System.currentTimeMillis() + magic.JOIN_TIME());
+        FlightCheck.movingExempt.put(player.getUniqueId(), System.currentTimeMillis() + magic.JOIN_TIME());
     }
 
     public boolean isMovingExempt(Player player) {
@@ -796,22 +796,22 @@ public class Backend {
     }
 
     public boolean isAscending(Player player) {
-        return isAscending.contains(player.getName());
+        return isAscending.contains(player.getUniqueId());
     }
 
-    private boolean isDoing(Player player, Map<String, Long> map, double max) {
-        if (map.containsKey(player.getName())) {
+    private boolean isDoing(Player player, Map<UUID, Long> map, double max) {
+        if (map.containsKey(player.getUniqueId())) {
             if (max != -1) {
-                if (((System.currentTimeMillis() - map.get(player.getName())) / 1000) > max) {
-                    map.remove(player.getName());
+                if (((System.currentTimeMillis() - map.get(player.getUniqueId())) / 1000) > max) {
+                    map.remove(player.getUniqueId());
                     return false;
                 } else {
                     return true;
                 }
             } else {
                 // Termination time has already been calculated
-                if (map.get(player.getName()) < System.currentTimeMillis()) {
-                    map.remove(player.getName());
+                if (map.get(player.getUniqueId()) < System.currentTimeMillis()) {
+                    map.remove(player.getUniqueId());
                     return false;
                 } else {
                     return true;
@@ -831,23 +831,23 @@ public class Backend {
     }
 
     public void processChatSpammer(Player player) {
-        User user = manager.getUserManager().getUser(player.getName());
-        int level = chatLevel.containsKey(user.getName()) ? chatLevel.get(user.getName()) : 0;
+        User user = manager.getUserManager().getUser(player.getUniqueId());
+        int level = chatLevel.containsKey(user.getUUID()) ? chatLevel.get(user.getUUID()) : 0;
         if (player != null && player.isOnline() && level >= magic.CHAT_ACTION_ONE_LEVEL()) {
             String event = level >= magic.CHAT_ACTION_TWO_LEVEL() ? manager.getConfiguration().getConfig().chatSpamActionTwo.getValue() : manager.getConfiguration().getConfig().chatSpamActionOne.getValue();
-            manager.getUserManager().execute(manager.getUserManager().getUser(player.getName()), Utilities.stringToList(event), CheckType.CHAT_SPAM, lang.SPAM_KICK_REASON(), Utilities.stringToList(lang.SPAM_WARNING()), lang.SPAM_BAN_REASON());
+            manager.getUserManager().execute(manager.getUserManager().getUser(player.getUniqueId()), Utilities.stringToList(event), CheckType.CHAT_SPAM, lang.SPAM_KICK_REASON(), Utilities.stringToList(lang.SPAM_WARNING()), lang.SPAM_BAN_REASON());
         }
-        chatLevel.put(user.getName(), level + 1);
+        chatLevel.put(user.getUUID(), level + 1);
     }
 
     public void processCommandSpammer(Player player) {
-        User user = manager.getUserManager().getUser(player.getName());
-        int level = commandLevel.containsKey(user.getName()) ? commandLevel.get(user.getName()) : 0;
+        User user = manager.getUserManager().getUser(player.getUniqueId());
+        int level = commandLevel.containsKey(user.getUUID()) ? commandLevel.get(user.getUUID()) : 0;
         if (player != null && player.isOnline() && level >= magic.COMMAND_ACTION_ONE_LEVEL()) {
             String event = level >= magic.COMMAND_ACTION_TWO_LEVEL() ? manager.getConfiguration().getConfig().commandSpamActionTwo.getValue() : manager.getConfiguration().getConfig().commandSpamActionOne.getValue();
-            manager.getUserManager().execute(manager.getUserManager().getUser(player.getName()), Utilities.stringToList(event), CheckType.COMMAND_SPAM, lang.SPAM_KICK_REASON(), Utilities.stringToList(lang.SPAM_WARNING()), lang.SPAM_BAN_REASON());
+            manager.getUserManager().execute(manager.getUserManager().getUser(player.getUniqueId()), Utilities.stringToList(event), CheckType.COMMAND_SPAM, lang.SPAM_KICK_REASON(), Utilities.stringToList(lang.SPAM_WARNING()), lang.SPAM_BAN_REASON());
         }
-        commandLevel.put(user.getName(), level + 1);
+        commandLevel.put(user.getUUID(), level + 1);
     }
 
     public int increment(Player player, Map<UUID, Integer> ascensionCount2, int num) {
@@ -867,18 +867,18 @@ public class Backend {
         }
     }
     
-    public int incrementOld(Player player, Map<String, Integer> ascensionCount2, int num) {
-        String name = player.getName();
-        if (ascensionCount2.get(name) == null) {
-            ascensionCount2.put(name, 1);
+    public int incrementOld(Player player, Map<UUID, Integer> ascensionCount2, int num) {
+        UUID uuid = player.getUniqueId();
+        if (ascensionCount2.get(uuid) == null) {
+            ascensionCount2.put(uuid, 1);
             return 1;
         } else {
-            int amount = ascensionCount2.get(name) + 1;
+            int amount = ascensionCount2.get(uuid) + 1;
             if (amount < num + 1) {
-                ascensionCount2.put(name, amount);
+                ascensionCount2.put(uuid, amount);
                 return amount;
             } else {
-                ascensionCount2.put(name, num);
+                ascensionCount2.put(uuid, num);
                 return num;
             }
         }

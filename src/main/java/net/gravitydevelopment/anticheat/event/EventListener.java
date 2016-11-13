@@ -30,10 +30,11 @@ import org.bukkit.event.Listener;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class EventListener implements Listener {
     private static final Map<CheckType, Integer> USAGE_LIST = new EnumMap<CheckType, Integer>(CheckType.class);
-    private static final Map<String, Integer> DECREASE_LIST = new HashMap<String, Integer>();
+    private static final Map<UUID, Integer> DECREASE_LIST = new HashMap<UUID, Integer>();
     private static final CheckManager CHECK_MANAGER = AntiCheat.getManager().getCheckManager();
     private static final Backend BACKEND = AntiCheat.getManager().getBackend();
     private static final AntiCheat PLUGIN = AntiCheat.getManager().getPlugin();
@@ -41,7 +42,7 @@ public class EventListener implements Listener {
     private static final Configuration CONFIG = AntiCheat.getManager().getConfiguration();
 
     public static void log(String message, Player player, CheckType type) {
-        User user = getUserManager().getUser(player.getName());
+        User user = getUserManager().getUser(player.getUniqueId());
         if (user != null) { // npc
             logCheat(type, user);
             if (user.increaseLevel(type) && message != null) {
@@ -54,7 +55,7 @@ public class EventListener implements Listener {
     private static void logCheat(CheckType type, User user) {
         USAGE_LIST.put(type, getCheats(type) + 1);
         // Ignore plugins that are creating NPCs with no names (why the hell)
-        if (user != null && user.getName() != null) {
+        if (user != null && user.getUUID() != null) {
             type.logUse(user);
             if (CONFIG.getConfig().enterprise.getValue() && CONFIG.getEnterprise().loggingEnabled.getValue()) {
                 CONFIG.getEnterprise().database.logEvent(user, type);
@@ -77,34 +78,34 @@ public class EventListener implements Listener {
     private static void removeDecrease(User user) {
         int x = 0;
         // Ignore plugins that are creating NPCs with no names
-        if (user.getName() != null) {
-            if (DECREASE_LIST.get(user.getName()) != null) {
-                x = DECREASE_LIST.get(user.getName());
+        if (user.getUUID() != null) {
+            if (DECREASE_LIST.get(user.getUUID()) != null) {
+                x = DECREASE_LIST.get(user.getUUID());
                 x -= 2;
                 if (x < 0) {
                     x = 0;
                 }
             }
-            DECREASE_LIST.put(user.getName(), x);
+            DECREASE_LIST.put(user.getUUID(), x);
         }
     }
 
     public static void decrease(Player player) {
-        User user = getUserManager().getUser(player.getName());
+        User user = getUserManager().getUser(player.getUniqueId());
         // Ignore plugins that are creating NPCs with no names
-        if (user.getName() != null) {
+        if (user.getUUID() != null) {
             int x = 0;
 
-            if (DECREASE_LIST.get(user.getName()) != null) {
-                x = DECREASE_LIST.get(user.getName());
+            if (DECREASE_LIST.get(user.getUUID()) != null) {
+                x = DECREASE_LIST.get(user.getUUID());
             }
 
             x += 1;
-            DECREASE_LIST.put(user.getName(), x);
+            DECREASE_LIST.put(user.getUUID(), x);
 
             if (x >= 10) {
                 user.decreaseLevel();
-                DECREASE_LIST.put(user.getName(), 0);
+                DECREASE_LIST.put(user.getUUID(), 0);
             }
         }
     }

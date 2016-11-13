@@ -56,13 +56,13 @@ public class InventoryListener extends EventListener {
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent event) {
         if (event.getInventory().getType() != InventoryType.BEACON) {
-            getUserManager().getUser(event.getPlayer().getName()).setInventorySnapshot(event.getInventory().getContents());
+            getUserManager().getUser(event.getPlayer().getUniqueId()).setInventorySnapshot(event.getInventory().getContents());
         }
     }
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
-        User user = getUserManager().getUser(event.getPlayer().getName());
+        User user = getUserManager().getUser(event.getPlayer().getUniqueId());
         if (user != null) {
             user.removeInventorySnapshot();
         }

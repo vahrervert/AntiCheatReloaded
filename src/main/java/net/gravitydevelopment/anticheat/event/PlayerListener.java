@@ -192,7 +192,7 @@ public class PlayerListener extends EventListener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         getBackend().garbageClean(event.getPlayer());
 
-        User user = getUserManager().getUser(event.getPlayer().getName());
+        User user = getUserManager().getUser(event.getPlayer().getUniqueId());
 
         getConfig().getLevels().saveLevelFromUser(user);
 
@@ -291,7 +291,7 @@ public class PlayerListener extends EventListener {
 
         getBackend().logJoin(player);
 
-        User user = new User(player.getName());
+        User user = new User(player.getUniqueId());
         user.setIsWaitingOnLevelSync(true);
         getConfig().getLevels().loadLevelToUser(user);
         getUserManager().addUser(user);
@@ -318,7 +318,7 @@ public class PlayerListener extends EventListener {
             final double y = distance.getYDifference();
             getBackend().logAscension(player, from.getY(), to.getY());
 
-            final User user = getUserManager().getUser(player.getName());
+            final User user = getUserManager().getUser(player.getUniqueId());
             user.setTo(to.getX(), to.getY(), to.getZ());
             
             KillAuraCheck.doMove(event);
@@ -445,7 +445,7 @@ public class PlayerListener extends EventListener {
     public void checkFly(PlayerMoveEvent event) {
         // Check flight on highest to make sure other plugins have a chance to change the values first.
         final Player player = event.getPlayer();
-        final User user = getUserManager().getUser(player.getName());
+        final User user = getUserManager().getUser(player.getUniqueId());
         final Location from = event.getFrom();
         final Location to = event.getTo();
 

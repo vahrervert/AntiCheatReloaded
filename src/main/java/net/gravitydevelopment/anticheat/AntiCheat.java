@@ -20,6 +20,7 @@ package net.gravitydevelopment.anticheat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -142,14 +143,14 @@ public class AntiCheat extends JavaPlugin {
 
     private void restoreLevels() {
         for (Player player : getServer().getOnlinePlayers()) {
-            String name = player.getName();
+            UUID uuid = player.getUniqueId();
 
-            User user = new User(name);
+            User user = new User(uuid);
             user.setIsWaitingOnLevelSync(true);
             config.getLevels().loadLevelToUser(user);
 
             manager.getUserManager().addUser(user);
-            verboseLog("Data for " + name + " loaded");
+            verboseLog("Data for " + uuid + " loaded");
         }
     }
 
