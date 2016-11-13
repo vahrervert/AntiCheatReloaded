@@ -57,7 +57,7 @@ public class User {
      */
     public User(UUID uuid) {
         this.uuid = uuid;
-        this.name = getPlayer().getName();
+        this.name = getPlayer() != null && getPlayer().isOnline() ? getPlayer().getName() : "";
         this.id = getPlayer() != null && getPlayer().isOnline() ? getPlayer().getEntityId() : -1;
     }
 
@@ -105,7 +105,7 @@ public class User {
      * @return Player
      */
     public Player getPlayer() {
-        return Bukkit.getPlayer(uuid);
+    	return Bukkit.getPlayer(uuid);
     }
 
     /**
