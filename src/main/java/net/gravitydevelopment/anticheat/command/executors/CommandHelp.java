@@ -37,7 +37,6 @@ public class CommandHelp extends CommandBase {
             RED + "/anti " + GRAY + "log " + WHITE + "[file/console] [on/off]",
             RED + "/anti " + GRAY + "report " + WHITE + "[group/user]",
             RED + "/anti " + GRAY + "reset " + WHITE + "[user]",
-            RED + "/anti " + GRAY + "spy " + WHITE + "[user]",
     };
 
     public CommandHelp() {
