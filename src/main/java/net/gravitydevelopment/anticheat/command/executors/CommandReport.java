@@ -30,6 +30,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class CommandReport extends CommandBase {
 
@@ -81,7 +82,7 @@ public class CommandReport extends CommandBase {
                 // Test users
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (player.getName().equalsIgnoreCase(args[0])) {
-                        User user = AntiCheat.getManager().getUserManager().getUser(args[0]);
+                        User user = AntiCheat.getManager().getUserManager().getUser(player.getUniqueId());
                         playerReport(cs, user, page);
                         return;
                     }
@@ -126,11 +127,12 @@ public class CommandReport extends CommandBase {
     private void playerReport(CommandSender cs, User user, int page) {
         List<CheckType> types = new ArrayList<CheckType>();
         for (CheckType type : CheckType.values()) {
-            if (type.getUses(user.getName()) > 0) {
+            if (type.getUses(user.getUUID()) > 0) {
                 types.add(type);
             }
         }
 
+        UUID uuid = user.getUUID();
         String name = user.getName();
         int pages = (int) Math.ceil(((float) types.size()) / 6);
 
@@ -150,7 +152,7 @@ public class CommandReport extends CommandBase {
                 int index = ((page - 1) * 5) + (x + ((page - 1)));
                 if (index < types.size()) {
                     CheckType type = types.get(index);
-                    int use = type.getUses(name);
+                    int use = type.getUses(uuid);
                     ChatColor color = WHITE;
                     if (use >= 20) {
                         color = YELLOW;

@@ -22,36 +22,44 @@ import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.command.CommandBase;
 import net.gravitydevelopment.anticheat.util.Permission;
 import net.gravitydevelopment.anticheat.util.User;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class CommandReset extends CommandBase {
 
-    private static final String NAME = "AntiCheat Resetting";
-    private static final String COMMAND = "reset";
-    private static final String USAGE = "anticheat reset [user]";
-    private static final Permission PERMISSION = Permission.SYSTEM_RESET;
-    private static final String[] HELP = {
-            GRAY + "Use: " + AQUA + "/anticheat reset [user]" + GRAY + " to reset this user's hack level",
-    };
+	private static final String NAME = "AntiCheat Resetting";
+	private static final String COMMAND = "reset";
+	private static final String USAGE = "anticheat reset [user]";
+	private static final Permission PERMISSION = Permission.SYSTEM_RESET;
+	private static final String[] HELP = {
+			GRAY + "Use: " + AQUA + "/anticheat reset [user]" + GRAY + " to reset this user's hack level",
+	};
 
-    public CommandReset() {
-        super(NAME, COMMAND, USAGE, HELP, PERMISSION);
-    }
+	public CommandReset() {
+		super(NAME, COMMAND, USAGE, HELP, PERMISSION);
+	}
 
-    @Override
-    protected void execute(CommandSender cs, String[] args) {
-        if (args.length == 1) {
-            User user = USER_MANAGER.getUser(args[0]);
-            if (user != null) {
-                user.resetLevel();
-                user.clearMessages();
-                AntiCheat.getManager().getBackend().resetChatLevel(user);
-                cs.sendMessage(args[0] + GREEN + " has been reset.");
-            } else {
-                cs.sendMessage(RED + "Player: " +args[0] + " not found.");
-            }
-        } else {
-            sendHelp(cs);
-        }
-    }
+	@Override
+	protected void execute(CommandSender cs, String[] args) {
+		User user;
+		if (args.length == 1) {
+			if (Bukkit.getPlayer(args[0]) != null) {
+				user = USER_MANAGER.getUser(Bukkit.getPlayer(args[0]).getUniqueId());
+			} else {
+				user = USER_MANAGER.getUser(Bukkit.getOfflinePlayer(args[0]).getUniqueId());
+			}
+			if (user != null) {
+				user.resetLevel();
+				user.clearMessages();
+				AntiCheat.getManager().getBackend().resetChatLevel(user);
+				cs.sendMessage(args[0] + GREEN + " has been reset.");
+			} else {
+				cs.sendMessage(RED + "Player: " +args[0] + " not found.");
+			}
+		} else {
+			sendHelp(cs);
+		}
+	}
 }

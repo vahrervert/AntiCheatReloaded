@@ -31,8 +31,10 @@ import org.bukkit.inventory.ItemStack;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class User {
+    private final UUID uuid;
     private final String name;
     private final int id;
     private int level = 0;
@@ -51,11 +53,32 @@ public class User {
     /**
      * Initialize an AntiCheat user
      *
+     * @param uuid Player's UUID
+     */
+    public User(UUID uuid) {
+        this.uuid = uuid;
+        this.name = getPlayer() != null && getPlayer().isOnline() ? getPlayer().getName() : "";
+        this.id = getPlayer() != null && getPlayer().isOnline() ? getPlayer().getEntityId() : -1;
+    }
+
+    /**
+     * Initialize an AntiCheat user
+     *
      * @param name Player's name
      */
-    public User(String name) {
+/*    public User(String name) {
+        this.uuid = Bukkit.getPlayer(name).getUniqueId();
         this.name = name;
         this.id = getPlayer() != null && getPlayer().isOnline() ? getPlayer().getEntityId() : -1;
+    }
+*/
+    /**
+     * Get the player's UUID
+     *
+     * @return Player UUID
+     */
+    public UUID getUUID() {
+        return uuid;
     }
 
     /**
@@ -82,7 +105,7 @@ public class User {
      * @return Player
      */
     public Player getPlayer() {
-        return Bukkit.getPlayer(name);
+    	return Bukkit.getPlayer(uuid);
     }
 
     /**
@@ -117,7 +140,7 @@ public class User {
      */
     public boolean increaseLevel(CheckType type) {
         if (getPlayer() != null && getPlayer().isOnline()) {
-            if (silentMode() && type.getUses(name) % 4 != 0) {
+            if (silentMode() && type.getUses(uuid) % 4 != 0) {
                 // Prevent silent mode from increasing the level way too fast
                 return false;
             } else {
@@ -181,7 +204,7 @@ public class User {
     public void resetLevel() {
         level = 0;
         for (CheckType type : CheckType.values()) {
-            type.clearUse(name);
+            type.clearUse(uuid);
         }
     }
 
@@ -402,6 +425,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "User {name = " + name + ", level = " + level + "}";
+        return "User {name = " + getName() + ", level = " + level + "}";
     }
 }

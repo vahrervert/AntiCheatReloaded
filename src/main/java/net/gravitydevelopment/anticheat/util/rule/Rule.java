@@ -160,12 +160,12 @@ public class Rule {
         map.put("player_check", type.name().toLowerCase());
         map.put("player_level", user.getLevel());
         map.put("player_group", user.getGroup() != null ? user.getGroup().getName().toLowerCase() : "low");
-        map.put("player_name", user.getName().toLowerCase());
+        map.put("player_uuid", user.getUUID().toString());
         map.put("player_gamemode", user.getPlayer().getGameMode().toString());
         map.put("player_world", user.getPlayer().getWorld().getName());
         map.put("player_health", user.getPlayer().getHealth());
         for (CheckType t : CheckType.values()) {
-            map.put("check_" + t.name().toLowerCase(), t.getUses(user.getName()));
+            map.put("check_" + t.name().toLowerCase(), t.getUses(user.getUUID()));
         }
         return map;
     }

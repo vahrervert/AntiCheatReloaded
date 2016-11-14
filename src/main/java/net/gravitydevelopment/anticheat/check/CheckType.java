@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * <p/>
@@ -64,7 +65,7 @@ public enum CheckType {
 	CRITICALS(Permission.CRITICALS);
 
     private final Permission permission;
-    private final Map<String, Integer> level = new HashMap<String, Integer>();
+    private final Map<UUID, Integer> level = new HashMap<UUID, Integer>();
 
     /**
      * Initialize a CheckType
@@ -91,28 +92,28 @@ public enum CheckType {
      * @param user User who failed the check
      */
     public void logUse(User user) {
-        int amount = level.get(user.getName()) == null ? 1 : level.get(user.getName()) + 1;
-        level.put(user.getName(), amount);
+        int amount = level.get(user.getUUID()) == null ? 1 : level.get(user.getUUID()) + 1;
+        level.put(user.getUUID(), amount);
         Bukkit.getServer().getPluginManager().callEvent(new CheckFailEvent(user, this));
     }
 
     /**
      * Clear failure history of this check for a user
      *
-     * @param name User's name to clear
+     * @param UUID User's UUID to clear
      */
-    public void clearUse(String name) {
-        level.put(name, 0);
+    public void clearUse(UUID uuid) {
+        level.put(uuid, 0);
     }
 
     /**
      * Get how many times a user has failed this check
      *
-     * @param name User's name
+     * @param UUID User's UUID
      * @return number of times failed
      */
-    public int getUses(String name) {
-        return level.get(name) != null ? level.get(name) : 0;
+    public int getUses(UUID uuid) {
+        return level.get(uuid) != null ? level.get(uuid) : 0;
     }
 
     /**

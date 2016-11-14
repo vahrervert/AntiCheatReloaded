@@ -23,70 +23,109 @@ import net.gravitydevelopment.anticheat.util.enterprise.Database;
 import org.bukkit.Bukkit;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class ConfigurationTable {
 
-    private final String table;
-    private final Configuration config;
+	private final String table;
+	private final Configuration config;
 
-    private Database database;
-    private String prefix;
-    private String serverName;
+	private Database database;
+	private String prefix;
+	private String serverName;
 
-    public ConfigurationTable(Configuration config, String table) {
-        this.config = config;
-        this.table = table;
+	public ConfigurationTable(Configuration config, String table) {
+		this.config = config;
+		this.table = table;
 
-        load();
-    }
+		load();
+	}
 
-    public void load() {
-        this.database = config.getEnterprise().database;
-        this.prefix = database.getPrefix();
-        this.serverName = config.getEnterprise().serverName.getValue();
+	public void load() {
+		this.database = config.getEnterprise().database;
+		this.prefix = database.getPrefix();
+		this.serverName = config.getEnterprise().serverName.getValue();
 
-        open();
-    }
+		open();
+	}
 
-    public void open() {
-        // Nothing to do
-    }
+	public void open() {
+		// Nothing to do
+	}
 
-    public void reload() {
-        // For after sql inserts have been made
-        Bukkit.getScheduler().runTask(AntiCheat.getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                load();
-            }
-        });
-    }
+	public void reload() {
+		// For after sql inserts have been made
+		Bukkit.getScheduler().runTask(AntiCheat.getPlugin(), new Runnable() {
+			@Override
+			public void run() {
+				load();
+			}
+		});
+	}
 
-    public Database getDatabase() {
-        return database;
-    }
+	public Database getDatabase() {
+		return database;
+	}
 
-    public String getFullTable() {
-        return prefix + table;
-    }
+	public String getFullTable() {
+		return prefix + table;
+	}
 
-    public boolean tableExists() {
-        try {
-            return getConnection().getMetaData().getTables(null, null, getFullTable(), null).next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+	public boolean tableExists() {
+		try {
+			return getConnection().getMetaData().getTables(null, null, getFullTable(), null).next();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
-    public String getServerName() {
-        return serverName;
-    }
+	public boolean isUUIDFormatted(String colName) {
+		String sqlSelect = "SELECT " + colName + " FROM " + getFullTable() + " LIMIT 1";
+		String user;
 
-    public Connection getConnection() {
-        return database.getConnection();
-    }
+		try {
+			ResultSet res = getConnection().prepareStatement(sqlSelect).executeQuery();
+
+			if (res.next() && (user = res.getString(colName)) != null) {
+				try {
+					return UUID.fromString(user) != null;
+				} catch (IllegalArgumentException e) {}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	public void convertToUUID(String colName) {
+		String sqlSelect = "SELECT " + colName + " FROM " + getFullTable();
+		String sqlUpdate = "UPDATE " + getFullTable() + " SET " + colName + " = ? WHERE " + colName + " = ?";
+
+		try {
+			ResultSet res = getConnection().prepareStatement(sqlSelect).executeQuery();
+
+			while (res.next()) {
+				PreparedStatement stmt = getConnection().prepareStatement(sqlUpdate);
+				stmt.setString(1, (Bukkit.getOfflinePlayer(res.getString(1)).getUniqueId().toString()));
+				stmt.setString(2, res.getString(1));
+
+				stmt.executeUpdate();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public String getServerName() {
+		return serverName;
+	}
+
+	public Connection getConnection() {
+		return database.getConnection();
+	}
 }

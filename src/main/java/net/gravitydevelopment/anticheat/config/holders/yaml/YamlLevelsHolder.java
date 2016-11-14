@@ -25,6 +25,7 @@ import net.gravitydevelopment.anticheat.config.providers.Levels;
 import net.gravitydevelopment.anticheat.util.User;
 
 import java.util.List;
+import java.util.UUID;
 
 public class YamlLevelsHolder extends ConfigurationFile implements Levels {
 
@@ -36,7 +37,7 @@ public class YamlLevelsHolder extends ConfigurationFile implements Levels {
 
     @Override
     public void loadLevelToUser(User user) {
-        user.setLevel(getLevel(user.getName()));
+        user.setLevel(getLevel(user.getUUID()));
     }
 
     @Override
@@ -45,7 +46,7 @@ public class YamlLevelsHolder extends ConfigurationFile implements Levels {
     }
 
     private void saveLevelFromUser(User user, boolean remove) {
-        saveLevel(user.getName(), user.getLevel());
+        saveLevel(user.getUUID(), user.getLevel());
         if (remove) AntiCheat.getManager().getUserManager().remove(user);
     }
 
@@ -62,8 +63,8 @@ public class YamlLevelsHolder extends ConfigurationFile implements Levels {
         return;
     }
 
-    private int getLevel(String name) {
-        ConfigValue<Integer> level = new ConfigValue<Integer>(name, false);
+    private int getLevel(UUID uuid) {
+        ConfigValue<Integer> level = new ConfigValue<Integer>(uuid.toString(), false);
         if (level.hasValue()) {
             return level.getValue();
         } else {
@@ -71,7 +72,7 @@ public class YamlLevelsHolder extends ConfigurationFile implements Levels {
         }
     }
 
-    private void saveLevel(String name, int level) {
-        new ConfigValue<Integer>(name, false).setValue(new Integer(level));
+    private void saveLevel(UUID uuid, int level) {
+        new ConfigValue<Integer>(uuid.toString(), false).setValue(new Integer(level));
     }
 }

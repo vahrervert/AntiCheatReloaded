@@ -70,6 +70,8 @@ public class MySQLLevelsHolder extends ConfigurationTable implements Levels {
             if (!tableExists()) {
                 getConnection().prepareStatement(sqlCreate).executeUpdate();
                 getConnection().commit();
+            } else if (!isUUIDFormatted("user")) {
+            	convertToUUID("user");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,10 +84,10 @@ public class MySQLLevelsHolder extends ConfigurationTable implements Levels {
             @Override
             public void run() {
                 if (!user.isWaitingOnLevelSync()) {
-                    AntiCheat.debugLog("Saving level from " + user.getName() + ". Value: " + user.getLevel());
+                    AntiCheat.debugLog("Saving level from " + user.getUUID() + ". Value: " + user.getLevel());
                     try {
                         PreparedStatement statement = getConnection().prepareStatement(sqlSave);
-                        statement.setString(1, user.getName());
+                        statement.setString(1, user.getUUID().toString());
                         statement.setInt(2, user.getLevel());
                         statement.setString(3, getServerName());
                         statement.setTimestamp(4, user.getLevelSyncTimestamp());
@@ -110,14 +112,14 @@ public class MySQLLevelsHolder extends ConfigurationTable implements Levels {
             public void run() {
                 try {
                     PreparedStatement statement = getConnection().prepareStatement(sqlLoad);
-                    statement.setString(1, user.getName());
+                    statement.setString(1, user.getUUID().toString());
 
                     ResultSet set = statement.executeQuery();
 
                     boolean has = false;
                     while (set.next()) {
                         has = true;
-                        AntiCheat.debugLog("Syncing level to " + user.getName() + ". Value: " + set.getInt("level"));
+                        AntiCheat.debugLog("Syncing level to " + user.getUUID() + ". Value: " + set.getInt("level"));
                         user.setLevel(set.getInt("level"));
                         user.setLevelSyncTimestamp(set.getTimestamp("last_update"));
                     }
@@ -136,7 +138,7 @@ public class MySQLLevelsHolder extends ConfigurationTable implements Levels {
             for (User user : users) {
                 if (!user.isWaitingOnLevelSync()) {
                     try {
-                        statement.setString(1, user.getName());
+                        statement.setString(1, user.getUUID().toString());
                         statement.setInt(2, user.getLevel());
                         statement.setString(3, getServerName());
                         statement.setTimestamp(4, user.getLevelSyncTimestamp());
@@ -164,14 +166,14 @@ public class MySQLLevelsHolder extends ConfigurationTable implements Levels {
             public void run() {
                 try {
                     PreparedStatement statement = getConnection().prepareStatement(sqlUpdate);
-                    statement.setString(1, user.getName());
+                    statement.setString(1, user.getUUID().toString());
                     statement.setTimestamp(2, user.getLevelSyncTimestamp());
                     statement.setString(3, MANUAL_EDIT_TAG);
 
                     ResultSet set = statement.executeQuery();
 
                     while (set.next()) {
-                        AntiCheat.debugLog("Syncing level to " + user.getName() + ". Value: " + set.getInt("level"));
+                        AntiCheat.debugLog("Syncing level to " + user.getUUID() + ". Value: " + set.getInt("level"));
                         user.setLevel(set.getInt("level"));
                         user.setLevelSyncTimestamp(set.getTimestamp("last_update"));
                     }
