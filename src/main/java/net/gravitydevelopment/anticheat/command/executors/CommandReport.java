@@ -81,7 +81,7 @@ public class CommandReport extends CommandBase {
 
                 // Test users
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (player.getName().equalsIgnoreCase(args[0])) {
+                    if (player.getUniqueId().equals(Bukkit.getPlayer(args[0]).getUniqueId())) {
                         User user = AntiCheat.getManager().getUserManager().getUser(player.getUniqueId());
                         playerReport(cs, user, page);
                         return;

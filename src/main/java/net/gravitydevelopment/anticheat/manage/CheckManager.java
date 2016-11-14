@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * <p/>
@@ -38,7 +39,7 @@ public class CheckManager {
     private AntiCheatManager manager = null;
     private Configuration config;
     private static List<CheckType> checkIgnoreList = new ArrayList<CheckType>();
-    private static Map<String, List<CheckType>> exemptList = new HashMap<String, List<CheckType>>();
+    private static Map<UUID, List<CheckType>> exemptList = new HashMap<UUID, List<CheckType>>();
 
     public CheckManager(AntiCheatManager manager) {
         this.manager = manager;
@@ -96,11 +97,11 @@ public class CheckManager {
      */
     public void exemptPlayer(Player player, CheckType type, String className) {
         if (!isExempt(player, type)) {
-            if (!exemptList.containsKey(player.getName())) {
-                exemptList.put(player.getName(), new ArrayList<CheckType>());
+            if (!exemptList.containsKey(player.getUniqueId())) {
+                exemptList.put(player.getUniqueId(), new ArrayList<CheckType>());
             }
             manager.getLoggingManager().logFineInfo(player.getName() + " was exempted from the " + type.toString() + " check by " + className + ".");
-            exemptList.get(player.getName()).add(type);
+            exemptList.get(player.getUniqueId()).add(type);
         }
     }
 
@@ -113,7 +114,7 @@ public class CheckManager {
     public void unexemptPlayer(Player player, CheckType type, String className) {
         if (isExempt(player, type)) {
             manager.getLoggingManager().logFineInfo(player.getName() + " was unexempted from the " + type.toString() + " check by " + className + ".");
-            exemptList.get(player.getName()).remove(type);
+            exemptList.get(player.getUniqueId()).remove(type);
         }
     }
 
@@ -124,7 +125,7 @@ public class CheckManager {
      * @param type   The check
      */
     public boolean isExempt(Player player, CheckType type) {
-        return exemptList.containsKey(player.getName()) ? exemptList.get(player.getName()).contains(type) : false;
+        return exemptList.containsKey(player.getUniqueId()) ? exemptList.get(player.getUniqueId()).contains(type) : false;
     }
 
     /**
@@ -189,7 +190,7 @@ public class CheckManager {
     public boolean isOnline(Player player) {
         // Check if the player is on the user list, e.g. is not an NPC
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.getName().equals(player.getName())) {
+            if (p.getUniqueId().equals(player.getUniqueId())) {
                 return true;
             }
         }

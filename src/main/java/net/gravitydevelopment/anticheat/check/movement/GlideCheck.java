@@ -2,6 +2,7 @@ package net.gravitydevelopment.anticheat.check.movement;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -23,27 +24,27 @@ public class GlideCheck {
 
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 	
-	public static Map<String, Double> lastYDelta = new HashMap<String, Double>();
-	public static Map<String, Integer> glideBuffer = new HashMap<String, Integer>();
+	public static Map<UUID, Double> lastYDelta = new HashMap<UUID, Double>();
+	public static Map<UUID, Integer> glideBuffer = new HashMap<UUID, Integer>();
 	
 	public static CheckResult runCheck(Player player, Distance distance) {
-    	String name = player.getName();
-    	if(!lastYDelta.containsKey(name))
-    		lastYDelta.put(name, 0.0);
-    	if(!YAxisCheck.lastYcoord.containsKey(name))
-    		YAxisCheck.lastYcoord.put(name, player.getLocation().getY());
+    	UUID uuid = player.getUniqueId();
+    	if(!lastYDelta.containsKey(uuid))
+    		lastYDelta.put(uuid, 0.0);
+    	if(!YAxisCheck.lastYcoord.containsKey(uuid))
+    		YAxisCheck.lastYcoord.put(uuid, player.getLocation().getY());
     	double currentY = player.getLocation().getY();
-    	double math = currentY - YAxisCheck.lastYcoord.get(name);
+    	double math = currentY - YAxisCheck.lastYcoord.get(uuid);
     	if((math < 0 && math > AntiCheat.getManager().getBackend().getMagic().GLIDE_MAX()) && !AntiCheat.getManager().getBackend().isMovingExempt(player))
     	{
-    		if(math <= lastYDelta.get(name) && !(player.getEyeLocation().getBlock().getType() == Material.LADDER)
+    		if(math <= lastYDelta.get(uuid) && !(player.getEyeLocation().getBlock().getType() == Material.LADDER)
     				&& !Utilities.isInWater(player) && !Utilities.isInWeb(player)
     				&& Utilities.cantStandAt(player.getLocation().getBlock()) && !Utilities.cantStandAtSingle(player.getLocation().getBlock()) && !!Utilities.cantStandAtSingle(player.getLocation().getBlock().getRelative(BlockFace.DOWN)))
     		{
-    			if(!glideBuffer.containsKey(name))
-    	    		glideBuffer.put(name, 0);
-    			int currentBuffer = glideBuffer.get(name);
-    			glideBuffer.put(name, currentBuffer + 1);
+    			if(!glideBuffer.containsKey(uuid))
+    	    		glideBuffer.put(uuid, 0);
+    			int currentBuffer = glideBuffer.get(uuid);
+    			glideBuffer.put(uuid, currentBuffer + 1);
     			if(currentBuffer >= AntiCheat.getManager().getBackend().getMagic().GLIDE_LIMIT())
     			{
         			double fallDist = distanceToFall(player.getLocation());
@@ -53,14 +54,14 @@ public class GlideCheck {
     				{
     					player.sendMessage(ChatColor.RED + "[AntiCheat] Glide/Fly hacking detected.");
     				}
-    				lastYDelta.put(name, math);
-    				return new CheckResult(CheckResult.Result.FAILED, name + " attempted to fall too slowly!");
+    				lastYDelta.put(uuid, math);
+    				return new CheckResult(CheckResult.Result.FAILED, uuid + " attempted to fall too slowly!");
     			}
     		}
     	}else {
-	    	glideBuffer.remove(name);
+	    	glideBuffer.remove(uuid);
     	}
-    	lastYDelta.put(name, math);
+    	lastYDelta.put(uuid, math);
     	return PASS;
 	}
 
