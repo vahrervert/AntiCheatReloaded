@@ -1,9 +1,7 @@
 package net.gravitydevelopment.anticheat.check.movement;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import org.bukkit.ChatColor;

@@ -92,7 +92,7 @@ public class NPC_1_10 {
 							NPC_1_10.this.npc.setInvisible(true);
 							((CraftPlayer) NPC_1_10.this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 						}
-					}.runTaskLater(AntiCheat.getPlugin(), 3);
+					}.runTaskLater(AntiCheat.getPlugin(), 4);
 				}
 			}else {
 				Location eyelocation = e.getPlayer().getEyeLocation();
@@ -108,9 +108,9 @@ public class NPC_1_10 {
 		} else if (e.getTo().getPitch() >= 22) {
 			Location eyelocation = e.getPlayer().getEyeLocation();
 			Vector vec = e.getPlayer().getLocation().getDirection();
-			vec.setX(-2.5 * vec.getX());
-			vec.setY(e.getPlayer().getLocation().getY() + 1.5);
-			vec.setZ(-2.5 * vec.getZ());
+			vec.setX(-3 * vec.getX());
+			vec.setY(e.getPlayer().getLocation().getY() - 0.4);
+			vec.setZ(-3 * vec.getZ());
 			Location back = eyelocation.add(vec);
 			this.location = back; // TODO
 			this.npc.teleportTo(back, false);
@@ -128,6 +128,7 @@ public class NPC_1_10 {
 			vec.setZ(-1.95 * vec.getZ());
 			Location back = eyelocation.add(vec);
 			this.location = back; // TODO
+			this.npc.setPositionRotation(back.getX(), back.getY(), back.getZ(), (float)new Random().nextFloat() * 20, (float)new Random().nextFloat() * 20);
 			this.npc.teleportTo(back, false);
 			((CraftPlayer) this.getOwner()).getHandle().playerConnection
 					.sendPacket(new PacketPlayOutEntityTeleport(npc));
@@ -140,7 +141,7 @@ public class NPC_1_10 {
 						NPC_1_10.this.npc.setInvisible(true);
 						((CraftPlayer) NPC_1_10.this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 					}
-				}.runTaskLater(AntiCheat.getPlugin(), 5);
+				}.runTaskLater(AntiCheat.getPlugin(), 6);
 			}
 		}
 	}
@@ -161,7 +162,7 @@ public class NPC_1_10 {
 					NPC_1_10.this.npc.setInvisible(true);
 					((CraftPlayer) NPC_1_10.this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 				}
-			}.runTaskLater(AntiCheat.getPlugin(), 5 + new Random().nextInt(5));
+			}.runTaskLater(AntiCheat.getPlugin(), 6 + new Random().nextInt(7));
 		}
 	}
 	
@@ -175,7 +176,7 @@ public class NPC_1_10 {
 					NPC_1_10.this.npc.setInvisible(true);
 					((CraftPlayer) NPC_1_10.this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 				}
-			}.runTaskLater(AntiCheat.getPlugin(), 5 + new Random().nextInt(8));
+			}.runTaskLater(AntiCheat.getPlugin(), 6 + new Random().nextInt(8));
 		}
 	}
 

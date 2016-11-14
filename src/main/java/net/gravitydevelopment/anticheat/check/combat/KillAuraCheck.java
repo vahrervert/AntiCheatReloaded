@@ -30,14 +30,16 @@ public class KillAuraCheck {
 	private static final Map<UUID, Integer> VL_COUNT = new HashMap<UUID, Integer>();
 	
 	public static void cleanPlayer(Player p) {
-		if (!VersionUtil.getVersion().equals("v1_10_R1"))
+		if (!VersionUtil.getVersion().equals("v1_10_R1")) {
 			return;
+		}
 		NPC_LIST.remove(p.getUniqueId());
 	}
 	
 	public static void listenPackets() {
-		if (!VersionUtil.getVersion().equals("v1_10_R1"))
+		if (!VersionUtil.getVersion().equals("v1_10_R1")) {
 			return;
+		}
 		AntiCheat.getProtocolManager().addPacketListener(new PacketAdapter(AntiCheat.getPlugin(), ListenerPriority.NORMAL, new PacketType[] {PacketType.Play.Client.USE_ENTITY}) {
 			@Override
 			public void onPacketReceiving(PacketEvent e) {
@@ -45,16 +47,18 @@ public class KillAuraCheck {
 				if (!NPC_LIST.containsKey(p.getUniqueId()))
 					return;
 				int id = e.getPacket().getIntegers().read(0);
-				if (NPC_LIST.containsKey(p.getUniqueId()))
-					if (NPC_LIST.get(p.getUniqueId()).getID() != id)
+				if (NPC_LIST.containsKey(p.getUniqueId())) {
+					if (NPC_LIST.get(p.getUniqueId()).getID() != id) {
 						return;
+					}
+				}
 				if (!VL_COUNT.containsKey(p.getUniqueId())) {
-					VL_COUNT.put(p.getUniqueId(), 0);
+					VL_COUNT.put(p.getUniqueId(), 1);
 					NPC_LIST.get(p.getUniqueId()).damage();
 				}else {
 					VL_COUNT.put(p.getUniqueId(), VL_COUNT.get(p.getUniqueId()) + 1);
 					if (VL_COUNT.get(p.getUniqueId()) >= 5) {
-						EventListener.log(new CheckResult(CheckResult.Result.FAILED, p.getName() + " failed KillAura (botcheck), hit the bot " + VL_COUNT.get(p.getUniqueId()) + "times (max=5)").getMessage(), p, CheckType.BLINK);
+						EventListener.log(new CheckResult(CheckResult.Result.FAILED, p.getName() + " failed KillAura (botcheck), hit the bot " + VL_COUNT.get(p.getUniqueId()) + " times (max=5)").getMessage(), p, CheckType.BLINK);
 						VL_COUNT.remove(p.getUniqueId());
 					}
 				}
@@ -63,8 +67,9 @@ public class KillAuraCheck {
 	}
 
 	public static void doDamageEvent(EntityDamageByEntityEvent e, Player p) {
-		if (!VersionUtil.getVersion().equals("v1_10_R1"))
+		if (!VersionUtil.getVersion().equals("v1_10_R1")) {
 			return;
+		}
 		if (NPC_LIST.containsKey(p.getUniqueId()))
 			NPC_LIST.get(p.getUniqueId()).damage(e, p);
 		else {
@@ -75,8 +80,9 @@ public class KillAuraCheck {
 	}
 	
 	public static void doMove(PlayerMoveEvent e) {
-		if (!VersionUtil.getVersion().equals("v1_10_R1"))
+		if (!VersionUtil.getVersion().equals("v1_10_R1")) {
 			return;
+		}
 		if (NPC_LIST.containsKey(e.getPlayer().getUniqueId()))
 			NPC_LIST.get(e.getPlayer().getUniqueId()).move(e);
 	}
