@@ -39,7 +39,7 @@ public class YAxisCheck {
             double y1 = player.getLocation().getY();
             UUID uuid = player.getUniqueId();
             // Fix Y axis spam.
-            if (!lastYcoord.containsKey(uuid) || !lastYtime.containsKey(uuid) || !yAxisLastViolation.containsKey(uuid) || !yAxisLastViolation.containsKey(uuid)) {
+            if (!lastYcoord.containsKey(uuid) || !lastYtime.containsKey(uuid) || !yAxisLastViolation.containsKey(uuid)) {
                 lastYcoord.put(uuid, y1);
                 yAxisViolations.put(uuid, 0);
                 yAxisLastViolation.put(uuid, 0L);
