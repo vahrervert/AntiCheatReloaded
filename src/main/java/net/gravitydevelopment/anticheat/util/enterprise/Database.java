@@ -180,7 +180,7 @@ public class Database {
     public void logEvent(User user, CheckType checkType) {
         try {
             eventBatch.setString(1, serverName);
-            eventBatch.setString(2, user.getName());
+            eventBatch.setString(2, user.getUUID().toString());
             eventBatch.setString(3, checkType.toString());
 
             eventBatch.addBatch();
