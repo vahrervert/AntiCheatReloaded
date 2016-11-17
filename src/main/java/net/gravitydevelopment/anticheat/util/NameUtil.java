@@ -10,7 +10,10 @@ public class NameUtil {
 		"Derp",
 		"Random",
 		"That",
-		"NoHaxJust"
+		"NoHaxJust",
+		"Derp",
+		"Fun",
+		"Luigi"
 	};
 
 	private static String[] secondParts = new String[] {
@@ -19,7 +22,11 @@ public class NameUtil {
 		"Guy",
 		"Mario",
 		"Plain",
-		"Simple"
+		"Simple",
+		"NotHacking",
+		"Random",
+		"11",
+		"06"
 	};
 	
 	private static Random theRandom = new Random();

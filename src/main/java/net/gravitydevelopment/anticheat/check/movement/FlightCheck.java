@@ -12,6 +12,7 @@ import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.check.CheckResult;
 import net.gravitydevelopment.anticheat.util.Distance;
 import net.gravitydevelopment.anticheat.util.Utilities;
+import net.gravitydevelopment.anticheat.util.VersionUtil;
 
 /**
  * 
@@ -26,7 +27,7 @@ public class FlightCheck {
 	public static Map<UUID, Long> movingExempt = new HashMap<UUID, Long>();
 	
     public static CheckResult runCheck(Player player, Distance distance) {
-        if (distance.getYDifference() > AntiCheat.getManager().getBackend().getMagic().TELEPORT_MIN()) {
+        if (distance.getYDifference() > AntiCheat.getManager().getBackend().getMagic().TELEPORT_MIN() || VersionUtil.isFlying(player)) {
             // This was a teleport, so we don't care about it.
             return PASS;
         }
