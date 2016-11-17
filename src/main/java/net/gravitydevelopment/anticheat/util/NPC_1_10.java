@@ -89,8 +89,8 @@ public class NPC_1_10 {
 					new BukkitRunnable() {
 						@Override
 						public void run() {
-							NPC_1_10.this.npc.setInvisible(true);
-							((CraftPlayer) NPC_1_10.this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
+							npc.setInvisible(true);
+							((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 						}
 					}.runTaskLater(AntiCheat.getPlugin(), 4);
 				}
@@ -138,8 +138,8 @@ public class NPC_1_10 {
 				new BukkitRunnable() {
 					@Override
 					public void run() {
-						NPC_1_10.this.npc.setInvisible(true);
-						((CraftPlayer) NPC_1_10.this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
+						npc.setInvisible(true);
+						((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 					}
 				}.runTaskLater(AntiCheat.getPlugin(), 6);
 			}
@@ -151,30 +151,34 @@ public class NPC_1_10 {
 	}
 
 	public void damage(EntityDamageByEntityEvent e, Player p) {
-		if (p != getOwner())
+		if (p != getOwner() || this.npc == null) {
 			return;
+		}
 		if (new Random().nextBoolean() && this.npc.isInvisible()) {
 			this.npc.setInvisible(false);
 			((CraftPlayer) this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					NPC_1_10.this.npc.setInvisible(true);
-					((CraftPlayer) NPC_1_10.this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
+					npc.setInvisible(true);
+					((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 				}
 			}.runTaskLater(AntiCheat.getPlugin(), 6 + new Random().nextInt(7));
 		}
 	}
 	
 	public void damage() {
+		if (this.npc == null) {
+			return;
+		}
 		if (new Random().nextBoolean() && this.npc.isInvisible()) {
 			this.npc.setInvisible(false);
 			((CraftPlayer) this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					NPC_1_10.this.npc.setInvisible(true);
-					((CraftPlayer) NPC_1_10.this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
+					npc.setInvisible(true);
+					((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 				}
 			}.runTaskLater(AntiCheat.getPlugin(), 6 + new Random().nextInt(8));
 		}
