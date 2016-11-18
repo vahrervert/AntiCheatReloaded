@@ -26,7 +26,7 @@ public class GlideCheck {
 	public static Map<UUID, Integer> glideBuffer = new HashMap<UUID, Integer>();
 	
 	public static CheckResult runCheck(Player player, Distance distance) {
-    	UUID uuid = player.getUniqueId();
+    	/*UUID uuid = player.getUniqueId();
     	if(!lastYDelta.containsKey(uuid))
     		lastYDelta.put(uuid, 0.0);
     	if(!YAxisCheck.lastYcoord.containsKey(uuid))
@@ -59,15 +59,15 @@ public class GlideCheck {
     	}else {
 	    	glideBuffer.remove(uuid);
     	}
-    	lastYDelta.put(uuid, math);
+    	lastYDelta.put(uuid, math);*/
     	return PASS;
 	}
 
-	private static double distanceToFall(Location location) {
+	/*private static double distanceToFall(Location location) {
 		double firstY = location.getY();
 		while (location.clone().add(0, -0.1, 0).getBlock().getType() == Material.AIR)
 			location.add(0, -0.1, 0);
 		return firstY - location.getY();
-	}
+	}*/
 
 }
