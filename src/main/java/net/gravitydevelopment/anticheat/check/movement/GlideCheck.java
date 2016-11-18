@@ -16,9 +16,7 @@ import net.gravitydevelopment.anticheat.util.Distance;
 import net.gravitydevelopment.anticheat.util.Utilities;
 
 /**
- * 
- * @author Marco STILL IN ALPHA TESTING!
- * TODO fix false positives
+ * This is broken as f*ck
  */
 public class GlideCheck {
 

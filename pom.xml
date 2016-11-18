@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.gravitydevelopment.anticheat</groupId>
     <artifactId>AntiCheat</artifactId>
-    <version>1.5.2-ALPHA</version>
+    <version>1.5.3-ALPHA</version>
     <name>AntiCheatReloaded</name>
     <url>https://rammelkast.com</url>
     <properties>
