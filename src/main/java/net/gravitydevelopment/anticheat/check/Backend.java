@@ -457,9 +457,6 @@ public class Backend {
             int i = fastBreakViolation.get(uuid);
             if (i > violations && math < magic.FASTBREAK_MAXVIOLATIONTIME()) {
                 lastBlockBroken.put(uuid, System.currentTimeMillis());
-                if (!silentMode()) {
-                    player.sendMessage(ChatColor.RED + "[AntiCheat] Fastbreaking detected. Please wait 10 seconds before breaking blocks.");
-                }
                 return new CheckResult(CheckResult.Result.FAILED, player.getName() + " broke blocks too fast " + i + " times in a row (max=" + violations + ")");
             } else if (fastBreakViolation.get(uuid) > 0 && math > magic.FASTBREAK_MAXVIOLATIONTIME()) {
                 fastBreakViolation.put(uuid, 0);
@@ -521,9 +518,6 @@ public class Backend {
             AntiCheat.debugLog("Player lastBlockPlaced value = " + lastBlockPlaced + ", diff=" + math);
             if (lastBlockPlaced.get(uuid) > 0 && math < magic.FASTPLACE_MAXVIOLATIONTIME()) {
                 lastBlockPlaced.put(uuid, time);
-                if (!silentMode()) {
-                    player.sendMessage(ChatColor.RED + "[AntiCheat] Fastplacing detected. Please wait 10 seconds before placing blocks.");
-                }
                 return new CheckResult(CheckResult.Result.FAILED, player.getName() + " placed blocks too fast " + fastBreakViolation.get(uuid) + " times in a row (max=" + violations + ")");
             } else if (lastBlockPlaced.get(uuid) > 0 && math > magic.FASTPLACE_MAXVIOLATIONTIME()) {
                 AntiCheat.debugLog("Reset facePlaceViolation for " + uuid);

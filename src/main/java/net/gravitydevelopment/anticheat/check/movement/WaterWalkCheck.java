@@ -21,70 +21,83 @@ import net.gravitydevelopment.anticheat.util.Utilities;
 public class WaterWalkCheck {
 
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
-	
-    public static List<UUID> isInWater = new ArrayList<UUID>();
-    public static List<UUID> isInWaterCache = new ArrayList<UUID>();
-    public static Map<UUID, Integer> waterSpeedViolation = new HashMap<UUID, Integer>();
-    public static Map<UUID, Integer> waterAscensionViolation = new HashMap<UUID, Integer>();
-	
-	public static CheckResult runCheck(Player player, double x, double y, double z) {
-        Block block = player.getLocation().getBlock();
-        UUID uuid = player.getUniqueId();
 
-        if (player.getVehicle() == null && !player.isFlying()) {
-            if (block.isLiquid()) {
-                if (isInWater.contains(uuid)) {
-                    if (isInWaterCache.contains(uuid)) {
-                        if (player.getNearbyEntities(1, 1, 1).isEmpty()) {
-                            boolean b;
-                            if (!Utilities.sprintFly(player)) {
-                                b = x > AntiCheat.getManager().getBackend().getMagic().XZ_SPEED_MAX_WATER() || z > AntiCheat.getManager().getBackend().getMagic().XZ_SPEED_MAX_WATER();
-                            } else {
-                                b = x > AntiCheat.getManager().getBackend().getMagic().XZ_SPEED_MAX_WATER_SPRINT() || z > AntiCheat.getManager().getBackend().getMagic().XZ_SPEED_MAX_WATER_SPRINT();
-                            }
-                            if (!b && !Utilities.isFullyInWater(player.getLocation()) && Utilities.isHoveringOverWater(player.getLocation(), 1) && y == 0D && !block.getType().equals(Material.WATER_LILY)) {
-                                b = true;
-                            }
-                            if (b) {
-                                if (waterSpeedViolation.containsKey(uuid)) {
-                                    int v = waterSpeedViolation.get(uuid);
-                                    if (v >= AntiCheat.getManager().getBackend().getMagic().WATER_SPEED_VIOLATION_MAX()) {
-                                        waterSpeedViolation.put(uuid, 0);
-                                        return new CheckResult(CheckResult.Result.FAILED, player.getName() + " stood on water " + v + " times (can't stand on " + block.getType() + " or " + block.getRelative(BlockFace.DOWN).getType() + ")");
-                                    } else {
-                                        waterSpeedViolation.put(uuid, v + 1);
-                                    }
-                                } else {
-                                    waterSpeedViolation.put(uuid, 1);
-                                }
-                            }
-                        }
-                    } else {
-                        isInWaterCache.add(uuid);
-                        return PASS;
-                    }
-                } else {
-                    isInWater.add(uuid);
-                    return PASS;
-                }
-            } else if (block.getRelative(BlockFace.DOWN).isLiquid() && !AntiCheat.getManager().getBackend().isAscending(player) && Utilities.cantStandAt(block) && Utilities.cantStandAt(block.getRelative(BlockFace.DOWN))) {
-                if (waterAscensionViolation.containsKey(uuid)) {
-                    int v = waterAscensionViolation.get(uuid);
-                    if (v >= AntiCheat.getManager().getBackend().getMagic().WATER_ASCENSION_VIOLATION_MAX()) {
-                        waterAscensionViolation.put(uuid, 0);
-                        return new CheckResult(CheckResult.Result.FAILED, player.getName() + " stood on water " + v + " times (can't stand on " + block.getType() + " or " + block.getRelative(BlockFace.DOWN).getType() + ")");
-                    } else {
-                        waterAscensionViolation.put(uuid, v + 1);
-                    }
-                } else {
-                    waterAscensionViolation.put(uuid, 1);
-                }
-            } else {
-                isInWater.remove(uuid);
-                isInWaterCache.remove(uuid);
-            }
-        }
-        return PASS;
-    }
-	
+	public static List<UUID> isInWater = new ArrayList<UUID>();
+	public static List<UUID> isInWaterCache = new ArrayList<UUID>();
+	public static Map<UUID, Integer> waterSpeedViolation = new HashMap<UUID, Integer>();
+	public static Map<UUID, Integer> waterAscensionViolation = new HashMap<UUID, Integer>();
+
+	public static CheckResult runCheck(Player player, double x, double y, double z) {
+		Block block = player.getLocation().getBlock();
+		UUID uuid = player.getUniqueId();
+
+		if (player.getVehicle() == null && !player.isFlying()) {
+			if (block.isLiquid()) {
+				if (isInWater.contains(uuid)) {
+					if (isInWaterCache.contains(uuid)) {
+						if (player.getNearbyEntities(1, 1, 1).isEmpty()) {
+							boolean b;
+							if (!Utilities.sprintFly(player)) {
+								b = x > AntiCheat.getManager().getBackend().getMagic().XZ_SPEED_MAX_WATER()
+										|| z > AntiCheat.getManager().getBackend().getMagic().XZ_SPEED_MAX_WATER();
+							} else {
+								b = x > AntiCheat.getManager().getBackend().getMagic().XZ_SPEED_MAX_WATER_SPRINT()
+										|| z > AntiCheat.getManager().getBackend().getMagic()
+												.XZ_SPEED_MAX_WATER_SPRINT();
+							}
+							if (!b && !Utilities.isFullyInWater(player.getLocation())
+									&& Utilities.isHoveringOverWater(player.getLocation(), 1) && y == 0D
+									&& !block.getType().equals(Material.WATER_LILY)) {
+								b = true;
+							}
+							if (b) {
+								if (waterSpeedViolation.containsKey(uuid)) {
+									int v = waterSpeedViolation.get(uuid);
+									if (v >= AntiCheat.getManager().getBackend().getMagic()
+											.WATER_SPEED_VIOLATION_MAX()) {
+										waterSpeedViolation.put(uuid, 0);
+										return new CheckResult(CheckResult.Result.FAILED,
+												player.getName() + " stood on water " + v + " times (can't stand on "
+														+ block.getType() + " or "
+														+ block.getRelative(BlockFace.DOWN).getType() + ")");
+									} else {
+										waterSpeedViolation.put(uuid, v + 1);
+									}
+								} else {
+									waterSpeedViolation.put(uuid, 1);
+								}
+							}
+						}
+					} else {
+						isInWaterCache.add(uuid);
+						return PASS;
+					}
+				} else {
+					isInWater.add(uuid);
+					return PASS;
+				}
+			} else if (block.getRelative(BlockFace.DOWN).isLiquid()
+					&& !AntiCheat.getManager().getBackend().isAscending(player) && Utilities.cantStandAt(block)
+					&& Utilities.cantStandAt(block.getRelative(BlockFace.DOWN))) {
+				if (waterAscensionViolation.containsKey(uuid)) {
+					int v = waterAscensionViolation.get(uuid);
+					if (v >= AntiCheat.getManager().getBackend().getMagic().WATER_ASCENSION_VIOLATION_MAX()) {
+						waterAscensionViolation.put(uuid, 0);
+						return new CheckResult(CheckResult.Result.FAILED,
+								player.getName() + " stood on water " + v + " times (can't stand on " + block.getType()
+										+ " or " + block.getRelative(BlockFace.DOWN).getType() + ")");
+					} else {
+						waterAscensionViolation.put(uuid, v + 1);
+					}
+				} else {
+					waterAscensionViolation.put(uuid, 1);
+				}
+			} else {
+				isInWater.remove(uuid);
+				isInWaterCache.remove(uuid);
+			}
+		}
+		return PASS;
+	}
+
 }
