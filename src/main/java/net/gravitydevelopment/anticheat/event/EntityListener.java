@@ -19,7 +19,6 @@
 package net.gravitydevelopment.anticheat.event;
 
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -39,7 +38,6 @@ import net.gravitydevelopment.anticheat.check.combat.CriticalsCheck;
 import net.gravitydevelopment.anticheat.check.combat.KillAuraCheck;
 import net.gravitydevelopment.anticheat.check.combat.VelocityCheck;
 import net.gravitydevelopment.anticheat.util.Distance;
-import net.gravitydevelopment.anticheat.util.Utilities;
 
 public class EntityListener extends EventListener {
 
