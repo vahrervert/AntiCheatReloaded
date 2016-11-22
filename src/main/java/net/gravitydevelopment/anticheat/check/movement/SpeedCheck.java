@@ -37,7 +37,7 @@ public class SpeedCheck {
 					reason = "on soulsand ";
 					max = AntiCheat.getManager().getBackend().getMagic().XZ_SPEED_MAX_SOULSAND();
 				}
-			} else if (player.isFlying()) {
+			} else if (VersionUtil.isFlying(player)) {
 				reason = "while flying ";
 				max = AntiCheat.getManager().getBackend().getMagic().XZ_SPEED_MAX_FLY();
 			} else if (player.hasPotionEffect(PotionEffectType.SPEED)) {
