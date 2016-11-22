@@ -65,7 +65,7 @@ public class GlideCheck {
 	lastYDelta.put(uuid, math);*/
 	
 	public static CheckResult runCheck(Player player, Distance distance) {
-		UUID uuid = player.getUniqueId();
+	/*	UUID uuid = player.getUniqueId();
 		if (AntiCheat.getManager().getBackend().isMovingExempt(player) || VersionUtil.isFlying(player)) {
 			return PASS;
 		}
@@ -93,7 +93,7 @@ public class GlideCheck {
 			return PASS;
 		}
 		
-		if (timeDiff <= 150 /* 3 ticks */) {
+		if (timeDiff <= 150/) {
 			return PASS;
 		}
 		
@@ -123,7 +123,7 @@ public class GlideCheck {
 		}
 		
 		System.out.println(diff + ":" + timeDiff + ":" + distanceToFall(player.getLocation()));
-		
+		*/
     	return PASS;
 	}
 
