@@ -83,8 +83,9 @@ public class KillAuraCheck {
 		if (!VersionUtil.getVersion().equals("v1_11_R1")) {
 			return;
 		}
-		if (NPC_LIST.containsKey(e.getPlayer().getUniqueId()))
+		if (NPC_LIST.containsKey(e.getPlayer().getUniqueId())) {
 			NPC_LIST.get(e.getPlayer().getUniqueId()).move(e);
+		}
 	}
 	
 }

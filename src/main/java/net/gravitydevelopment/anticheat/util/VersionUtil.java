@@ -39,5 +39,13 @@ public class VersionUtil {
 			return MOVE_UP_BLOCKS_1_8;
 		}
 	}
+
+	public static boolean isNewYSpeed() {
+		if (getVersion().equals("v1_9_R1") || getVersion().equals("v1_10_R1") || getVersion().equals("v1_11_R1")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 }

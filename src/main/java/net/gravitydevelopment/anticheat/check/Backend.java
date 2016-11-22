@@ -170,7 +170,7 @@ public class Backend {
         inventoryTime.remove(pU);
         inventoryClicks.remove(pU);
         lastFallPacket.remove(pU);
-        GlideCheck.lastYDelta.remove(pU);
+        GlideCheck.lastToFall.remove(pU);
         GlideCheck.glideBuffer.remove(pU);
         SpeedCheck.speedViolation.remove(player.getUniqueId());
     }
@@ -258,7 +258,7 @@ public class Backend {
     }
 
     public CheckResult checkYSpeed(Player player, double y) {
-        if (!isMovingExempt(player) && !player.isInsideVehicle() && !player.isSleeping() && y > magic.Y_SPEED_MAX() && !isDoing(player, velocitized, magic.VELOCITY_TIME()) && !player.hasPotionEffect(PotionEffectType.JUMP)) {
+        if (!isMovingExempt(player) && !player.isInsideVehicle() && !player.isSleeping() && (y > (VersionUtil.isNewYSpeed() ? magic.Y_SPEED_MAX() + 0.05 : magic.Y_SPEED_MAX())) && !isDoing(player, velocitized, magic.VELOCITY_TIME()) && !player.hasPotionEffect(PotionEffectType.JUMP)) {
             return new CheckResult(CheckResult.Result.FAILED, player.getName() + "'s y speed was too high (speed=" + y + ", max=" + magic.Y_SPEED_MAX() + ")");
         } else {
             return PASS;
@@ -773,7 +773,7 @@ public class Backend {
         YAxisCheck.yAxisLastViolation.remove(player.getUniqueId());
         YAxisCheck.lastYcoord.remove(player.getUniqueId());
         YAxisCheck.lastYtime.remove(player.getUniqueId());
-        GlideCheck.lastYDelta.remove(player.getUniqueId());
+        GlideCheck.lastToFall.remove(player.getUniqueId());
         GlideCheck.glideBuffer.remove(player.getUniqueId());
     }
 

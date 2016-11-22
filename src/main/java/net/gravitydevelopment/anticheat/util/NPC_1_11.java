@@ -81,7 +81,7 @@ public class NPC_1_11 {
 				vec.setZ(-3 * vec.getZ());
 				Location back = eyelocation.add(vec);
 				this.location = back; // TODO
-				this.npc.teleportTo(back, false);
+				this.npc.setPositionRotation(back.getX(), back.getY(), back.getZ(), (float)new Random().nextFloat() * 20, (float)new Random().nextFloat() * 20);
 				((CraftPlayer) this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityTeleport(npc));
 				if (new Random().nextInt(50) == 25 && this.npc.isInvisible()) {
 					this.npc.setInvisible(false);
@@ -102,7 +102,7 @@ public class NPC_1_11 {
 				vec.setZ(-3 * vec.getZ());
 				Location back = eyelocation.add(vec);
 				this.location = back; // TODO
-				this.npc.teleportTo(back, false);
+				this.npc.setPositionRotation(back.getX(), back.getY(), back.getZ(), (float)new Random().nextFloat() * 20, (float)new Random().nextFloat() * 20);
 				((CraftPlayer) this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityTeleport(npc));
 			}
 		} else if (e.getTo().getPitch() >= 22) {
@@ -113,7 +113,7 @@ public class NPC_1_11 {
 			vec.setZ(-3 * vec.getZ());
 			Location back = eyelocation.add(vec);
 			this.location = back; // TODO
-			this.npc.teleportTo(back, false);
+			this.npc.setPositionRotation(back.getX(), back.getY(), back.getZ(), (float)new Random().nextFloat() * 20, (float)new Random().nextFloat() * 20);
 			((CraftPlayer) this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityTeleport(npc));
 		} else {
 			Location eyelocation = e.getPlayer().getEyeLocation();
@@ -129,7 +129,6 @@ public class NPC_1_11 {
 			Location back = eyelocation.add(vec);
 			this.location = back; // TODO
 			this.npc.setPositionRotation(back.getX(), back.getY(), back.getZ(), (float)new Random().nextFloat() * 20, (float)new Random().nextFloat() * 20);
-			this.npc.teleportTo(back, false);
 			((CraftPlayer) this.getOwner()).getHandle().playerConnection
 					.sendPacket(new PacketPlayOutEntityTeleport(npc));
 			if (new Random().nextInt(1000) == 500 && this.npc.isInvisible()) {
