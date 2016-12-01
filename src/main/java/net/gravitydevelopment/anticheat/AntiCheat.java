@@ -51,7 +51,6 @@ public class AntiCheat extends JavaPlugin {
     private static Configuration config;
     private static boolean verbose;
     private static boolean developer;
-    private static final int PROJECT_ID = 100229;
     private static ProtocolManager protocolManager;
     private static boolean protocolLib = false;
     private static Long loadTime;

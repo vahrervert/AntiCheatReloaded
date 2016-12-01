@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 
 public class VersionUtil {
 
@@ -26,7 +27,7 @@ public class VersionUtil {
 	
 	public static boolean isFlying(Player p) {
 		if (getVersion().equals("v1_9_R1") || getVersion().equals("v1_10_R1") || getVersion().equals("v1_11_R1")) {
-			return p.isFlying() || p.isGliding();
+			return p.isFlying() || p.isGliding() || p.hasPotionEffect(PotionEffectType.LEVITATION);
 		} else {
 			return p.isFlying();
 		}
