@@ -27,6 +27,9 @@ public class WaterWalkCheck {
 	public static Map<UUID, Integer> waterSpeedViolation = new HashMap<UUID, Integer>();
 	public static Map<UUID, Integer> waterAscensionViolation = new HashMap<UUID, Integer>();
 
+	/**
+	 * TODO check & fix for 1.11? (see #25)
+	 */
 	public static CheckResult runCheck(Player player, double x, double y, double z) {
 		Block block = player.getLocation().getBlock();
 		UUID uuid = player.getUniqueId();

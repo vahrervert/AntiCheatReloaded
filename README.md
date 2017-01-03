@@ -7,6 +7,22 @@ AntiCheat helps server admins easily identify and block malicious users by monit
 First of all, i've put a lot of time and work in this project, so donations (especially in (m)BTC) are appreciated!
 My BTC address is 1JfyX6hvGUazHTtKVLaNcYaUxnyjR5HtMY
 
+Bug Reporting
+------------
+
+Issues should be filed by hitting the [issues](https://github.com/Rammelkast/AntiCheatReloaded/issues?state=open) tab above. Please make sure you search your issue before opening a new ticket.
+
+Please include the following information with your issue, this allows me to fix it quicker;
+* The `/anticheat debug` log
+* Your AntiCheatReloaded version
+* Your server software (Bukkit/Spigot/Paper/Taco) and it's version
+* When using protocollib, your protocollib version
+* If you use protocolhacks (ViaVersion etc.)
+
+Usage
+-------
+Simply drag and drop the plugin and the ProtoclLib into your Plugins folder.
+
 ###Hacks blocked
 -------
 * Blink
@@ -30,14 +46,3 @@ My BTC address is 1JfyX6hvGUazHTtKVLaNcYaUxnyjR5HtMY
 * FastPlace
 * Spam
 * FastEat
-
-Usage
--------
-Simply drag and drop the plugin and the ProtoclLib into your Plugins folder.
-
-Bug Reporting/Support/Questions
-------------
-
-Issues should be filed by hitting the [issues](https://github.com/Rammelkast/AntiCheatReloaded/issues?state=open) tab above. Please make sure you search your issue before opening a new ticket.
-
-All opened tickets that are bug reports require a debug log that includes logs of the issue in question. To obtain this, type `/anticheat debug` on your server. Note that for the debug output to contain valid information and help us diagnose your issue, you need to issue this command AFTER the issue occurs at least once and BEFORE you reload or restart it.
