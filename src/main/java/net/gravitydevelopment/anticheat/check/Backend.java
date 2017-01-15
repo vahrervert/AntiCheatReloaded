@@ -258,7 +258,7 @@ public class Backend {
     }
 
     public CheckResult checkYSpeed(Player player, double y) {
-        if (!isMovingExempt(player) && !player.isInsideVehicle() && !player.isSleeping() && (y > (VersionUtil.isNewYSpeed() ? magic.Y_SPEED_MAX() + 0.05 : magic.Y_SPEED_MAX())) && !isDoing(player, velocitized, magic.VELOCITY_TIME()) && !player.hasPotionEffect(PotionEffectType.JUMP)) {
+        if (!isMovingExempt(player) && !player.isInsideVehicle() && !player.isSleeping() && (y > (VersionUtil.isNewYSpeed() ? magic.Y_SPEED_MAX() + 0.05 : magic.Y_SPEED_MAX())) && !isDoing(player, velocitized, magic.VELOCITY_TIME()) && !player.hasPotionEffect(PotionEffectType.JUMP) && !VersionUtil.isFlying(player)) {
             return new CheckResult(CheckResult.Result.FAILED, player.getName() + "'s y speed was too high (speed=" + y + ", max=" + magic.Y_SPEED_MAX() + ")");
         } else {
             return PASS;

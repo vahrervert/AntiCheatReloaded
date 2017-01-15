@@ -45,9 +45,9 @@ public class VersionUtil {
 
 	public static long getHealTime() {
 		if (getVersion().equals("v1_9_R1") || getVersion().equals("v1_10_R1") || getVersion().equals("v1_11_R1")) {
-			return 499;
+			return 495;
 		} else {
-			return 1999;
+			return 1995;
 		}
 	}
 	
