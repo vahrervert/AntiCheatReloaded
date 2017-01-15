@@ -42,5 +42,13 @@ public class VersionUtil {
 			return false;
 		}
 	}
+
+	public static long getHealTime() {
+		if (getVersion().equals("v1_9_R1") || getVersion().equals("v1_10_R1") || getVersion().equals("v1_11_R1")) {
+			return 499;
+		} else {
+			return 1999;
+		}
+	}
 	
 }

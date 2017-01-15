@@ -649,10 +649,11 @@ public class Backend {
     public CheckResult checkFastHeal(Player player) {
         if (lastHeal.containsKey(player.getUniqueId())) // Otherwise it was modified by a plugin, don't worry about it.
         {
+        	long healTime = VersionUtil.getHealTime();
             long l = lastHeal.get(player.getUniqueId());
             lastHeal.remove(player.getUniqueId());
-            if ((System.currentTimeMillis() - l) < magic.HEAL_TIME_MIN()) {
-                return new CheckResult(CheckResult.Result.FAILED, player.getName() + " healed too quickly (time=" + (System.currentTimeMillis() - l) + " ms, min=" + magic.HEAL_TIME_MIN() + " ms)");
+            if ((System.currentTimeMillis() - l) < healTime) {
+                return new CheckResult(CheckResult.Result.FAILED, player.getName() + " healed too quickly (time=" + (System.currentTimeMillis() - l) + " ms, min=" + healTime + " ms)");
             }
         }
         return PASS;

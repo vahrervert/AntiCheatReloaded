@@ -258,10 +258,6 @@ public interface Magic {
      */
     public double BLOCK_PLACE_MIN();
     /**
-     * Minimum time in between healing; Type=SYSTEM, Leniency=DECREASE.
-     */
-    public int HEAL_TIME_MIN();
-    /**
      * Minimum time in between eating; Type=SYSTEM, Leniency=DECREASE.
      */
     public int EAT_TIME_MIN();
