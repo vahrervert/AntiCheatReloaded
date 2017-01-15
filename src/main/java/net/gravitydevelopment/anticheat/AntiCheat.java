@@ -26,6 +26,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -95,6 +96,13 @@ public class AntiCheat extends JavaPlugin {
         KillAuraCheck.listenPackets();
         BlinkCheck.startTimer();
         BlinkCheck.listenPackets();
+        
+        // Metrics
+        try {
+        	new Metrics(this).start();
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
     }
 
 	@Override
