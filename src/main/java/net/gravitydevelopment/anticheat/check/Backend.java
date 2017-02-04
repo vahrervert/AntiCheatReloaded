@@ -294,7 +294,7 @@ public class Backend {
     }
 
     public CheckResult checkSneak(Player player, double x, double z) {
-        if (player.isSneaking() && !player.isFlying() && !isMovingExempt(player) && !player.isInsideVehicle()) {
+        if (player.isSneaking() && !VersionUtil.isFlying(player) && !isMovingExempt(player) && !player.isInsideVehicle()) {
             double i = x > magic.XZ_SPEED_MAX_SNEAK() ? x : z > magic.XZ_SPEED_MAX_SNEAK() ? z : -1;
             if (i != -1) {
                 return new CheckResult(CheckResult.Result.FAILED, player.getName() + " was sneaking too fast (speed=" + i + ", max=" + magic.XZ_SPEED_MAX_SNEAK() + ")");
