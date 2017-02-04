@@ -177,6 +177,9 @@ public class Backend {
 
     public CheckResult checkFastBow(Player player, float force) {
         // Ignore magic numbers here, they are minecrafty vanilla stuff.
+    	if (!bowWindUp.containsKey(player.getUniqueId())) {
+    		return PASS;
+    	}
         int ticks = (int) ((((System.currentTimeMillis() - bowWindUp.get(player.getUniqueId())) * 20) / 1000) + 3);
         bowWindUp.remove(player.getUniqueId());
         float f = (float) ticks / 20.0F;
