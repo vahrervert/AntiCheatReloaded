@@ -55,6 +55,7 @@ import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.check.CheckResult;
 import net.gravitydevelopment.anticheat.check.CheckType;
 import net.gravitydevelopment.anticheat.check.combat.KillAuraCheck;
+import net.gravitydevelopment.anticheat.check.movement.ElytraFly;
 import net.gravitydevelopment.anticheat.check.movement.FlightCheck;
 import net.gravitydevelopment.anticheat.check.movement.GlideCheck;
 import net.gravitydevelopment.anticheat.check.movement.SpeedCheck;
@@ -345,6 +346,12 @@ public class PlayerListener extends EventListener {
                 	// NO TELEPORT NEEDED HERE, HANDLED BY CHECK ITSELF
                     log(result.getMessage(), player, CheckType.FLY);
                 }
+            }
+            if (getCheckManager().willCheckQuick(player, CheckType.FLY)) {
+            	 CheckResult result = ElytraFly.runCheck(player, distance);
+                 if (result.failed()) {
+                     log(result.getMessage(), player, CheckType.FLY);
+                 }
             }
             if (getCheckManager().willCheckQuick(player, CheckType.VCLIP) && event.getFrom().getY() > event.getTo().getY()) {
                 CheckResult result = getBackend().checkVClip(player, new Distance(event.getFrom(), event.getTo()));

@@ -26,7 +26,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.Metrics;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -41,6 +40,7 @@ import net.gravitydevelopment.anticheat.event.InventoryListener;
 import net.gravitydevelopment.anticheat.event.PlayerListener;
 import net.gravitydevelopment.anticheat.event.VehicleListener;
 import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
+import net.gravitydevelopment.anticheat.metrics.Metrics;
 import net.gravitydevelopment.anticheat.util.User;
 import net.gravitydevelopment.anticheat.util.VersionUtil;
 
@@ -99,7 +99,7 @@ public class AntiCheat extends JavaPlugin {
         
         // Metrics
         try {
-        	new Metrics(this).start();
+        	new Metrics(this);
         } catch (Exception e) {
         	e.printStackTrace();
         }
