@@ -12,7 +12,10 @@ public class NameGenerator {
 		"NoHax",
 		"Just",
 		"That",
-		"New"
+		"New",
+		"Ultra",
+		"Killer",
+		"Swift"
 	});
 
 	private static final List<String> END = Arrays.asList(new String[]{
@@ -21,7 +24,12 @@ public class NameGenerator {
 		"JustYolo",
 		"Gaming",
 		"Minecraft",
-		"Games"
+		"Games",
+		"Bawz",
+		"1",
+		"51",
+		"99",
+		"" + new Random().nextInt(100)
 	});
 	
 	public static String generateName() {
