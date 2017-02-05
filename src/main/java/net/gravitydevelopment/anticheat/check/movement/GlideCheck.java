@@ -18,9 +18,6 @@ import net.gravitydevelopment.anticheat.util.Distance;
 import net.gravitydevelopment.anticheat.util.Utilities;
 import net.gravitydevelopment.anticheat.util.VersionUtil;
 
-/**
- * This is broken as f*ck
- */
 public class GlideCheck {
 
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
@@ -28,44 +25,6 @@ public class GlideCheck {
 	public static Map<UUID, Double> lastDiff = new HashMap<UUID, Double>();
 	public static Map<UUID, Float> lastFallDistance = new HashMap<UUID, Float>();
 	public static Map<UUID, Integer> violations = new HashMap<UUID, Integer>();
-	
-	/*
-	 * SOME OLD CODE
-	 * 
-	 * UUID uuid = player.getUniqueId();
-	if(!lastYDelta.containsKey(uuid))
-		lastYDelta.put(uuid, 0.0);
-	if(!YAxisCheck.lastYcoord.containsKey(uuid))
-		YAxisCheck.lastYcoord.put(uuid, player.getLocation().getY());
-	double currentY = player.getLocation().getY();
-	double math = currentY - YAxisCheck.lastYcoord.get(uuid);
-	if((math < 0 && math > AntiCheat.getManager().getBackend().getMagic().GLIDE_MAX()) && !AntiCheat.getManager().getBackend().isMovingExempt(player))
-	{
-		if(math <= lastYDelta.get(uuid) && !(player.getEyeLocation().getBlock().getType() == Material.LADDER)
-				&& !Utilities.isInWater(player) && !Utilities.isInWeb(player)
-				&& Utilities.cantStandAt(player.getLocation().getBlock()) && !Utilities.cantStandAtSingle(player.getLocation().getBlock()) && !!Utilities.cantStandAtSingle(player.getLocation().getBlock().getRelative(BlockFace.DOWN)))
-		{
-			if(!glideBuffer.containsKey(uuid))
-	    		glideBuffer.put(uuid, 0);
-			int currentBuffer = glideBuffer.get(uuid);
-			glideBuffer.put(uuid, currentBuffer + 1);
-			if(currentBuffer >= AntiCheat.getManager().getBackend().getMagic().GLIDE_LIMIT())
-			{
-    			double fallDist = distanceToFall(player.getLocation());
-    			player.teleport(player.getLocation().add(0, -fallDist, 0));
-    			player.setFallDistance((float) fallDist);
-				if(!AntiCheat.getManager().getBackend().silentMode())
-				{
-					player.sendMessage(ChatColor.RED + "[AntiCheat] Glide/Fly hacking detected.");
-				}
-				lastYDelta.put(uuid, math);
-				return new CheckResult(CheckResult.Result.FAILED, uuid + " attempted to fall too slowly!");
-			}
-		}
-	}else {
-    	glideBuffer.remove(uuid);
-	}
-	lastYDelta.put(uuid, math);*/
 	
 	public static CheckResult runCheck(Player player, Distance distance) {
 		if (VersionUtil.isFlying(player)) {
