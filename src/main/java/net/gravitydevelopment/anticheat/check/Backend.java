@@ -170,8 +170,9 @@ public class Backend {
         inventoryTime.remove(pU);
         inventoryClicks.remove(pU);
         lastFallPacket.remove(pU);
-        GlideCheck.lastToFall.remove(pU);
-        GlideCheck.glideBuffer.remove(pU);
+        GlideCheck.lastDiff.remove(pU);
+        GlideCheck.lastFallDistance.remove(pU);
+        GlideCheck.violations.remove(pU);
         SpeedCheck.speedViolation.remove(player.getUniqueId());
     }
 
@@ -777,8 +778,9 @@ public class Backend {
         YAxisCheck.yAxisLastViolation.remove(player.getUniqueId());
         YAxisCheck.lastYcoord.remove(player.getUniqueId());
         YAxisCheck.lastYtime.remove(player.getUniqueId());
-        GlideCheck.lastToFall.remove(player.getUniqueId());
-        GlideCheck.glideBuffer.remove(player.getUniqueId());
+        GlideCheck.lastFallDistance.remove(player.getUniqueId());
+        GlideCheck.lastDiff.remove(player.getUniqueId());
+        GlideCheck.violations.remove(player.getUniqueId());
     }
 
     public void logExitFly(final Player player) {

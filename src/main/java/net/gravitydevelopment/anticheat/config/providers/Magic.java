@@ -162,10 +162,6 @@ public interface Magic {
      */
     public int GLIDE_LIMIT();
     /**
-     * The max fallspeed after which glide check is disabled; Type=DOUBLE
-     */
-    public double GLIDE_MAX();
-    /**
      * How many blocks you can travel before action is taken; Type=INTEGER, Leniency=INCREASE.
      */
     public double FLIGHT_BLOCK_LIMIT();

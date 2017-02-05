@@ -1,5 +1,6 @@
 package net.gravitydevelopment.anticheat.check.movement;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 import net.gravitydevelopment.anticheat.AntiCheat;
+import net.gravitydevelopment.anticheat.check.Backend;
 import net.gravitydevelopment.anticheat.check.CheckResult;
 import net.gravitydevelopment.anticheat.util.Distance;
 import net.gravitydevelopment.anticheat.util.Utilities;
@@ -23,8 +25,9 @@ public class GlideCheck {
 
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 	
-	public static Map<UUID, Double> lastToFall = new HashMap<UUID, Double>();
-	public static Map<UUID, Integer> glideBuffer = new HashMap<UUID, Integer>();
+	public static Map<UUID, Double> lastDiff = new HashMap<UUID, Double>();
+	public static Map<UUID, Float> lastFallDistance = new HashMap<UUID, Float>();
+	public static Map<UUID, Integer> violations = new HashMap<UUID, Integer>();
 	
 	/*
 	 * SOME OLD CODE
@@ -65,65 +68,37 @@ public class GlideCheck {
 	lastYDelta.put(uuid, math);*/
 	
 	public static CheckResult runCheck(Player player, Distance distance) {
-	/*	UUID uuid = player.getUniqueId();
-		if (AntiCheat.getManager().getBackend().isMovingExempt(player) || VersionUtil.isFlying(player)) {
+		if (VersionUtil.isFlying(player)) {
 			return PASS;
 		}
-		
-		if(!YAxisCheck.lastYcoord.containsKey(uuid)) {
-			YAxisCheck.lastYcoord.put(uuid, player.getLocation().getY());
-		}
-		
-		if(!YAxisCheck.lastYtime.containsKey(uuid)) {
-			YAxisCheck.lastYtime.put(uuid, System.currentTimeMillis());
-		}
-		
-		double currentY = player.getLocation().getY();
-		double diff = currentY - YAxisCheck.lastYcoord.get(uuid);
-		double glideMax = AntiCheat.getManager().getBackend().getMagic().GLIDE_MAX();
-		long timeDiff = System.currentTimeMillis() - YAxisCheck.lastYtime.get(uuid);
-		
-		if (diff <= glideMax || diff >= 0) {
+		if (!lastDiff.containsKey(player.getUniqueId())) {
+			lastDiff.put(player.getUniqueId(), distance.getYDifference());
 			return PASS;
 		}
-		
-		if (!(!(player.getEyeLocation().getBlock().getType() == Material.LADDER)
-				|| !Utilities.isInWater(player) || !Utilities.isInWeb(player)
-				|| Utilities.cantStandAt(player.getLocation().getBlock()) || !Utilities.cantStandAtSingle(player.getLocation().getBlock()) || !Utilities.cantStandAtSingle(player.getLocation().getBlock().getRelative(BlockFace.DOWN)))) {
+		if (!lastFallDistance.containsKey(player.getUniqueId())) {
+			lastFallDistance.put(player.getUniqueId(), player.getFallDistance());
 			return PASS;
 		}
-		
-		if (timeDiff <= 150/) {
-			return PASS;
-		}
-		
-		if(!lastToFall.containsKey(uuid)) {
-			lastToFall.put(uuid, distanceToFall(player.getLocation()));
-		} else {
-			double lastFall = lastToFall.get(uuid);
-			if (distanceToFall(player.getLocation()) + diff >= lastFall - 0.10125) {
-				if (!glideBuffer.containsKey(uuid)) {
-					glideBuffer.put(uuid, 1);
+		double yDiff = distance.getYDifference();
+		float fallDistance = player.getFallDistance();
+		if (yDiff == lastDiff.get(player.getUniqueId()) && fallDistance > lastFallDistance.get(player.getUniqueId())) {
+			if (!violations.containsKey(player.getUniqueId())) {
+				violations.put(player.getUniqueId(), 1);
+			} else {
+				if (violations.get(player.getUniqueId()) + 1 >= AntiCheat.getManager().getBackend().getMagic().GLIDE_LIMIT()) {
+					violations.remove(player.getUniqueId());
+					Location to = player.getLocation();
+					to.setY(to.getY() - distanceToFall(to));
+					player.teleport(to);
+					return new CheckResult(CheckResult.Result.FAILED,
+							player.getName() + " was set back for gliding (yDiff=" + new BigDecimal(yDiff).setScale(2, BigDecimal.ROUND_UP) + ")");
 				} else {
-					int buffer = glideBuffer.get(uuid);
-					if (buffer >= AntiCheat.getManager().getBackend().getMagic().GLIDE_LIMIT()) {
-						glideBuffer.remove(uuid);
-						if(!AntiCheat.getManager().getBackend().silentMode())
-						{
-							double fallDist = distanceToFall(player.getLocation());
-			    			player.teleport(player.getLocation().add(0, -fallDist, 0));
-			    			player.setFallDistance((float) fallDist);
-						}
-						return new CheckResult(CheckResult.Result.FAILED, uuid + " attempted to glide!");
-					} else {
-						glideBuffer.put(uuid, buffer + 1);
-					}
+					violations.put(player.getUniqueId(), violations.get(player.getUniqueId()) + 1);
 				}
 			}
 		}
-		
-		System.out.println(diff + ":" + timeDiff + ":" + distanceToFall(player.getLocation()));
-		*/
+		lastDiff.put(player.getUniqueId(), distance.getYDifference());
+		lastFallDistance.put(player.getUniqueId(), player.getFallDistance());
     	return PASS;
 	}
 
