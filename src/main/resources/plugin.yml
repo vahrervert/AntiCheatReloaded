@@ -1,10 +1,9 @@
 name: AntiCheatReloaded
 author: Rammelkast
 description: AntiCheatReloaded helps easily identify and block malicious users on your server.
-main: net.gravitydevelopment.anticheat.AntiCheat
+main: com.rammelkast.anticheatreloaded.AntiCheat
 softdepend: [ProtocolLib]
 startup: postworld
-url: http://gravitydevelopment.net
 version: ${project.build.version}
 commands:
   anticheat:
