@@ -167,7 +167,7 @@ public class NPC_1_11 {
 	}
 	
 	public void damage() {
-		if (this.npc == null) {
+		if (this.npc == null || this.getOwner() == null) {
 			return;
 		}
 		if (new Random().nextBoolean() && this.npc.isInvisible()) {

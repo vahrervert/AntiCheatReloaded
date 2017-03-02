@@ -229,6 +229,7 @@ public class UserManager {
                         }
                     } else if (event.equalsIgnoreCase("KICK")) {
                         user.getPlayer().kickPlayer(RED + kickReason);
+                        AntiCheat.getPlugin().onPlayerKicked();
                         String msg = RED + config.getLang().KICK_BROADCAST().replaceAll("&player", name) + " (" + CheckType.getName(type) + ")";
                         if (!msg.equals("")) {
                             manager.log(msg);
