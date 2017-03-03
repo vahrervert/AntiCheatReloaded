@@ -2,7 +2,7 @@ name: AntiCheatReloaded
 author: Rammelkast
 description: AntiCheatReloaded helps easily identify and block malicious users on your server.
 main: com.rammelkast.anticheatreloaded.AntiCheat
-softdepend: [ProtocolLib]
+depend: [ProtocolLib]
 startup: postworld
 version: ${project.build.version}
 commands:

@@ -81,6 +81,9 @@ public class AntiCheat extends JavaPlugin {
 			KillAuraCheck.listenPackets();
 			BlinkCheck.startTimer();
 			BlinkCheck.listenPackets();
+		} else {
+			getLogger().severe("Shutting down, ProtocolLib not found!");
+			Bukkit.getPluginManager().disablePlugin(this);
 		}
 		
 		// Check if other AC's are installed
@@ -120,19 +123,34 @@ public class AntiCheat extends JavaPlugin {
 			metrics.addCustomChart(new Metrics.SingleLineChart("cheaters_kicked") {
 				@Override
 				public int getValue() {
-					return playersKicked;
+					int kicked = playersKicked;
+					// Reset so we don't keep sending the same value
+					playersKicked = 0;
+					return kicked;
 				}
 			});
 			metrics.addCustomChart(new Metrics.SingleLineChart("killaura_violations") {
 				@Override
 				public int getValue() {
-					return killauraViolations;
+					int violations = killauraViolations;
+					// Reset so we don't keep sending the same value
+					killauraViolations = 0;
+					return violations;
 				}
 			});
 			metrics.addCustomChart(new Metrics.SingleLineChart("glide_violations") {
 				@Override
 				public int getValue() {
-					return glideViolations;
+					int violations = glideViolations;
+					// Reset so we don't keep sending the same value
+					glideViolations = 0;
+					return violations;
+				}
+			});
+			metrics.addCustomChart(new Metrics.SimplePie("protocollib_version") {
+				@Override
+				public String getValue() {
+					return Bukkit.getPluginManager().getPlugin("ProtocolLib").getDescription().getVersion();
 				}
 			});
 		} catch (Exception e) {
