@@ -39,9 +39,9 @@ public class BlinkCheck {
 			public void onPacketReceiving(PacketEvent e) {
 				Player p = e.getPlayer();
 				Location cur = e.getPlayer().getLocation();
-				if (!MOVE_COUNT.containsKey(p.getUniqueId()))
+				if (!MOVE_COUNT.containsKey(p.getUniqueId())) {
 					MOVE_COUNT.put(p.getUniqueId(), 1);
-				else {
+				} else {
 					MOVE_COUNT.put(p.getUniqueId(), MOVE_COUNT.get(p.getUniqueId()) + 1);
 					if (AntiCheat.getManager().getCheckManager().checkInWorld(p) && !AntiCheat.getManager().getCheckManager().isOpExempt(p) && !AntiCheat.getManager().getCheckManager().isExempt(p, CheckType.BLINK)) {
 						if (MOVE_COUNT.get(p.getUniqueId()) > AntiCheat.getManager().getBackend().getMagic().BLINK_PACKET()) {

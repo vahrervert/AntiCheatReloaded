@@ -15,8 +15,8 @@ import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
- * 
- * @author Marco TODO rewrite this check
+ * @author Rammelkast
+ * TODO rewrite this check
  */
 public class FlightCheck {
 
@@ -28,7 +28,7 @@ public class FlightCheck {
 	public static CheckResult runCheck(Player player, Distance distance) {
 		if (distance.getYDifference() > AntiCheat.getManager().getBackend().getMagic().TELEPORT_MIN()
 				|| VersionUtil.isFlying(player)) {
-			// This was a teleport or user is flying/elyta'ing, so we don't care
+			// This was a teleport or user is flying/using elytra, so we don't care
 			// about it.
 			return PASS;
 		}

@@ -52,7 +52,6 @@ public class AntiCheat extends JavaPlugin {
 	private static boolean verbose;
 	private static boolean developer;
 	private static ProtocolManager protocolManager;
-	private static boolean protocolLib = false;
 	private static Long loadTime;
 
 	@Override
@@ -70,21 +69,23 @@ public class AntiCheat extends JavaPlugin {
 		setupConfig();
 		setupEvents();
 		setupCommands();
-		setupProtocol();
 		// Enterprise must come before levels
 		setupEnterprise();
 		restoreLevels();
 		
 		if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
-			getLogger().info("Found ProtocolLib, enabling checks that use ProtcolLib...");
-			// Enable packetlisteners
-			KillAuraCheck.listenPackets();
-			BlinkCheck.startTimer();
-			BlinkCheck.listenPackets();
+			setupProtocol();
 		} else {
 			getLogger().severe("Shutting down, ProtocolLib not found!");
 			Bukkit.getPluginManager().disablePlugin(this);
+			return;
 		}
+		
+		getLogger().info("Found ProtocolLib, enabling checks that use ProtcolLib...");
+		// Enable packetlisteners
+		KillAuraCheck.listenPackets();
+		BlinkCheck.startTimer();
+		BlinkCheck.listenPackets();
 		
 		// Check if other AC's are installed
 		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
@@ -169,11 +170,8 @@ public class AntiCheat extends JavaPlugin {
 	}
 
 	private void setupProtocol() {
-		if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
-			protocolLib = true;
-			protocolManager = ProtocolLibrary.getProtocolManager();
-			verboseLog("Hooked into ProtocolLib");
-		}
+		protocolManager = ProtocolLibrary.getProtocolManager();
+		verboseLog("Hooked into ProtocolLib");
 	}
 
 	private void setupEvents() {
@@ -238,10 +236,6 @@ public class AntiCheat extends JavaPlugin {
 
 	public static void setDeveloperMode(boolean b) {
 		developer = b;
-	}
-
-	public static boolean isUsingProtocolLib() {
-		return protocolLib;
 	}
 
 	public static void debugLog(final String string) {

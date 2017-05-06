@@ -49,6 +49,8 @@ public class GlideCheck {
 					Location to = player.getLocation();
 					to.setY(to.getY() - distanceToFall(to));
 					player.teleport(to);
+					// Report glide violation to statistics, just for the lulz jk
+					AntiCheat.getPlugin().onGlideViolation();
 					return new CheckResult(CheckResult.Result.FAILED,
 							player.getName() + " was set back for gliding (yDiff=" + new BigDecimal(yDiff).setScale(2, BigDecimal.ROUND_UP) + ")");
 				} else {
