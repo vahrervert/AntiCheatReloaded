@@ -3,6 +3,7 @@ package com.rammelkast.anticheatreloaded.util;
 import java.util.EnumSet;
 
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.potion.PotionEffectType;
 
 public class NMS_1_9_PLUS {
@@ -14,5 +15,7 @@ public class NMS_1_9_PLUS {
 			Material.SPRUCE_WOOD_STAIRS, Material.WOOD_STAIRS, Material.PURPUR_STAIRS);
 	
 	static final PotionEffectType LEVITATION = PotionEffectType.LEVITATION;
+	
+	static final Enchantment FROST_WALKER = Enchantment.FROST_WALKER;
 	
 }

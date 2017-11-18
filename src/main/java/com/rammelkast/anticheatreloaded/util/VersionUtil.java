@@ -19,7 +19,7 @@ public class VersionUtil {
 			Material.SPRUCE_WOOD_STAIRS, Material.WOOD_STAIRS);
 	
 	public static boolean isFlying(Player p) {
-		if (getVersion().equals("v1_9_R1") || getVersion().equals("v1_10_R1") || getVersion().equals("v1_11_R1")) {
+		if (getVersion().startsWith("v1_9") || getVersion().startsWith("v1_10") || getVersion().startsWith("v1_11") || getVersion().startsWith("v1_12")) {
 			return p.isFlying() || p.isGliding() || p.hasPotionEffect(NMS_1_9_PLUS.LEVITATION);
 		} else {
 			return p.isFlying();
@@ -27,7 +27,7 @@ public class VersionUtil {
 	}
 
 	public static EnumSet<Material> getMoveUpBlocks() {
-		if (getVersion().equals("v1_9_R1") || getVersion().equals("v1_10_R1") || getVersion().equals("v1_11_R1")) {
+		if (getVersion().startsWith("v1_9") || getVersion().startsWith("v1_10") || getVersion().startsWith("v1_11") || getVersion().startsWith("v1_12")) {
 			return NMS_1_9_PLUS.MOVE_UP_BLOCKS_1_9;
 		} else {
 			return MOVE_UP_BLOCKS_1_8;
@@ -35,7 +35,7 @@ public class VersionUtil {
 	}
 
 	public static boolean isNewYSpeed() {
-		if (getVersion().equals("v1_9_R1") || getVersion().equals("v1_10_R1") || getVersion().equals("v1_11_R1")) {
+		if (getVersion().startsWith("v1_9") || getVersion().startsWith("v1_10") || getVersion().startsWith("v1_11") || getVersion().startsWith("v1_12")) {
 			return true;
 		} else {
 			return false;
@@ -43,10 +43,18 @@ public class VersionUtil {
 	}
 
 	public static long getHealTime() {
-		if (getVersion().equals("v1_9_R1") || getVersion().equals("v1_10_R1") || getVersion().equals("v1_11_R1")) {
+		if (getVersion().startsWith("v1_9") || getVersion().startsWith("v1_10") || getVersion().startsWith("v1_11") || getVersion().startsWith("v1_12")) {
 			return 495;
 		} else {
 			return 1995;
+		}
+	}
+
+	public static boolean isFrostWalk(Player player) {
+		if (getVersion().startsWith("v1_9") || getVersion().startsWith("v1_10") || getVersion().startsWith("v1_11") || getVersion().startsWith("v1_12")) {
+			return player.getInventory().getBoots().containsEnchantment(NMS_1_9_PLUS.FROST_WALKER);
+		} else {
+			return false;
 		}
 	}
 	

@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import com.rammelkast.anticheatreloaded.AntiCheat;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Utilities;
+import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
  * This check seems to be broken/outdated
@@ -27,14 +28,11 @@ public class WaterWalkCheck {
 	public static Map<UUID, Integer> waterSpeedViolation = new HashMap<UUID, Integer>();
 	public static Map<UUID, Integer> waterAscensionViolation = new HashMap<UUID, Integer>();
 
-	/**
-	 * TODO check & fix for 1.11? (see #25)
-	 */
 	public static CheckResult runCheck(Player player, double x, double y, double z) {
 		Block block = player.getLocation().getBlock();
 		UUID uuid = player.getUniqueId();
 
-		if (player.getVehicle() == null && !player.isFlying()) {
+		if (player.getVehicle() == null && !player.isFlying() && !VersionUtil.isFrostWalk(player)) {
 			if (block.isLiquid()) {
 				if (isInWater.contains(uuid)) {
 					if (isInWaterCache.contains(uuid)) {
