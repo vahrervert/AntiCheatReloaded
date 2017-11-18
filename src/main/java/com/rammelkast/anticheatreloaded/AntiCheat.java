@@ -288,7 +288,7 @@ public class AntiCheat extends JavaPlugin {
 	}
 
 	public void onGlideViolation() {
-		this.killauraViolations++;
+		this.glideViolations++;
 	}
 
 }
