@@ -26,6 +26,8 @@ import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.ConfigurationTable;
 import com.rammelkast.anticheatreloaded.config.providers.Lang;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
@@ -50,7 +52,13 @@ public class MySQLLangHolder extends ConfigurationTable implements InvocationHan
 
     @Override
     public void open() {
-        defaults = YamlConfiguration.loadConfiguration(AntiCheat.getPlugin().getResource("lang.yml"));
+    	InputStreamReader reader = new InputStreamReader(AntiCheat.getPlugin().getResource("lang.yml"));
+        defaults = YamlConfiguration.loadConfiguration(reader);
+        try {
+			reader.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 
         stringValues = new HashMap<String, String>();
         listValues = new HashMap<String, List<String>>();

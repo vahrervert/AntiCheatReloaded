@@ -26,6 +26,8 @@ import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.ConfigurationTable;
 import com.rammelkast.anticheatreloaded.config.providers.Magic;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
@@ -47,7 +49,13 @@ public class MySQLMagicHolder extends ConfigurationTable implements InvocationHa
 
     @Override
     public void open() {
-        defaults = YamlConfiguration.loadConfiguration(AntiCheat.getPlugin().getResource("magic.yml"));
+    	InputStreamReader reader = new InputStreamReader(AntiCheat.getPlugin().getResource("magic.yml"));
+        defaults = YamlConfiguration.loadConfiguration(reader);
+        try {
+			reader.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 
         ints = new HashMap<String, Integer>();
         doubles = new HashMap<String, Double>();

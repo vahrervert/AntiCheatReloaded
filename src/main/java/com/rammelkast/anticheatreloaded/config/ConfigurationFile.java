@@ -26,6 +26,7 @@ import com.rammelkast.anticheatreloaded.config.yaml.CommentedConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class ConfigurationFile {
 
@@ -59,7 +60,13 @@ public class ConfigurationFile {
         this.saveDefault = saveDefault;
 
         if (saveDefault) {
-            defaultConfigFile = YamlConfiguration.loadConfiguration(plugin.getResource(fileName));
+        	InputStreamReader reader = new InputStreamReader(plugin.getResource(fileName));
+            defaultConfigFile = YamlConfiguration.loadConfiguration(reader);
+            try {
+				reader.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
         }
         load();
     }

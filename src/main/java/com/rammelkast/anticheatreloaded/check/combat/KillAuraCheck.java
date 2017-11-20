@@ -16,7 +16,7 @@ import com.rammelkast.anticheatreloaded.AntiCheat;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.event.EventListener;
-import com.rammelkast.anticheatreloaded.util.NPC_1_11;
+import com.rammelkast.anticheatreloaded.util.NPC_1_12;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
@@ -24,7 +24,7 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
  */
 public class KillAuraCheck {
 	
-	private static final Map<UUID, NPC_1_11> NPC_LIST = new HashMap<UUID, NPC_1_11>();
+	private static final Map<UUID, NPC_1_12> NPC_LIST = new HashMap<UUID, NPC_1_12>();
 	private static final Map<UUID, Integer> VL_COUNT = new HashMap<UUID, Integer>();
 	
 	public static void cleanPlayer(Player p) {
@@ -72,7 +72,7 @@ public class KillAuraCheck {
 		if (NPC_LIST.containsKey(p.getUniqueId()))
 			NPC_LIST.get(p.getUniqueId()).damage(e, p);
 		else {
-			NPC_1_11 npc = new NPC_1_11(p);
+			NPC_1_12 npc = new NPC_1_12(p);
 			NPC_LIST.put(p.getUniqueId(), npc);
 			npc.spawn();
 		}

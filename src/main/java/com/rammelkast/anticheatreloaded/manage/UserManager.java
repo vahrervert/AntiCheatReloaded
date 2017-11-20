@@ -18,6 +18,11 @@
 
 package com.rammelkast.anticheatreloaded.manage;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
@@ -27,10 +32,6 @@ import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.util.Group;
 import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.Utilities;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class UserManager {
     private List<User> users = new ArrayList<User>();
@@ -243,7 +244,7 @@ public class UserManager {
                             }
                         }
                     } else if (event.equalsIgnoreCase("BAN")) {
-                        user.getPlayer().setBanned(true);
+                        Bukkit.getBanList(Type.NAME).addBan(user.getPlayer().getName(), RED + banReason, null, null);
                         user.getPlayer().kickPlayer(RED + banReason);
                         String msg = RED + config.getLang().BAN_BROADCAST().replaceAll("&player", name) + " (" + CheckType.getName(type) + ")";
                         if (!msg.equals("")) {

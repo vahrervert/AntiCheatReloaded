@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
@@ -188,7 +189,9 @@ public class CommentedConfiguration extends YamlConfiguration {
         CommentedConfiguration config = new CommentedConfiguration();
 
         try {
-            config.load(stream);
+        	InputStreamReader reader = new InputStreamReader(stream);
+            config.load(reader);
+            reader.close();
         } catch (IOException ex) {
             Bukkit.getLogger().log(Level.SEVERE, "Cannot load configuration from stream", ex);
         } catch (InvalidConfigurationException ex) {
