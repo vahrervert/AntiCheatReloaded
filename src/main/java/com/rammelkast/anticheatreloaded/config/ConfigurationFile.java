@@ -21,7 +21,7 @@ package com.rammelkast.anticheatreloaded.config;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.yaml.CommentedConfiguration;
 
 import java.io.File;
@@ -37,21 +37,21 @@ public class ConfigurationFile {
     private FileConfiguration defaultConfigFile;
     private Configuration config;
 
-    private AntiCheat plugin;
+    private AntiCheatReloaded plugin;
 
     private boolean saveDefault;
 
     protected boolean needsReload;
 
-    public ConfigurationFile(AntiCheat plugin, Configuration config, String fileName) {
+    public ConfigurationFile(AntiCheatReloaded plugin, Configuration config, String fileName) {
         this(plugin, config, fileName, true);
     }
 
-    public ConfigurationFile(AntiCheat plugin, Configuration config, String fileName, boolean saveDefault) {
+    public ConfigurationFile(AntiCheatReloaded plugin, Configuration config, String fileName, boolean saveDefault) {
         this(plugin, config, fileName, saveDefault, new File(plugin.getDataFolder(), fileName));
     }
 
-    public ConfigurationFile(AntiCheat plugin, Configuration config, String fileName, boolean saveDefault, File rawFile) {
+    public ConfigurationFile(AntiCheatReloaded plugin, Configuration config, String fileName, boolean saveDefault, File rawFile) {
         // Can't change with user editing
         this.plugin = plugin;
         this.config = config;

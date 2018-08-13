@@ -22,7 +22,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.util.FileFormatter;
 import com.rammelkast.anticheatreloaded.util.Permission;
@@ -42,7 +42,7 @@ public class LoggingManager {
     private static List<String> logs = new CopyOnWriteArrayList<String>();
     private final Configuration config;
 
-    public LoggingManager(AntiCheat plugin, Logger logger, Configuration config) {
+    public LoggingManager(AntiCheatReloaded plugin, Logger logger, Configuration config) {
         this.fileLogger = Logger.getLogger("net.gravitydevelopment.anticheat.AntiCheat");
         this.config = config;
         try {
@@ -70,12 +70,12 @@ public class LoggingManager {
     }
 
     public void debugLog(String message) {
-        Bukkit.getConsoleSender().sendMessage("[AntiCheat] " + ChatColor.GRAY + message);
+        Bukkit.getConsoleSender().sendMessage("[ACR] " + ChatColor.GRAY + message);
         logToLogs(message);
     }
 
     public void logToConsole(String message) {
-        Bukkit.getConsoleSender().sendMessage("[AntiCheat] " + ChatColor.RED + message);
+        Bukkit.getConsoleSender().sendMessage("[ACR] " + ChatColor.RED + message);
     }
 
     public void logToFile(String message) {

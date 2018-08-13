@@ -5,20 +5,24 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import com.mojang.authlib.GameProfile;
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 
 import net.minecraft.server.v1_12_R1.EntityHuman;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
+import net.minecraft.server.v1_12_R1.EnumItemSlot;
 import net.minecraft.server.v1_12_R1.MinecraftServer;
 import net.minecraft.server.v1_12_R1.PacketPlayOutEntityMetadata;
 import net.minecraft.server.v1_12_R1.PacketPlayOutEntityTeleport;
@@ -62,6 +66,8 @@ public class NPC_1_12 {
 						this.location.getZ(), 0.0f, 0.0f);
 		this.npc.collides = false;
 		this.npc.setInvisible(true);
+		this.npc.setEquipment(EnumItemSlot.CHEST, AntiCheatReloaded.getRandom().nextBoolean() ? CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_CHESTPLATE)) : CraftItemStack.asNMSCopy(new ItemStack(Material.CHAINMAIL_CHESTPLATE)));
+		this.npc.setEquipment(EnumItemSlot.FEET, AntiCheatReloaded.getRandom().nextBoolean() ? CraftItemStack.asNMSCopy(new ItemStack(Material.CHAINMAIL_BOOTS)) : CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_BOOTS)));
 		this.entityId = this.npc.getId();
 		final PlayerConnection connection = ((CraftPlayer) this.getOwner()).getHandle().playerConnection;
 		connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER,
@@ -89,10 +95,13 @@ public class NPC_1_12 {
 					new BukkitRunnable() {
 						@Override
 						public void run() {
+							if (NPC_1_12.this.npc == null || NPC_1_12.this.getOwner() == null) {
+								return;
+							}
 							npc.setInvisible(true);
 							((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 						}
-					}.runTaskLater(AntiCheat.getPlugin(), 4);
+					}.runTaskLater(AntiCheatReloaded.getPlugin(), 4);
 				}
 			}else {
 				Location eyelocation = e.getPlayer().getEyeLocation();
@@ -137,10 +146,13 @@ public class NPC_1_12 {
 				new BukkitRunnable() {
 					@Override
 					public void run() {
+						if (NPC_1_12.this.npc == null || NPC_1_12.this.getOwner() == null) {
+							return;
+						}
 						npc.setInvisible(true);
 						((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 					}
-				}.runTaskLater(AntiCheat.getPlugin(), 6);
+				}.runTaskLater(AntiCheatReloaded.getPlugin(), 6);
 			}
 		}
 	}
@@ -159,10 +171,13 @@ public class NPC_1_12 {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
+					if (NPC_1_12.this.npc == null || NPC_1_12.this.getOwner() == null) {
+						return;
+					}
 					npc.setInvisible(true);
 					((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 				}
-			}.runTaskLater(AntiCheat.getPlugin(), 6 + new Random().nextInt(7));
+			}.runTaskLater(AntiCheatReloaded.getPlugin(), 6 + new Random().nextInt(7));
 		}
 	}
 	
@@ -176,10 +191,13 @@ public class NPC_1_12 {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
+					if (NPC_1_12.this.npc == null || NPC_1_12.this.getOwner() == null) {
+						return;
+					}
 					npc.setInvisible(true);
 					((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 				}
-			}.runTaskLater(AntiCheat.getPlugin(), 6 + new Random().nextInt(8));
+			}.runTaskLater(AntiCheatReloaded.getPlugin(), 6 + new Random().nextInt(8));
 		}
 	}
 

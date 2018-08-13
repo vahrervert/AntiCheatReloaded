@@ -20,7 +20,7 @@ package com.rammelkast.anticheatreloaded.config;
 
 import org.bukkit.Bukkit;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.util.enterprise.Database;
 
 import java.sql.Connection;
@@ -59,7 +59,7 @@ public class ConfigurationTable {
 
 	public void reload() {
 		// For after sql inserts have been made
-		Bukkit.getScheduler().runTask(AntiCheat.getPlugin(), new Runnable() {
+		Bukkit.getScheduler().runTask(AntiCheatReloaded.getPlugin(), new Runnable() {
 			@Override
 			public void run() {
 				load();

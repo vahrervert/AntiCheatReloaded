@@ -8,7 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Distance;
 import com.rammelkast.anticheatreloaded.util.Utilities;
@@ -26,7 +26,7 @@ public class FlightCheck {
 	public static Map<UUID, Long> movingExempt = new HashMap<UUID, Long>();
 
 	public static CheckResult runCheck(Player player, Distance distance) {
-		if (distance.getYDifference() > AntiCheat.getManager().getBackend().getMagic().TELEPORT_MIN()
+		if (distance.getYDifference() > AntiCheatReloaded.getManager().getBackend().getMagic().TELEPORT_MIN()
 				|| VersionUtil.isFlying(player)) {
 			// This was a teleport or user is flying/using elytra, so we don't care
 			// about it.
@@ -51,11 +51,11 @@ public class FlightCheck {
 				blocksOverFlight.put(uuid, (blocksOverFlight.get(uuid) - distance.getYDifference()));
 			}
 
-			if (blocksOverFlight.get(uuid) > AntiCheat.getManager().getBackend().getMagic().FLIGHT_BLOCK_LIMIT()
+			if (blocksOverFlight.get(uuid) > AntiCheatReloaded.getManager().getBackend().getMagic().FLIGHT_BLOCK_LIMIT()
 					&& (y1 <= y2)) {
 				return new CheckResult(CheckResult.Result.FAILED,
 						player.getName() + " flew over " + blocksOverFlight.get(uuid) + " blocks (max="
-								+ AntiCheat.getManager().getBackend().getMagic().FLIGHT_BLOCK_LIMIT() + ")");
+								+ AntiCheatReloaded.getManager().getBackend().getMagic().FLIGHT_BLOCK_LIMIT() + ")");
 			}
 		} else {
 			blocksOverFlight.put(uuid, 0D);

@@ -20,7 +20,7 @@ package com.rammelkast.anticheatreloaded.config.holders.yaml;
 
 import java.util.*;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.ConfigurationFile;
 import com.rammelkast.anticheatreloaded.config.providers.Groups;
@@ -34,7 +34,7 @@ public class YamlGroupsHolder extends ConfigurationFile implements Groups {
 
     private int highestLevel;
 
-    public YamlGroupsHolder(AntiCheat plugin, Configuration config) {
+    public YamlGroupsHolder(AntiCheatReloaded plugin, Configuration config) {
         super(plugin, config, FILENAME);
     }
 

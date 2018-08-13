@@ -29,7 +29,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.check.combat.CriticalsCheck;
@@ -57,7 +57,7 @@ public class EntityListener extends EventListener {
             }
         }
 
-        AntiCheat.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
+        AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
     }
 
     @EventHandler
@@ -76,7 +76,7 @@ public class EntityListener extends EventListener {
             }
         }
 
-        AntiCheat.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
+        AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
     }
 
     @EventHandler
@@ -95,7 +95,7 @@ public class EntityListener extends EventListener {
             }
         }
 
-        AntiCheat.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
+        AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
     }
 
     @EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = true)
@@ -169,6 +169,6 @@ public class EntityListener extends EventListener {
             }
         }
 
-        AntiCheat.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
+        AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
     }
 }

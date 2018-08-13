@@ -22,7 +22,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.ConfigurationFile;
 
@@ -30,7 +30,7 @@ public class YamlLangHolder extends ConfigurationFile implements InvocationHandl
 
     public static final String FILENAME = "lang.yml";
 
-    public YamlLangHolder(AntiCheat plugin, Configuration config) {
+    public YamlLangHolder(AntiCheatReloaded plugin, Configuration config) {
         super(plugin, config, FILENAME);
     }
 
@@ -76,7 +76,7 @@ public class YamlLangHolder extends ConfigurationFile implements InvocationHandl
                 return value.getValue();
             }
         }
-        AntiCheat.getPlugin().getLogger().severe("The lang value " + key + " couldn't be found.");
+        AntiCheatReloaded.getPlugin().getLogger().severe("The lang value " + key + " couldn't be found.");
         return "Language error. See console for details.";
     }
 }

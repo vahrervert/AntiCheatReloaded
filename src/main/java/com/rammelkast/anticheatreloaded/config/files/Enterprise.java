@@ -18,7 +18,7 @@
 
 package com.rammelkast.anticheatreloaded.config.files;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.ConfigurationFile;
 import com.rammelkast.anticheatreloaded.util.enterprise.Database;
@@ -43,7 +43,7 @@ public class Enterprise extends ConfigurationFile {
 
     public Database database;
 
-    public Enterprise(AntiCheat plugin, Configuration config) {
+    public Enterprise(AntiCheatReloaded plugin, Configuration config) {
         super(plugin, config, FILENAME);
     }
 

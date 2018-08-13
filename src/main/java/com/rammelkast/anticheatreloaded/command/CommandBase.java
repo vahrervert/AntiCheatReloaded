@@ -24,7 +24,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.manage.CheckManager;
 import com.rammelkast.anticheatreloaded.manage.UserManager;
@@ -32,9 +32,9 @@ import com.rammelkast.anticheatreloaded.util.Permission;
 
 public class CommandBase {
 
-    public static final Configuration CONFIG = AntiCheat.getManager().getConfiguration();
-    public static final UserManager USER_MANAGER = AntiCheat.getManager().getUserManager();
-    public static final CheckManager CHECK_MANAGER = AntiCheat.getManager().getCheckManager();
+    public static final Configuration CONFIG = AntiCheatReloaded.getManager().getConfiguration();
+    public static final UserManager USER_MANAGER = AntiCheatReloaded.getManager().getUserManager();
+    public static final CheckManager CHECK_MANAGER = AntiCheatReloaded.getManager().getCheckManager();
     public static final ChatColor RED = ChatColor.RED;
     public static final ChatColor YELLOW = ChatColor.YELLOW;
     public static final ChatColor GREEN = ChatColor.GREEN;

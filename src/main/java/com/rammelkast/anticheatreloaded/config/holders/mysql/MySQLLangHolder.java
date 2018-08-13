@@ -21,7 +21,7 @@ package com.rammelkast.anticheatreloaded.config.holders.mysql;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.ConfigurationTable;
 import com.rammelkast.anticheatreloaded.config.providers.Lang;
@@ -52,7 +52,7 @@ public class MySQLLangHolder extends ConfigurationTable implements InvocationHan
 
     @Override
     public void open() {
-    	InputStreamReader reader = new InputStreamReader(AntiCheat.getPlugin().getResource("lang.yml"));
+    	InputStreamReader reader = new InputStreamReader(AntiCheatReloaded.getPlugin().getResource("lang.yml"));
         defaults = YamlConfiguration.loadConfiguration(reader);
         try {
 			reader.close();
@@ -150,7 +150,7 @@ public class MySQLLangHolder extends ConfigurationTable implements InvocationHan
                 return value;
             }
         }
-        AntiCheat.getPlugin().getLogger().severe("The lang value " + key + " couldn't be found.");
+        AntiCheatReloaded.getPlugin().getLogger().severe("The lang value " + key + " couldn't be found.");
         return "Language error. See console for details.";
     }
 

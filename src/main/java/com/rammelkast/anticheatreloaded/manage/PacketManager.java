@@ -3,15 +3,15 @@ package com.rammelkast.anticheatreloaded.manage;
 import com.comphenix.protocol.Packets;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.*;
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 
 public class PacketManager {
 
     private ProtocolManager protocolManager;
-    private AntiCheat plugin;
+    private AntiCheatReloaded plugin;
     private AntiCheatManager manager;
 
-    public PacketManager(ProtocolManager protocolManager, AntiCheat plugin, AntiCheatManager manager) {
+    public PacketManager(ProtocolManager protocolManager, AntiCheatReloaded plugin, AntiCheatManager manager) {
         this.protocolManager = protocolManager;
         this.plugin = plugin;
         this.manager = manager;

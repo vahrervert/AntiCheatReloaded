@@ -24,7 +24,7 @@ import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 
 public class VehicleListener extends EventListener {
 
@@ -34,7 +34,7 @@ public class VehicleListener extends EventListener {
             getBackend().logEnterExit((Player) event.getEntered());
         }
 
-        AntiCheat.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
+        AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -43,7 +43,7 @@ public class VehicleListener extends EventListener {
             getBackend().logEnterExit((Player) event.getExited());
         }
 
-        AntiCheat.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
+        AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
     }
 
 
@@ -53,6 +53,6 @@ public class VehicleListener extends EventListener {
             getBackend().logEnterExit((Player) event.getVehicle().getPassenger());
         }
 
-        AntiCheat.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
+        AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
     }
 }

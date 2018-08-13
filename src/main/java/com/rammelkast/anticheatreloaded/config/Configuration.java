@@ -20,7 +20,7 @@ package com.rammelkast.anticheatreloaded.config;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.files.Config;
 import com.rammelkast.anticheatreloaded.config.files.Enterprise;
 import com.rammelkast.anticheatreloaded.config.holders.mysql.*;
@@ -48,7 +48,7 @@ public class Configuration {
     private ArrayList<ConfigurationFile> flatfiles;
     private ArrayList<ConfigurationTable> dbfiles;
 
-    public Configuration(AntiCheat plugin, AntiCheatManager manager) {
+    public Configuration(AntiCheatReloaded plugin, AntiCheatManager manager) {
         removeOldFiles();
         this.manager = manager;
         config = new Config(plugin, this);
@@ -146,20 +146,20 @@ public class Configuration {
 
     private void removeOldFiles() {
         ArrayList<String> removed = new ArrayList<String>();
-        File configFile = new File(AntiCheat.getPlugin().getDataFolder(), "config.yml");
+        File configFile = new File(AntiCheatReloaded.getPlugin().getDataFolder(), "config.yml");
         if (configFile.exists() && YamlConfiguration.loadConfiguration(configFile).getString("System.Auto update") != null) {
-            configFile.renameTo(new File(AntiCheat.getPlugin().getDataFolder(), "config.old"));
+            configFile.renameTo(new File(AntiCheatReloaded.getPlugin().getDataFolder(), "config.old"));
             removed.add("config.yml has been renamed to config.old and replaced with the new config.yml");
         }
-        File eventsFile = new File(AntiCheat.getPlugin().getDataFolder(), "events.yml");
+        File eventsFile = new File(AntiCheatReloaded.getPlugin().getDataFolder(), "events.yml");
         if (eventsFile.exists()) {
-            eventsFile.renameTo(new File(AntiCheat.getPlugin().getDataFolder(), "events.old"));
+            eventsFile.renameTo(new File(AntiCheatReloaded.getPlugin().getDataFolder(), "events.old"));
             removed.add("events.yml has been renamed to events.old and replaced with groups.yml and rules.yml");
         }
         if (removed.size() > 0) {
-            AntiCheat.getPlugin().getLogger().info("You are upgrading from an old version of AntiCheat. Due to configuration changes, the following files have been modified:");
+            AntiCheatReloaded.getPlugin().getLogger().info("You are upgrading from an old version of AntiCheat. Due to configuration changes, the following files have been modified:");
             for (String s : removed) {
-                AntiCheat.getPlugin().getLogger().info(s);
+                AntiCheatReloaded.getPlugin().getLogger().info(s);
             }
         }
     }

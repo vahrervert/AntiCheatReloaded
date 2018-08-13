@@ -36,7 +36,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.potion.PotionEffectType;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
 import com.rammelkast.anticheatreloaded.check.movement.BlinkCheck;
@@ -516,14 +516,14 @@ public class Backend {
                 fastPlaceViolation.put(uuid, 0);
             }
         } else if (fastPlaceViolation.containsKey(uuid) && fastPlaceViolation.get(uuid) > violations) {
-            AntiCheat.debugLog("Noted that fastPlaceViolation contains key " + uuid + " with value " + fastPlaceViolation.get(uuid));
+            AntiCheatReloaded.debugLog("Noted that fastPlaceViolation contains key " + uuid + " with value " + fastPlaceViolation.get(uuid));
             Long math = System.currentTimeMillis() - lastBlockPlaced.get(uuid);
-            AntiCheat.debugLog("Player lastBlockPlaced value = " + lastBlockPlaced + ", diff=" + math);
+            AntiCheatReloaded.debugLog("Player lastBlockPlaced value = " + lastBlockPlaced + ", diff=" + math);
             if (lastBlockPlaced.get(uuid) > 0 && math < magic.FASTPLACE_MAXVIOLATIONTIME()) {
                 lastBlockPlaced.put(uuid, time);
                 return new CheckResult(CheckResult.Result.FAILED, player.getName() + " placed blocks too fast " + fastBreakViolation.get(uuid) + " times in a row (max=" + violations + ")");
             } else if (lastBlockPlaced.get(uuid) > 0 && math > magic.FASTPLACE_MAXVIOLATIONTIME()) {
-                AntiCheat.debugLog("Reset facePlaceViolation for " + uuid);
+                AntiCheatReloaded.debugLog("Reset facePlaceViolation for " + uuid);
                 fastPlaceViolation.put(uuid, 0);
             }
         } else if (lastBlockPlaced.containsKey(uuid)) {

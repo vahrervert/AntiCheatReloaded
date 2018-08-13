@@ -20,7 +20,7 @@ package com.rammelkast.anticheatreloaded.util;
 
 import org.bukkit.ChatColor;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,8 +41,8 @@ public class Group {
 
         ChatColor c = ChatColor.valueOf(color);
         if (c == null) {
-            AntiCheat.getPlugin().getLogger().warning("Event '" + name + "' was initialized with the color '" + color + "' which is invalid.");
-            AntiCheat.getPlugin().getLogger().warning("This event will not run properly. See http://jd.bukkit.org/apidocs/org/bukkit/ChatColor.html#enum_constant_summary for a list of valid colors");
+            AntiCheatReloaded.getPlugin().getLogger().warning("Event '" + name + "' was initialized with the color '" + color + "' which is invalid.");
+            AntiCheatReloaded.getPlugin().getLogger().warning("This event will not run properly. See http://jd.bukkit.org/apidocs/org/bukkit/ChatColor.html#enum_constant_summary for a list of valid colors");
         } else {
             this.color = c;
         }
@@ -75,9 +75,9 @@ public class Group {
                 throw new Exception();
             }
         } catch (Exception ex) {
-            AntiCheat.getPlugin().getLogger().warning("An event was initialized with an invalid string: '" + string + "'");
-            AntiCheat.getPlugin().getLogger().warning("The proper format is: 'name : threshold : color : action' such as 'High : 50 : RED : KICK'");
-            AntiCheat.getPlugin().getLogger().warning("This event will NOT run. (" + ex.getMessage() + ")");
+            AntiCheatReloaded.getPlugin().getLogger().warning("An event was initialized with an invalid string: '" + string + "'");
+            AntiCheatReloaded.getPlugin().getLogger().warning("The proper format is: 'name : threshold : color : action' such as 'High : 50 : RED : KICK'");
+            AntiCheatReloaded.getPlugin().getLogger().warning("This event will NOT run. (" + ex.getMessage() + ")");
             return null;
         }
     }

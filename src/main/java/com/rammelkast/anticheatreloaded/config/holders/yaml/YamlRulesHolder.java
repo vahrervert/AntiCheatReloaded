@@ -21,7 +21,7 @@ package com.rammelkast.anticheatreloaded.config.holders.yaml;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.ConfigurationFile;
 import com.rammelkast.anticheatreloaded.config.providers.Rules;
@@ -33,7 +33,7 @@ public class YamlRulesHolder extends ConfigurationFile implements Rules {
 
     private List<Rule> rules;
 
-    public YamlRulesHolder(AntiCheat plugin, Configuration config) {
+    public YamlRulesHolder(AntiCheatReloaded plugin, Configuration config) {
         super(plugin, config, FILENAME);
     }
 
@@ -61,7 +61,7 @@ public class YamlRulesHolder extends ConfigurationFile implements Rules {
             if (rule != null) {
                 this.rules.add(rule);
             } else {
-                AntiCheat.getPlugin().getLogger().warning("Couldn't load rule '" + string + "' from config. Improper format used.");
+                AntiCheatReloaded.getPlugin().getLogger().warning("Couldn't load rule '" + string + "' from config. Improper format used.");
             }
         }
     }

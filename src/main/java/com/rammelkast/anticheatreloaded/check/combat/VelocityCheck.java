@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.event.EventListener;
@@ -23,7 +23,7 @@ public class VelocityCheck {
 	}
 	
 	public static void runCheck(EntityDamageByEntityEvent e, final Player p) {
-		if (AntiCheat.getManager().getCheckManager().isOpExempt(p) || AntiCheat.getManager().getCheckManager().isExempt(p, CheckType.VELOCITY))
+		if (AntiCheatReloaded.getManager().getCheckManager().isOpExempt(p) || AntiCheatReloaded.getManager().getCheckManager().isExempt(p, CheckType.VELOCITY))
 			return;
 		final Location then = p.getLocation();
 		new BukkitRunnable() {
@@ -36,8 +36,8 @@ public class VelocityCheck {
 						VL_COUNT.put(p.getUniqueId(), 1);
 					else {
 						VL_COUNT.put(p.getUniqueId(), VL_COUNT.get(p.getUniqueId()) + 1);
-						if (VL_COUNT.get(p.getUniqueId()) > AntiCheat.getManager().getBackend().getMagic().VELOCITY_AMT()) {
-							EventListener.log(new CheckResult(CheckResult.Result.FAILED, p.getName() + " failed Velocity, had zero/low velocity " + VL_COUNT.get(p.getUniqueId()) + " times (max=" + AntiCheat.getManager().getBackend().getMagic().VELOCITY_AMT() + ", dist=" + then.distance(p.getLocation()) + ")").getMessage(), p, CheckType.VELOCITY);
+						if (VL_COUNT.get(p.getUniqueId()) > AntiCheatReloaded.getManager().getBackend().getMagic().VELOCITY_AMT()) {
+							EventListener.log(new CheckResult(CheckResult.Result.FAILED, p.getName() + " failed Velocity, had zero/low velocity " + VL_COUNT.get(p.getUniqueId()) + " times (max=" + AntiCheatReloaded.getManager().getBackend().getMagic().VELOCITY_AMT() + ", dist=" + then.distance(p.getLocation()) + ")").getMessage(), p, CheckType.VELOCITY);
 							VL_COUNT.remove(p.getUniqueId());
 						}
 					}
@@ -45,7 +45,7 @@ public class VelocityCheck {
 					VL_COUNT.remove(p.getUniqueId());
 				}
 			}
-		}.runTaskLater(AntiCheat.getPlugin(), 4);
+		}.runTaskLater(AntiCheatReloaded.getPlugin(), 4);
 	}
 	
 }

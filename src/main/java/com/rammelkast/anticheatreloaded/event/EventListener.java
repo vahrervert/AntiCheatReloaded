@@ -21,7 +21,7 @@ package com.rammelkast.anticheatreloaded.event;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.Backend;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.config.Configuration;
@@ -36,18 +36,18 @@ import java.util.UUID;
 public class EventListener implements Listener {
     private static final Map<CheckType, Integer> USAGE_LIST = new EnumMap<CheckType, Integer>(CheckType.class);
     private static final Map<UUID, Integer> DECREASE_LIST = new HashMap<UUID, Integer>();
-    private static final CheckManager CHECK_MANAGER = AntiCheat.getManager().getCheckManager();
-    private static final Backend BACKEND = AntiCheat.getManager().getBackend();
-    private static final AntiCheat PLUGIN = AntiCheat.getManager().getPlugin();
-    private static final UserManager USER_MANAGER = AntiCheat.getManager().getUserManager();
-    private static final Configuration CONFIG = AntiCheat.getManager().getConfiguration();
+    private static final CheckManager CHECK_MANAGER = AntiCheatReloaded.getManager().getCheckManager();
+    private static final Backend BACKEND = AntiCheatReloaded.getManager().getBackend();
+    private static final AntiCheatReloaded PLUGIN = AntiCheatReloaded.getManager().getPlugin();
+    private static final UserManager USER_MANAGER = AntiCheatReloaded.getManager().getUserManager();
+    private static final Configuration CONFIG = AntiCheatReloaded.getManager().getConfiguration();
 
     public static void log(String message, Player player, CheckType type) {
         User user = getUserManager().getUser(player.getUniqueId());
         if (user != null) { // npc
             logCheat(type, user);
             if (user.increaseLevel(type) && message != null) {
-                AntiCheat.getManager().log(message);
+                AntiCheatReloaded.getManager().log(message);
             }
             removeDecrease(user);
         }
@@ -116,7 +116,7 @@ public class EventListener implements Listener {
     }
 
     public static AntiCheatManager getManager() {
-        return AntiCheat.getManager();
+        return AntiCheatReloaded.getManager();
     }
 
     public static Backend getBackend() {
@@ -127,7 +127,7 @@ public class EventListener implements Listener {
         return USER_MANAGER;
     }
 
-    public static AntiCheat getPlugin() {
+    public static AntiCheatReloaded getPlugin() {
         return PLUGIN;
     }
 

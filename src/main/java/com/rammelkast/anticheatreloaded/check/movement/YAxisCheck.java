@@ -12,7 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Distance;
 import com.rammelkast.anticheatreloaded.util.Utilities;
@@ -32,7 +32,7 @@ public class YAxisCheck {
 	}
 
 	public static CheckResult runCheck(Player player, Distance distance) {
-		if (distance.getYDifference() > AntiCheat.getManager().getBackend().getMagic().TELEPORT_MIN()
+		if (distance.getYDifference() > AntiCheatReloaded.getManager().getBackend().getMagic().TELEPORT_MIN()
 				|| distance.getYDifference() < 0 || VersionUtil.isFlying(player)) {
 			return PASS;
 		}
@@ -52,13 +52,13 @@ public class YAxisCheck {
 				lastYtime.put(uuid, System.currentTimeMillis());
 			} else {
 				if (y1 > lastYcoord.get(uuid)
-						&& yAxisViolations.get(uuid) > AntiCheat.getManager().getBackend().getMagic().Y_MAXVIOLATIONS()
-						&& (System.currentTimeMillis() - yAxisLastViolation.get(uuid)) < AntiCheat.getManager()
+						&& yAxisViolations.get(uuid) > AntiCheatReloaded.getManager().getBackend().getMagic().Y_MAXVIOLATIONS()
+						&& (System.currentTimeMillis() - yAxisLastViolation.get(uuid)) < AntiCheatReloaded.getManager()
 								.getBackend().getMagic().Y_MAXVIOTIME()) {
 					Location g = player.getLocation();
 					yAxisViolations.put(uuid, yAxisViolations.get(uuid) + 1);
 					yAxisLastViolation.put(uuid, System.currentTimeMillis());
-					if (!AntiCheat.getManager().getBackend().silentMode()) {
+					if (!AntiCheatReloaded.getManager().getBackend().silentMode()) {
 						g.setY(lastYcoord.get(uuid));
 						if (g.getBlock().getType() == Material.AIR) {
 							player.teleport(g);
@@ -66,33 +66,33 @@ public class YAxisCheck {
 					}
 					return new CheckResult(CheckResult.Result.FAILED,
 							player.getName() + " tried to fly on y-axis " + yAxisViolations.get(uuid) + " times (max ="
-									+ AntiCheat.getManager().getBackend().getMagic().Y_MAXVIOLATIONS() + ")");
+									+ AntiCheatReloaded.getManager().getBackend().getMagic().Y_MAXVIOLATIONS() + ")");
 				} else {
-					if (yAxisViolations.get(uuid) > AntiCheat.getManager().getBackend().getMagic().Y_MAXVIOLATIONS()
-							&& (System.currentTimeMillis() - yAxisLastViolation.get(uuid)) > AntiCheat.getManager()
+					if (yAxisViolations.get(uuid) > AntiCheatReloaded.getManager().getBackend().getMagic().Y_MAXVIOLATIONS()
+							&& (System.currentTimeMillis() - yAxisLastViolation.get(uuid)) > AntiCheatReloaded.getManager()
 									.getBackend().getMagic().Y_MAXVIOTIME()) {
 						yAxisViolations.put(uuid, 0);
 						yAxisLastViolation.put(uuid, 0L);
 					}
 				}
 				long i = System.currentTimeMillis() - lastYtime.get(uuid);
-				double diff = AntiCheat.getManager().getBackend().getMagic().Y_MAXDIFF()
+				double diff = AntiCheatReloaded.getManager().getBackend().getMagic().Y_MAXDIFF()
 						+ (Utilities.isStair(player.getLocation().add(0, -1, 0).getBlock()) ? 0.5 : 0.0);
-				if ((y1 - lastYcoord.get(uuid)) > diff && i < AntiCheat.getManager().getBackend().getMagic().Y_TIME()) {
+				if ((y1 - lastYcoord.get(uuid)) > diff && i < AntiCheatReloaded.getManager().getBackend().getMagic().Y_TIME()) {
 					Location g = player.getLocation();
 					yAxisViolations.put(uuid, yAxisViolations.get(uuid) + 1);
 					yAxisLastViolation.put(uuid, System.currentTimeMillis());
-					if (!AntiCheat.getManager().getBackend().silentMode()) {
+					if (!AntiCheatReloaded.getManager().getBackend().silentMode()) {
 						g.setY(lastYcoord.get(uuid));
 						if (g.getBlock().getType() == Material.AIR) {
 							player.teleport(g);
 						}
 					}
 					return new CheckResult(CheckResult.Result.FAILED, player.getName() + " tried to fly on y-axis in "
-							+ i + " ms (min =" + AntiCheat.getManager().getBackend().getMagic().Y_TIME() + ")");
+							+ i + " ms (min =" + AntiCheatReloaded.getManager().getBackend().getMagic().Y_TIME() + ")");
 				} else {
-					if ((y1 - lastYcoord.get(uuid)) > AntiCheat.getManager().getBackend().getMagic().Y_MAXDIFF() + 1
-							|| (System.currentTimeMillis() - lastYtime.get(uuid)) > AntiCheat.getManager().getBackend()
+					if ((y1 - lastYcoord.get(uuid)) > AntiCheatReloaded.getManager().getBackend().getMagic().Y_MAXDIFF() + 1
+							|| (System.currentTimeMillis() - lastYtime.get(uuid)) > AntiCheatReloaded.getManager().getBackend()
 									.getMagic().Y_TIME()) {
 						lastYtime.put(uuid, System.currentTimeMillis());
 						lastYcoord.put(uuid, y1);

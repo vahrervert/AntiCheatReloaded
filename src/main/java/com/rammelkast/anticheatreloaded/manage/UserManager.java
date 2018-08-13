@@ -26,7 +26,7 @@ import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.util.Group;
@@ -217,9 +217,12 @@ public class UserManager {
      */
     public void execute(final User user, final List<String> actions, final CheckType type, final String kickReason, final List<String> warning, final String banReason) {
         // Execute synchronously for thread safety when called from AsyncPlayerChatEvent
-        Bukkit.getScheduler().scheduleSyncDelayedTask(AntiCheat.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(AntiCheatReloaded.getPlugin(), new Runnable() {
             @Override
             public void run() {
+            	if (user.getPlayer() == null) {
+            		return;
+            	}
                 final String name = user.getName();
                 for (String event : actions) {
                     event = event.replaceAll("&player", name).replaceAll("&world", user.getPlayer().getWorld().getName()).replaceAll("&check", type.name());
@@ -230,7 +233,7 @@ public class UserManager {
                         }
                     } else if (event.equalsIgnoreCase("KICK")) {
                         user.getPlayer().kickPlayer(RED + kickReason);
-                        AntiCheat.getPlugin().onPlayerKicked();
+                        AntiCheatReloaded.getPlugin().onPlayerKicked();
                         String msg = RED + config.getLang().KICK_BROADCAST().replaceAll("&player", name) + " (" + CheckType.getName(type) + ")";
                         if (!msg.equals("")) {
                             manager.log(msg);

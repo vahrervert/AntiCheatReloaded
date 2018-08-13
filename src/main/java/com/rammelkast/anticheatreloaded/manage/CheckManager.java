@@ -21,7 +21,7 @@ package com.rammelkast.anticheatreloaded.manage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 
@@ -175,7 +175,7 @@ public class CheckManager {
                 && !isExempt(player, type)
                 && !type.checkPermission(player)
                 && !isOpExempt(player);
-        AntiCheat.debugLog("Check " + type + (check ? " run " : " not run ") + "on " + player.getName());
+        AntiCheatReloaded.debugLog("Check " + type + (check ? " run " : " not run ") + "on " + player.getName());
         // TODO temp fix
         if ((type == CheckType.FLY || type == CheckType.SPEED) && player.isFlying())
         	return false;

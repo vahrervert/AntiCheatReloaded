@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.manage.AntiCheatManager;
 import com.rammelkast.anticheatreloaded.manage.CheckManager;
@@ -34,8 +34,8 @@ import com.rammelkast.anticheatreloaded.util.Group;
  */
 
 public class AntiCheatAPI {
-    private static CheckManager chk = AntiCheat.getManager().getCheckManager();
-    private static UserManager umr = AntiCheat.getManager().getUserManager();
+    private static CheckManager chk = AntiCheatReloaded.getManager().getCheckManager();
+    private static UserManager umr = AntiCheatReloaded.getManager().getUserManager();
 
     // CheckManager API
 
@@ -173,7 +173,7 @@ public class AntiCheatAPI {
      * @return the AntiCheat Manager
      */
     public static AntiCheatManager getManager() {
-        return AntiCheat.getManager();
+        return AntiCheatReloaded.getManager();
     }
 
 

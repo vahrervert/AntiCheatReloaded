@@ -24,7 +24,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.providers.Magic;
 
@@ -104,7 +104,7 @@ public class PastebinReport {
     }
 
     private void appendLogs() {
-        List<String> logs = AntiCheat.getManager().getLoggingManager().getLastLogs();
+        List<String> logs = AntiCheatReloaded.getManager().getLoggingManager().getLastLogs();
         if (logs.size() == 0) {
             append("No recent logs.");
             return;
@@ -116,8 +116,8 @@ public class PastebinReport {
 
     private void appendSystemInfo() {
         Runtime runtime = Runtime.getRuntime();
-        Configuration config = AntiCheat.getManager().getConfiguration();
-        append("AntiCheat Version: " + AntiCheat.getVersion());
+        Configuration config = AntiCheatReloaded.getManager().getConfiguration();
+        append("AntiCheat Version: " + AntiCheatReloaded.getVersion());
         append("Server Version: " + Bukkit.getVersion());
         append("Server Implementation: " + Bukkit.getName());
         append("Server ID: " + Bukkit.getServerId());
@@ -130,7 +130,7 @@ public class PastebinReport {
         append("Online Mode: " + Bukkit.getOnlineMode());
         append("Players: " + Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getMaxPlayers());
         append("Plugin Count: " + Bukkit.getPluginManager().getPlugins().length);
-        append("Plugin Uptime: " + ((System.currentTimeMillis() - AntiCheat.getPlugin().getLoadTime()) / 1000) / 60 + " minutes");
+        append("Plugin Uptime: " + ((System.currentTimeMillis() - AntiCheatReloaded.getPlugin().getLoadTime()) / 1000) / 60 + " minutes");
         append("Enterprise: " + config.getConfig().enterprise.getValue());
         if (config.getConfig().enterprise.getValue()) {
             append("- Server name: " + config.getEnterprise().serverName.getValue());
@@ -143,8 +143,8 @@ public class PastebinReport {
 
     private void appendMagicDiff() {
         // This is hacky, and I like it
-        Magic magic = AntiCheat.getManager().getConfiguration().getMagic();
-        FileConfiguration file = YamlConfiguration.loadConfiguration(new File(AntiCheat.getPlugin().getDataFolder(), "magic.yml"));
+        Magic magic = AntiCheatReloaded.getManager().getConfiguration().getMagic();
+        FileConfiguration file = YamlConfiguration.loadConfiguration(new File(AntiCheatReloaded.getPlugin().getDataFolder(), "magic.yml"));
         boolean changed = false;
         for (Field field : Magic.class.getFields()) {
             Object defaultValue = file.get(field.getName());
@@ -169,11 +169,11 @@ public class PastebinReport {
     }
 
     private void appendEventHandlers() {
-        report.append(AntiCheat.getManager().getEventChainReport());
+        report.append(AntiCheatReloaded.getManager().getEventChainReport());
     }
 
     private void writeReport() throws IOException {
-        File f = new File(AntiCheat.getPlugin().getDataFolder() + "/report.txt");
+        File f = new File(AntiCheatReloaded.getPlugin().getDataFolder() + "/report.txt");
         FileWriter r = new FileWriter(f);
         BufferedWriter writer = new BufferedWriter(r);
         writer.write(report.toString());

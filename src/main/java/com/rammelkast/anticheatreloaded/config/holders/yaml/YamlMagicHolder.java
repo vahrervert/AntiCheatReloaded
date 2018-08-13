@@ -21,7 +21,7 @@ package com.rammelkast.anticheatreloaded.config.holders.yaml;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.ConfigurationFile;
 
@@ -29,7 +29,7 @@ public class YamlMagicHolder extends ConfigurationFile implements InvocationHand
 
     public static final String FILENAME = "magic.yml";
 
-    public YamlMagicHolder(AntiCheat plugin, Configuration config) {
+    public YamlMagicHolder(AntiCheatReloaded plugin, Configuration config) {
         super(plugin, config, FILENAME);
     }
 
@@ -41,7 +41,7 @@ public class YamlMagicHolder extends ConfigurationFile implements InvocationHand
         } else if (method.getReturnType().getSimpleName().equals("double")) {
             return new ConfigValue<Double>(key).getValue();
         } else {
-            AntiCheat.getPlugin().getLogger().severe("The magic value " + key + " couldn't be found.");
+            AntiCheatReloaded.getPlugin().getLogger().severe("The magic value " + key + " couldn't be found.");
             return -1;
         }
     }

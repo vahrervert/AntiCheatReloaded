@@ -20,7 +20,7 @@ package com.rammelkast.anticheatreloaded.config.holders.mysql;
 
 import org.bukkit.Bukkit;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.ConfigurationTable;
 import com.rammelkast.anticheatreloaded.config.providers.Levels;
@@ -81,11 +81,11 @@ public class MySQLLevelsHolder extends ConfigurationTable implements Levels {
 
     @Override
     public void saveLevelFromUser(final User user) {
-        Bukkit.getScheduler().runTaskAsynchronously(AntiCheat.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(AntiCheatReloaded.getPlugin(), new Runnable() {
             @Override
             public void run() {
                 if (!user.isWaitingOnLevelSync()) {
-                    AntiCheat.debugLog("Saving level from " + user.getUUID() + ". Value: " + user.getLevel());
+                    AntiCheatReloaded.debugLog("Saving level from " + user.getUUID() + ". Value: " + user.getLevel());
                     try {
                         PreparedStatement statement = getConnection().prepareStatement(sqlSave);
                         statement.setString(1, user.getUUID().toString());
@@ -101,14 +101,14 @@ public class MySQLLevelsHolder extends ConfigurationTable implements Levels {
                         e.printStackTrace();
                     }
                 }
-                AntiCheat.getManager().getUserManager().remove(user);
+                AntiCheatReloaded.getManager().getUserManager().remove(user);
             }
         });
     }
 
     @Override
     public void loadLevelToUser(final User user) {
-        Bukkit.getScheduler().runTaskAsynchronously(AntiCheat.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(AntiCheatReloaded.getPlugin(), new Runnable() {
             @Override
             public void run() {
                 try {
@@ -120,7 +120,7 @@ public class MySQLLevelsHolder extends ConfigurationTable implements Levels {
                     boolean has = false;
                     while (set.next()) {
                         has = true;
-                        AntiCheat.debugLog("Syncing level to " + user.getUUID() + ". Value: " + set.getInt("level"));
+                        AntiCheatReloaded.debugLog("Syncing level to " + user.getUUID() + ". Value: " + set.getInt("level"));
                         user.setLevel(set.getInt("level"));
                         user.setLevelSyncTimestamp(set.getTimestamp("last_update"));
                     }
@@ -162,7 +162,7 @@ public class MySQLLevelsHolder extends ConfigurationTable implements Levels {
 
     @Override
     public void updateLevelToUser(final User user) {
-        Bukkit.getScheduler().runTaskAsynchronously(AntiCheat.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(AntiCheatReloaded.getPlugin(), new Runnable() {
             @Override
             public void run() {
                 try {
@@ -174,7 +174,7 @@ public class MySQLLevelsHolder extends ConfigurationTable implements Levels {
                     ResultSet set = statement.executeQuery();
 
                     while (set.next()) {
-                        AntiCheat.debugLog("Syncing level to " + user.getUUID() + ". Value: " + set.getInt("level"));
+                        AntiCheatReloaded.debugLog("Syncing level to " + user.getUUID() + ". Value: " + set.getInt("level"));
                         user.setLevel(set.getInt("level"));
                         user.setLevelSyncTimestamp(set.getTimestamp("last_update"));
                     }

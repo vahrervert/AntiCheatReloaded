@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.util.rule.Rule;
@@ -41,7 +41,7 @@ public class User {
     private int level = 0;
     private Location goodLocation;
     private List<ItemStack> inventorySnapshot = null;
-    private Configuration config = AntiCheat.getManager().getConfiguration();
+    private Configuration config = AntiCheatReloaded.getManager().getConfiguration();
     private int toX, toY, toZ;
     private String[] messages = new String[2];
     private Long[] messageTimes = new Long[2];
@@ -151,7 +151,7 @@ public class User {
                     // Check levels
                     for (Group l : getLevels()) {
                         if (l.getLevel() == level) {
-                            AntiCheat.getManager().getUserManager().alert(this, l, type);
+                            AntiCheatReloaded.getManager().getUserManager().alert(this, l, type);
                             if (l.getLevel() == config.getGroups().getHighestLevel()) {
                                 level = l.getLevel() - 10;
                             }

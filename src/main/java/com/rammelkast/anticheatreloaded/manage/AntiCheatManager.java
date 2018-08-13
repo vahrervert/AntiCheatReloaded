@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.plugin.RegisteredListener;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.Backend;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 
@@ -34,7 +34,7 @@ import com.rammelkast.anticheatreloaded.config.Configuration;
  */
 
 public class AntiCheatManager {
-    private static AntiCheat plugin = null;
+    private static AntiCheatReloaded plugin = null;
     private static Configuration configuration;
     private static UserManager userManager = null;
     private static CheckManager checkManager = null;
@@ -43,7 +43,7 @@ public class AntiCheatManager {
     private static Map<String, RegisteredListener[]> eventchains = new ConcurrentHashMap<String, RegisteredListener[]>();
     private static Map<String, Long> eventcache = new ConcurrentHashMap<String, Long>();
 
-    public AntiCheatManager(AntiCheat instance, Logger logger) {
+    public AntiCheatManager(AntiCheatReloaded instance, Logger logger) {
         plugin = instance;
         configuration = new Configuration(plugin, this);
         loggingManager = new LoggingManager(plugin, logger, configuration);
@@ -104,7 +104,7 @@ public class AntiCheatManager {
         return gen;
     }
 
-    public AntiCheat getPlugin() {
+    public AntiCheatReloaded getPlugin() {
         return plugin;
     }
 

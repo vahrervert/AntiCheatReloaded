@@ -12,7 +12,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.event.EventListener;
@@ -38,7 +38,7 @@ public class KillAuraCheck {
 		if (!VersionUtil.getVersion().equals("v1_11_R1")) {
 			return;
 		}
-		AntiCheat.getProtocolManager().addPacketListener(new PacketAdapter(AntiCheat.getPlugin(), ListenerPriority.NORMAL, new PacketType[] {PacketType.Play.Client.USE_ENTITY}) {
+		AntiCheatReloaded.getProtocolManager().addPacketListener(new PacketAdapter(AntiCheatReloaded.getPlugin(), ListenerPriority.NORMAL, new PacketType[] {PacketType.Play.Client.USE_ENTITY}) {
 			@Override
 			public void onPacketReceiving(PacketEvent e) {
 				Player p = e.getPlayer();
@@ -57,7 +57,7 @@ public class KillAuraCheck {
 					VL_COUNT.put(p.getUniqueId(), VL_COUNT.get(p.getUniqueId()) + 1);
 					if (VL_COUNT.get(p.getUniqueId()) >= 5) {
 						EventListener.log(new CheckResult(CheckResult.Result.FAILED, p.getName() + " failed KillAura (botcheck), hit the bot " + VL_COUNT.get(p.getUniqueId()) + " times (max=5)").getMessage(), p, CheckType.KILLAURA);
-						AntiCheat.getPlugin().onKillAuraViolation();
+						AntiCheatReloaded.getPlugin().onKillAuraViolation();
 						VL_COUNT.remove(p.getUniqueId());
 					}
 				}

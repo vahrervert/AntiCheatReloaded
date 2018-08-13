@@ -11,7 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
@@ -39,11 +39,11 @@ public class WaterWalkCheck {
 						if (player.getNearbyEntities(1, 1, 1).isEmpty()) {
 							boolean b;
 							if (!Utilities.sprintFly(player)) {
-								b = x > AntiCheat.getManager().getBackend().getMagic().XZ_SPEED_MAX_WATER()
-										|| z > AntiCheat.getManager().getBackend().getMagic().XZ_SPEED_MAX_WATER();
+								b = x > AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_WATER()
+										|| z > AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_WATER();
 							} else {
-								b = x > AntiCheat.getManager().getBackend().getMagic().XZ_SPEED_MAX_WATER_SPRINT()
-										|| z > AntiCheat.getManager().getBackend().getMagic()
+								b = x > AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_WATER_SPRINT()
+										|| z > AntiCheatReloaded.getManager().getBackend().getMagic()
 												.XZ_SPEED_MAX_WATER_SPRINT();
 							}
 							if (!b && !Utilities.isFullyInWater(player.getLocation())
@@ -54,7 +54,7 @@ public class WaterWalkCheck {
 							if (b) {
 								if (waterSpeedViolation.containsKey(uuid)) {
 									int v = waterSpeedViolation.get(uuid);
-									if (v >= AntiCheat.getManager().getBackend().getMagic()
+									if (v >= AntiCheatReloaded.getManager().getBackend().getMagic()
 											.WATER_SPEED_VIOLATION_MAX()) {
 										waterSpeedViolation.put(uuid, 0);
 										return new CheckResult(CheckResult.Result.FAILED,
@@ -78,11 +78,11 @@ public class WaterWalkCheck {
 					return PASS;
 				}
 			} else if (block.getRelative(BlockFace.DOWN).isLiquid()
-					&& !AntiCheat.getManager().getBackend().isAscending(player) && Utilities.cantStandAt(block)
+					&& !AntiCheatReloaded.getManager().getBackend().isAscending(player) && Utilities.cantStandAt(block)
 					&& Utilities.cantStandAt(block.getRelative(BlockFace.DOWN))) {
 				if (waterAscensionViolation.containsKey(uuid)) {
 					int v = waterAscensionViolation.get(uuid);
-					if (v >= AntiCheat.getManager().getBackend().getMagic().WATER_ASCENSION_VIOLATION_MAX()) {
+					if (v >= AntiCheatReloaded.getManager().getBackend().getMagic().WATER_ASCENSION_VIOLATION_MAX()) {
 						waterAscensionViolation.put(uuid, 0);
 						return new CheckResult(CheckResult.Result.FAILED,
 								player.getName() + " stood on water " + v + " times (can't stand on " + block.getType()

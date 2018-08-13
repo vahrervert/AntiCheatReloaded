@@ -21,7 +21,7 @@ package com.rammelkast.anticheatreloaded.config.holders.mysql;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.ConfigurationTable;
 import com.rammelkast.anticheatreloaded.config.providers.Magic;
@@ -49,7 +49,7 @@ public class MySQLMagicHolder extends ConfigurationTable implements InvocationHa
 
     @Override
     public void open() {
-    	InputStreamReader reader = new InputStreamReader(AntiCheat.getPlugin().getResource("magic.yml"));
+    	InputStreamReader reader = new InputStreamReader(AntiCheatReloaded.getPlugin().getResource("magic.yml"));
         defaults = YamlConfiguration.loadConfiguration(reader);
         try {
 			reader.close();
@@ -102,7 +102,7 @@ public class MySQLMagicHolder extends ConfigurationTable implements InvocationHa
                 } else if (set.getObject("value_double") != null) {
                     doubles.put(key, set.getDouble("value_double"));
                 } else {
-                    AntiCheat.getPlugin().getLogger().severe("The magic value " + key + " loaded from the database did not have a value configured. Using the default value.");
+                    AntiCheatReloaded.getPlugin().getLogger().severe("The magic value " + key + " loaded from the database did not have a value configured. Using the default value.");
                     for (int i=1;i<=methods.length;i++) {
                         String name = methods[i-1].getName();
                         if (name.equalsIgnoreCase(key)) {
@@ -149,7 +149,7 @@ public class MySQLMagicHolder extends ConfigurationTable implements InvocationHa
                 return value;
             }
         }
-        AntiCheat.getPlugin().getLogger().severe("The magic value " + key + " couldn't be found.");
+        AntiCheatReloaded.getPlugin().getLogger().severe("The magic value " + key + " couldn't be found.");
         return 0;
     }
 }

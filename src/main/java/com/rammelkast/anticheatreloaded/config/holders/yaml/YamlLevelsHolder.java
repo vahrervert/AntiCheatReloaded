@@ -21,7 +21,7 @@ package com.rammelkast.anticheatreloaded.config.holders.yaml;
 import java.util.List;
 import java.util.UUID;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.ConfigurationFile;
 import com.rammelkast.anticheatreloaded.config.providers.Levels;
@@ -31,7 +31,7 @@ public class YamlLevelsHolder extends ConfigurationFile implements Levels {
 
     public static final String FILENAME = "data/levels.yml";
 
-    public YamlLevelsHolder(AntiCheat plugin, Configuration config) {
+    public YamlLevelsHolder(AntiCheatReloaded plugin, Configuration config) {
         super(plugin, config, FILENAME, false);
     }
 
@@ -47,7 +47,7 @@ public class YamlLevelsHolder extends ConfigurationFile implements Levels {
 
     private void saveLevelFromUser(User user, boolean remove) {
         saveLevel(user.getUUID(), user.getLevel());
-        if (remove) AntiCheat.getManager().getUserManager().remove(user);
+        if (remove) AntiCheatReloaded.getManager().getUserManager().remove(user);
     }
 
     @Override

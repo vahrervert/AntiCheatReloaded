@@ -11,7 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.Backend;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Distance;
@@ -44,13 +44,13 @@ public class GlideCheck {
 			if (!violations.containsKey(player.getUniqueId())) {
 				violations.put(player.getUniqueId(), 1);
 			} else {
-				if (violations.get(player.getUniqueId()) + 1 >= AntiCheat.getManager().getBackend().getMagic().GLIDE_LIMIT()) {
+				if (violations.get(player.getUniqueId()) + 1 >= AntiCheatReloaded.getManager().getBackend().getMagic().GLIDE_LIMIT()) {
 					violations.remove(player.getUniqueId());
 					Location to = player.getLocation();
 					to.setY(to.getY() - distanceToFall(to));
 					player.teleport(to);
 					// Report glide violation to statistics, just for the lulz jk
-					AntiCheat.getPlugin().onGlideViolation();
+					AntiCheatReloaded.getPlugin().onGlideViolation();
 					return new CheckResult(CheckResult.Result.FAILED,
 							player.getName() + " was set back for gliding (yDiff=" + new BigDecimal(yDiff).setScale(2, BigDecimal.ROUND_UP) + ")");
 				} else {

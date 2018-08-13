@@ -20,7 +20,7 @@ package com.rammelkast.anticheatreloaded.config.files;
 
 import java.util.List;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.ConfigurationFile;
 
@@ -51,7 +51,7 @@ public class Config extends ConfigurationFile {
     public ConfigValue<List<String>> disabledWorlds;
     public ConfigValue<List<String>> disabledChecks;
 
-    public Config(AntiCheat plugin, Configuration config) {
+    public Config(AntiCheatReloaded plugin, Configuration config) {
         super(plugin, config, FILENAME);
     }
 

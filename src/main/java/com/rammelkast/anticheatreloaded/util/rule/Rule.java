@@ -20,7 +20,7 @@ package com.rammelkast.anticheatreloaded.util.rule;
 
 import org.bukkit.GameMode;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.util.Group;
 import com.rammelkast.anticheatreloaded.util.User;
@@ -175,7 +175,7 @@ public class Rule {
         if (variable.equals("player_level") && Utilities.isInt(value)) {
             user.setLevel(Integer.parseInt(value));
         } else if (variable.equals("player_group") && Utilities.isInt(value)) {
-            for (Group group : AntiCheat.getManager().getConfiguration().getGroups().getGroups()) {
+            for (Group group : AntiCheatReloaded.getManager().getConfiguration().getGroups().getGroups()) {
                 if (group.getName().equalsIgnoreCase(value)) {
                     user.setLevel(group.getLevel());
                 }
@@ -196,7 +196,7 @@ public class Rule {
             text = text.split("\\.")[1];
             List<String> action = new ArrayList<String>();
             action.add(text);
-            AntiCheat.getManager().getUserManager().execute(user, action, type);
+            AntiCheatReloaded.getManager().getUserManager().execute(user, action, type);
         }
     }
 

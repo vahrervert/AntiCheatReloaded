@@ -23,7 +23,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.ConfigurationTable;
 import com.rammelkast.anticheatreloaded.config.providers.Rules;
@@ -65,7 +65,7 @@ public class MySQLRulesHolder extends ConfigurationTable implements Rules {
                 if (rule != null) {
                     this.rules.add(rule);
                 } else {
-                    AntiCheat.getPlugin().getLogger().warning("Couldn't load rule '" + string + "' from the database. Improper format used.");
+                    AntiCheatReloaded.getPlugin().getLogger().warning("Couldn't load rule '" + string + "' from the database. Improper format used.");
                 }
             }
         } catch (SQLException e) {

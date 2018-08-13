@@ -28,7 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.NumberConversions;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,7 +59,7 @@ public final class Utilities {
             }
         }
         for (String msg : message) {
-            AntiCheat.getManager().log(msg);
+            AntiCheatReloaded.getManager().log(msg);
         }
     }
     

@@ -20,7 +20,7 @@ package com.rammelkast.anticheatreloaded.command.executors;
 
 import org.bukkit.command.CommandSender;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.command.CommandBase;
 import com.rammelkast.anticheatreloaded.util.Permission;
 
@@ -40,7 +40,7 @@ public class CommandDeveloper extends CommandBase {
 
     @Override
     protected void execute(CommandSender cs, String[] args) {
-        AntiCheat.setDeveloperMode(!AntiCheat.developerMode());
-        cs.sendMessage(GREEN + "Developer mode " + (AntiCheat.developerMode() ? "ON" : "OFF"));
+        AntiCheatReloaded.setDeveloperMode(!AntiCheatReloaded.developerMode());
+        cs.sendMessage(GREEN + "Developer mode " + (AntiCheatReloaded.developerMode() ? "ON" : "OFF"));
     }
 }

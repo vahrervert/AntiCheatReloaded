@@ -18,11 +18,13 @@
 
 package com.rammelkast.anticheatreloaded;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -43,20 +45,22 @@ import com.rammelkast.anticheatreloaded.metrics.Metrics;
 import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
-public class AntiCheat extends JavaPlugin {
+public class AntiCheatReloaded extends JavaPlugin {
 
 	private static AntiCheatManager manager;
-	private static AntiCheat plugin;
+	private static AntiCheatReloaded plugin;
 	private static List<Listener> eventList = new ArrayList<Listener>();
 	private static Configuration config;
 	private static boolean verbose;
 	private static boolean developer;
 	private static ProtocolManager protocolManager;
+	private static SecureRandom random;
 	private static Long loadTime;
 
 	@Override
 	public void onEnable() {
 		plugin = this;
+		random = new SecureRandom();
 		loadTime = System.currentTimeMillis();
 		manager = new AntiCheatManager(this, getLogger());
 		eventList.add(new PlayerListener());
@@ -81,6 +85,10 @@ public class AntiCheat extends JavaPlugin {
 			return;
 		}
 		
+		getLogger().info("NMS version is " + VersionUtil.getVersion());
+		if (!VersionUtil.isSupported()) {
+			Bukkit.getConsoleSender().sendMessage("[ACR] " + ChatColor.RED + "The version of this server is NOT supported by ACR! The plugin will be buggy!");
+		}
 		getLogger().info("Found ProtocolLib, enabling checks that use ProtcolLib...");
 		// Enable packetlisteners
 		KillAuraCheck.listenPackets();
@@ -104,7 +112,21 @@ public class AntiCheat extends JavaPlugin {
 					getLogger().severe("Please remove or disable AAC to silence this warning.");
 					getLogger().severe("*----------------------------------------------*");
 				}
-				if (Bukkit.getPluginManager().getPlugin("AntiCheat") != null) {
+				if (Bukkit.getPluginManager().getPlugin("Spartan") != null) {
+					getLogger().severe("*----------------------------------------------*");
+					getLogger().severe("You are also running Spartan!");
+					getLogger().severe("Multiple anticheats create false cheat detections.");
+					getLogger().severe("Please remove or disable AAC to silence this warning.");
+					getLogger().severe("*----------------------------------------------*");
+				}
+				if (Bukkit.getPluginManager().getPlugin("NoAura") != null) {
+					getLogger().severe("*----------------------------------------------*");
+					getLogger().severe("You are also running NoAura!");
+					getLogger().severe("Multiple anticheats create false cheat detections.");
+					getLogger().severe("Please remove or disable AAC to silence this warning.");
+					getLogger().severe("*----------------------------------------------*");
+				}
+				if (Bukkit.getPluginManager().getPlugin("AntiCheat") != null || Bukkit.getPluginManager().getPlugin("AntiCheatPlus") != null) {
 					getLogger().severe("*----------------------------------------------*");
 					getLogger().severe("You are also running AntiCheat!");
 					getLogger().severe("Multiple anticheats create false cheat detections.");
@@ -112,11 +134,10 @@ public class AntiCheat extends JavaPlugin {
 					getLogger().severe("*----------------------------------------------*");
 				}
 			}
-		}, 60L);
+		}, 90L);
 		
 		// End tests
 		verboseLog("Finished loading.");
-		getLogger().info("Running NMS version " + VersionUtil.getVersion() + "...");
 
 		// Metrics
 		try {
@@ -152,6 +173,12 @@ public class AntiCheat extends JavaPlugin {
 				@Override
 				public String getValue() {
 					return Bukkit.getPluginManager().getPlugin("ProtocolLib").getDescription().getVersion();
+				}
+			});
+			metrics.addCustomChart(new Metrics.SimplePie("nms_version") {
+				@Override
+				public String getValue() {
+					return VersionUtil.getVersion();
 				}
 			});
 		} catch (Exception e) {
@@ -212,7 +239,7 @@ public class AntiCheat extends JavaPlugin {
 		}
 	}
 
-	public static AntiCheat getPlugin() {
+	public static AntiCheatReloaded getPlugin() {
 		return plugin;
 	}
 
@@ -220,6 +247,10 @@ public class AntiCheat extends JavaPlugin {
 		return manager;
 	}
 
+	public static SecureRandom getRandom() {
+		return random;
+	}
+	
 	public static String getVersion() {
 		return manager.getPlugin().getDescription().getVersion();
 	}

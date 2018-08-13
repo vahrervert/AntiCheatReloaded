@@ -12,7 +12,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.event.EventListener;
@@ -30,11 +30,11 @@ public class BlinkCheck {
 			public void run() {
 				MOVE_COUNT.clear();
 			}
-		}.runTaskTimer(AntiCheat.getPlugin(), 20, 20);
+		}.runTaskTimer(AntiCheatReloaded.getPlugin(), 20, 20);
 	}
 	
 	public static void listenPackets() {
-		AntiCheat.getProtocolManager().addPacketListener(new PacketAdapter(AntiCheat.getPlugin(), ListenerPriority.NORMAL, new PacketType[] {PacketType.Play.Client.POSITION, PacketType.Play.Client.POSITION_LOOK}) {
+		AntiCheatReloaded.getProtocolManager().addPacketListener(new PacketAdapter(AntiCheatReloaded.getPlugin(), ListenerPriority.NORMAL, new PacketType[] {PacketType.Play.Client.POSITION, PacketType.Play.Client.POSITION_LOOK}) {
 			@Override
 			public void onPacketReceiving(PacketEvent e) {
 				Player p = e.getPlayer();
@@ -43,9 +43,9 @@ public class BlinkCheck {
 					MOVE_COUNT.put(p.getUniqueId(), 1);
 				} else {
 					MOVE_COUNT.put(p.getUniqueId(), MOVE_COUNT.get(p.getUniqueId()) + 1);
-					if (AntiCheat.getManager().getCheckManager().checkInWorld(p) && !AntiCheat.getManager().getCheckManager().isOpExempt(p) && !AntiCheat.getManager().getCheckManager().isExempt(p, CheckType.BLINK)) {
-						if (MOVE_COUNT.get(p.getUniqueId()) > AntiCheat.getManager().getBackend().getMagic().BLINK_PACKET()) {
-							EventListener.log(new CheckResult(CheckResult.Result.FAILED, p.getName() + " failed Blink, sent " + MOVE_COUNT.get(p.getUniqueId()) + " packets in one second (max=" + AntiCheat.getManager().getBackend().getMagic().BLINK_PACKET() + ")").getMessage(), p, CheckType.BLINK);
+					if (AntiCheatReloaded.getManager().getCheckManager().checkInWorld(p) && !AntiCheatReloaded.getManager().getCheckManager().isOpExempt(p) && !AntiCheatReloaded.getManager().getCheckManager().isExempt(p, CheckType.BLINK)) {
+						if (MOVE_COUNT.get(p.getUniqueId()) > AntiCheatReloaded.getManager().getBackend().getMagic().BLINK_PACKET()) {
+							EventListener.log(new CheckResult(CheckResult.Result.FAILED, p.getName() + " failed Blink, sent " + MOVE_COUNT.get(p.getUniqueId()) + " packets in one second (max=" + AntiCheatReloaded.getManager().getBackend().getMagic().BLINK_PACKET() + ")").getMessage(), p, CheckType.BLINK);
 							MOVE_COUNT.remove(p.getUniqueId());
 							e.setCancelled(true);
 							e.getPlayer().teleport(cur);

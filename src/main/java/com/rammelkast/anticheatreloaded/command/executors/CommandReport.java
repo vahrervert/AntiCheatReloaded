@@ -23,7 +23,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.command.CommandBase;
 import com.rammelkast.anticheatreloaded.manage.CheckManager;
@@ -83,7 +83,7 @@ public class CommandReport extends CommandBase {
                 // Test users
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (player.getUniqueId().equals(Bukkit.getPlayer(args[0]).getUniqueId())) {
-                        User user = AntiCheat.getManager().getUserManager().getUser(player.getUniqueId());
+                        User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
                         playerReport(cs, user, page);
                         return;
                     }
@@ -176,13 +176,13 @@ public class CommandReport extends CommandBase {
             }
         }
 
-        if (AntiCheat.developerMode()) {
+        if (AntiCheatReloaded.developerMode()) {
             int permission = 0;
             int check = 0;
             for (Permission perm : Permission.values()) {
                 if (perm.get(user.getPlayer())) permission++;
             }
-            CheckManager manager = AntiCheat.getManager().getCheckManager();
+            CheckManager manager = AntiCheatReloaded.getManager().getCheckManager();
             for (CheckType type : CheckType.values()) {
                 if (manager.willCheck(user.getPlayer(), type)) check++;
             }

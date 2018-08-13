@@ -21,7 +21,7 @@ package com.rammelkast.anticheatreloaded.util.enterprise;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
-import com.rammelkast.anticheatreloaded.AntiCheat;
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.Utilities;
@@ -137,7 +137,7 @@ public class Database {
             connection.setAutoCommit(false);
 
             if (logInterval != 0) {
-                eventTask = Bukkit.getScheduler().runTaskTimerAsynchronously(AntiCheat.getPlugin(), new Runnable() {
+                eventTask = Bukkit.getScheduler().runTaskTimerAsynchronously(AntiCheatReloaded.getPlugin(), new Runnable() {
                     @Override
                     public void run() {
                         flushEvents();
@@ -146,7 +146,7 @@ public class Database {
             }
 
             if(syncLevels && syncInterval != 0) {
-                syncTask = Bukkit.getScheduler().runTaskTimerAsynchronously(AntiCheat.getPlugin(), new Runnable() {
+                syncTask = Bukkit.getScheduler().runTaskTimerAsynchronously(AntiCheatReloaded.getPlugin(), new Runnable() {
                     @Override
                     public void run() {
                         syncUsers();
@@ -154,7 +154,7 @@ public class Database {
                 }, syncInterval * 20, syncInterval * 20);
             }
 
-            AntiCheat.getPlugin().verboseLog("Connected to the database.");
+            AntiCheatReloaded.getPlugin().verboseLog("Connected to the database.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -203,7 +203,7 @@ public class Database {
 
     public void cleanEvents() {
         if (logLife != 0) {
-            Bukkit.getScheduler().runTaskAsynchronously(AntiCheat.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskAsynchronously(AntiCheatReloaded.getPlugin(), new Runnable() {
                 @Override
                 public void run() {
                     try {
@@ -213,7 +213,7 @@ public class Database {
                         statement.executeUpdate();
 
                         connection.commit();
-                        AntiCheat.getPlugin().verboseLog("Cleaned " + statement.getUpdateCount() + " old events from the database");
+                        AntiCheatReloaded.getPlugin().verboseLog("Cleaned " + statement.getUpdateCount() + " old events from the database");
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -223,8 +223,8 @@ public class Database {
     }
 
     private void syncUsers() {
-        for (User user : AntiCheat.getManager().getUserManager().getUsers()) {
-            AntiCheat.getManager().getConfiguration().getLevels().updateLevelToUser(user);
+        for (User user : AntiCheatReloaded.getManager().getUserManager().getUsers()) {
+            AntiCheatReloaded.getManager().getConfiguration().getLevels().updateLevelToUser(user);
         }
     }
 }
