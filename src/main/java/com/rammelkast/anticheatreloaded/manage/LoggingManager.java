@@ -1,6 +1,7 @@
 /*
- * AntiCheat for Bukkit.
- * Copyright (C) 2012-2014 AntiCheat Team | http://gravitydevelopment.net
+ * AntiCheatReloaded for Bukkit and Spigot.
+ * Copyright (c) 2012-2015 AntiCheat Team | http://gravitydevelopment.net
+ * Copyright (c) 2016-2018 Rammelkast | https://rammelkast.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +44,7 @@ public class LoggingManager {
     private final Configuration config;
 
     public LoggingManager(AntiCheatReloaded plugin, Logger logger, Configuration config) {
-        this.fileLogger = Logger.getLogger("net.gravitydevelopment.anticheat.AntiCheat");
+        this.fileLogger = Logger.getLogger("com.rammelkast.anticheatreloaded.AntiCheatReloaded");
         this.config = config;
         try {
             File file = new File(plugin.getDataFolder(), "log");

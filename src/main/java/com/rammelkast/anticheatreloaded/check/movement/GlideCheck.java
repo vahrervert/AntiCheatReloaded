@@ -1,3 +1,22 @@
+/*
+ * AntiCheatReloaded for Bukkit and Spigot.
+ * Copyright (c) 2012-2015 AntiCheat Team | http://gravitydevelopment.net
+ * Copyright (c) 2016-2018 Rammelkast | https://rammelkast.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.rammelkast.anticheatreloaded.check.movement;
 
 import java.math.BigDecimal;
@@ -21,11 +40,11 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 public class GlideCheck {
 
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
-	
+
 	public static Map<UUID, Double> lastDiff = new HashMap<UUID, Double>();
 	public static Map<UUID, Float> lastFallDistance = new HashMap<UUID, Float>();
 	public static Map<UUID, Integer> violations = new HashMap<UUID, Integer>();
-	
+
 	public static CheckResult runCheck(Player player, Distance distance) {
 		if (VersionUtil.isFlying(player)) {
 			return PASS;
@@ -44,7 +63,8 @@ public class GlideCheck {
 			if (!violations.containsKey(player.getUniqueId())) {
 				violations.put(player.getUniqueId(), 1);
 			} else {
-				if (violations.get(player.getUniqueId()) + 1 >= AntiCheatReloaded.getManager().getBackend().getMagic().GLIDE_LIMIT()) {
+				if (violations.get(player.getUniqueId()) + 1 >= AntiCheatReloaded.getManager().getBackend().getMagic()
+						.GLIDE_LIMIT()) {
 					violations.remove(player.getUniqueId());
 					Location to = player.getLocation();
 					to.setY(to.getY() - distanceToFall(to));
@@ -52,7 +72,8 @@ public class GlideCheck {
 					// Report glide violation to statistics, just for the lulz jk
 					AntiCheatReloaded.getPlugin().onGlideViolation();
 					return new CheckResult(CheckResult.Result.FAILED,
-							player.getName() + " was set back for gliding (yDiff=" + new BigDecimal(yDiff).setScale(2, BigDecimal.ROUND_UP) + ")");
+							player.getName() + " was set back for gliding (yDiff="
+									+ new BigDecimal(yDiff).setScale(2, BigDecimal.ROUND_UP) + ")");
 				} else {
 					violations.put(player.getUniqueId(), violations.get(player.getUniqueId()) + 1);
 				}
@@ -62,7 +83,7 @@ public class GlideCheck {
 		}
 		lastDiff.put(player.getUniqueId(), distance.getYDifference());
 		lastFallDistance.put(player.getUniqueId(), player.getFallDistance());
-    	return PASS;
+		return PASS;
 	}
 
 	private static double distanceToFall(Location location) {

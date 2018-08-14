@@ -96,6 +96,6 @@ KILLAURA_BOTHITS: 4
 # Maximum amount of movement packets allowed per second
 # Increase this in case of false positives
 BLINK_PACKET: 74
-# Maximum amount of suspected "fake-criticalhits" before a player is suspected
+# Maximum amount zero-velocity moments before a player is suspected
 # Increase this in case of false positives
 VELOCITY_AMT: 5

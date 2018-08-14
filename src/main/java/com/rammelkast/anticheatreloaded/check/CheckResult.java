@@ -1,6 +1,7 @@
 /*
- * AntiCheat for Bukkit.
- * Copyright (C) 2012-2014 AntiCheat Team | http://gravitydevelopment.net
+ * AntiCheatReloaded for Bukkit and Spigot.
+ * Copyright (c) 2012-2015 AntiCheat Team | http://gravitydevelopment.net
+ * Copyright (c) 2016-2018 Rammelkast | https://rammelkast.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

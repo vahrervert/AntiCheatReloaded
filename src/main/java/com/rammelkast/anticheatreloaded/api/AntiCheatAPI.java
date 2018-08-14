@@ -1,6 +1,7 @@
 /*
- * AntiCheat for Bukkit.
- * Copyright (C) 2012-2014 AntiCheat Team | http://gravitydevelopment.net
+ * AntiCheatReloaded for Bukkit and Spigot.
+ * Copyright (c) 2012-2015 AntiCheat Team | http://gravitydevelopment.net
+ * Copyright (c) 2016-2018 Rammelkast | https://rammelkast.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +45,7 @@ public class AntiCheatAPI {
      *
      * @param type Check to start watching for
      */
-    public static void activateCheck(CheckType type, Class caller) {
+    public static void activateCheck(CheckType type, Class<?> caller) {
         chk.activateCheck(type, caller.getName());
     }
 
@@ -53,7 +54,7 @@ public class AntiCheatAPI {
      *
      * @param type Check to stop watching for
      */
-    public static void deactivateCheck(CheckType type, Class caller) {
+    public static void deactivateCheck(CheckType type, Class<?> caller) {
         chk.deactivateCheck(type, caller.getName());
     }
 
@@ -73,7 +74,7 @@ public class AntiCheatAPI {
      * @param player Player to stop watching
      * @param type   Check to stop watching for
      */
-    public static void exemptPlayer(Player player, CheckType type, Class caller) {
+    public static void exemptPlayer(Player player, CheckType type, Class<?> caller) {
         chk.exemptPlayer(player, type, caller.getName());
     }
 
@@ -83,7 +84,7 @@ public class AntiCheatAPI {
      * @param player Player to start watching
      * @param type   Check to start watching for
      */
-    public static void unexemptPlayer(Player player, CheckType type, Class caller) {
+    public static void unexemptPlayer(Player player, CheckType type, Class<?> caller) {
         chk.unexemptPlayer(player, type, caller.getName());
     }
 
@@ -110,31 +111,6 @@ public class AntiCheatAPI {
     }
 
     // PlayerManager API
-
-    /**
-     * Get a player's integer hack level
-     *
-     * @param player Player to check
-     * @return player's hack level
-     * @deprecated see {@link #getGroup(org.bukkit.entity.Player)}
-     */
-    @Deprecated
-    public static int getLevel(Player player) {
-        return umr.safeGetLevel(player.getUniqueId());
-    }
-
-
-    /**
-     * Set a player's hack level
-     *
-     * @param player Player to set
-     * @param level  Group to set to
-     * @deprecated see {@link #resetPlayer(org.bukkit.entity.Player)}
-     */
-    @Deprecated
-    public static void setLevel(Player player, int level) {
-        umr.safeSetLevel(player.getUniqueId(), level);
-    }
 
     /**
      * Reset a player's hack level to 0

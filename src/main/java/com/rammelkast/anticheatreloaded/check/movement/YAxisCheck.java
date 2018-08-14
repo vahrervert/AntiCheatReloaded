@@ -1,11 +1,28 @@
+/*
+ * AntiCheatReloaded for Bukkit and Spigot.
+ * Copyright (c) 2012-2015 AntiCheat Team | http://gravitydevelopment.net
+ * Copyright (c) 2016-2018 Rammelkast | https://rammelkast.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.rammelkast.anticheatreloaded.check.movement;
 
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -52,7 +69,8 @@ public class YAxisCheck {
 				lastYtime.put(uuid, System.currentTimeMillis());
 			} else {
 				if (y1 > lastYcoord.get(uuid)
-						&& yAxisViolations.get(uuid) > AntiCheatReloaded.getManager().getBackend().getMagic().Y_MAXVIOLATIONS()
+						&& yAxisViolations.get(uuid) > AntiCheatReloaded.getManager().getBackend().getMagic()
+								.Y_MAXVIOLATIONS()
 						&& (System.currentTimeMillis() - yAxisLastViolation.get(uuid)) < AntiCheatReloaded.getManager()
 								.getBackend().getMagic().Y_MAXVIOTIME()) {
 					Location g = player.getLocation();
@@ -68,9 +86,10 @@ public class YAxisCheck {
 							player.getName() + " tried to fly on y-axis " + yAxisViolations.get(uuid) + " times (max ="
 									+ AntiCheatReloaded.getManager().getBackend().getMagic().Y_MAXVIOLATIONS() + ")");
 				} else {
-					if (yAxisViolations.get(uuid) > AntiCheatReloaded.getManager().getBackend().getMagic().Y_MAXVIOLATIONS()
-							&& (System.currentTimeMillis() - yAxisLastViolation.get(uuid)) > AntiCheatReloaded.getManager()
-									.getBackend().getMagic().Y_MAXVIOTIME()) {
+					if (yAxisViolations.get(uuid) > AntiCheatReloaded.getManager().getBackend().getMagic()
+							.Y_MAXVIOLATIONS()
+							&& (System.currentTimeMillis() - yAxisLastViolation.get(uuid)) > AntiCheatReloaded
+									.getManager().getBackend().getMagic().Y_MAXVIOTIME()) {
 						yAxisViolations.put(uuid, 0);
 						yAxisLastViolation.put(uuid, 0L);
 					}
@@ -78,7 +97,8 @@ public class YAxisCheck {
 				long i = System.currentTimeMillis() - lastYtime.get(uuid);
 				double diff = AntiCheatReloaded.getManager().getBackend().getMagic().Y_MAXDIFF()
 						+ (Utilities.isStair(player.getLocation().add(0, -1, 0).getBlock()) ? 0.5 : 0.0);
-				if ((y1 - lastYcoord.get(uuid)) > diff && i < AntiCheatReloaded.getManager().getBackend().getMagic().Y_TIME()) {
+				if ((y1 - lastYcoord.get(uuid)) > diff
+						&& i < AntiCheatReloaded.getManager().getBackend().getMagic().Y_TIME()) {
 					Location g = player.getLocation();
 					yAxisViolations.put(uuid, yAxisViolations.get(uuid) + 1);
 					yAxisLastViolation.put(uuid, System.currentTimeMillis());
@@ -91,9 +111,10 @@ public class YAxisCheck {
 					return new CheckResult(CheckResult.Result.FAILED, player.getName() + " tried to fly on y-axis in "
 							+ i + " ms (min =" + AntiCheatReloaded.getManager().getBackend().getMagic().Y_TIME() + ")");
 				} else {
-					if ((y1 - lastYcoord.get(uuid)) > AntiCheatReloaded.getManager().getBackend().getMagic().Y_MAXDIFF() + 1
-							|| (System.currentTimeMillis() - lastYtime.get(uuid)) > AntiCheatReloaded.getManager().getBackend()
-									.getMagic().Y_TIME()) {
+					if ((y1 - lastYcoord.get(uuid)) > AntiCheatReloaded.getManager().getBackend().getMagic().Y_MAXDIFF()
+							+ 1
+							|| (System.currentTimeMillis() - lastYtime.get(uuid)) > AntiCheatReloaded.getManager()
+									.getBackend().getMagic().Y_TIME()) {
 						lastYtime.put(uuid, System.currentTimeMillis());
 						lastYcoord.put(uuid, y1);
 					}

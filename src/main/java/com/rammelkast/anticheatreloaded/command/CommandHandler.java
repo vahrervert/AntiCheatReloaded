@@ -1,6 +1,7 @@
 /*
- * AntiCheat for Bukkit.
- * Copyright (C) 2012-2014 AntiCheat Team | http://gravitydevelopment.net
+ * AntiCheatReloaded for Bukkit and Spigot.
+ * Copyright (c) 2012-2015 AntiCheat Team | http://gravitydevelopment.net
+ * Copyright (c) 2016-2018 Rammelkast | https://rammelkast.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +27,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import com.rammelkast.anticheatreloaded.command.executors.CommandCheck;
-import com.rammelkast.anticheatreloaded.command.executors.CommandDebug;
 import com.rammelkast.anticheatreloaded.command.executors.CommandDeveloper;
 import com.rammelkast.anticheatreloaded.command.executors.CommandHelp;
 import com.rammelkast.anticheatreloaded.command.executors.CommandLog;
@@ -41,7 +41,6 @@ public class CommandHandler implements CommandExecutor {
     public CommandHandler() {
         commands.add(new CommandHelp());
         commands.add(new CommandCheck());
-        commands.add(new CommandDebug());
         commands.add(new CommandDeveloper());
         commands.add(new CommandLog());
         commands.add(new CommandReload());

@@ -6,6 +6,8 @@ AntiCheat helps server admins easily identify and block malicious users by monit
 ### BTC donations: 1DwUKboRQKrgR9o1oZC4VutkCUwdZStHtk
 ### LTC donations: LTXzGnVLXmiH5XJch1bKrcZtzQjaF9rd8V
 
+See the [current project plan](https://trello.com/b/zaeCVY0H/anticheatreloaded) on Trello.
+
 Bug Reporting
 ------------
 
