@@ -431,7 +431,7 @@ public class Backend {
     public CheckResult checkSwing(Player player, Block block) {
         UUID uuid = player.getUniqueId();
         if (!isInstantBreakExempt(player)) {
-            if (!player.getInventory().getItemInHand().containsEnchantment(Enchantment.DIG_SPEED) && !(player.getInventory().getItemInHand().getType() == Material.SHEARS && block.getType() == Material.LEAVES)) {
+            if (!VersionUtil.getItemInHand(player).containsEnchantment(Enchantment.DIG_SPEED) && !(VersionUtil.getItemInHand(player).getType() == Material.SHEARS && block.getType() == Material.LEAVES)) {
                 if (blockPunches.get(uuid) != null && player.getGameMode() != GameMode.CREATIVE) {
                     int i = blockPunches.get(uuid);
                     if (i < magic.BLOCK_PUNCH_MIN()) {
@@ -447,7 +447,7 @@ public class Backend {
 
     public CheckResult checkFastBreak(Player player, Block block) {
         int violations = magic.FASTBREAK_MAXVIOLATIONS();
-        long timemax = isInstantBreakExempt(player) ? 0 : Utilities.calcSurvivalFastBreak(player.getInventory().getItemInHand(), block.getType());
+        long timemax = isInstantBreakExempt(player) ? 0 : Utilities.calcSurvivalFastBreak(VersionUtil.getItemInHand(player), block.getType());
         if (player.getGameMode() == GameMode.CREATIVE) {
             violations = magic.FASTBREAK_MAXVIOLATIONS_CREATIVE();
             timemax = magic.FASTBREAK_TIMEMAX_CREATIVE();
@@ -634,8 +634,8 @@ public class Backend {
     }
 
     public CheckResult checkAutoTool(Player player) {
-        if (itemInHand.containsKey(player.getUniqueId()) && itemInHand.get(player.getUniqueId()) != player.getItemInHand().getType()) {
-            return new CheckResult(CheckResult.Result.FAILED, player.getName() + " switched tools too fast (had " + itemInHand.get(player.getName()) + ", has " + player.getItemInHand().getType() + ")");
+        if (itemInHand.containsKey(player.getUniqueId()) && itemInHand.get(player.getUniqueId()) != VersionUtil.getItemInHand(player).getType()) {
+            return new CheckResult(CheckResult.Result.FAILED, player.getName() + " switched tools too fast (had " + itemInHand.get(player.getUniqueId()) + ", has " + VersionUtil.getItemInHand(player).getType() + ")");
         } else {
             return PASS;
         }

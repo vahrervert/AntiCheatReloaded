@@ -57,6 +57,8 @@ public class GlideCheck {
 					violations.put(player.getUniqueId(), violations.get(player.getUniqueId()) + 1);
 				}
 			}
+		} else {
+			// TODO more sophisticated check
 		}
 		lastDiff.put(player.getUniqueId(), distance.getYDifference());
 		lastFallDistance.put(player.getUniqueId(), player.getFallDistance());

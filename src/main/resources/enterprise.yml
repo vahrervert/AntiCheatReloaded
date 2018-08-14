@@ -17,7 +17,7 @@ database:
   # Password for the user
   password: ''
   # Prefix for the tables
-  prefix: 'ac_'
+  prefix: 'acr_'
   # Database/Schema to use
   database: 'anticheat'
 # Logging settings

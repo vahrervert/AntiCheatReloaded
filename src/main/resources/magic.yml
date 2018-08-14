@@ -1,4 +1,9 @@
 # AntiCheatReloaded configuration file
+#  
+#  This file is not yet fully documented
+#  For more information on the undocumented values visit:
+#  https://github.com/Rammelkast/AntiCheatReloaded/blob/master/src/main/java/com/rammelkast/anticheatreloaded/config/providers/Magic.java#L39-L380
+#
 ANIMATION_INTERACT_MAX: 3
 ANIMATION_MIN: 200
 ASCENSION_COUNT_MAX: 8
@@ -82,7 +87,15 @@ Y_MAXVIOLATIONS: 1
 Y_MAXVIOTIME: 5500
 Y_SPEED_MAX: 0.5125
 Y_TIME: 800
+# Amount of suspicious mid-air movements before a player is suspected of glide
+# Increase this in case of false positives
 GLIDE_LIMIT: 10
+# Amount of hits to a bot before a player is suspected
+# Increase this in case of false positives
 KILLAURA_BOTHITS: 4
+# Maximum amount of movement packets allowed per second
+# Increase this in case of false positives
 BLINK_PACKET: 74
+# Maximum amount of suspected "fake-criticalhits" before a player is suspected
+# Increase this in case of false positives
 VELOCITY_AMT: 5

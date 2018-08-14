@@ -29,7 +29,6 @@ public class Config extends ConfigurationFile {
     public static final String FILENAME = "config.yml";
 
     public ConfigValue<Boolean> logToConsole;
-    public ConfigValue<Boolean> autoUpdate;
     public ConfigValue<Boolean> verboseStartup;
     public ConfigValue<Boolean> silentMode;
     public ConfigValue<Boolean> exemptOp;
@@ -59,7 +58,6 @@ public class Config extends ConfigurationFile {
     public void open() {
         logToConsole = new ConfigValue<Boolean>("system.log-to-console");
 
-        autoUpdate = new ConfigValue<Boolean>("system.auto-update");
         verboseStartup = new ConfigValue<Boolean>("system.verbose-startup");
         silentMode = new ConfigValue<Boolean>("system.silent-mode");
         exemptOp = new ConfigValue<Boolean>("system.exempt-op");

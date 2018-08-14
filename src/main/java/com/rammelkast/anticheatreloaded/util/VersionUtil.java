@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class VersionUtil {
 
@@ -77,6 +78,14 @@ public class VersionUtil {
 			return player.getInventory().getBoots().containsEnchantment(NMS_1_9_PLUS.FROST_WALKER);
 		} else {
 			return false;
+		}
+	}
+
+	public static ItemStack getItemInHand(Player player) {
+		if (getVersion().startsWith("v1_9") || getVersion().startsWith("v1_10") || getVersion().startsWith("v1_11") || getVersion().startsWith("v1_12")) {
+			return NMS_1_9_PLUS.getItemInHand(player);
+		} else {
+			return player.getItemInHand();
 		}
 	}
 	

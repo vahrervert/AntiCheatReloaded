@@ -70,17 +70,17 @@ public class AntiCheatReloaded extends JavaPlugin {
 		eventList.add(new InventoryListener());
 		// Order is important in some cases, don't screw with these unless
 		// needed, especially config
-		setupConfig();
-		setupEvents();
-		setupCommands();
+		this.setupConfig();
+		this.setupEvents();
+		this.setupCommands();
 		// Enterprise must come before levels
-		setupEnterprise();
-		restoreLevels();
+		this.setupEnterprise();
+		this.restoreLevels();
 		
 		if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
-			setupProtocol();
+			this.setupProtocol();
 		} else {
-			getLogger().severe("Shutting down, ProtocolLib not found!");
+			Bukkit.getConsoleSender().sendMessage("[ACR] " + ChatColor.RED + "Shutting down, ProtocolLib not found!");
 			Bukkit.getPluginManager().disablePlugin(this);
 			return;
 		}

@@ -4,6 +4,8 @@ import java.util.EnumSet;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 public class NMS_1_9_PLUS {
@@ -17,5 +19,9 @@ public class NMS_1_9_PLUS {
 	static final PotionEffectType LEVITATION = PotionEffectType.LEVITATION;
 	
 	static final Enchantment FROST_WALKER = Enchantment.FROST_WALKER;
+
+	public static ItemStack getItemInHand(Player player) {
+		return player.getInventory().getItemInMainHand();
+	}
 	
 }
