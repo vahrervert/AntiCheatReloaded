@@ -29,62 +29,67 @@ import java.util.List;
 
 public class Group {
 
-    private String name;
-    private int level;
-    private ChatColor color = ChatColor.RED;
-    private List<String> actions = new ArrayList<String>();
+	private String name;
+	private int level;
+	private ChatColor color = ChatColor.RED;
+	private List<String> actions = new ArrayList<String>();
 
-    public Group(String name, int level, String color, List<String> actions) {
+	public Group(String name, int level, String color, List<String> actions) {
 
-        this.name = name;
-        this.level = level;
-        this.actions = actions;
+		this.name = name;
+		this.level = level;
+		this.actions = actions;
 
-        ChatColor c = ChatColor.valueOf(color);
-        if (c == null) {
-            AntiCheatReloaded.getPlugin().getLogger().warning("Event '" + name + "' was initialized with the color '" + color + "' which is invalid.");
-            AntiCheatReloaded.getPlugin().getLogger().warning("This event will not run properly. See http://jd.bukkit.org/apidocs/org/bukkit/ChatColor.html#enum_constant_summary for a list of valid colors");
-        } else {
-            this.color = c;
-        }
-    }
-    public String getName() {
-        return name;
-    }
+		ChatColor c = ChatColor.valueOf(color);
+		if (c == null) {
+			AntiCheatReloaded.getPlugin().getLogger()
+					.warning("Event '" + name + "' was initialized with the color '" + color + "' which is invalid.");
+			AntiCheatReloaded.getPlugin().getLogger().warning(
+					"This event will not run properly. See http://jd.bukkit.org/apidocs/org/bukkit/ChatColor.html#enum_constant_summary for a list of valid colors");
+		} else {
+			this.color = c;
+		}
+	}
 
-    public int getLevel() {
-        return level;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public ChatColor getColor() {
-        return color;
-    }
+	public int getLevel() {
+		return level;
+	}
 
-    public List<String> getActions() {
-        return actions;
-    }
+	public ChatColor getColor() {
+		return color;
+	}
 
-    public static Group load(String string) {
-        try {
-            if (string.split(" : ").length == 4) {
-                String name = string.split(" : ")[0];
-                int level = Integer.parseInt(string.split(" : ")[1]);
-                String color = string.split(" : ")[2];
-                List<String> actions = Arrays.asList(string.split(" : ")[3].split(","));
-                return new Group(name, level, color, actions);
-            } else {
-                throw new Exception();
-            }
-        } catch (Exception ex) {
-            AntiCheatReloaded.getPlugin().getLogger().warning("An event was initialized with an invalid string: '" + string + "'");
-            AntiCheatReloaded.getPlugin().getLogger().warning("The proper format is: 'name : threshold : color : action' such as 'High : 50 : RED : KICK'");
-            AntiCheatReloaded.getPlugin().getLogger().warning("This event will NOT run. (" + ex.getMessage() + ")");
-            return null;
-        }
-    }
+	public List<String> getActions() {
+		return actions;
+	}
 
-    @Override
-    public String toString() {
-        return name + " : " + level + " : " + color.name() + " : " + Utilities.listToCommaString(actions);
-    }
+	public static Group load(String string) {
+		try {
+			if (string.split(" : ").length == 4) {
+				String name = string.split(" : ")[0];
+				int level = Integer.parseInt(string.split(" : ")[1]);
+				String color = string.split(" : ")[2];
+				List<String> actions = Arrays.asList(string.split(" : ")[3].split(","));
+				return new Group(name, level, color, actions);
+			} else {
+				throw new Exception();
+			}
+		} catch (Exception ex) {
+			AntiCheatReloaded.getPlugin().getLogger()
+					.warning("An event was initialized with an invalid string: '" + string + "'");
+			AntiCheatReloaded.getPlugin().getLogger().warning(
+					"The proper format is: 'name : threshold : color : action' such as 'High : 50 : RED : KICK'");
+			AntiCheatReloaded.getPlugin().getLogger().warning("This event will NOT run. (" + ex.getMessage() + ")");
+			return null;
+		}
+	}
+
+	@Override
+	public String toString() {
+		return name + " : " + level + " : " + color.name() + " : " + Utilities.listToCommaString(actions);
+	}
 }

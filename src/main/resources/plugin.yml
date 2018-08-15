@@ -60,8 +60,11 @@ permissions:
   anticheat.check.zombe.cheat:
     description: Allow players to use zombe cheat hack
     default: false
-  anticheat.check.fly:
+  anticheat.check.flight:
     description: Allow players to fly
+    default: false
+  anticheat.check.elytra:
+    description: Allow players to fly when using elytra
     default: false
   anticheat.check.waterwalk:
     description: Allow players to walk on water

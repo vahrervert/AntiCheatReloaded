@@ -64,7 +64,7 @@ public class NPC_1_12 {
 	public int getID() {
 		return this.entityId;
 	}
-	
+
 	public NPC_1_12(Player owner) {
 		this.owner = owner.getUniqueId();
 		this.name = NameGenerator.generateName();
@@ -85,15 +85,21 @@ public class NPC_1_12 {
 						this.location.getZ(), 0.0f, 0.0f);
 		this.npc.collides = false;
 		this.npc.setInvisible(true);
-		this.npc.setEquipment(EnumItemSlot.CHEST, AntiCheatReloaded.getRandom().nextBoolean() ? CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_CHESTPLATE)) : CraftItemStack.asNMSCopy(new ItemStack(Material.CHAINMAIL_CHESTPLATE)));
-		this.npc.setEquipment(EnumItemSlot.FEET, AntiCheatReloaded.getRandom().nextBoolean() ? CraftItemStack.asNMSCopy(new ItemStack(Material.CHAINMAIL_BOOTS)) : CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_BOOTS)));
+		this.npc.setEquipment(EnumItemSlot.CHEST,
+				AntiCheatReloaded.getRandom().nextBoolean()
+						? CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_CHESTPLATE))
+						: CraftItemStack.asNMSCopy(new ItemStack(Material.CHAINMAIL_CHESTPLATE)));
+		this.npc.setEquipment(EnumItemSlot.FEET,
+				AntiCheatReloaded.getRandom().nextBoolean()
+						? CraftItemStack.asNMSCopy(new ItemStack(Material.CHAINMAIL_BOOTS))
+						: CraftItemStack.asNMSCopy(new ItemStack(Material.DIAMOND_BOOTS)));
 		this.entityId = this.npc.getId();
 		final PlayerConnection connection = ((CraftPlayer) this.getOwner()).getHandle().playerConnection;
 		connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER,
 				new EntityPlayer[] { this.npc }));
 		connection.sendPacket(new PacketPlayOutNamedEntitySpawn((EntityHuman) this.npc));
 	}
-	
+
 	public boolean up = true;
 
 	public void move(PlayerMoveEvent e) {
@@ -106,11 +112,14 @@ public class NPC_1_12 {
 				vec.setZ(-3 * vec.getZ());
 				Location back = eyelocation.add(vec);
 				this.location = back; // TODO
-				this.npc.setPositionRotation(back.getX(), back.getY(), back.getZ(), (float)new Random().nextFloat() * 20, (float)new Random().nextFloat() * 20);
-				((CraftPlayer) this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityTeleport(npc));
+				this.npc.setPositionRotation(back.getX(), back.getY(), back.getZ(),
+						(float) new Random().nextFloat() * 20, (float) new Random().nextFloat() * 20);
+				((CraftPlayer) this.getOwner()).getHandle().playerConnection
+						.sendPacket(new PacketPlayOutEntityTeleport(npc));
 				if (new Random().nextInt(50) == 25 && this.npc.isInvisible()) {
 					this.npc.setInvisible(false);
-					((CraftPlayer) this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
+					((CraftPlayer) this.getOwner()).getHandle().playerConnection
+							.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 					new BukkitRunnable() {
 						@Override
 						public void run() {
@@ -118,11 +127,12 @@ public class NPC_1_12 {
 								return;
 							}
 							npc.setInvisible(true);
-							((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
+							((CraftPlayer) getOwner()).getHandle().playerConnection
+									.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 						}
 					}.runTaskLater(AntiCheatReloaded.getPlugin(), 4);
 				}
-			}else {
+			} else {
 				Location eyelocation = e.getPlayer().getEyeLocation();
 				Vector vec = e.getPlayer().getLocation().getDirection();
 				vec.setX(-3 * vec.getX());
@@ -130,8 +140,10 @@ public class NPC_1_12 {
 				vec.setZ(-3 * vec.getZ());
 				Location back = eyelocation.add(vec);
 				this.location = back; // TODO
-				this.npc.setPositionRotation(back.getX(), back.getY(), back.getZ(), (float)new Random().nextFloat() * 20, (float)new Random().nextFloat() * 20);
-				((CraftPlayer) this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityTeleport(npc));
+				this.npc.setPositionRotation(back.getX(), back.getY(), back.getZ(),
+						(float) new Random().nextFloat() * 20, (float) new Random().nextFloat() * 20);
+				((CraftPlayer) this.getOwner()).getHandle().playerConnection
+						.sendPacket(new PacketPlayOutEntityTeleport(npc));
 			}
 		} else if (e.getTo().getPitch() >= 22) {
 			Location eyelocation = e.getPlayer().getEyeLocation();
@@ -141,8 +153,10 @@ public class NPC_1_12 {
 			vec.setZ(-3 * vec.getZ());
 			Location back = eyelocation.add(vec);
 			this.location = back; // TODO
-			this.npc.setPositionRotation(back.getX(), back.getY(), back.getZ(), (float)new Random().nextFloat() * 20, (float)new Random().nextFloat() * 20);
-			((CraftPlayer) this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityTeleport(npc));
+			this.npc.setPositionRotation(back.getX(), back.getY(), back.getZ(), (float) new Random().nextFloat() * 20,
+					(float) new Random().nextFloat() * 20);
+			((CraftPlayer) this.getOwner()).getHandle().playerConnection
+					.sendPacket(new PacketPlayOutEntityTeleport(npc));
 		} else {
 			Location eyelocation = e.getPlayer().getEyeLocation();
 			Vector vec = e.getPlayer().getLocation().getDirection();
@@ -156,12 +170,14 @@ public class NPC_1_12 {
 			vec.setZ(-1.95 * vec.getZ());
 			Location back = eyelocation.add(vec);
 			this.location = back; // TODO
-			this.npc.setPositionRotation(back.getX(), back.getY(), back.getZ(), (float)new Random().nextFloat() * 20, (float)new Random().nextFloat() * 20);
+			this.npc.setPositionRotation(back.getX(), back.getY(), back.getZ(), (float) new Random().nextFloat() * 20,
+					(float) new Random().nextFloat() * 20);
 			((CraftPlayer) this.getOwner()).getHandle().playerConnection
 					.sendPacket(new PacketPlayOutEntityTeleport(npc));
 			if (new Random().nextInt(1000) == 500 && this.npc.isInvisible()) {
 				this.npc.setInvisible(false);
-				((CraftPlayer) this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
+				((CraftPlayer) this.getOwner()).getHandle().playerConnection
+						.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 				new BukkitRunnable() {
 					@Override
 					public void run() {
@@ -169,7 +185,8 @@ public class NPC_1_12 {
 							return;
 						}
 						npc.setInvisible(true);
-						((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
+						((CraftPlayer) getOwner()).getHandle().playerConnection
+								.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 					}
 				}.runTaskLater(AntiCheatReloaded.getPlugin(), 6);
 			}
@@ -186,7 +203,8 @@ public class NPC_1_12 {
 		}
 		if (new Random().nextBoolean() && this.npc.isInvisible()) {
 			this.npc.setInvisible(false);
-			((CraftPlayer) this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
+			((CraftPlayer) this.getOwner()).getHandle().playerConnection
+					.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 			new BukkitRunnable() {
 				@Override
 				public void run() {
@@ -194,19 +212,21 @@ public class NPC_1_12 {
 						return;
 					}
 					npc.setInvisible(true);
-					((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
+					((CraftPlayer) getOwner()).getHandle().playerConnection
+							.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 				}
 			}.runTaskLater(AntiCheatReloaded.getPlugin(), 6 + new Random().nextInt(7));
 		}
 	}
-	
+
 	public void damage() {
 		if (this.npc == null || this.getOwner() == null) {
 			return;
 		}
 		if (new Random().nextBoolean() && this.npc.isInvisible()) {
 			this.npc.setInvisible(false);
-			((CraftPlayer) this.getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
+			((CraftPlayer) this.getOwner()).getHandle().playerConnection
+					.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 			new BukkitRunnable() {
 				@Override
 				public void run() {
@@ -214,7 +234,8 @@ public class NPC_1_12 {
 						return;
 					}
 					npc.setInvisible(true);
-					((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
+					((CraftPlayer) getOwner()).getHandle().playerConnection
+							.sendPacket(new PacketPlayOutEntityMetadata(entityId, npc.getDataWatcher(), false));
 				}
 			}.runTaskLater(AntiCheatReloaded.getPlugin(), 6 + new Random().nextInt(8));
 		}

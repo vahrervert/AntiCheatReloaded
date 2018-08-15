@@ -19,6 +19,7 @@
 
 package com.rammelkast.anticheatreloaded.event;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
@@ -48,13 +49,21 @@ public class VehicleListener extends EventListener {
     }
 
 
-    @Deprecated
     @EventHandler(ignoreCancelled = true)
     public void onVehicleDestroy(VehicleDestroyEvent event) {
     	// TODO fix deprecations
-        if (event.getVehicle().getPassenger() != null && event.getVehicle().getPassenger() instanceof Player) {
-            getBackend().logEnterExit((Player) event.getVehicle().getPassenger());
-        }
+        //if (event.getVehicle().getPassenger() != null && event.getVehicle().getPassenger() instanceof Player) {
+        //    getBackend().logEnterExit((Player) event.getVehicle().getPassenger());
+        //}
+    	
+    	// TODO this should work, untested though.
+    	if (!event.getVehicle().getPassengers().isEmpty()) {
+    		for (Entity entity: event.getVehicle().getPassengers()) {
+    			if (entity instanceof Player) {
+    				getBackend().logEnterExit((Player) entity);
+    			}
+    		}
+    	}
 
         AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
     }

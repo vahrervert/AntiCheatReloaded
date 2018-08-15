@@ -88,7 +88,7 @@ public class Rule {
     private Type type;
 
     public enum Type {
-        CONDITIONAL(".*[?]*.*:.*", "net.gravitydevelopment.anticheat.util.rule.ConditionalRule");
+        CONDITIONAL(".*[?]*.*:.*", "com.rammelkast.anticheatreloaded.util.rule.ConditionalRule");
 
         private String regex;
         private String c;

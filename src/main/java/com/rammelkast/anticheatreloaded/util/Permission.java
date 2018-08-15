@@ -22,77 +22,46 @@ package com.rammelkast.anticheatreloaded.util;
 import org.bukkit.command.CommandSender;
 
 public enum Permission {
-    /* Check Nodes */
-    CHECK_ZOMBE_FLY,
-    CHECK_ZOMBE_NOCLIP,
-    CHECK_ZOMBE_CHEAT,
-    CHECK_FLY,
-    CHECK_WATERWALK,
-    CHECK_NOSWING,
-    CHECK_FASTBREAK,
-    CHECK_FASTPLACE,
-    CHECK_CHATSPAM,
-    CHECK_COMMANDSPAM,
-    CHECK_SPRINT,
-    CHECK_SNEAK,
-    CHECK_SPEED,
-    CHECK_VCLIP,
-    CHECK_SPIDER,
-    CHECK_NOFALL,
-    CHECK_FASTBOW,
-    CHECK_FASTEAT,
-    CHECK_FASTHEAL,
-    CHECK_FORCEFIELD,
-    CHECK_LONGREACH,
-    CHECK_FASTPROJECTILE,
-    CHECK_ITEMSPAM,
-    CHECK_VISUAL,
-    CHECK_FASTINVENTORY,
-    CHECK_AUTOTOOL,
+	/* Check Nodes */
+	CHECK_ZOMBE_FLY, CHECK_ZOMBE_NOCLIP, CHECK_ZOMBE_CHEAT, CHECK_FLIGHT, CHECK_ELYTRA, CHECK_WATERWALK, CHECK_NOSWING, CHECK_FASTBREAK,
+	CHECK_FASTPLACE, CHECK_CHATSPAM, CHECK_COMMANDSPAM, CHECK_SPRINT, CHECK_SNEAK, CHECK_SPEED, CHECK_VCLIP,
+	CHECK_SPIDER, CHECK_NOFALL, CHECK_FASTBOW, CHECK_FASTEAT, CHECK_FASTHEAL, CHECK_FORCEFIELD, CHECK_LONGREACH,
+	CHECK_FASTPROJECTILE, CHECK_ITEMSPAM, CHECK_VISUAL, CHECK_FASTINVENTORY, CHECK_AUTOTOOL,
 
-    /* System Nodes */
-    SYSTEM_LOG,
-    SYSTEM_RESET,
-    SYSTEM_SPY,
-    SYSTEM_HELP,
-    SYSTEM_UPDATE,
-    SYSTEM_REPORT,
-    SYSTEM_ALERT,
-    SYSTEM_NOTICE,
-    SYSTEM_CALIBRATE,
-    SYSTEM_CHECK,
-    SYSTEM_DEBUG,
-    SYSTEM_RELOAD, CHECK_KILLAURA, CHECK_BLINK, VELOCITY, CRITICALS;
+	/* System Nodes */
+	SYSTEM_LOG, SYSTEM_RESET, SYSTEM_SPY, SYSTEM_HELP, SYSTEM_UPDATE, SYSTEM_REPORT, SYSTEM_ALERT, SYSTEM_NOTICE,
+	SYSTEM_CALIBRATE, SYSTEM_CHECK, SYSTEM_DEBUG, SYSTEM_RELOAD, CHECK_KILLAURA, CHECK_BLINK, VELOCITY, CRITICALS;
 
-    private static final String PERMISSION_ALL = "anticheat.*";
-    private static final String PERMISSION_SPAM = "anticheat.check.spam";
+	private static final String PERMISSION_ALL = "anticheat.*";
+	private static final String PERMISSION_SPAM = "anticheat.check.spam";
 
-    public static boolean getCommandExempt(CommandSender cs, String commandLabel) {
-        // Check permission, base, and all will have already been checked
-        return cs.hasPermission(CHECK_COMMANDSPAM.toString() + commandLabel);
-    }
+	public static boolean getCommandExempt(CommandSender cs, String commandLabel) {
+		// Check permission, base, and all will have already been checked
+		return cs.hasPermission(CHECK_COMMANDSPAM.toString() + commandLabel);
+	}
 
-    public boolean get(CommandSender cs) {
-        if ((this == CHECK_CHATSPAM || this == CHECK_COMMANDSPAM) && cs.hasPermission(PERMISSION_SPAM)) return true;
-        return cs.hasPermission(toString()) || cs.hasPermission(getBase()) || cs.hasPermission(PERMISSION_ALL);
-    }
+	public boolean get(CommandSender cs) {
+		if ((this == CHECK_CHATSPAM || this == CHECK_COMMANDSPAM) && cs.hasPermission(PERMISSION_SPAM))
+			return true;
+		return cs.hasPermission(toString()) || cs.hasPermission(getBase()) || cs.hasPermission(PERMISSION_ALL);
+	}
 
-    public String getBase() {
-        return "anticheat." + this.name().toLowerCase().split("_")[0] + ".*";
-    }
+	public String getBase() {
+		return "anticheat." + this.name().toLowerCase().split("_")[0] + ".*";
+	}
 
-    public String whichPermission(CommandSender cs) {
-        for (String s : new String[]{PERMISSION_ALL, getBase(), toString()}) {
-            if (cs.hasPermission(s)) {
-                return s;
-            }
-        }
-        return null;
-    }
+	public String whichPermission(CommandSender cs) {
+		for (String s : new String[] { PERMISSION_ALL, getBase(), toString() }) {
+			if (cs.hasPermission(s)) {
+				return s;
+			}
+		}
+		return null;
+	}
 
-    @Override
-    public String toString() {
-        return "anticheat." + this.name().toLowerCase().replace("_", ".");
-    }
+	@Override
+	public String toString() {
+		return "anticheat." + this.name().toLowerCase().replace("_", ".");
+	}
 
 }

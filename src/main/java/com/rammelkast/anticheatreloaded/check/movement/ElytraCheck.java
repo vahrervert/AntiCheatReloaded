@@ -19,20 +19,39 @@
 
 package com.rammelkast.anticheatreloaded.check.movement;
 
+import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Distance;
+import com.rammelkast.anticheatreloaded.util.Utilities;
 
 /**
  * TODO
  */
-public class ElytraFly {
+public class ElytraCheck {
 
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
-	
+
 	public static CheckResult runCheck(Player player, Distance distance) {
+		if (distance.getYDifference() > AntiCheatReloaded.getManager().getBackend().getMagic().TELEPORT_MIN()) {
+			// This was a teleport, so skip check.
+			return PASS;
+		}
+		if (!FlightCheck.isMovingExempt(player) && !Utilities.isHoveringOverWater(player.getLocation(), 1)
+				&& Utilities.cantStandAtExp(player.getLocation())
+				&& Utilities.blockIsnt(player.getLocation().getBlock().getRelative(BlockFace.DOWN),
+						new Material[] { Material.FENCE, Material.FENCE_GATE, Material.COBBLE_WALL,
+								Material.ACACIA_FENCE, Material.ACACIA_FENCE_GATE, Material.BIRCH_FENCE,
+								Material.BIRCH_FENCE_GATE, Material.DARK_OAK_FENCE, Material.DARK_OAK_FENCE_GATE,
+								Material.IRON_FENCE, Material.JUNGLE_FENCE, Material.JUNGLE_FENCE_GATE,
+								Material.NETHER_FENCE, Material.SPRUCE_FENCE, Material.SPRUCE_FENCE_GATE, Material.IRON_BARDING })) {
+
+		}
+
 		return PASS;
 	}
-	
+
 }

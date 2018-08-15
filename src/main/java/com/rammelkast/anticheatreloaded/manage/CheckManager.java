@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.config.Configuration;
+import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -177,8 +178,7 @@ public class CheckManager {
                 && !type.checkPermission(player)
                 && !isOpExempt(player);
         AntiCheatReloaded.debugLog("Check " + type + (check ? " run " : " not run ") + "on " + player.getName());
-        // TODO temp fix
-        if ((type == CheckType.FLY || type == CheckType.SPEED) && player.isFlying())
+        if ((type == CheckType.FLIGHT || type == CheckType.SPEED) && VersionUtil.isFlying(player))
         	return false;
         return check;
     }

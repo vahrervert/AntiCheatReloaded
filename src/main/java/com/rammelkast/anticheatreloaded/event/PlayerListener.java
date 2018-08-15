@@ -56,7 +56,7 @@ import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
-import com.rammelkast.anticheatreloaded.check.movement.ElytraFly;
+import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
 import com.rammelkast.anticheatreloaded.check.movement.GlideCheck;
 import com.rammelkast.anticheatreloaded.check.movement.SpeedCheck;
@@ -153,7 +153,7 @@ public class PlayerListener extends EventListener {
     @EventHandler
     public void onPlayerVelocity(PlayerVelocityEvent event) {
         Player player = event.getPlayer();
-        if (getCheckManager().willCheck(player, CheckType.FLY)) {
+        if (getCheckManager().willCheck(player, CheckType.FLIGHT)) {
             if (getBackend().justVelocity(player) && getBackend().extendVelocityTime(player)) {
                 event.setCancelled(!silentMode());
                 return;
@@ -332,26 +332,26 @@ public class PlayerListener extends EventListener {
                     log(result.getMessage(), player, CheckType.SPRINT);
                 }
             }
-            if (getCheckManager().willCheckQuick(player, CheckType.FLY) && !VersionUtil.isFlying(player)) {
+            if (getCheckManager().willCheckQuick(player, CheckType.FLIGHT) && !VersionUtil.isFlying(player)) {
                 CheckResult result = FlightCheck.runCheck(player, distance);
                 if (result.failed()) {
                     if (!silentMode()) {
                         event.setTo(user.getGoodLocation(from.clone()));
                     }
-                    log(result.getMessage(), player, CheckType.FLY);
+                    log(result.getMessage(), player, CheckType.FLIGHT);
                 }
             }
-            if (getCheckManager().willCheckQuick(player, CheckType.FLY) && !VersionUtil.isFlying(player)) {
+            if (getCheckManager().willCheckQuick(player, CheckType.FLIGHT) && !VersionUtil.isFlying(player)) {
                 CheckResult result = GlideCheck.runCheck(player, distance);
                 if (result.failed()) {
                 	// NO TELEPORT NEEDED HERE, HANDLED BY CHECK ITSELF
-                    log(result.getMessage(), player, CheckType.FLY);
+                    log(result.getMessage(), player, CheckType.FLIGHT);
                 }
             }
-            if (getCheckManager().willCheckQuick(player, CheckType.FLY)) {
-            	 CheckResult result = ElytraFly.runCheck(player, distance);
+            if (getCheckManager().willCheckQuick(player, CheckType.ELYTRA)) {
+            	 CheckResult result = ElytraCheck.runCheck(player, distance);
                  if (result.failed()) {
-                     log(result.getMessage(), player, CheckType.FLY);
+                     log(result.getMessage(), player, CheckType.ELYTRA);
                  }
             }
             if (getCheckManager().willCheckQuick(player, CheckType.VCLIP) && event.getFrom().getY() > event.getTo().getY()) {
@@ -370,7 +370,7 @@ public class PlayerListener extends EventListener {
                     log(result.getMessage(), player, CheckType.VCLIP);
                 }
             }
-            if (getCheckManager().willCheckQuick(player, CheckType.NOFALL) && getCheckManager().willCheck(player, CheckType.FLY) && !Utilities.isClimbableBlock(player.getLocation().getBlock()) && event.getFrom().getY() > event.getTo().getY()) {
+            if (getCheckManager().willCheckQuick(player, CheckType.NOFALL) && getCheckManager().willCheck(player, CheckType.FLIGHT) && !Utilities.isClimbableBlock(player.getLocation().getBlock()) && event.getFrom().getY() > event.getTo().getY()) {
                 CheckResult result = getBackend().checkNoFall(player, y);
                 if (result.failed()) {
                     if (!silentMode()) {
@@ -385,7 +385,7 @@ public class PlayerListener extends EventListener {
             if (event.getTo() != event.getFrom()) {
                 double x = distance.getXDifference();
                 double z = distance.getZDifference();
-                if (getCheckManager().willCheckQuick(player, CheckType.SPEED) && getCheckManager().willCheck(player, CheckType.FLY)) {
+                if (getCheckManager().willCheckQuick(player, CheckType.SPEED) && getCheckManager().willCheck(player, CheckType.FLIGHT)) {
                     if (event.getFrom().getY() < event.getTo().getY()) {
                         CheckResult result = getBackend().checkYSpeed(player, y);
                         if (result.failed()) {
@@ -462,7 +462,7 @@ public class PlayerListener extends EventListener {
             return;
         }
 
-        if (getCheckManager().willCheck(player, CheckType.FLY) && !player.isFlying()) {
+        if (getCheckManager().willCheck(player, CheckType.FLIGHT) && !player.isFlying()) {
             CheckResult result1 = YAxisCheck.runCheck(player, new Distance(from, to));
             CheckResult result2 = getBackend().checkAscension(player, from.getY(), to.getY());
             String log = result1.failed() ? result1.getMessage() : result2.failed() ? result2.getMessage() : "";
@@ -470,7 +470,7 @@ public class PlayerListener extends EventListener {
                 if (!silentMode()) {
                     event.setTo(user.getGoodLocation(from.clone()));
                 }
-                log(log, player, CheckType.FLY);
+                log(log, player, CheckType.FLIGHT);
             }
         }
     }

@@ -56,7 +56,11 @@ public class FlightCheck {
 		if (!isMovingExempt(player) && !Utilities.isHoveringOverWater(player.getLocation(), 1)
 				&& Utilities.cantStandAtExp(player.getLocation())
 				&& Utilities.blockIsnt(player.getLocation().getBlock().getRelative(BlockFace.DOWN),
-						new Material[] { Material.FENCE, Material.FENCE_GATE, Material.COBBLE_WALL })) {
+						new Material[] { Material.FENCE, Material.FENCE_GATE, Material.COBBLE_WALL,
+								Material.ACACIA_FENCE, Material.ACACIA_FENCE_GATE, Material.BIRCH_FENCE,
+								Material.BIRCH_FENCE_GATE, Material.DARK_OAK_FENCE, Material.DARK_OAK_FENCE_GATE,
+								Material.IRON_FENCE, Material.JUNGLE_FENCE, Material.JUNGLE_FENCE_GATE,
+								Material.NETHER_FENCE, Material.SPRUCE_FENCE, Material.SPRUCE_FENCE_GATE, Material.IRON_BARDING })) {
 
 			if (!blocksOverFlight.containsKey(uuid)) {
 				blocksOverFlight.put(uuid, 0D);
