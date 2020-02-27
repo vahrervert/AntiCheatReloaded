@@ -1,7 +1,7 @@
 /*
  * AntiCheatReloaded for Bukkit and Spigot.
- * Copyright (c) 2012-2015 AntiCheat Team | http://gravitydevelopment.net
- * Copyright (c) 2016-2018 Rammelkast | https://rammelkast.com
+ * Copyright (c) 2012-2015 AntiCheat Team
+ * Copyright (c) 2016-2020 Rammelkast
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,14 +31,13 @@ public class CommandHelp extends CommandBase {
     private static final String USAGE = "anticheat help";
     private static final Permission PERMISSION = Permission.SYSTEM_HELP;
     private static final String[] HELP = {
-            RED + "/anti " + GRAY + "help",
-            RED + "/anti " + GRAY + "reload",
-            RED + "/anti " + GRAY + "update",
-            RED + "/anti " + GRAY + "debug " + WHITE + "<user>",
-            RED + "/anti " + GRAY + "check " + WHITE + "[check] [on/off]",
-            RED + "/anti " + GRAY + "log " + WHITE + "[file/console] [on/off]",
-            RED + "/anti " + GRAY + "report " + WHITE + "[group/user]",
-            RED + "/anti " + GRAY + "reset " + WHITE + "[user]",
+            RED + "/acr " + GRAY + "help",
+            RED + "/acr " + GRAY + "reload",
+            RED + "/acr " + GRAY + "update",
+            RED + "/acr " + GRAY + "check " + WHITE + "[check] [on/off]",
+            RED + "/acr " + GRAY + "log " + WHITE + "[file/console] [on/off]",
+            RED + "/acr " + GRAY + "report " + WHITE + "[group/user]",
+            RED + "/acr " + GRAY + "reset " + WHITE + "[user]",
     };
 
     public CommandHelp() {
