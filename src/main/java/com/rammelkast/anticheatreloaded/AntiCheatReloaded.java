@@ -323,4 +323,8 @@ public class AntiCheatReloaded extends JavaPlugin {
 		this.glideViolations++;
 	}
 
+	public static void sendToMainThread(Runnable runnable) {
+		Bukkit.getServer().getScheduler().runTask(AntiCheatReloaded.getPlugin(), runnable);
+	}
+	
 }

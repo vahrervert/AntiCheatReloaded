@@ -69,7 +69,7 @@ public class WaterWalkCheck {
 							}
 							if (!b && !Utilities.isFullyInWater(player.getLocation())
 									&& Utilities.isHoveringOverWater(player.getLocation(), 1) && y == 0D
-									&& !block.getType().equals(Material.WATER_LILY)) {
+									&& !block.getType().equals(Material.LILY_PAD)) {
 								b = true;
 							}
 							if (b) {

@@ -19,42 +19,28 @@
 
 package com.rammelkast.anticheatreloaded.check.combat;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
-import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
-import com.rammelkast.anticheatreloaded.check.CheckResult;
-import com.rammelkast.anticheatreloaded.check.CheckType;
-import com.rammelkast.anticheatreloaded.event.EventListener;
-import com.rammelkast.anticheatreloaded.util.NPC_1_12;
-import com.rammelkast.anticheatreloaded.util.VersionUtil;
-
 /**
  * @author Rammelkast
  */
+@Deprecated
 public class KillAuraCheck {
 
-	private static final Map<UUID, NPC_1_12> NPC_LIST = new HashMap<UUID, NPC_1_12>();
-	private static final Map<UUID, Integer> VL_COUNT = new HashMap<UUID, Integer>();
+	//private static final Map<UUID, NPC_1_12> NPC_LIST = new HashMap<UUID, NPC_1_12>();
+	//private static final Map<UUID, Integer> VL_COUNT = new HashMap<UUID, Integer>();
 
 	public static void cleanPlayer(Player p) {
-		if (!VersionUtil.getVersion().equals("v1_12_R1")) {
+		/*if (!VersionUtil.getVersion().equals("v1_12_R1")) {
 			return;
 		}
-		NPC_LIST.remove(p.getUniqueId());
+		NPC_LIST.remove(p.getUniqueId());*/
 	}
 
 	public static void listenPackets() {
-		if (!VersionUtil.getVersion().equals("v1_12_R1")) {
+		/*if (!VersionUtil.getVersion().equals("v1_12_R1")) {
 			return;
 		}
 		AntiCheatReloaded.getProtocolManager().addPacketListener(new PacketAdapter(AntiCheatReloaded.getPlugin(),
@@ -86,11 +72,11 @@ public class KillAuraCheck {
 					}
 				}
 			}
-		});
+		});*/
 	}
 
 	public static void doDamageEvent(EntityDamageByEntityEvent e, Player p) {
-		if (!VersionUtil.getVersion().equals("v1_12_R1")) {
+		/*if (!VersionUtil.getVersion().equals("v1_12_R1")) {
 			return;
 		}
 		if (NPC_LIST.containsKey(p.getUniqueId()))
@@ -99,16 +85,16 @@ public class KillAuraCheck {
 			NPC_1_12 npc = new NPC_1_12(p);
 			NPC_LIST.put(p.getUniqueId(), npc);
 			npc.spawn();
-		}
+		}*/
 	}
 
 	public static void doMove(PlayerMoveEvent e) {
-		if (!VersionUtil.getVersion().equals("v1_12_R1")) {
+		/*if (!VersionUtil.getVersion().equals("v1_12_R1")) {
 			return;
 		}
 		if (NPC_LIST.containsKey(e.getPlayer().getUniqueId())) {
 			NPC_LIST.get(e.getPlayer().getUniqueId()).move(e);
-		}
+		}*/
 	}
 
 }

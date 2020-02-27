@@ -55,7 +55,6 @@ import org.bukkit.inventory.PlayerInventory;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
-import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
 import com.rammelkast.anticheatreloaded.check.movement.GlideCheck;
@@ -176,7 +175,26 @@ public class PlayerListener extends EventListener {
                     player.sendMessage(ChatColor.RED + result.getMessage());
                 }
                 getBackend().processChatSpammer(player);
-                log(null, player, CheckType.CHAT_SPAM);
+                AntiCheatReloaded.sendToMainThread(new Runnable() {
+					@Override
+					public void run() {
+						log(null, player, CheckType.CHAT_SPAM);
+					}
+				});
+            }
+        }
+        
+        if (getCheckManager().willCheck(player, CheckType.CHAT_UNICODE)) {
+            CheckResult result = getBackend().checkChatUnicode(player, event.getMessage());
+            if (result.failed()) {
+            	event.setCancelled(true);
+            	player.sendMessage(ChatColor.RED + result.getMessage());
+                AntiCheatReloaded.sendToMainThread(new Runnable() {
+					@Override
+					public void run() {
+						log(null, player, CheckType.CHAT_UNICODE);
+					}
+				});
             }
         }
 
@@ -225,10 +243,9 @@ public class PlayerListener extends EventListener {
         Player player = event.getPlayer();
         PlayerInventory inv = player.getInventory();
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            Material m = inv.getItemInHand().getType();
-            if (m == Material.BOW) {
+            if (inv.getItemInMainHand().getType() == Material.BOW) {
                 getBackend().logBowWindUp(player);
-            } else if (Utilities.isFood(m)) {
+            } else if (Utilities.isFood(inv.getItemInMainHand().getType()) || Utilities.isFood(inv.getItemInOffHand().getType())) {
                 getBackend().logEatingStart(player);
             }
         }
@@ -258,7 +275,7 @@ public class PlayerListener extends EventListener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerEnterBed(PlayerBedEnterEvent event) {
-        if (event.getBed().getType() != Material.BED) return;
+        if (event.getBed().getType().name().endsWith("BED")) return;
         getBackend().logEnterExit(event.getPlayer());
 
         AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
@@ -266,7 +283,7 @@ public class PlayerListener extends EventListener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerExitBed(PlayerBedLeaveEvent event) {
-        if (event.getBed().getType() != Material.BED) return;
+        if (event.getBed().getType().name().endsWith("BED")) return;
         getBackend().logEnterExit(event.getPlayer());
 
         AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
@@ -301,7 +318,7 @@ public class PlayerListener extends EventListener {
         if (player.hasMetadata(Utilities.SPY_METADATA)) {
             for (Player p : player.getServer().getOnlinePlayers()) {
                 if (!Permission.SYSTEM_SPY.get(p)) {
-                    p.hidePlayer(player);
+                    p.hidePlayer(AntiCheatReloaded.getPlugin(), player);
                 }
             }
         }
@@ -323,7 +340,8 @@ public class PlayerListener extends EventListener {
             final User user = getUserManager().getUser(player.getUniqueId());
             user.setTo(to.getX(), to.getY(), to.getZ());
             
-            KillAuraCheck.doMove(event);
+            //KillAuraCheck.doMove(event);
+            //TODO
             
             if (getCheckManager().willCheckQuick(player, CheckType.SPRINT)) {
                 CheckResult result = getBackend().checkSprintStill(player, from, to);
@@ -446,7 +464,8 @@ public class PlayerListener extends EventListener {
 
     @EventHandler(priority=EventPriority.HIGHEST)
     public void onDeath(PlayerDeathEvent e) {
-    	KillAuraCheck.cleanPlayer(e.getEntity()); // Remove bots on death to reduce lag
+    	//KillAuraCheck.cleanPlayer(e.getEntity()); // Remove bots on death to reduce lag
+    	//TODO
     }
     
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

@@ -2,6 +2,7 @@ name: AntiCheatReloaded
 author: Rammelkast
 description: AntiCheatReloaded helps easily identify and block malicious users on your server.
 main: com.rammelkast.anticheatreloaded.AntiCheatReloaded
+api-version: 1.13
 depend: [ProtocolLib]
 startup: postworld
 version: ${project.build.version}
@@ -129,8 +130,20 @@ permissions:
   anticheat.check.autotool:
     description: Allow players to use autotool to switch tools quickly
     default: false
-  anticheat.check.fastanimation:
-    description: Allow players to attack or interact very quickly
+  anticheat.check.killaura:
+    description: Allow players to use killaura
+    default: false
+  anticheat.check.blink:
+    description: Allow players to send lots of movement packets
+    default: false
+  anticheat.check.velocity:
+    description: Allow players to use knockback prevention
+    default: false
+  anticheat.check.criticals:
+    description: Allow players to use criticals
+    default: false
+  anticheat.check.unicode:
+    description: Allow players to use unicode in chat
     default: false
   anticheat.check.exempt:
     description: Total exemption from checks

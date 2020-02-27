@@ -19,6 +19,7 @@
 
 package com.rammelkast.anticheatreloaded.check;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -262,7 +263,7 @@ public class Backend {
     }
 
     public CheckResult checkYSpeed(Player player, double y) {
-        if (!isMovingExempt(player) && !player.isInsideVehicle() && !player.isSleeping() && (y > (VersionUtil.isNewYSpeed() ? magic.Y_SPEED_MAX() + 0.05 : magic.Y_SPEED_MAX())) && !isDoing(player, velocitized, magic.VELOCITY_TIME()) && !player.hasPotionEffect(PotionEffectType.JUMP) && !VersionUtil.isFlying(player)) {
+        if (!isMovingExempt(player) && !player.isInsideVehicle() && !player.isSleeping() && (y > magic.Y_SPEED_MAX())  && !isDoing(player, velocitized, magic.VELOCITY_TIME()) && !player.hasPotionEffect(PotionEffectType.JUMP) && !VersionUtil.isFlying(player)) {
             return new CheckResult(CheckResult.Result.FAILED, player.getName() + "'s y speed was too high (speed=" + y + ", max=" + magic.Y_SPEED_MAX() + ")");
         } else {
             return PASS;
@@ -432,7 +433,7 @@ public class Backend {
     public CheckResult checkSwing(Player player, Block block) {
         UUID uuid = player.getUniqueId();
         if (!isInstantBreakExempt(player)) {
-            if (!VersionUtil.getItemInHand(player).containsEnchantment(Enchantment.DIG_SPEED) && !(VersionUtil.getItemInHand(player).getType() == Material.SHEARS && block.getType() == Material.LEAVES)) {
+            if (!VersionUtil.getItemInHand(player).containsEnchantment(Enchantment.DIG_SPEED) && !(VersionUtil.getItemInHand(player).getType() == Material.SHEARS && block.getType().name().endsWith("LEAVES"))) {
                 if (blockPunches.get(uuid) != null && player.getGameMode() != GameMode.CREATIVE) {
                     int i = blockPunches.get(uuid);
                     if (i < magic.BLOCK_PUNCH_MIN()) {
@@ -584,7 +585,21 @@ public class Backend {
         user.addMessage(msg);
         return PASS;
     }
+    
+    public CheckResult checkChatUnicode(Player player, String msg) {
+        UUID uuid = player.getUniqueId();
+        User user = manager.getUserManager().getUser(uuid);
+        if (!isPureAscii(msg)) {
+        	return new CheckResult(CheckResult.Result.FAILED, "Unicode chat is not allowed.");
+        }
+        user.addMessage(msg);
+        return PASS;
+    }
 
+	private boolean isPureAscii(String v) {
+		return StandardCharsets.US_ASCII.newEncoder().canEncode(v.replaceAll("¡", "!").replaceAll("¿", "?"));
+	}
+    
     public CheckResult checkCommandSpam(Player player, String cmd) {
         UUID uuid = player.getUniqueId();
         User user = manager.getUserManager().getUser(uuid);
