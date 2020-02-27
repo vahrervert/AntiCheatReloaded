@@ -1,12 +1,10 @@
 AntiCheatReloaded
 =============
-AntiCheatReloaded is a fork of the old 'AntiCheat' project.
-AntiCheat helps server admins easily identify and block malicious users by monitoring and analyzing the behaviour of their players.
+AntiCheatReloaded helps server admins easily identify and block malicious users by monitoring and analyzing the behaviour of their players. It is based on one of the oldest anti-cheats in the community, AntiCheat.
 
-### BTC donations: 1DwUKboRQKrgR9o1oZC4VutkCUwdZStHtk
-### LTC donations: LTXzGnVLXmiH5XJch1bKrcZtzQjaF9rd8V
-
-See the [current project plan](https://trello.com/b/zaeCVY0H/anticheatreloaded) on Trello.
++ BTC donations: bc1q5qgmzq9e63h7ptf3kneg78uf0mghtwsmvwxt8m
++ LTC donations: LYZLe6AGRQZTey5UHe7CCF3e9HAyQooSmh
++ ETH donations: 0x2a2171fB3600fc67951734c2872E0Ad742741Cf2
 
 Bug Reporting
 ------------
@@ -32,7 +30,7 @@ Hacks blocked
 * Jesus
 * Step
 * Criticals
-* KillAura
+* KillAura (not available on MC > 1.12.2
 * Anti-Knockback
 * FastBow
 * FastDrop
