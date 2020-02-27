@@ -85,17 +85,14 @@ XZ_SPEED_MAX_WATER_SPRINT: 0.3
 Y_MAXDIFF: 5.0
 Y_MAXVIOLATIONS: 1
 Y_MAXVIOTIME: 5500
-Y_SPEED_MAX: 0.5125
+Y_SPEED_MAX: 0.5175
 Y_TIME: 800
 # Amount of suspicious mid-air movements before a player is suspected of glide
 # Increase this in case of false positives
 GLIDE_LIMIT: 10
-# Amount of hits to a bot before a player is suspected
-# Increase this in case of false positives
-KILLAURA_BOTHITS: 4
 # Maximum amount of movement packets allowed per second
 # Increase this in case of false positives
-BLINK_PACKET: 74
+BLINK_PACKET: 25
 # Maximum amount zero-velocity moments before a player is suspected
 # Increase this in case of false positives
 VELOCITY_AMT: 5

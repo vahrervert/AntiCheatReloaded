@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -35,6 +36,7 @@ import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.event.EventListener;
+import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
  * @author Rammelkast
@@ -49,7 +51,7 @@ public class BlinkCheck {
 			public void run() {
 				MOVE_COUNT.clear();
 			}
-		}.runTaskTimer(AntiCheatReloaded.getPlugin(), 20, 20);
+		}.runTaskTimer(AntiCheatReloaded.getPlugin(), 100, 20);
 	}
 
 	public static void listenPackets() {
@@ -67,18 +69,35 @@ public class BlinkCheck {
 							if (AntiCheatReloaded.getManager().getCheckManager().checkInWorld(p)
 									&& !AntiCheatReloaded.getManager().getCheckManager().isOpExempt(p)
 									&& !AntiCheatReloaded.getManager().getCheckManager().isExempt(p, CheckType.BLINK)) {
-								if (MOVE_COUNT.get(p.getUniqueId()) > AntiCheatReloaded.getManager().getBackend()
-										.getMagic().BLINK_PACKET()) {
-									EventListener.log(
-											new CheckResult(CheckResult.Result.FAILED, p.getName()
-													+ " failed Blink, sent " + MOVE_COUNT.get(p.getUniqueId())
-													+ " packets in one second (max=" + AntiCheatReloaded.getManager()
-															.getBackend().getMagic().BLINK_PACKET()
-													+ ")").getMessage(),
-											p, CheckType.BLINK);
-									MOVE_COUNT.remove(p.getUniqueId());
-									e.setCancelled(true);
-									e.getPlayer().teleport(cur);
+								int ping = VersionUtil.getPlayerPing(p);
+								int blinkMagic = AntiCheatReloaded.getManager().getBackend()
+										.getMagic().BLINK_PACKET();
+								float pingLeniency = (float) ((ping / 150));
+								if (pingLeniency < 1) pingLeniency = 1;
+								if (pingLeniency > 3) pingLeniency = 3;
+								blinkMagic = Math.round(pingLeniency * blinkMagic);
+								final float finalPingLeniency = pingLeniency;
+								try {
+									if (MOVE_COUNT.get(p.getUniqueId()) > blinkMagic) {
+										final int packets = MOVE_COUNT.get(p.getUniqueId());
+										MOVE_COUNT.remove(p.getUniqueId());
+										AntiCheatReloaded.sendToMainThread(new Runnable() {
+											@Override
+											public void run() {
+												EventListener.log(
+														new CheckResult(CheckResult.Result.FAILED, p.getName()
+																+ " failed Blink, sent " + packets
+																+ " packets in one second (max=" + AntiCheatReloaded.getManager()
+																		.getBackend().getMagic().BLINK_PACKET()
+																+ ", leniency=" + finalPingLeniency + ", ping=" + ping + ")").getMessage(),
+														p, CheckType.BLINK);
+												e.setCancelled(true);
+												e.getPlayer().teleport(cur);
+											}
+										});
+									}
+								} catch (NullPointerException nullPointer) {
+									// TODO this is thrown sometimes, might have something to do with line 83
 								}
 							}
 						}

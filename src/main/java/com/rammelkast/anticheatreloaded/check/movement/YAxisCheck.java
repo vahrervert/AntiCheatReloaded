@@ -126,7 +126,8 @@ public class YAxisCheck {
 	}
 
 	public static boolean isMoveUpBlock(Block block) {
-		return VersionUtil.getMoveUpBlocks().contains(block.getType());
+		Material type = block.getType();
+		return type.name().endsWith("STAIRS"); // TODO slabs/others?
 	}
 
 }

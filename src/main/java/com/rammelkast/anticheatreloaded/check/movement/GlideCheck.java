@@ -24,17 +24,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
-import com.rammelkast.anticheatreloaded.check.Backend;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Distance;
-import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class GlideCheck {
@@ -47,6 +43,9 @@ public class GlideCheck {
 
 	public static CheckResult runCheck(Player player, Distance distance) {
 		if (VersionUtil.isFlying(player)) {
+			return PASS;
+		}
+		if (player.getLocation().getBlock().getType() == Material.LADDER || player.getLocation().getBlock().getRelative(0, 1, 0).getType() == Material.LADDER) {
 			return PASS;
 		}
 		if (!lastDiff.containsKey(player.getUniqueId())) {

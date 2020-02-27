@@ -64,8 +64,9 @@ public enum CheckType {
     AUTOTOOL(Permission.CHECK_AUTOTOOL),
     KILLAURA(Permission.CHECK_KILLAURA), 
     BLINK(Permission.CHECK_BLINK),
-	VELOCITY(Permission.VELOCITY),
-	CRITICALS(Permission.CRITICALS);
+	VELOCITY(Permission.CHECK_VELOCITY),
+	CRITICALS(Permission.CHECK_CRITICALS),
+	CHAT_UNICODE(Permission.CHECK_UNICODE);
 
     private final Permission permission;
     private final Map<UUID, Integer> level = new HashMap<UUID, Integer>();
