@@ -51,7 +51,7 @@ public class BlinkCheck {
 			public void run() {
 				MOVE_COUNT.clear();
 			}
-		}.runTaskTimer(AntiCheatReloaded.getPlugin(), 100, 20);
+		}.runTaskTimer(AntiCheatReloaded.getPlugin(), 20, 20);
 	}
 
 	public static void listenPackets() {

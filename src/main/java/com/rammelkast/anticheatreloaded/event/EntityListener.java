@@ -29,17 +29,15 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.check.combat.CriticalsCheck;
-import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
 import com.rammelkast.anticheatreloaded.util.Distance;
-
-import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 public class EntityListener extends EventListener {
 
@@ -105,9 +103,6 @@ public class EntityListener extends EventListener {
         if (event instanceof EntityDamageByEntityEvent) {
             EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) event;
             if (e.getDamager() instanceof Player) {
-            	if (getCheckManager().willCheck((Player)e.getDamager(), CheckType.KILLAURA)) {
-                	KillAuraCheck.doDamageEvent(e, (Player)e.getDamager());
-            	}
             	if (getCheckManager().willCheck((Player)e.getDamager(), CheckType.CRITICALS)) {
                 	CriticalsCheck.doDamageEvent(e, (Player)e.getDamager());	 
             	}
@@ -118,7 +113,7 @@ public class EntityListener extends EventListener {
                 if (e.getDamager() instanceof Player) {
                     Player p = (Player) e.getDamager();
                     getBackend().logDamage(p, 1);
-                    int value = p.getInventory().getItemInHand().containsEnchantment(Enchantment.KNOCKBACK) ? 2 : 1;
+                    int value = p.getInventory().getItemInMainHand().containsEnchantment(Enchantment.KNOCKBACK) ? 2 : 1;
                     getBackend().logDamage(player, value);
                     if (getCheckManager().willCheck(p, CheckType.LONG_REACH)) {
                         Distance distance = new Distance(player.getLocation(), p.getLocation());

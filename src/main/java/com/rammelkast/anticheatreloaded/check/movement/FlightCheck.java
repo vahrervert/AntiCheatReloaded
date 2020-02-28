@@ -38,10 +38,9 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
  */
 public class FlightCheck {
 
+	public static final Map<UUID, Double> BLOCKS_OVER_FLIGHT = new HashMap<UUID, Double>();
+	public static final Map<UUID, Long> MOVING_EXEMPT = new HashMap<UUID, Long>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
-
-	public static Map<UUID, Double> blocksOverFlight = new HashMap<UUID, Double>();
-	public static Map<UUID, Long> movingExempt = new HashMap<UUID, Long>();
 
 	public static CheckResult runCheck(Player player, Distance distance) {
 		if (distance.getYDifference() > AntiCheatReloaded.getManager().getBackend().getMagic().TELEPORT_MIN()
@@ -62,32 +61,32 @@ public class FlightCheck {
 					"FENCE_GATE"
 				})) {
 
-			if (!blocksOverFlight.containsKey(uuid)) {
-				blocksOverFlight.put(uuid, 0D);
+			if (!BLOCKS_OVER_FLIGHT.containsKey(uuid)) {
+				BLOCKS_OVER_FLIGHT.put(uuid, 0D);
 			}
 
-			blocksOverFlight.put(uuid, (blocksOverFlight.get(uuid) + distance.getXDifference()
+			BLOCKS_OVER_FLIGHT.put(uuid, (BLOCKS_OVER_FLIGHT.get(uuid) + distance.getXDifference()
 					+ distance.getYDifference() + distance.getZDifference()));
 
 			if (y1 > y2) {
-				blocksOverFlight.put(uuid, (blocksOverFlight.get(uuid) - distance.getYDifference()));
+				BLOCKS_OVER_FLIGHT.put(uuid, (BLOCKS_OVER_FLIGHT.get(uuid) - distance.getYDifference()));
 			}
 
-			if (blocksOverFlight.get(uuid) > AntiCheatReloaded.getManager().getBackend().getMagic().FLIGHT_BLOCK_LIMIT()
+			if (BLOCKS_OVER_FLIGHT.get(uuid) > AntiCheatReloaded.getManager().getBackend().getMagic().FLIGHT_BLOCK_LIMIT()
 					&& (y1 <= y2)) {
 				return new CheckResult(CheckResult.Result.FAILED,
-						player.getName() + " flew over " + blocksOverFlight.get(uuid) + " blocks (max="
+						player.getName() + " flew over " + BLOCKS_OVER_FLIGHT.get(uuid) + " blocks (max="
 								+ AntiCheatReloaded.getManager().getBackend().getMagic().FLIGHT_BLOCK_LIMIT() + ")");
 			}
 		} else {
-			blocksOverFlight.put(uuid, 0D);
+			BLOCKS_OVER_FLIGHT.put(uuid, 0D);
 		}
 
 		return PASS;
 	}
 
 	public static boolean isMovingExempt(Player player) {
-		return isDoing(player, movingExempt, -1);
+		return isDoing(player, MOVING_EXEMPT, -1);
 	}
 
 	private static boolean isDoing(Player player, Map<UUID, Long> map, double max) {

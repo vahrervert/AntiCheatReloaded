@@ -62,7 +62,6 @@ public enum CheckType {
     ITEM_SPAM(Permission.CHECK_ITEMSPAM),
     FAST_INVENTORY(Permission.CHECK_FASTINVENTORY),
     AUTOTOOL(Permission.CHECK_AUTOTOOL),
-    KILLAURA(Permission.CHECK_KILLAURA), 
     BLINK(Permission.CHECK_BLINK),
 	VELOCITY(Permission.CHECK_VELOCITY),
 	CRITICALS(Permission.CHECK_CRITICALS),

@@ -20,6 +20,7 @@
 package com.rammelkast.anticheatreloaded.check.movement;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -35,36 +36,37 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class GlideCheck {
 
+	public static final Map<UUID, Double> LAST_DIFFERENCE = new HashMap<UUID, Double>();
+	public static final Map<UUID, Float> LAST_FALL_DISTANCE = new HashMap<UUID, Float>();
+	public static final Map<UUID, Integer> VIOLATIONS = new HashMap<UUID, Integer>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
-
-	public static Map<UUID, Double> lastDiff = new HashMap<UUID, Double>();
-	public static Map<UUID, Float> lastFallDistance = new HashMap<UUID, Float>();
-	public static Map<UUID, Integer> violations = new HashMap<UUID, Integer>();
 
 	public static CheckResult runCheck(Player player, Distance distance) {
 		if (VersionUtil.isFlying(player)) {
 			return PASS;
 		}
-		if (player.getLocation().getBlock().getType() == Material.LADDER || player.getLocation().getBlock().getRelative(0, 1, 0).getType() == Material.LADDER) {
+		if (player.getLocation().getBlock().getType() == Material.LADDER
+				|| player.getLocation().getBlock().getRelative(0, 1, 0).getType() == Material.LADDER) {
 			return PASS;
 		}
-		if (!lastDiff.containsKey(player.getUniqueId())) {
-			lastDiff.put(player.getUniqueId(), distance.getYDifference());
+		if (!LAST_DIFFERENCE.containsKey(player.getUniqueId())) {
+			LAST_DIFFERENCE.put(player.getUniqueId(), distance.getYDifference());
 			return PASS;
 		}
-		if (!lastFallDistance.containsKey(player.getUniqueId())) {
-			lastFallDistance.put(player.getUniqueId(), player.getFallDistance());
+		if (!LAST_FALL_DISTANCE.containsKey(player.getUniqueId())) {
+			LAST_FALL_DISTANCE.put(player.getUniqueId(), player.getFallDistance());
 			return PASS;
 		}
 		double yDiff = distance.getYDifference();
 		float fallDistance = player.getFallDistance();
-		if (yDiff == lastDiff.get(player.getUniqueId()) && fallDistance > lastFallDistance.get(player.getUniqueId())) {
-			if (!violations.containsKey(player.getUniqueId())) {
-				violations.put(player.getUniqueId(), 1);
+		if (yDiff == LAST_DIFFERENCE.get(player.getUniqueId())
+				&& fallDistance > LAST_FALL_DISTANCE.get(player.getUniqueId())) {
+			if (!VIOLATIONS.containsKey(player.getUniqueId())) {
+				VIOLATIONS.put(player.getUniqueId(), 1);
 			} else {
-				if (violations.get(player.getUniqueId()) + 1 >= AntiCheatReloaded.getManager().getBackend().getMagic()
+				if (VIOLATIONS.get(player.getUniqueId()) + 1 >= AntiCheatReloaded.getManager().getBackend().getMagic()
 						.GLIDE_LIMIT()) {
-					violations.remove(player.getUniqueId());
+					VIOLATIONS.remove(player.getUniqueId());
 					Location to = player.getLocation();
 					to.setY(to.getY() - distanceToFall(to));
 					player.teleport(to);
@@ -72,16 +74,16 @@ public class GlideCheck {
 					AntiCheatReloaded.getPlugin().onGlideViolation();
 					return new CheckResult(CheckResult.Result.FAILED,
 							player.getName() + " was set back for gliding (yDiff="
-									+ new BigDecimal(yDiff).setScale(2, BigDecimal.ROUND_UP) + ")");
+									+ new BigDecimal(yDiff).setScale(2, RoundingMode.HALF_UP) + ")");
 				} else {
-					violations.put(player.getUniqueId(), violations.get(player.getUniqueId()) + 1);
+					VIOLATIONS.put(player.getUniqueId(), VIOLATIONS.get(player.getUniqueId()) + 1);
 				}
 			}
 		} else {
 			// TODO more sophisticated check
 		}
-		lastDiff.put(player.getUniqueId(), distance.getYDifference());
-		lastFallDistance.put(player.getUniqueId(), player.getFallDistance());
+		LAST_DIFFERENCE.put(player.getUniqueId(), distance.getYDifference());
+		LAST_FALL_DISTANCE.put(player.getUniqueId(), player.getFallDistance());
 		return PASS;
 	}
 

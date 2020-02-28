@@ -32,8 +32,8 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class SpeedCheck {
 
+	public static final Map<UUID, Integer> SPEED_VIOLATIONS = new HashMap<UUID, Integer>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
-	public static Map<UUID, Integer> speedViolation = new HashMap<UUID, Integer>();
 
 	public static boolean isSpeedExempt(Player player) {
 		return AntiCheatReloaded.getManager().getBackend().isMovingExempt(player)
@@ -75,7 +75,7 @@ public class SpeedCheck {
 			max += speed > 0 ? player.getWalkSpeed() - 0.2f : 0;
 
 			if (x > max || z > max) {
-				int num = AntiCheatReloaded.getManager().getBackend().increment(player, speedViolation,
+				int num = AntiCheatReloaded.getManager().getBackend().increment(player, SPEED_VIOLATIONS,
 						AntiCheatReloaded.getManager().getBackend().getMagic().SPEED_MAX());
 				if (num >= AntiCheatReloaded.getManager().getBackend().getMagic().SPEED_MAX()) {
 					return new CheckResult(CheckResult.Result.FAILED,
@@ -86,7 +86,7 @@ public class SpeedCheck {
 					return PASS;
 				}
 			} else {
-				speedViolation.put(player.getUniqueId(), 0);
+				SPEED_VIOLATIONS.put(player.getUniqueId(), 0);
 				return PASS;
 			}
 		} else {

@@ -130,9 +130,6 @@ permissions:
   anticheat.check.autotool:
     description: Allow players to use autotool to switch tools quickly
     default: false
-  anticheat.check.killaura:
-    description: Allow players to use killaura
-    default: false
   anticheat.check.blink:
     description: Allow players to send lots of movement packets
     default: false
@@ -175,3 +172,7 @@ permissions:
       anticheat.check.fastinventory: true
       anticheat.check.autotool: true
       anticheat.check.fastanimation: true
+      anticheat.check.blink: true
+      anticheat.check.velocity: true
+      anticheat.check.criticals: true
+      anticheat.check.unicode: true

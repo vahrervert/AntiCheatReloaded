@@ -39,7 +39,6 @@ import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.potion.PotionEffectType;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
-import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
 import com.rammelkast.anticheatreloaded.check.movement.BlinkCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
@@ -121,29 +120,28 @@ public class Backend {
         UUID pU = player.getUniqueId();
 
         VelocityCheck.cleanPlayer(player);
-        KillAuraCheck.cleanPlayer(player);
         BlinkCheck.MOVE_COUNT.remove(player.getUniqueId());
         blocksDropped.remove(pU);
         blockTime.remove(pU);
-        FlightCheck.movingExempt.remove(pU);
+        FlightCheck.MOVING_EXEMPT.remove(pU);
         brokenBlock.remove(pU);
         placedBlock.remove(pU);
         bowWindUp.remove(pU);
         startEat.remove(pU);
         lastHeal.remove(pU);
         sprinted.remove(pU);
-        WaterWalkCheck.isInWater.remove(pU);
-        WaterWalkCheck.isInWaterCache.remove(pU);
+        WaterWalkCheck.IS_IN_WATER.remove(pU);
+        WaterWalkCheck.IS_IN_WATER_CACHE.remove(pU);
         instantBreakExempt.remove(pU);
         isAscending.remove(player.getUniqueId());
         ascensionCount.remove(player.getUniqueId());
-        FlightCheck.blocksOverFlight.remove(pU);
+        FlightCheck.BLOCKS_OVER_FLIGHT.remove(pU);
         nofallViolation.remove(pU);
         fastBreakViolation.remove(pU);
-        YAxisCheck.yAxisViolations.remove(pU);
-        YAxisCheck.yAxisLastViolation.remove(pU);
-        YAxisCheck.lastYcoord.remove(pU);
-        YAxisCheck.lastYtime.remove(pU);
+        YAxisCheck.Y_AXIS_VIOLATIONS.remove(pU);
+        YAxisCheck.LAST_Y_AXIS_VIOLATION.remove(pU);
+        YAxisCheck.LAST_Y_COORD_CACHE.remove(pU);
+        YAxisCheck.LAST_Y_TIME.remove(pU);
         fastBreaks.remove(pU);
         blockBreakHolder.remove(pU);
         lastBlockBroken.remove(pU);
@@ -151,8 +149,8 @@ public class Backend {
         lastBlockPlaced.remove(pU);
         lastBlockPlaceTime.remove(pU);
         blockPunches.remove(pU);
-        WaterWalkCheck.waterAscensionViolation.remove(pU);
-        WaterWalkCheck.waterSpeedViolation.remove(pU);
+        WaterWalkCheck.WATER_ASCENSION_VIOLATIONS.remove(pU);
+        WaterWalkCheck.WATER_SPEED_VIOLATIONS.remove(pU);
         projectilesShot.remove(pU);
         velocitized.remove(pU);
         velocitytrack.remove(pU);
@@ -164,17 +162,17 @@ public class Backend {
         sprinted.remove(pU);
         brokenBlock.remove(pU);
         placedBlock.remove(pU);
-        FlightCheck.movingExempt.remove(pU);
+        FlightCheck.MOVING_EXEMPT.remove(pU);
         blockTime.remove(pU);
         blocksDropped.remove(pU);
         lastInventoryTime.remove(pU);
         inventoryTime.remove(pU);
         inventoryClicks.remove(pU);
         lastFallPacket.remove(pU);
-        GlideCheck.lastDiff.remove(pU);
-        GlideCheck.lastFallDistance.remove(pU);
-        GlideCheck.violations.remove(pU);
-        SpeedCheck.speedViolation.remove(player.getUniqueId());
+        GlideCheck.LAST_DIFFERENCE.remove(pU);
+        GlideCheck.LAST_FALL_DISTANCE.remove(pU);
+        GlideCheck.VIOLATIONS.remove(pU);
+        SpeedCheck.SPEED_VIOLATIONS.remove(player.getUniqueId());
     }
 
     public CheckResult checkFastBow(Player player, float force) {
@@ -703,8 +701,8 @@ public class Backend {
     }
 
     public boolean isHoveringOverWaterAfterViolation(Player player) {
-        if (WaterWalkCheck.waterSpeedViolation.containsKey(player.getUniqueId())) {
-            if (WaterWalkCheck.waterSpeedViolation.get(player.getUniqueId()) >= magic.WATER_SPEED_VIOLATION_MAX() && Utilities.isHoveringOverWater(player.getLocation())) {
+        if (WaterWalkCheck.WATER_SPEED_VIOLATIONS.containsKey(player.getUniqueId())) {
+            if (WaterWalkCheck.WATER_SPEED_VIOLATIONS.get(player.getUniqueId()) >= magic.WATER_SPEED_VIOLATION_MAX() && Utilities.isHoveringOverWater(player.getLocation())) {
                 return true;
             }
         }
@@ -771,43 +769,43 @@ public class Backend {
                 break;
 
         }
-        FlightCheck.movingExempt.put(player.getUniqueId(), System.currentTimeMillis() + time);
+        FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + time);
         // Only map in which termination time is calculated beforehand.
     }
 
     public void logEnterExit(final Player player) {
-        FlightCheck.movingExempt.put(player.getUniqueId(), System.currentTimeMillis() + magic.ENTERED_EXITED_TIME());
+        FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + magic.ENTERED_EXITED_TIME());
     }
 
     public void logToggleSneak(final Player player) {
-        FlightCheck.movingExempt.put(player.getUniqueId(), System.currentTimeMillis() + magic.SNEAK_TIME());
+        FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + magic.SNEAK_TIME());
     }
 
     public void logTeleport(final Player player) {
-        FlightCheck.movingExempt.put(player.getUniqueId(), System.currentTimeMillis() + magic.TELEPORT_TIME());
+        FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + magic.TELEPORT_TIME());
 
         /* Data for fly/speed should be reset */
         nofallViolation.remove(player.getUniqueId());
-        FlightCheck.blocksOverFlight.remove(player.getUniqueId());
-        YAxisCheck.yAxisViolations.remove(player.getUniqueId());
-        YAxisCheck.yAxisLastViolation.remove(player.getUniqueId());
-        YAxisCheck.lastYcoord.remove(player.getUniqueId());
-        YAxisCheck.lastYtime.remove(player.getUniqueId());
-        GlideCheck.lastFallDistance.remove(player.getUniqueId());
-        GlideCheck.lastDiff.remove(player.getUniqueId());
-        GlideCheck.violations.remove(player.getUniqueId());
+        FlightCheck.BLOCKS_OVER_FLIGHT.remove(player.getUniqueId());
+        YAxisCheck.Y_AXIS_VIOLATIONS.remove(player.getUniqueId());
+        YAxisCheck.LAST_Y_AXIS_VIOLATION.remove(player.getUniqueId());
+        YAxisCheck.LAST_Y_COORD_CACHE.remove(player.getUniqueId());
+        YAxisCheck.LAST_Y_TIME.remove(player.getUniqueId());
+        GlideCheck.LAST_FALL_DISTANCE.remove(player.getUniqueId());
+        GlideCheck.LAST_DIFFERENCE.remove(player.getUniqueId());
+        GlideCheck.VIOLATIONS.remove(player.getUniqueId());
     }
 
     public void logExitFly(final Player player) {
-        FlightCheck.movingExempt.put(player.getUniqueId(), System.currentTimeMillis() + magic.EXIT_FLY_TIME());
+        FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + magic.EXIT_FLY_TIME());
     }
 
     public void logJoin(final Player player) {
-        FlightCheck.movingExempt.put(player.getUniqueId(), System.currentTimeMillis() + magic.JOIN_TIME());
+        FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + magic.JOIN_TIME());
     }
 
     public boolean isMovingExempt(Player player) {
-        return isDoing(player, FlightCheck.movingExempt, -1);
+        return isDoing(player, FlightCheck.MOVING_EXEMPT, -1);
     }
 
     public boolean isAscending(Player player) {

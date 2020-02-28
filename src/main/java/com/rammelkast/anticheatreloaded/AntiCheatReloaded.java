@@ -23,6 +23,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,7 +33,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.BlinkCheck;
 import com.rammelkast.anticheatreloaded.command.CommandHandler;
 import com.rammelkast.anticheatreloaded.config.Configuration;
@@ -92,7 +92,6 @@ public class AntiCheatReloaded extends JavaPlugin {
 		}
 		getLogger().info("Found ProtocolLib, enabling checks that use ProtcolLib...");
 		// Enable packetlisteners
-		KillAuraCheck.listenPackets();
 		BlinkCheck.startTimer();
 		BlinkCheck.listenPackets();
 		
@@ -149,46 +148,38 @@ public class AntiCheatReloaded extends JavaPlugin {
 
 		// Metrics
 		try {
-			Metrics metrics = new Metrics(this);
-			metrics.addCustomChart(new Metrics.SingleLineChart("cheaters_kicked") {
+			Metrics metrics = new Metrics(this, 202);
+			metrics.addCustomChart(new Metrics.SingleLineChart("cheaters_kicked", new Callable<Integer>() {
 				@Override
-				public int getValue() {
+				public Integer call() throws Exception {
 					int kicked = playersKicked;
 					// Reset so we don't keep sending the same value
 					playersKicked = 0;
 					return kicked;
 				}
-			});
-			metrics.addCustomChart(new Metrics.SingleLineChart("killaura_violations") {
+			}));
+			metrics.addCustomChart(new Metrics.SingleLineChart("glide_violations", new Callable<Integer>() {
 				@Override
-				public int getValue() {
-					int violations = killauraViolations;
-					// Reset so we don't keep sending the same value
-					killauraViolations = 0;
-					return violations;
-				}
-			});
-			metrics.addCustomChart(new Metrics.SingleLineChart("glide_violations") {
-				@Override
-				public int getValue() {
+				public Integer call() throws Exception {
 					int violations = glideViolations;
 					// Reset so we don't keep sending the same value
 					glideViolations = 0;
 					return violations;
 				}
-			});
-			metrics.addCustomChart(new Metrics.SimplePie("protocollib_version") {
+			}));
+			metrics.addCustomChart(new Metrics.SimplePie("protocollib_version", new Callable<String>() {
 				@Override
-				public String getValue() {
+				public String call() throws Exception {
 					return Bukkit.getPluginManager().getPlugin("ProtocolLib").getDescription().getVersion();
 				}
-			});
-			metrics.addCustomChart(new Metrics.SimplePie("nms_version") {
+			}));
+			metrics.addCustomChart(new Metrics.SimplePie("nms_version", new Callable<String>() {
 				@Override
-				public String getValue() {
+				public String call() throws Exception {
 					return VersionUtil.getVersion();
 				}
-			});
+
+			}));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -310,20 +301,12 @@ public class AntiCheatReloaded extends JavaPlugin {
 	 */
 	private int playersKicked = 0;
 	/**
-	 * Amount of killaura violations since start
-	 */
-	private int killauraViolations = 0;
-	/**
 	 * Amount of glide violations since start
 	 */
 	private int glideViolations = 0;
 
 	public void onPlayerKicked() {
 		this.playersKicked++;
-	}
-
-	public void onKillAuraViolation() {
-		this.killauraViolations++;
 	}
 
 	public void onGlideViolation() {

@@ -30,7 +30,6 @@ Hacks blocked
 * Jesus
 * Step
 * Criticals
-* KillAura (not available on MC > 1.12.2
 * Anti-Knockback
 * FastBow
 * FastDrop
