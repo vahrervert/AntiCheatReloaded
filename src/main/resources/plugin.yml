@@ -52,20 +52,11 @@ permissions:
       anticheat.system.update: true
       anticheat.system.calibrate: true
       anticheat.system.debug: true
-  anticheat.check.zombe.fly:
-    description: Allow players to use zombe flymod
-    default: false
-  anticheat.check.zombe.noclip:
-    description: Allow players to use zombe noclip hack
-    default: false
-  anticheat.check.zombe.cheat:
-    description: Allow players to use zombe cheat hack
-    default: false
   anticheat.check.flight:
-    description: Allow players to fly
+    description: Allow players to use fly cheats
     default: false
   anticheat.check.elytra:
-    description: Allow players to fly when using elytra
+    description: Allow players to use ElytraFly cheats
     default: false
   anticheat.check.waterwalk:
     description: Allow players to walk on water
@@ -142,13 +133,13 @@ permissions:
   anticheat.check.unicode:
     description: Allow players to use unicode in chat
     default: false
+  anticheat.check.ghosthand:
+    description: Allow players to use ghosthand
+    default: false
   anticheat.check.exempt:
     description: Total exemption from checks
     default: false
     children:
-      anticheat.check.zombe.fly: true
-      anticheat.check.zombe.noclip: true
-      anticheat.check.zombe.cheat: true
       anticheat.check.fly: true
       anticheat.check.waterwalk: true
       anticheat.check.noswing: true
@@ -176,3 +167,4 @@ permissions:
       anticheat.check.velocity: true
       anticheat.check.criticals: true
       anticheat.check.unicode: true
+      anticheat.check.ghosthand: true

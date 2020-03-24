@@ -77,7 +77,7 @@ public class YAxisCheck {
 					LAST_Y_AXIS_VIOLATION.put(uuid, System.currentTimeMillis());
 					if (!AntiCheatReloaded.getManager().getBackend().silentMode()) {
 						g.setY(LAST_Y_COORD_CACHE.get(uuid));
-						if (g.getBlock().getType() == Material.AIR) {
+						if (g.getBlock().getType() == Material.AIR || g.getBlock().getType() == Material.CAVE_AIR) {
 							player.teleport(g);
 						}
 					}
@@ -103,7 +103,7 @@ public class YAxisCheck {
 					LAST_Y_AXIS_VIOLATION.put(uuid, System.currentTimeMillis());
 					if (!AntiCheatReloaded.getManager().getBackend().silentMode()) {
 						g.setY(LAST_Y_COORD_CACHE.get(uuid));
-						if (g.getBlock().getType() == Material.AIR) {
+						if (g.getBlock().getType() == Material.AIR || g.getBlock().getType() == Material.CAVE_AIR) {
 							player.teleport(g);
 						}
 					}

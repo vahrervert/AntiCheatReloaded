@@ -36,11 +36,8 @@ import java.util.UUID;
  */
 
 public enum CheckType {
-    ZOMBE_FLY(Permission.CHECK_ZOMBE_FLY),
-    ZOMBE_NOCLIP(Permission.CHECK_ZOMBE_NOCLIP),
-    ZOMBE_CHEAT(Permission.CHECK_ZOMBE_CHEAT),
     FLIGHT(Permission.CHECK_FLIGHT),
-    ELYTRA(Permission.CHECK_FLIGHT),
+    ELYTRAFLY(Permission.CHECK_FLIGHT),
     WATER_WALK(Permission.CHECK_WATERWALK),
     NO_SWING(Permission.CHECK_NOSWING),
     FAST_BREAK(Permission.CHECK_FASTBREAK),
@@ -65,8 +62,9 @@ public enum CheckType {
     BLINK(Permission.CHECK_BLINK),
 	VELOCITY(Permission.CHECK_VELOCITY),
 	CRITICALS(Permission.CHECK_CRITICALS),
-	CHAT_UNICODE(Permission.CHECK_UNICODE);
-
+	CHAT_UNICODE(Permission.CHECK_UNICODE),
+	GHOSTHAND(Permission.CHECK_GHOSTHAND);
+	
     private final Permission permission;
     private final Map<UUID, Integer> level = new HashMap<UUID, Integer>();
 

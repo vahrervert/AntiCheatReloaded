@@ -72,7 +72,7 @@ public final class Utilities {
 	public static boolean cantStandAtSingle(Block block) {
 		// TODO: Implement Better to reduce false positives (done? lets test...)
 		Block otherBlock = block.getLocation().add(0, -0.5, 0).getBlock();
-		boolean center = otherBlock.getType() == Material.AIR;
+		boolean center = otherBlock.getType() == Material.AIR || otherBlock.getType() == Material.CAVE_AIR;
 		return center;
 	}
 
@@ -128,7 +128,7 @@ public final class Utilities {
 	 * @return true if the player can stand here
 	 */
 	public static boolean canStand(Block block) {
-		return !(block.isLiquid() || block.getType() == Material.AIR);
+		return !(block.isLiquid() || block.getType() == Material.AIR || block.getType() == Material.CAVE_AIR);
 	}
 
 	/**
@@ -181,7 +181,7 @@ public final class Utilities {
 	public static boolean isHoveringOverWater(Location player, int blocks) {
 		for (int i = player.getBlockY(); i > player.getBlockY() - blocks; i--) {
 			Block newloc = (new Location(player.getWorld(), player.getBlockX(), i, player.getBlockZ())).getBlock();
-			if (newloc.getType() != Material.AIR) {
+			if (newloc.getType() != Material.AIR && newloc.getType() != Material.CAVE_AIR) {
 				return newloc.isLiquid();
 			}
 		}
@@ -417,7 +417,7 @@ public final class Utilities {
 				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 	
 	/**
@@ -434,7 +434,7 @@ public final class Utilities {
 				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	/**

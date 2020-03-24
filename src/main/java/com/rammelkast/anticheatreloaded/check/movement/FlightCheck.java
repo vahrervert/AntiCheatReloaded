@@ -56,11 +56,8 @@ public class FlightCheck {
 				&& Utilities.cantStandAtExp(player.getLocation())
 				&& Utilities.blockIsnt(player.getLocation().getBlock().getRelative(BlockFace.DOWN),
 						new Material[] { Material.IRON_BARS })
-				&& Utilities.blockIsnt(player.getLocation().getBlock().getRelative(BlockFace.DOWN), new String[] {
-					"FENCE",
-					"FENCE_GATE"
-				})) {
-
+				&& Utilities.blockIsnt(player.getLocation().getBlock().getRelative(BlockFace.DOWN),
+						new String[] { "FENCE", "FENCE_GATE" })) {
 			if (!BLOCKS_OVER_FLIGHT.containsKey(uuid)) {
 				BLOCKS_OVER_FLIGHT.put(uuid, 0D);
 			}
@@ -72,8 +69,8 @@ public class FlightCheck {
 				BLOCKS_OVER_FLIGHT.put(uuid, (BLOCKS_OVER_FLIGHT.get(uuid) - distance.getYDifference()));
 			}
 
-			if (BLOCKS_OVER_FLIGHT.get(uuid) > AntiCheatReloaded.getManager().getBackend().getMagic().FLIGHT_BLOCK_LIMIT()
-					&& (y1 <= y2)) {
+			if (BLOCKS_OVER_FLIGHT.get(uuid) > AntiCheatReloaded.getManager().getBackend().getMagic()
+					.FLIGHT_BLOCK_LIMIT() && (y1 <= y2)) {
 				return new CheckResult(CheckResult.Result.FAILED,
 						player.getName() + " flew over " + BLOCKS_OVER_FLIGHT.get(uuid) + " blocks (max="
 								+ AntiCheatReloaded.getManager().getBackend().getMagic().FLIGHT_BLOCK_LIMIT() + ")");
@@ -81,7 +78,6 @@ public class FlightCheck {
 		} else {
 			BLOCKS_OVER_FLIGHT.put(uuid, 0D);
 		}
-
 		return PASS;
 	}
 

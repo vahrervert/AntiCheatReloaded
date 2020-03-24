@@ -67,11 +67,11 @@ public class GlideCheck {
 				if (VIOLATIONS.get(player.getUniqueId()) + 1 >= AntiCheatReloaded.getManager().getBackend().getMagic()
 						.GLIDE_LIMIT()) {
 					VIOLATIONS.remove(player.getUniqueId());
-					Location to = player.getLocation();
-					to.setY(to.getY() - distanceToFall(to));
-					player.teleport(to);
-					// Report glide violation to statistics, just for the lulz jk
-					AntiCheatReloaded.getPlugin().onGlideViolation();
+					if (!AntiCheatReloaded.getManager().getBackend().silentMode()) {
+						Location to = player.getLocation();
+						to.setY(to.getY() - distanceToFall(to));
+						player.teleport(to);
+					}
 					return new CheckResult(CheckResult.Result.FAILED,
 							player.getName() + " was set back for gliding (yDiff="
 									+ new BigDecimal(yDiff).setScale(2, RoundingMode.HALF_UP) + ")");
@@ -90,7 +90,8 @@ public class GlideCheck {
 	private static double distanceToFall(Location location) {
 		location = location.clone();
 		double firstY = location.getY();
-		while (location.clone().add(0, -0.1, 0).getBlock().getType() == Material.AIR)
+		Material subtractType = location.clone().add(0, -0.1, 0).getBlock().getType();
+		while (subtractType == Material.AIR || subtractType == Material.CAVE_AIR)
 			location.add(0, -0.1, 0);
 		return firstY - location.getY();
 	}

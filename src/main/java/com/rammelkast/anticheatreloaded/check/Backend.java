@@ -41,6 +41,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
 import com.rammelkast.anticheatreloaded.check.movement.BlinkCheck;
+import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
 import com.rammelkast.anticheatreloaded.check.movement.GlideCheck;
 import com.rammelkast.anticheatreloaded.check.movement.SpeedCheck;
@@ -173,6 +174,7 @@ public class Backend {
         GlideCheck.LAST_FALL_DISTANCE.remove(pU);
         GlideCheck.VIOLATIONS.remove(pU);
         SpeedCheck.SPEED_VIOLATIONS.remove(player.getUniqueId());
+        ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId().toString());
     }
 
     public CheckResult checkFastBow(Player player, float force) {
@@ -411,22 +413,29 @@ public class Backend {
         if (player.hasPotionEffect(PotionEffectType.JUMP)) {
             max += 12;
             string = " with jump potion";
-        }
-        Block block = player.getLocation().getBlock();
-        if (!isMovingExempt(player) && !Utilities.isInWater(player) && !VersionUtil.isFlying(player) && !justBroke(player) && !Utilities.isClimbableBlock(player.getLocation().getBlock()) && !player.isInsideVehicle() && !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -1, 0).getBlock()) && !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -1.5, 0).getBlock())) {
-            if (y1 < y2) {
-                if (!block.getRelative(BlockFace.NORTH).isLiquid() && !block.getRelative(BlockFace.SOUTH).isLiquid() && !block.getRelative(BlockFace.EAST).isLiquid() && !block.getRelative(BlockFace.WEST).isLiquid()) {
-                    increment(player, ascensionCount, max);
-                    if (ascensionCount.get(player.getUniqueId()) >= max) {
-                        return new CheckResult(CheckResult.Result.FAILED, player.getName() + " ascended " + ascensionCount.get(player.getUniqueId()) + " times in a row (max = " + max + string + ")");
-                    }
-                }
-            } else {
-                ascensionCount.put(player.getUniqueId(), 0);
-            }
-        }
-        return PASS;
-    }
+		}
+		Block block = player.getLocation().getBlock();
+		if (!isMovingExempt(player) && !Utilities.isInWater(player) && !VersionUtil.isFlying(player)
+				&& !justBroke(player) && !Utilities.isClimbableBlock(player.getLocation().getBlock())
+				&& !player.isInsideVehicle() && !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -1, 0).getBlock())
+				&& !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -1.5, 0).getBlock())) {
+			if (y1 < y2) {
+				if (!block.getRelative(BlockFace.NORTH).isLiquid() && !block.getRelative(BlockFace.SOUTH).isLiquid()
+						&& !block.getRelative(BlockFace.EAST).isLiquid()
+						&& !block.getRelative(BlockFace.WEST).isLiquid()) {
+					increment(player, ascensionCount, max);
+					if (ascensionCount.get(player.getUniqueId()) >= max) {
+						return new CheckResult(CheckResult.Result.FAILED,
+								player.getName() + " ascended " + ascensionCount.get(player.getUniqueId())
+										+ " times in a row (max = " + max + string + ")");
+					}
+				}
+			} else {
+				ascensionCount.put(player.getUniqueId(), 0);
+			}
+		}
+		return PASS;
+	}
 
     public CheckResult checkSwing(Player player, Block block) {
         UUID uuid = player.getUniqueId();
@@ -566,14 +575,14 @@ public class Backend {
                 }
                 Long l = user.getMessageTime(i);
 
-                if (System.currentTimeMillis() - l > magic.CHAT_REPEAT_MIN() * 100) {
+                if (System.currentTimeMillis() - l > magic.CHAT_REPEAT_MIN()) {
                     user.clearMessages();
                     break;
                 } else {
                     if (manager.getConfiguration().getConfig().blockChatSpamRepetition.getValue() && m.equalsIgnoreCase(msg) && i == 1) {
                         manager.getLoggingManager().logFineInfo(player.getName() + " spam-repeated \"" + msg + "\"");
                         return new CheckResult(CheckResult.Result.FAILED, lang.SPAM_WARNING());
-                    } else if (manager.getConfiguration().getConfig().blockChatSpamSpeed.getValue() && System.currentTimeMillis() - user.getLastCommandTime() < magic.COMMAND_MIN() * 2) {
+                    } else if (manager.getConfiguration().getConfig().blockChatSpamSpeed.getValue() && System.currentTimeMillis() - user.getLastCommandTime() < magic.CHAT_MIN()) {
                         manager.getLoggingManager().logFineInfo(player.getName() + " spammed quickly \"" + msg + "\"");
                         return new CheckResult(CheckResult.Result.FAILED, lang.SPAM_WARNING());
                     }
@@ -609,13 +618,13 @@ public class Backend {
                 }
                 Long l = user.getCommandTime(i);
 
-                if (System.currentTimeMillis() - l > magic.COMMAND_REPEAT_MIN() * 100) {
+                if (System.currentTimeMillis() - l > magic.COMMAND_REPEAT_MIN()) {
                     user.clearCommands();
                     break;
                 } else {
                     if (manager.getConfiguration().getConfig().blockCommandSpamRepetition.getValue() && m.equalsIgnoreCase(cmd) && i == 1) {
                         return new CheckResult(CheckResult.Result.FAILED, lang.SPAM_WARNING());
-                    } else if (manager.getConfiguration().getConfig().blockCommandSpamSpeed.getValue() && System.currentTimeMillis() - user.getLastCommandTime() < magic.COMMAND_MIN() * 2) {
+                    } else if (manager.getConfiguration().getConfig().blockCommandSpamSpeed.getValue() && System.currentTimeMillis() - user.getLastCommandTime() < magic.COMMAND_MIN()) {
                         return new CheckResult(CheckResult.Result.FAILED, lang.SPAM_WARNING());
                     }
                 }
@@ -656,8 +665,8 @@ public class Backend {
     }
 
     public CheckResult checkSprintDamage(Player player) {
-        if (isDoing(player, sprinted, magic.SPRINT_MIN())) {
-            return new CheckResult(CheckResult.Result.FAILED, player.getName() + " sprinted and damaged an entity too fast (min sprint=" + magic.SPRINT_MIN() + " ms)");
+        if (isDoing(player, sprinted, magic.SPRINT_MAX())) {
+            return new CheckResult(CheckResult.Result.FAILED, player.getName() + " sprinted and damaged an entity too fast (min sprint=" + magic.SPRINT_MAX() + " ms)");
         } else {
             return PASS;
         }
@@ -794,6 +803,7 @@ public class Backend {
         GlideCheck.LAST_FALL_DISTANCE.remove(player.getUniqueId());
         GlideCheck.LAST_DIFFERENCE.remove(player.getUniqueId());
         GlideCheck.VIOLATIONS.remove(player.getUniqueId());
+        ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId().toString());
     }
 
     public void logExitFly(final Player player) {

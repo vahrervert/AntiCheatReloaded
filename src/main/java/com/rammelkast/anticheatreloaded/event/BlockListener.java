@@ -30,6 +30,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
+import com.rammelkast.anticheatreloaded.check.player.GhosthandCheck;
 import com.rammelkast.anticheatreloaded.util.Distance;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 
@@ -55,17 +56,28 @@ public class BlockListener extends EventListener {
     @EventHandler(ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
         final Player player = event.getPlayer();
-        if (player != null && getCheckManager().willCheck(player, CheckType.FAST_PLACE)) {
+        boolean noHack = true;
+        if (getCheckManager().willCheck(player, CheckType.FAST_PLACE)) {
             CheckResult result = getBackend().checkFastPlace(player);
             if (result.failed()) {
                 event.setCancelled(!silentMode());
                 log(result.getMessage(), player, CheckType.FAST_PLACE);
-            } else {
-                decrease(player);
-                getBackend().logBlockPlace(player);
-            }
+                noHack = false;
+            } 
         }
-
+        
+        if (getCheckManager().willCheck(player, CheckType.GHOSTHAND)) {
+            CheckResult result = GhosthandCheck.performCheck(player, event);
+            if (result.failed()) {
+                event.setCancelled(!silentMode());
+                log(result.getMessage(), player, CheckType.GHOSTHAND);
+                noHack = false;
+            } 
+        }
+        if (noHack) {
+        	 decrease(player);
+             getBackend().logBlockPlace(player);
+        }
         AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
     }
 
@@ -74,32 +86,38 @@ public class BlockListener extends EventListener {
         final Player player = event.getPlayer();
         final Block block = event.getBlock();
         boolean noHack = true;
-        if (player != null) {
-            CheckResult result;
-            if (getCheckManager().willCheck(player, CheckType.FAST_BREAK)) {
-                result = getBackend().checkFastBreak(player, block);
-                if (result.failed()) {
-                    event.setCancelled(!silentMode());
-                    log(result.getMessage(), player, CheckType.FAST_BREAK);
-                    noHack = false;
-                }
+        CheckResult result;
+        if (getCheckManager().willCheck(player, CheckType.FAST_BREAK)) {
+            result = getBackend().checkFastBreak(player, block);
+            if (result.failed()) {
+                event.setCancelled(!silentMode());
+                log(result.getMessage(), player, CheckType.FAST_BREAK);
+                noHack = false;
             }
-            if (getCheckManager().willCheck(player, CheckType.NO_SWING)) {
-                result = getBackend().checkSwing(player, block);
-                if (result.failed()) {
-                    event.setCancelled(!silentMode());
-                    log(result.getMessage(), player, CheckType.NO_SWING);
-                    noHack = false;
-                }
+        }
+        if (getCheckManager().willCheck(player, CheckType.NO_SWING)) {
+            result = getBackend().checkSwing(player, block);
+            if (result.failed()) {
+                event.setCancelled(!silentMode());
+                log(result.getMessage(), player, CheckType.NO_SWING);
+                noHack = false;
             }
-            if (getCheckManager().willCheck(player, CheckType.LONG_REACH)) {
-                Distance distance = new Distance(player.getLocation(), block.getLocation());
-                result = getBackend().checkLongReachBlock(player, distance.getXDifference(), distance.getYDifference(), distance.getZDifference());
-                if (result.failed()) {
-                    event.setCancelled(!silentMode());
-                    log(result.getMessage(), player, CheckType.LONG_REACH);
-                    noHack = false;
-                }
+        }
+        if (getCheckManager().willCheck(player, CheckType.LONG_REACH)) {
+            Distance distance = new Distance(player.getLocation(), block.getLocation());
+            result = getBackend().checkLongReachBlock(player, distance.getXDifference(), distance.getYDifference(), distance.getZDifference());
+            if (result.failed()) {
+                event.setCancelled(!silentMode());
+                log(result.getMessage(), player, CheckType.LONG_REACH);
+                noHack = false;
+            }
+        }
+        if (getCheckManager().willCheck(player, CheckType.GHOSTHAND)) {
+            result = GhosthandCheck.performCheck(player, event);
+            if (result.failed()) {
+                event.setCancelled(!silentMode());
+                log(result.getMessage(), player, CheckType.GHOSTHAND);
+                noHack = false;
             }
         }
         if (noHack) {

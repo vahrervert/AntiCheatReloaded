@@ -158,15 +158,6 @@ public class AntiCheatReloaded extends JavaPlugin {
 					return kicked;
 				}
 			}));
-			metrics.addCustomChart(new Metrics.SingleLineChart("glide_violations", new Callable<Integer>() {
-				@Override
-				public Integer call() throws Exception {
-					int violations = glideViolations;
-					// Reset so we don't keep sending the same value
-					glideViolations = 0;
-					return violations;
-				}
-			}));
 			metrics.addCustomChart(new Metrics.SimplePie("protocollib_version", new Callable<String>() {
 				@Override
 				public String call() throws Exception {
@@ -300,17 +291,9 @@ public class AntiCheatReloaded extends JavaPlugin {
 	 * Amount of players kicked since start
 	 */
 	private int playersKicked = 0;
-	/**
-	 * Amount of glide violations since start
-	 */
-	private int glideViolations = 0;
 
 	public void onPlayerKicked() {
 		this.playersKicked++;
-	}
-
-	public void onGlideViolation() {
-		this.glideViolations++;
 	}
 
 	public static void sendToMainThread(Runnable runnable) {

@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -72,7 +71,9 @@ public class BlinkCheck {
 								int ping = VersionUtil.getPlayerPing(p);
 								int blinkMagic = AntiCheatReloaded.getManager().getBackend()
 										.getMagic().BLINK_PACKET();
-								float pingLeniency = (float) ((ping / 120));
+								int averagePing =  AntiCheatReloaded.getManager().getBackend()
+										.getMagic().BLINK_AVERAGE_PING();
+								float pingLeniency = (float) ((ping / averagePing));
 								if (pingLeniency < 1) pingLeniency = 1;
 								if (pingLeniency > 3) pingLeniency = 3;
 								blinkMagic = Math.round(pingLeniency * blinkMagic);

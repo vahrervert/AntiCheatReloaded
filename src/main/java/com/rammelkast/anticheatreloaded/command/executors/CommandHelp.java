@@ -33,7 +33,6 @@ public class CommandHelp extends CommandBase {
     private static final String[] HELP = {
             RED + "/acr " + GRAY + "help",
             RED + "/acr " + GRAY + "reload",
-            RED + "/acr " + GRAY + "update",
             RED + "/acr " + GRAY + "check " + WHITE + "[check] [on/off]",
             RED + "/acr " + GRAY + "log " + WHITE + "[file/console] [on/off]",
             RED + "/acr " + GRAY + "report " + WHITE + "[group/user]",

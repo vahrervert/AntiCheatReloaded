@@ -44,3 +44,5 @@ Hacks blocked
 * FastPlace
 * Spam
 * FastEat
+* ElytraFly
+* Unicode chat

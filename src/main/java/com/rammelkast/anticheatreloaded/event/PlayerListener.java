@@ -50,6 +50,8 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
@@ -243,10 +245,19 @@ public class PlayerListener extends EventListener {
         Player player = event.getPlayer();
         PlayerInventory inv = player.getInventory();
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (inv.getItemInMainHand().getType() == Material.BOW) {
+        	ItemStack itemInHand = ((event.getHand() == EquipmentSlot.HAND) ? inv.getItemInMainHand() : inv.getItemInOffHand());
+            if (itemInHand.getType() == Material.BOW) {
                 getBackend().logBowWindUp(player);
-            } else if (Utilities.isFood(inv.getItemInMainHand().getType()) || Utilities.isFood(inv.getItemInOffHand().getType())) {
+            } else if (Utilities.isFood(itemInHand.getType()) || Utilities.isFood(itemInHand.getType())) {
                 getBackend().logEatingStart(player);
+            }
+            
+            if (itemInHand.getType() == Material.FIREWORK_ROCKET) {
+                ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId().toString());
+                if (player.isGliding()) {
+                	// TODO config max elytra height?
+                	ElytraCheck.JUMP_Y_VALUE.put(player.getUniqueId().toString(), 9999.99D);
+                }
             }
         }
         Block block = event.getClickedBlock();
@@ -297,17 +308,6 @@ public class PlayerListener extends EventListener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        String section = "\u00a7";
-        if (getCheckManager().willCheck(player, CheckType.ZOMBE_FLY)) {
-            player.sendMessage(section + "f " + section + "f " + section + "1 " + section + "0 " + section + "2 " + section + "4");
-        }
-        if (getCheckManager().willCheck(player, CheckType.ZOMBE_CHEAT)) {
-            player.sendMessage(section + "f " + section + "f " + section + "2 " + section + "0 " + section + "4 " + section + "8");
-        }
-        if (getCheckManager().willCheck(player, CheckType.ZOMBE_NOCLIP)) {
-            player.sendMessage(section + "f " + section + "f " + section + "4 " + section + "0 " + section + "9 " + section + "6");
-        }
-
         getBackend().logJoin(player);
 
         User user = new User(player.getUniqueId());
@@ -366,10 +366,10 @@ public class PlayerListener extends EventListener {
                     log(result.getMessage(), player, CheckType.FLIGHT);
                 }
             }
-            if (getCheckManager().willCheckQuick(player, CheckType.ELYTRA)) {
+            if (getCheckManager().willCheckQuick(player, CheckType.ELYTRAFLY)) {
             	 CheckResult result = ElytraCheck.runCheck(player, distance);
                  if (result.failed()) {
-                     log(result.getMessage(), player, CheckType.ELYTRA);
+                     log(result.getMessage(), player, CheckType.ELYTRAFLY);
                  }
             }
             if (getCheckManager().willCheckQuick(player, CheckType.VCLIP) && event.getFrom().getY() > event.getTo().getY()) {

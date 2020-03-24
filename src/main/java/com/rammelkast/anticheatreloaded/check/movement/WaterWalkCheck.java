@@ -36,7 +36,8 @@ import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
- * This check seems to be broken/outdated
+ * This check should be replaced
+ * It works, but not great
  */
 public class WaterWalkCheck {
 

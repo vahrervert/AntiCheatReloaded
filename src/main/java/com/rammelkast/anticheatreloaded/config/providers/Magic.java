@@ -155,10 +155,6 @@ public interface Magic {
      */
     public int CHAT_ACTION_TWO_LEVEL();
     /**
-     * Number of times a player can be caught in-flight before action is taken; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int FLIGHT_LIMIT();
-    /**
      * Number of times a player can be caught in-glide before action is taken; Type=INTEGER, Leniency=INCREASE.
      */
     public int GLIDE_LIMIT();
@@ -235,7 +231,7 @@ public interface Magic {
      */
     public int COMMAND_REPEAT_MIN();
     /**
-     * Minimum time between chats; Type=SYSTEM, Leniency=INCREASE.
+     * Minimum time between chats; Type=SYSTEM, Leniency=DECREASE.
      */
     public int CHAT_MIN();
     /**
@@ -245,7 +241,7 @@ public interface Magic {
     /**
      * Maximum speed you can travel while sprinting; Type=DOUBLE, Leniency=INCREASE.
      */
-    public double SPRINT_MIN();
+    public double SPRINT_MAX();
     /**
      * Minimum time in between block breaks; Type=INTEGER, Leniency=DECREASE.
      */
@@ -263,7 +259,7 @@ public interface Magic {
      */
     public double BOW_ERROR();
     /**
-     * Minimum distance a player can break a block from; Type=DOUBLE, Leniency=INCREASE.
+     * Maximum distance a player can break a block from; Type=DOUBLE, Leniency=INCREASE.
      */
     public double BLOCK_MAX_DISTANCE();
     /**
@@ -271,11 +267,11 @@ public interface Magic {
      */
     public double BLOCK_MAX_DISTANCE_CREATIVE();
     /**
-     * Minimum distance a player can damage an entity from; Type=DOUBLE, Leniency=INCREASE.
+     * Maximum distance a player can damage an entity from; Type=DOUBLE, Leniency=INCREASE.
      */
     public double ENTITY_MAX_DISTANCE();
     /**
-     * Minimum distance a player can damage an entity from in creative mode; Type=DOUBLE, Leniency=INCREASE.
+     * Maximum distance a player can damage an entity from in creative mode; Type=DOUBLE, Leniency=INCREASE.
      */
     public double ENTITY_MAX_DISTANCE_CREATIVE();
     /**
@@ -367,13 +363,13 @@ public interface Magic {
      */
     public int TELEPORT_MIN();
     /**
-     * Maximum amount of times a player can hit a killaura bot; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int KILLAURA_BOTHITS();
-    /**
      * Maximum amount of packets a player can send in a second; Type=INTEGER, Leniency=INCREASE.
      */
     public int BLINK_PACKET();
+    /**
+     * The average ping settings used to account for lag; TYPE=INTEGER, Leniency=INCREASE
+     */
+	public int BLINK_AVERAGE_PING();
     /**
      * Maximum amount of low/zero velocity before flagging; Type=INTEGER, Leniency=INCREASE.
      */

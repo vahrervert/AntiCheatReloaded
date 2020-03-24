@@ -1,91 +1,245 @@
-# AntiCheatReloaded configuration file
-#  
-#  This file is not yet fully documented
-#  For more information on the undocumented values visit:
-#  https://github.com/Rammelkast/AntiCheatReloaded/blob/master/src/main/java/com/rammelkast/anticheatreloaded/config/providers/Magic.java#L39-L380
-#
+# Maximum times a player can interact between animations
+# Changing this value of almost never required
 ANIMATION_INTERACT_MAX: 3
+# Minimum time between animations
+# Changing this value is almost never required
 ANIMATION_MIN: 200
+# Number of times a player can fail the ascension check before being considered a cheater
+# Increase in case of false positives
 ASCENSION_COUNT_MAX: 8
+# Minimum time in between block breaks
+# Decrease in case of false positives
 BLOCK_BREAK_MIN: 0.1
+# Maximum distance a player can break a block from
+# Changing this value is almost never required
 BLOCK_MAX_DISTANCE: 5.5
+# Maximum distance a player can break a block from when in creative mode
+# Changing this value is almost never required
 BLOCK_MAX_DISTANCE_CREATIVE: 6.0
+# Minimum time in between block placing
+# Decrease in case of false positives
 BLOCK_PLACE_MIN: 0.1
+# Number of times required to punch a block before it breaks
+# Changing this value is almost never required
 BLOCK_PUNCH_MIN: 5
+# Maximum percent error between predicted bow force and actual bow force
+# Increase in case of false positives
 BOW_ERROR: 0.25
-CHAT_ACTION_ONE_LEVEL: 3
-CHAT_ACTION_TWO_LEVEL: 5
-CHAT_MIN: 100
-CHAT_REPEAT_MIN: 260
-CHAT_WARN_LEVEL: 7
-COMMAND_ACTION_ONE_LEVEL: 3
-COMMAND_ACTION_TWO_LEVEL: 5
-COMMAND_MIN: 100
-COMMAND_REPEAT_MIN: 260
+# Number of chat spam violations before action one is executed
+# Should be changed to personal preference
+CHAT_ACTION_ONE_LEVEL: 5
+# Number of chat spam violations before action two is executed
+# Should be changed to personal preference
+CHAT_ACTION_TWO_LEVEL: 10
+# Minimum time between chats in milliseconds
+# Should be changed to personal preference
+CHAT_MIN: 500
+# Time before repeating yourself in chat is ignored in milliseconds
+# Should be changed to personal preference
+CHAT_REPEAT_MIN: 600
+# Number of command spam violations before action one is executed
+# Should be changed to personal preference
+COMMAND_ACTION_ONE_LEVEL: 5
+# Number of command spam violations before action two is executed
+# Should be changed to personal preference
+COMMAND_ACTION_TWO_LEVEL: 10
+# Minimum time between commands in milliseconds
+# Should be changed to personal preference
+COMMAND_MIN: 400
+# Time before repeating a command in milliseconds
+# Should be changed to personal preference
+COMMAND_REPEAT_MIN: 500
+# Time to exempt a player from moving because of taking damage
+# Can be decreased very slightly to increase detection
+# Increasing in case of false positives is almost never necessary and is not advised
 DAMAGE_TIME: 3000
+# Number of item drops to wait for before checking how long they took to drop
+# Changing this value is almost never required
 DROP_CHECK: 10
+# Minimum time it takes to drop X items
+# Changing this value is almost never required
 DROP_TIME_MIN: 800
-DROPPED_ITEM_TIME: 100
+# Minimum time in between eating
+# Decrease in case of false positives
 EAT_TIME_MIN: 1000
+# Time to exempt a player from moving because of entering/exiting a vehicle
+# Increase in case of false positives
 ENTERED_EXITED_TIME: 1000
+# Maximum distance a player can damage an entity from
+# Changing this value is almost never required
 ENTITY_MAX_DISTANCE: 5.9
+# Maximum distance a player can damage an entity from when in creative mode
+# Changing this value is almost never required
 ENTITY_MAX_DISTANCE_CREATIVE: 6.5
+# Time to exempt a player from moving because of exiting fly mode
+# Changing this value is almost never required
 EXIT_FLY_TIME: 2000
+# Time to exempt a player from moving because of taking damage from an explosion
+# Can be decreased very slightly to increase detection
+# Increasing in case of false positives is almost never necessary and is not advised
 EXPLOSION_DAMAGE_TIME: 5000
+# Max number of blocks that can be broken in a given time
+# Increase in case of false positives
 FASTBREAK_LIMIT: 2
+# Number of times fastbreak can be observed before considering a player a cheater
+# Can be increased in case of false positives, but shouldn't be required
 FASTBREAK_MAXVIOLATIONS: 2
+# Number of times fastbreak can be observed before considering a creative player a cheater
+# Can be increased in case of false positives, but shouldn't be required
 FASTBREAK_MAXVIOLATIONS_CREATIVE: 4
+# Time a player is forced to wait after fastbreak has been detected
+# Should be changed to personal preference
 FASTBREAK_MAXVIOLATIONTIME: 10000
+# Time to wait before checking block breaks
+# Increase in case of false positives
 FASTBREAK_TIMEMAX: 1000
+# Time to wait before checking block breaks for creative mode users
+# Increase in case of false positives
 FASTBREAK_TIMEMAX_CREATIVE: 100
+# Number of times fastplace can be observed before considering a player a cheater
+# Increase in case of false positives
 FASTPLACE_MAXVIOLATIONS: 2
+# Number of times fastplace can be observed before considering a creative player a cheater
+# Increase in case of false positives
 FASTPLACE_MAXVIOLATIONS_CREATIVE: 3
+# Time a player is forced to wait after fastplace has been detected
+# Should be changed to personal preference
 FASTPLACE_MAXVIOLATIONTIME: 10000
+# Minimum time in between block places
+# Decrease in case of false positives, but shouldn't be required
 FASTPLACE_TIMEMIN: 50
+# Number of blocks that can be broken without being hit before considering a player a cheater
+# Increase in case of false positives
 FASTPLACE_ZEROLIMIT: 3
-FLIGHT_BLOCK_LIMIT: 15.0
-FLIGHT_LIMIT: 150
+# How many blocks you can travel before being considered a cheater
+# Can be decreased to increase detection with the risk of false positives
+# Can be increased to decrease false positives, but shouldn't be necesary
+FLIGHT_BLOCK_LIMIT: 8.0
+# Time to exempt a player from fastbreak check because of using instant break
+# Increase in case of false positives, but shouldn't be necessary
 INSTANT_BREAK_TIME: 2
+# The number of clicks we should wait before checking if the player has used fast inventory
+# Increase in case of false positives
 INVENTORY_CHECK: 10
+# The minimum time it should have taken for the player to click X times
+# Increase in case of false positives
 INVENTORY_TIMEMIN: 50
+# Time to exempt a player from moving because of joining the server
+# If your server is slow when a player joins, increasing this value is important
+# Shouldn't be lower than 1500 or higher than 5000
 JOIN_TIME: 2000
+# Time to exempt a player from moving because of taking damage with knockback effects
+# Can be decreased very slightly to increase detection
+# Increase in case of false positives, but shouldn't be necessary 
 KNOCKBACK_DAMAGE_TIME: 4000
+# Maximum speed a player on a ladder can travel
+# This is a set value and shouldn't be changed unless you know what you're doing
 LADDER_Y_MAX: 0.11761
+# Minimum speed a player on a ladder can travel
+# This is a set value and shouldn't be changed unless you know what you're doing
 LADDER_Y_MIN: 0.11759
-NOFALL_LIMIT: 9
+# Number of times a player can fail the nofall check before being considered a cheater
+# Can be decreased to improve detenction with the risk of false positives
+# Increase in case of false positives
+NOFALL_LIMIT: 8
+# Number of projectiles to wait for before checking how long they took to fire off
+# Do not decrease this value
 PROJECTILE_CHECK: 10
+# Minimum time it takes to fire X projectiles
+# Decrease in case of false positives
 PROJECTILE_TIME_MIN: 1500
+# Time to exempt a player from moving because of entering/exiting sneak mode
+# Increase in case of false positives, shouldn't be necessary
 SNEAK_TIME: 250
+# Maximum times a player can fail the speed check before being considered a cheater
+# Increase in case of false positives
 SPEED_MAX: 3
+# Number of times a player can sprint without proper food level before being considered a cheater
+# Can either be increased or decreased to your liking. Shouldn't make a massive difference.
 SPRINT_FOOD_MIN: 6
-SPRINT_MIN: 0.2
+# Maximum speed you can travel while sprinting
+# This is a set value and shouldn't be changed unless you know what you're doing
+SPRINT_MAX: 0.2
+# Minimum travel distance for move to be considered a teleport and subsequently be ignored
+# This is a set value and shouldn't be changed unless you know what you're doing
 TELEPORT_MIN: 400
+# Time to exempt a player from moving because of teleporting
+# Increase in case of false positives
 TELEPORT_TIME: 1000
+# The number of steps we should wait before checking if the player has used timer cheating
+# Increase in case of false positives
 TIMER_STEP_CHECK: 50
+# The minimum time it should have taken for the player to travel X steps
+# Decrease in case of false positives
 TIMER_TIMEMIN: 2000
+# Maximum time a player is considered to have a change in velocity
+# This is a set value and shouldn't be changed unless you know what you're doing
 VELOCITY_CHECKTIME: 2100
+# This is a set value and shouldn't be changed unless you know what you're doing
 VELOCITY_MAXTIMES: 2
+# This is a set value and shouldn't be changed unless you know what you're doing
 VELOCITY_PREVENT: 5000
+# This is a set value and shouldn't be changed unless you know what you're doing
 VELOCITY_SCHETIME: 2
+# This is a set value and shouldn't be changed unless you know what you're doing
 VELOCITY_TIME: 3
-WATER_ASCENSION_VIOLATION_MAX: 13
+# Number of times a player can fail the ascension check while in water before being considered a cheater
+# Increase in case of false positives
+WATER_ASCENSION_VIOLATION_MAX: 12
+# Maximum speed that a player can climb a waterfall
+# Can be increased in case of false positives, shouldn't be necesary
 WATER_CLIMB_MAX: 0.15
+# Number of times a player can be caught speeding in water before being considered a cheater
+# Increase in case of false positives
 WATER_SPEED_VIOLATION_MAX: 4
+# Maximum speed a player can travel forwards or backwards
+# This is a set value and shouldn't be changed unless you know what you're doing
 XZ_SPEED_MAX: 0.25
+# aximum speed a player can travel forwards or backwards while flying
+# This is a set value and shouldn't be changed unless you know what you're doing
 XZ_SPEED_MAX_FLY: 0.56
+# Maximum speed a player can travel forwards or backwards while under the influence
+# This is a set value and shouldn't be changed unless you know what you're doing
 XZ_SPEED_MAX_POTION: 0.7
+# Maximum speed a player can travel forwards or backwards while sprinting while under the influence
+# This is a set value and shouldn't be changed unless you know what you're doing
 XZ_SPEED_MAX_POTION_SPRINT: 0.95
+# Maximum speed a player can travel forwards or backwards while sneaking
+# This is a set value and shouldn't be changed unless you know what you're doing
 XZ_SPEED_MAX_SNEAK: 0.15
+# Maximum speed a player can travel forwards or backwards on soul sand
+# This is a set value and shouldn't be changed unless you know what you're doing
 XZ_SPEED_MAX_SOULSAND: 0.13
+# Maximum speed a player can travel forwards or backwards on soul sand while under the influenc
+# This is a set value and shouldn't be changed unless you know what you're doing
 XZ_SPEED_MAX_SOULSAND_POTION: 0.16
+# Maximum speed a player can travel forwards or backwards on soul sand while sprintin
+# This is a set value and shouldn't be changed unless you know what you're doing
 XZ_SPEED_MAX_SOULSAND_SPRINT: 0.2
+# Maximum speed a player can travel forwards or backwards while sprinting
+# This is a set value and shouldn't be changed unless you know what you're doing
 XZ_SPEED_MAX_SPRINT: 0.65
+# Maximum speed a player can travel forwards or backwards in water
+# This is a set value and shouldn't be changed unless you know what you're doing
 XZ_SPEED_MAX_WATER: 0.19
+# Maximum speed a player can travel forwards or backwards in water while sprinting
+# This is a set value and shouldn't be changed unless you know what you're doing
 XZ_SPEED_MAX_WATER_SPRINT: 0.3
+# Maximum difference between the player's last two Y values when traveling up
+# Can be decreased slightly to improve detection with the risk of false positives
+# Increase in case of false positives
 Y_MAXDIFF: 5.0
+# Number of times a player can fly on the y-axis before being considered a cheater
+# Increase in case of false positives
 Y_MAXVIOLATIONS: 1
+# Time a player is forced to wait after flyhacking on the y-axis
+# Should be changed to personal preference
 Y_MAXVIOTIME: 5500
+# Maximum speed a player can travel up
+# This is a set value and shouldn't be changed unless you know what you're doing
 Y_SPEED_MAX: 0.5175
+# Time in between Y difference measures
+# This is a set value and shouldn't be changed unless you know what you're doing
 Y_TIME: 800
 # Amount of suspicious mid-air movements before a player is suspected of glide
 # Increase this in case of false positives
@@ -93,6 +247,9 @@ GLIDE_LIMIT: 10
 # Maximum amount of movement packets allowed per second
 # Increase this in case of false positives
 BLINK_PACKET: 25
+# If the blink check gives false positives replace this with the average user ping on your server
+# Not a good idea to use a value lower than 100 or higher than 200
+BLINK_AVERAGE_PING: 120
 # Maximum amount zero-velocity moments before a player is suspected
 # Increase this in case of false positives
 VELOCITY_AMT: 5

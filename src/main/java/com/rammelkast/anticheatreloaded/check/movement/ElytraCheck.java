@@ -19,39 +19,71 @@
 
 package com.rammelkast.anticheatreloaded.check.movement;
 
+import java.util.HashMap;
+
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Distance;
-import com.rammelkast.anticheatreloaded.util.Utilities;
 
 /**
  * TODO
  */
 public class ElytraCheck {
 
+	public static final HashMap<String, Double> JUMP_Y_VALUE = new HashMap<String, Double>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
 	public static CheckResult runCheck(Player player, Distance distance) {
+		String uuid = player.getUniqueId().toString();
 		if (distance.getYDifference() > AntiCheatReloaded.getManager().getBackend().getMagic().TELEPORT_MIN()) {
 			// This was a teleport, so skip check.
+			JUMP_Y_VALUE.remove(uuid);
 			return PASS;
 		}
-		/*if (!FlightCheck.isMovingExempt(player) && !Utilities.isHoveringOverWater(player.getLocation(), 1)
-				&& Utilities.cantStandAtExp(player.getLocation())
-				&& Utilities.blockIsnt(player.getLocation().getBlock().getRelative(BlockFace.DOWN),
-						new Material[] { Material.FENCE, Material.FENCE_GATE, Material.COBBLE_WALL,
-								Material.ACACIA_FENCE, Material.ACACIA_FENCE_GATE, Material.BIRCH_FENCE,
-								Material.BIRCH_FENCE_GATE, Material.DARK_OAK_FENCE, Material.DARK_OAK_FENCE_GATE,
-								Material.IRON_FENCE, Material.JUNGLE_FENCE, Material.JUNGLE_FENCE_GATE,
-								Material.fence, Material.SPRUCE_FENCE, Material.SPRUCE_FENCE_GATE, Material.IRON_BARS })) {
 
-		}*/
-		//TODO 1.15 update
-
+		if (player.isFlying() || player.hasPotionEffect(PotionEffectType.LEVITATION) || !player.isGliding()) {
+			JUMP_Y_VALUE.remove(uuid);
+			return PASS;
+		}
+	
+		double changeY = distance.toY() - distance.fromY();
+		boolean upwardMovement = changeY > 0;
+		if (player.getInventory().getItemInMainHand().getType() == Material.TRIDENT) {
+			if (upwardMovement) {
+				// TODO continue check here
+				JUMP_Y_VALUE.remove(uuid);
+				return PASS;
+			}
+		}
+		
+		if (changeY == 0.0D) {
+			// Seen no false positives here yet
+			return new CheckResult(CheckResult.Result.FAILED,
+					player.getName() + " had no Y-axis dropoff when gliding with Elytra");
+		}
+		
+		if (!JUMP_Y_VALUE.containsKey(uuid)) {
+			JUMP_Y_VALUE.put(uuid, distance.toY());
+			return PASS;
+		}
+		double lastY = JUMP_Y_VALUE.get(uuid);
+		if (lastY < distance.toY()) {
+			double diff =  distance.toY() - lastY;
+			if (diff > 0.7675) {
+				if (!AntiCheatReloaded.getManager().getBackend().silentMode()) {
+					Location to = player.getLocation();
+					to.setY(to.getY() - diff);
+					player.teleport(to);
+				}
+				return new CheckResult(CheckResult.Result.FAILED,
+						player.getName() + " tried to glide above jump level");
+			}
+		}
 		return PASS;
 	}
 
