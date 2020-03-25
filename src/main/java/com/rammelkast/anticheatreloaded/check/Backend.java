@@ -39,6 +39,7 @@ import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.potion.PotionEffectType;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
+import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
 import com.rammelkast.anticheatreloaded.check.movement.BlinkCheck;
 import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
@@ -91,6 +92,7 @@ public class Backend {
     private Map<UUID, Long> stepTime = new HashMap<UUID, Long>();
     private HashSet<Byte> transparent = new HashSet<Byte>();
     private Map<UUID, Long> lastFallPacket = new HashMap<UUID, Long>();
+    private Map<String, Integer> fastSneakViolations = new HashMap<String, Integer>();
 
     private Magic magic;
     private AntiCheatManager manager = null;
@@ -170,11 +172,13 @@ public class Backend {
         inventoryTime.remove(pU);
         inventoryClicks.remove(pU);
         lastFallPacket.remove(pU);
+        fastSneakViolations.remove(player.getUniqueId().toString());
         GlideCheck.LAST_DIFFERENCE.remove(pU);
         GlideCheck.LAST_FALL_DISTANCE.remove(pU);
         GlideCheck.VIOLATIONS.remove(pU);
         SpeedCheck.SPEED_VIOLATIONS.remove(player.getUniqueId());
         ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId().toString());
+        KillAuraCheck.ANGLE_FLAGS.remove(player.getUniqueId().toString());
     }
 
     public CheckResult checkFastBow(Player player, float force) {
@@ -295,15 +299,27 @@ public class Backend {
         return PASS;
     }
 
-    public CheckResult checkSneak(Player player, double x, double z) {
-        if (player.isSneaking() && !VersionUtil.isFlying(player) && !isMovingExempt(player) && !player.isInsideVehicle()) {
+    public CheckResult checkSneak(Player player, Location location, double x, double z) {
+        if (player.isSneaking() && !VersionUtil.isFlying(player) && !isMovingExempt(player) && !player.isInsideVehicle() && !Utilities.cantStandAtExp(location)) {
             double i = x > magic.XZ_SPEED_MAX_SNEAK() ? x : z > magic.XZ_SPEED_MAX_SNEAK() ? z : -1;
             if (i != -1) {
-                return new CheckResult(CheckResult.Result.FAILED, player.getName() + " was sneaking too fast (speed=" + i + ", max=" + magic.XZ_SPEED_MAX_SNEAK() + ")");
+            	if (this.fastSneakViolations.containsKey(player.getUniqueId().toString())) {
+            		int flags = this.fastSneakViolations.get(player.getUniqueId().toString());
+            		if (flags >= 3) { // TODO possible config
+                        return new CheckResult(CheckResult.Result.FAILED, player.getName() + " was sneaking too fast (speed=" + i + ", max=" + magic.XZ_SPEED_MAX_SNEAK() + ")");
+            		}
+            		this.fastSneakViolations.put(player.getUniqueId().toString(), flags + 1);
+            		return PASS;
+            	} else {
+            		this.fastSneakViolations.put(player.getUniqueId().toString(), 1);
+            		return PASS;
+            	}
             } else {
+            	this.fastSneakViolations.remove(player.getUniqueId().toString());
                 return PASS;
             }
         } else {
+        	this.fastSneakViolations.remove(player.getUniqueId().toString());
             return PASS;
         }
     }
@@ -359,42 +375,6 @@ public class Backend {
                 return new CheckResult(CheckResult.Result.FAILED, player.getName() + " tried to alter their timer, took " + step + " steps in " + time + " ms (min = " + magic.TIMER_TIMEMIN() + " ms)");
             }
         }
-        return PASS;
-    }
-
-    public CheckResult checkSight(Player player, Entity entity) {
-        /*if (entity instanceof LivingEntity) {
-            LivingEntity le = (LivingEntity) entity;
-            // Check to make sure the entity's head is not surrounded
-            Block head = le.getWorld().getBlockAt((int) le.getLocation().getX(), (int) (le.getLocation().getY() + le.getEyeHeight()), (int) le.getLocation().getZ());
-            boolean solid = false;
-            // TODO: This sucks. See if it's possible to not have as many false-positives while still retaining most of the check.
-            for (int x = -2; x <= 2; x++) {
-                for (int z = -2; z <= 2; z++) {
-                    for (int y = -1; y < 2; y++) {
-                        if (head.getRelative(x, y, z).getTypeId() != 0) {
-                            if (head.getRelative(x, y, z).getType().isSolid()) {
-                                solid = true;
-                                break;
-                            }
-
-                        }
-                    }
-                }
-
-            }
-            if (solid) {
-                return PASS;
-            }
-            // TODO: Needs proper testing
-            Location mobLocation = le.getEyeLocation();
-            for (Block block : player.getLineOfSight(transparent, 5)) {
-                if (Math.abs(block.getLocation().getX() - mobLocation.getX()) < 2.3 || Math.abs(block.getLocation().getZ() - mobLocation.getZ()) < 2.3) {
-                    return PASS;
-                }
-            }
-            return new CheckResult(Result.FAILED, player.getName()+" tried to damage an entity ("+le.getType()+") out of sight ");
-        }*/
         return PASS;
     }
 

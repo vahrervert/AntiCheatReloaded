@@ -163,15 +163,6 @@ public class UserManager {
     }
 
     /**
-     * Get the alert to use for a check being failed
-     *
-     * @return check fail alert message
-     */
-    public List<String> getAlert() {
-        return config.getLang().ALERT();
-    }
-
-    /**
      * Fire an alert
      *
      * @param user  The user to alert
@@ -179,19 +170,6 @@ public class UserManager {
      * @param type  The CheckType that triggered the alert
      */
     public void alert(User user, Group group, CheckType type) {
-        ArrayList<String> messageArray = new ArrayList<String>();
-        List<String> alert = getAlert();
-        for (int i = 0; i < alert.size(); i++) {
-            String message = alert.get(i);
-            if (!message.equals("")) {
-                message = message.replaceAll("&player", GOLD + user.getName() + GRAY);
-                message = message.replaceAll("&check", GOLD + CheckType.getName(type) + GRAY);
-                message = message.replaceAll("&group", group.getColor() + group.getName() + GRAY);
-                message = message.replaceAll("&level", "" + user.getLevel() + GRAY);
-                messageArray.add(message);
-            }
-        }
-        Utilities.alert(messageArray);
         execute(user, group.getActions(), type);
     }
 
@@ -226,16 +204,16 @@ public class UserManager {
             	}
                 final String name = user.getName();
                 for (String event : actions) {
-                    event = event.replaceAll("&player", name).replaceAll("&world", user.getPlayer().getWorld().getName()).replaceAll("&check", type.name());
+                    event = event.replaceAll("%player%", name).replaceAll("%world%", user.getPlayer().getWorld().getName()).replaceAll("%check%", type.name());
 
                     if (event.startsWith("COMMAND[")) {
                         for (String cmd : Utilities.getCommands(event)) {
                             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd);
                         }
                     } else if (event.equalsIgnoreCase("KICK")) {
-                        user.getPlayer().kickPlayer(RED + kickReason);
+                        user.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&', kickReason));
                         AntiCheatReloaded.getPlugin().onPlayerKicked();
-                        String msg = RED + config.getLang().KICK_BROADCAST().replaceAll("&player", name) + " (" + CheckType.getName(type) + ")";
+                        String msg = ChatColor.translateAlternateColorCodes('&', config.getLang().KICK_BROADCAST().replaceAll("%player%", name) + " (" + CheckType.getName(type) + ")");
                         if (!msg.equals("")) {
                             manager.log(msg);
                             manager.playerLog(msg);
@@ -244,13 +222,13 @@ public class UserManager {
                         List<String> message = warning;
                         for (String string : message) {
                             if (!string.equals("")) {
-                                user.getPlayer().sendMessage(RED + string);
+                                user.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', string));
                             }
                         }
                     } else if (event.equalsIgnoreCase("BAN")) {
-                        Bukkit.getBanList(Type.NAME).addBan(user.getPlayer().getName(), RED + banReason, null, null);
-                        user.getPlayer().kickPlayer(RED + banReason);
-                        String msg = RED + config.getLang().BAN_BROADCAST().replaceAll("&player", name) + " (" + CheckType.getName(type) + ")";
+                        Bukkit.getBanList(Type.NAME).addBan(user.getPlayer().getName(), ChatColor.translateAlternateColorCodes('&', banReason), null, null);
+                        user.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&', banReason));
+                        String msg = ChatColor.translateAlternateColorCodes('&', config.getLang().BAN_BROADCAST().replaceAll("%player%", name) + " (" + CheckType.getName(type) + ")");
                         if (!msg.equals("")) {
                             manager.log(msg);
                             manager.playerLog(msg);

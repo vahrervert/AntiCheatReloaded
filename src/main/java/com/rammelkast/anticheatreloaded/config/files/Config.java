@@ -33,9 +33,9 @@ public class Config extends ConfigurationFile {
     public ConfigValue<Boolean> verboseStartup;
     public ConfigValue<Boolean> silentMode;
     public ConfigValue<Boolean> exemptOp;
-
     public ConfigValue<Boolean> eventChains;
     public ConfigValue<Boolean> enterprise;
+    public ConfigValue<Boolean> debugMode;
 
     public ConfigValue<Boolean> blockChatSpamSpeed;
     public ConfigValue<Boolean> blockCommandSpamSpeed;
@@ -64,6 +64,7 @@ public class Config extends ConfigurationFile {
         exemptOp = new ConfigValue<Boolean>("system.exempt-op");
         eventChains = new ConfigValue<Boolean>("system.event-chains");
         enterprise = new ConfigValue<Boolean>("system.enterprise");
+        debugMode = new ConfigValue<Boolean>("system.debug-mode");
 
         blockChatSpamSpeed = new ConfigValue<Boolean>("spam.chat.block-speed");
         blockChatSpamRepetition = new ConfigValue<Boolean>("spam.chat.block-repetition");

@@ -73,7 +73,7 @@ public class GlideCheck {
 						player.teleport(to);
 					}
 					return new CheckResult(CheckResult.Result.FAILED,
-							player.getName() + " was set back for gliding (yDiff="
+							player.getName() + " failed Glide (yDiff="
 									+ new BigDecimal(yDiff).setScale(2, RoundingMode.HALF_UP) + ")");
 				} else {
 					VIOLATIONS.put(player.getUniqueId(), VIOLATIONS.get(player.getUniqueId()) + 1);

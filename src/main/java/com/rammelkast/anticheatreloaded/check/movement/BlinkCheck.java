@@ -55,7 +55,7 @@ public class BlinkCheck {
 
 	public static void listenPackets() {
 		AntiCheatReloaded.getProtocolManager()
-				.addPacketListener(new PacketAdapter(AntiCheatReloaded.getPlugin(), ListenerPriority.NORMAL,
+				.addPacketListener(new PacketAdapter(AntiCheatReloaded.getPlugin(), ListenerPriority.LOWEST,
 						new PacketType[] { PacketType.Play.Client.POSITION, PacketType.Play.Client.POSITION_LOOK }) {
 					@Override
 					public void onPacketReceiving(PacketEvent e) {

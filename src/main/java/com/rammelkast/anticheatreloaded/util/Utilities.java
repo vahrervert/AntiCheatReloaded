@@ -46,24 +46,6 @@ public final class Utilities {
 	public static final String SPY_METADATA = "ac-spydata";
 
 	/**
-	 * Send a hack level alert to players and console
-	 *
-	 * @param message List of strings to send as the alert
-	 */
-	public static void alert(List<String> message) {
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (Permission.SYSTEM_ALERT.get(player)) {
-				for (String msg : message) {
-					player.sendMessage(msg);
-				}
-			}
-		}
-		for (String msg : message) {
-			AntiCheatReloaded.getManager().log(msg);
-		}
-	}
-
-	/**
 	 * Check if only the block beneath them is standable (includes water + lava)
 	 * 
 	 * @param block the block to check (under)

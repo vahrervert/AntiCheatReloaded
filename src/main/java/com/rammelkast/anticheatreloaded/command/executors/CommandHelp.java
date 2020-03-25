@@ -31,12 +31,12 @@ public class CommandHelp extends CommandBase {
     private static final String USAGE = "anticheat help";
     private static final Permission PERMISSION = Permission.SYSTEM_HELP;
     private static final String[] HELP = {
-            RED + "/acr " + GRAY + "help",
-            RED + "/acr " + GRAY + "reload",
-            RED + "/acr " + GRAY + "check " + WHITE + "[check] [on/off]",
-            RED + "/acr " + GRAY + "log " + WHITE + "[file/console] [on/off]",
-            RED + "/acr " + GRAY + "report " + WHITE + "[group/user]",
-            RED + "/acr " + GRAY + "reset " + WHITE + "[user]",
+    		GOLD + "/acr " + GRAY + "help",
+    		GOLD + "/acr " + GRAY + "reload",
+    		GOLD + "/acr " + GRAY + "check " + WHITE + "[check] [on/off]",
+            GOLD + "/acr " + GRAY + "log " + WHITE + "[file/console] [on/off]",
+            GOLD + "/acr " + GRAY + "report " + WHITE + "[group/user]",
+            GOLD + "/acr " + GRAY + "reset " + WHITE + "[user]",
     };
 
     public CommandHelp() {

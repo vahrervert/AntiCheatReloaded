@@ -45,7 +45,7 @@ public class CommandBase {
     public static final ChatColor AQUA = ChatColor.AQUA;
     public static final Server SERVER = Bukkit.getServer();
     public static final String PERMISSIONS_ERROR = RED + "You don't have the permissions to use this command.";
-    public static final String MENU_END = "-----------------------------------------------------";
+    public static final String MENU_END = GOLD + "-----------------------------------------------------";
 
     private final String name;
     private final String command;
@@ -74,9 +74,9 @@ public class CommandBase {
     }
 
     public void sendHelp(CommandSender cs) {
-        cs.sendMessage(RED + "== " + GRAY + getName() + RED + " ==");
-        cs.sendMessage(RED + "Usage: " + GRAY + (cs instanceof Player ? "/" : "") + getUsage());
-        cs.sendMessage(RED + "Permission: " + GRAY + getPermission().toString());
+        cs.sendMessage(GOLD + "" + ChatColor.BOLD + "AntiCheatReloaded " + ChatColor.GRAY + "Help Menu");
+        cs.sendMessage(GOLD + "Usage: " + GRAY + (cs instanceof Player ? "/" : "") + getUsage());
+        cs.sendMessage(GOLD + "Permission: " + GRAY + getPermission().toString());
         for (String string : getHelp()) {
             cs.sendMessage(string);
         }

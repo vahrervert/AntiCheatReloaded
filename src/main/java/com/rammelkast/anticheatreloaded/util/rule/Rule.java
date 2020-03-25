@@ -72,7 +72,7 @@ import java.util.TreeMap;
  * <p/>
  * <b>Types of functions:</b><br />
  * - Player: RESET, KICK, BAN, COMMAND[command] OR COMMAND[command1;command2]
- * <i>- when using commands <b>&player</b> will be replaced by the player name, <b>&world</b> will be replaced by the player's world,
+ * <i>- when using commands <b>%player%</b> will be replaced by the player name, <b>&world</b> will be replaced by the player's world,
  * and <b>&check</b> will be replaced by the check that caused this rule to be run</i><br />
  * <br /><br />
  * <p/>

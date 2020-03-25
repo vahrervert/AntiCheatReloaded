@@ -12,11 +12,11 @@ Bug Reporting
 Issues should be filed by hitting the [issues](https://github.com/Rammelkast/AntiCheatReloaded/issues?state=open) tab above. Please make sure you search your issue before opening a new ticket.
 
 Please include the following information with your issue, this allows me to fix it quicker;
-* The `/anticheat debug` log
 * Your AntiCheatReloaded version
 * Your server software (Bukkit/Spigot/Other) and it's version
-* If you use ProtocolLib, your ProtocolLib version
+* Your ProtocolLib version
 * Whether or not you are using protocol hacks (ViaVersion etc.)
+* Any logs relating to the issue
 
 Usage
 -------
@@ -46,3 +46,5 @@ Hacks blocked
 * FastEat
 * ElytraFly
 * Unicode chat
+* GhostHand
+* KillAura

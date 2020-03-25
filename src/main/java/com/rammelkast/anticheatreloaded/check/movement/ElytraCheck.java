@@ -64,7 +64,7 @@ public class ElytraCheck {
 		if (changeY == 0.0D) {
 			// Seen no false positives here yet
 			return new CheckResult(CheckResult.Result.FAILED,
-					player.getName() + " had no Y-axis dropoff when gliding with Elytra");
+					player.getName() + " failed ElytraFly, had no Y-axis dropoff when gliding with Elytra");
 		}
 		
 		if (!JUMP_Y_VALUE.containsKey(uuid)) {
@@ -81,7 +81,7 @@ public class ElytraCheck {
 					player.teleport(to);
 				}
 				return new CheckResult(CheckResult.Result.FAILED,
-						player.getName() + " tried to glide above jump level");
+						player.getName() + " failed ElytraFly, tried to glide above jump level");
 			}
 		}
 		return PASS;

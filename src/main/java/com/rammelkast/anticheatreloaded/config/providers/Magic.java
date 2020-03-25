@@ -371,7 +371,15 @@ public interface Magic {
      */
 	public int BLINK_AVERAGE_PING();
     /**
-     * Maximum amount of low/zero velocity before flagging; Type=INTEGER, Leniency=INCREASE.
+     * Maximum amount of low/zero velocity moments before flagging; Type=INTEGER, Leniency=INCREASE.
      */
-    public int VELOCITY_AMT();
+    public int VELOCITY_MAX_FLAGS();
+    /**
+     * The maximum angle difference allowed when attacking; TYPE=INTEGER, Leniency=INCREASE
+     */
+    public int KILLAURA_MAX_ANGLE_DIFFERENCE();
+    /**
+     * The maximum amount of violations before flagging player as a cheater; TYPE=INTEGER, Leniency=INCREASE
+     */
+    public int KILLAURA_MAX_ANGLE_VIOLATIONS();
 }

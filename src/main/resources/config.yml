@@ -30,6 +30,9 @@ system:
   event-chains: true
   # Should Enterprise options be enabled? Only set this to true if you're an advanced user.
   enterprise: false
+  # Running AntiCheatReloaded in debug mode will send alerts to the cheating players
+  # Do NOT enable this in a production environment!
+  debug-mode: false
 # Use /AntiCheatReloaded check for a list of valid checks
 disabled-checks:
 - EXAMPLE_CHECK

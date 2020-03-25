@@ -36,6 +36,7 @@ import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.check.combat.CriticalsCheck;
+import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
 import com.rammelkast.anticheatreloaded.util.Distance;
 
@@ -143,19 +144,19 @@ public class EntityListener extends EventListener {
                         noHack = false;
                     }
                 }
-                if (getCheckManager().willCheck(player, CheckType.FORCEFIELD)) {
+                if (getCheckManager().willCheck(player, CheckType.KILLAURA)) {
                     CheckResult result = getBackend().checkSprintDamage(player);
                     if (result.failed()) {
                         event.setCancelled(!silentMode());
-                        log(result.getMessage(), player, CheckType.FORCEFIELD);
+                        log(result.getMessage(), player, CheckType.KILLAURA);
                         noHack = false;
                     }
                 }
-                if (getCheckManager().willCheck(player, CheckType.FORCEFIELD)) {
-                    CheckResult result = getBackend().checkSight(player, e.getEntity());
+                if (getCheckManager().willCheck(player, CheckType.KILLAURA)) {
+                    CheckResult result = KillAuraCheck.checkAngle(player, event);
                     if (result.failed()) {
                         event.setCancelled(!silentMode());
-                        log(result.getMessage(), player, CheckType.FORCEFIELD);
+                        log(result.getMessage(), player, CheckType.KILLAURA);
                         noHack = false;
                     }
                 }

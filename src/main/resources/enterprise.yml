@@ -1,5 +1,4 @@
-# AntiCheat configuration file
-# Please report any bugs: https://github.com/gravitylow/AntiCheat/issues
+# AntiCheatReloaded configuration file
 # Server-specific settings
 server:
   # An identifiable name for this server

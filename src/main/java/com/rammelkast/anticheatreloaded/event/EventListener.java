@@ -19,6 +19,7 @@
 
 package com.rammelkast.anticheatreloaded.event;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
@@ -51,6 +52,17 @@ public class EventListener implements Listener {
                 AntiCheatReloaded.getManager().log(message);
             }
             removeDecrease(user);
+        }
+        
+        if (message == null || message.equals("")) {
+        	return;
+        }
+        
+        String alertMessage = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + message;
+        if (CONFIG.getConfig().debugMode.getValue()) {
+        	player.sendMessage(alertMessage);
+        } else {
+        	AntiCheatReloaded.getPlugin().sendToStaff(alertMessage);
         }
     }
 

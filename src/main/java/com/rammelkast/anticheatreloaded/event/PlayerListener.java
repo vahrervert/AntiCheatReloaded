@@ -78,7 +78,8 @@ public class PlayerListener extends EventListener {
             CheckResult result = getBackend().checkCommandSpam(player, event.getMessage());
             if (result.failed()) {
                 event.setCancelled(!silentMode());
-                if (!silentMode()) player.sendMessage(ChatColor.RED + result.getMessage());
+				if (!silentMode())
+					player.sendMessage(ChatColor.translateAlternateColorCodes('&', result.getMessage()));
                 getBackend().processCommandSpammer(player);
                 log(null, player, CheckType.COMMAND_SPAM);
             }
@@ -174,7 +175,7 @@ public class PlayerListener extends EventListener {
             if (result.failed()) {
                 event.setCancelled(!silentMode());
                 if (!result.getMessage().equals("") && !silentMode()) {
-                    player.sendMessage(ChatColor.RED + result.getMessage());
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', result.getMessage()));
                 }
                 getBackend().processChatSpammer(player);
                 AntiCheatReloaded.sendToMainThread(new Runnable() {
@@ -190,7 +191,7 @@ public class PlayerListener extends EventListener {
             CheckResult result = getBackend().checkChatUnicode(player, event.getMessage());
             if (result.failed()) {
             	event.setCancelled(true);
-            	player.sendMessage(ChatColor.RED + result.getMessage());
+            	player.sendMessage(ChatColor.translateAlternateColorCodes('&', result.getMessage()));
                 AntiCheatReloaded.sendToMainThread(new Runnable() {
 					@Override
 					public void run() {
@@ -434,7 +435,7 @@ public class PlayerListener extends EventListener {
                     }
                 }
                 if (getCheckManager().willCheckQuick(player, CheckType.SNEAK)) {
-                    CheckResult result = getBackend().checkSneak(player, x, z);
+                    CheckResult result = getBackend().checkSneak(player, event.getTo(), x, z);
                     if (result.failed()) {
                         if (!silentMode()) {
                             event.setTo(user.getGoodLocation(from.clone()));

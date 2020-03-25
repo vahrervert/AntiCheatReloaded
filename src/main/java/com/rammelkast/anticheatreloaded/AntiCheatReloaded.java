@@ -33,6 +33,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.BlinkCheck;
 import com.rammelkast.anticheatreloaded.command.CommandHandler;
 import com.rammelkast.anticheatreloaded.config.Configuration;
@@ -81,19 +82,20 @@ public class AntiCheatReloaded extends JavaPlugin {
 		if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
 			this.setupProtocol();
 		} else {
-			Bukkit.getConsoleSender().sendMessage("[ACR] " + ChatColor.RED + "Shutting down, ProtocolLib not found!");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.RED + "Shutting down, ProtocolLib not found!");
 			Bukkit.getPluginManager().disablePlugin(this);
 			return;
 		}
 		
 		getLogger().info("NMS version is " + VersionUtil.getVersion());
 		if (!VersionUtil.isSupported()) {
-			Bukkit.getConsoleSender().sendMessage("[ACR] " + ChatColor.RED + "The version of this server is NOT supported by ACR! The plugin will be buggy!");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.RED + "The version of this server is NOT supported by ACR! The plugin will be buggy!");
 		}
 		getLogger().info("Found ProtocolLib, enabling checks that use ProtcolLib...");
 		// Enable packetlisteners
 		BlinkCheck.startTimer();
 		BlinkCheck.listenPackets();
+		KillAuraCheck.listenPackets();
 		
 		// Check if other AC's are installed
 		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
@@ -298,6 +300,14 @@ public class AntiCheatReloaded extends JavaPlugin {
 
 	public static void sendToMainThread(Runnable runnable) {
 		Bukkit.getServer().getScheduler().runTask(AntiCheatReloaded.getPlugin(), runnable);
+	}
+	
+	public void sendToStaff(String message) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (player.hasPermission("anticheat.system.alert")) {
+				player.sendMessage(message);
+			}
+		}
 	}
 	
 }

@@ -252,4 +252,10 @@ BLINK_PACKET: 25
 BLINK_AVERAGE_PING: 120
 # Maximum amount zero-velocity moments before a player is suspected
 # Increase this in case of false positives
-VELOCITY_AMT: 5
+VELOCITY_MAX_FLAGS: 5
+# The maximum angle difference allowed when attacking
+# Increase this in case of false positives
+KILLAURA_MAX_ANGLE_DIFFERENCE: 50
+# The maximum amount of violations before flagging player as a cheater
+# Increase this in case of false positives
+KILLAURA_MAX_ANGLE_VIOLATIONS: 3

@@ -41,9 +41,9 @@ public class CommandReport extends CommandBase {
     private static final String USAGE = "anticheat report [group/user]";
     private static final Permission PERMISSION = Permission.SYSTEM_REPORT;
     private static final String[] HELP = {
-            GRAY + "Use: " + AQUA + "/anticheat report [group]" + GRAY + " to see all users in a given group",
-            GRAY + "Use: " + AQUA + "/anticheat report [user]" + GRAY + " to see a single user's report",
-            GRAY + "Use: " + AQUA + "/anticheat report [user/group] [num]" + GRAY + " to see pages of a report",
+            GRAY + "Use: " + GOLD + "/anticheat report [group]" + GRAY + " to see all users in a given group",
+            GRAY + "Use: " + GOLD + "/anticheat report [user]" + GRAY + " to see a single user's report",
+            GRAY + "Use: " + GOLD + "/anticheat report [user/group] [num]" + GRAY + " to see pages of a report",
     };
 
     public CommandReport() {
@@ -71,7 +71,7 @@ public class CommandReport extends CommandBase {
                     int numPlayers = USER_MANAGER.getUsersInGroup(g).size();
                     cs.sendMessage(g.getColor() + g.getName() + WHITE + ": " + numPlayers + " players");
                 }
-                cs.sendMessage(GRAY + "Use " + AQUA + "/anticheat report [group]" + GRAY + " for a list of players in each group.");
+                cs.sendMessage(GRAY + "Use " + GOLD + "/anticheat report [group]" + GRAY + " for a list of players in each group.");
             } else {
                 // Test groups
                 for (Group group : CONFIG.getGroups().getGroups()) {
@@ -79,6 +79,12 @@ public class CommandReport extends CommandBase {
                         groupReport(cs, group, page);
                         return;
                     }
+                }
+                
+                Player targetPlayer = Bukkit.getPlayer(args[0]);
+                if (targetPlayer == null) {
+                	 cs.sendMessage(RED + "Not a valid group or user: " + WHITE + args[0]);
+                	return;
                 }
 
                 // Test users
@@ -104,7 +110,7 @@ public class CommandReport extends CommandBase {
         String groupName = group == null ? "Low" : group.getName();
         int pages = (int) Math.ceil(((float) users.size()) / 7);
         if (page <= pages && page > 0) {
-            cs.sendMessage("--------------------[" + GREEN + "REPORT[" + page + "/" + pages + "]" + WHITE + "]---------------------");
+        	cs.sendMessage(GOLD + "----------------------[" + GRAY + "Page " + page + "/" + pages + "" + GOLD + "]----------------------");
             cs.sendMessage(GRAY + "Group: " + color + groupName);
             for (int x = 0; x < 7; x++) {
                 int index = ((page - 1) * 6) + (x + ((page - 1) * 1));
@@ -116,7 +122,7 @@ public class CommandReport extends CommandBase {
             cs.sendMessage(MENU_END);
         } else {
             if (pages == 0) {
-                cs.sendMessage("--------------------[" + GREEN + "REPORT[1/1]" + WHITE + "]---------------------");
+            	cs.sendMessage(GOLD + "----------------------[" + GRAY + "Page 1/1" + GOLD + "]----------------------");
                 cs.sendMessage(GRAY + "Group: " + color + groupName);
                 cs.sendMessage(GRAY + "There are no users in this group.");
                 cs.sendMessage(MENU_END);
@@ -147,7 +153,7 @@ public class CommandReport extends CommandBase {
         groupString += " (" + user.getLevel() + ")";
 
         if (page <= pages && page > 0) {
-            cs.sendMessage("--------------------[" + GREEN + "REPORT[" + page + "/" + pages + "]" + WHITE + "]---------------------");
+            cs.sendMessage(GOLD + "----------------------[" + GRAY + "Page " + page + "/" + pages + "" + GOLD + "]----------------------");
             cs.sendMessage(GRAY + "Player: " + WHITE + name);
             cs.sendMessage(GRAY + "Group: " + groupString);
             for (int x = 0; x < 6; x++) {
@@ -167,7 +173,7 @@ public class CommandReport extends CommandBase {
             cs.sendMessage(MENU_END);
         } else {
             if (pages == 0 && page == 1) {
-                cs.sendMessage("--------------------[" + GREEN + "REPORT[1/1]" + WHITE + "]---------------------");
+            	cs.sendMessage(GOLD + "----------------------[" + GRAY + "Page 1/1" + GOLD + "]----------------------");
                 cs.sendMessage(GRAY + "Player: " + WHITE + name);
                 cs.sendMessage(GRAY + "Group: " + groupString);
                 cs.sendMessage(GRAY + "This user has not failed any checks.");

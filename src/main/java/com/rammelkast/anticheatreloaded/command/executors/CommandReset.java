@@ -21,7 +21,6 @@ package com.rammelkast.anticheatreloaded.command.executors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.command.CommandBase;
@@ -55,7 +54,7 @@ public class CommandReset extends CommandBase {
 				user.resetLevel();
 				user.clearMessages();
 				AntiCheatReloaded.getManager().getBackend().resetChatLevel(user);
-				cs.sendMessage(args[0] + GREEN + " has been reset.");
+				cs.sendMessage(GOLD + args[0] + GRAY + " has been reset.");
 			} else {
 				cs.sendMessage(RED + "Player: " +args[0] + " not found.");
 			}

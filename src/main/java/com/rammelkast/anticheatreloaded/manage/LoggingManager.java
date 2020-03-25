@@ -71,12 +71,12 @@ public class LoggingManager {
     }
 
     public void debugLog(String message) {
-        Bukkit.getConsoleSender().sendMessage("[ACR] " + ChatColor.GRAY + message);
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + message);
         logToLogs(message);
     }
 
     public void logToConsole(String message) {
-        Bukkit.getConsoleSender().sendMessage("[ACR] " + ChatColor.RED + message);
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + message);
     }
 
     public void logToFile(String message) {

@@ -72,7 +72,7 @@ public class FlightCheck {
 			if (BLOCKS_OVER_FLIGHT.get(uuid) > AntiCheatReloaded.getManager().getBackend().getMagic()
 					.FLIGHT_BLOCK_LIMIT() && (y1 <= y2)) {
 				return new CheckResult(CheckResult.Result.FAILED,
-						player.getName() + " flew over " + BLOCKS_OVER_FLIGHT.get(uuid) + " blocks (max="
+						player.getName() + " failed Flight, flew over " + BLOCKS_OVER_FLIGHT.get(uuid) + " blocks (max="
 								+ AntiCheatReloaded.getManager().getBackend().getMagic().FLIGHT_BLOCK_LIMIT() + ")");
 			}
 		} else {

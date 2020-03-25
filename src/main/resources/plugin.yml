@@ -2,7 +2,7 @@ name: AntiCheatReloaded
 author: Rammelkast
 description: AntiCheatReloaded helps easily identify and block malicious users on your server.
 main: com.rammelkast.anticheatreloaded.AntiCheatReloaded
-api-version: 1.13
+api-version: 1.15
 depend: [ProtocolLib]
 startup: postworld
 version: ${project.build.version}
@@ -97,8 +97,8 @@ permissions:
   anticheat.check.fastheal:
     description: Allow players to heal up instantly
     default: false
-  anticheat.check.forcefield:
-    description: Allow players to use a forcefield
+  anticheat.check.killaura:
+    description: Allow players to use killaura
     default: false
   anticheat.check.longreach:
     description: Allow players to use longreaching hacks
@@ -154,7 +154,7 @@ permissions:
       anticheat.check.fastbow: true
       anticheat.check.fasteat: true
       anticheat.check.fastheal: true
-      anticheat.check.forcefield: true
+      anticheat.check.killaura: true
       anticheat.check.longreach: true
       anticheat.check.projectile: true
       anticheat.check.itemspam: true
