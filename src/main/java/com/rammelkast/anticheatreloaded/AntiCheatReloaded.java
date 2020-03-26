@@ -303,11 +303,7 @@ public class AntiCheatReloaded extends JavaPlugin {
 	}
 	
 	public void sendToStaff(String message) {
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (player.hasPermission("anticheat.system.alert")) {
-				player.sendMessage(message);
-			}
-		}
+		Bukkit.broadcast(message, "anticheat.system.alert");
 	}
 	
 }
