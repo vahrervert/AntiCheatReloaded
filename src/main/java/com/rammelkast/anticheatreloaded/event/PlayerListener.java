@@ -325,6 +325,10 @@ public class PlayerListener extends EventListener {
         }
 
         AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
+        
+        if (player.hasPermission("anticheat.admin") && !AntiCheatReloaded.getUpdateManager().isLatest()) {
+        	player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + "Your version of AntiCheatReloaded is outdated! You can download " + AntiCheatReloaded.getUpdateManager().getLatestVersion() + " from the Spigot forums or DevBukkit.");
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -344,13 +348,6 @@ public class PlayerListener extends EventListener {
             //KillAuraCheck.doMove(event);
             //TODO
             
-            if (getCheckManager().willCheckQuick(player, CheckType.SPRINT)) {
-                CheckResult result = getBackend().checkSprintStill(player, from, to);
-                if (result.failed()) {
-                    event.setCancelled(!silentMode());
-                    log(result.getMessage(), player, CheckType.SPRINT);
-                }
-            }
             if (getCheckManager().willCheckQuick(player, CheckType.FLIGHT) && !VersionUtil.isFlying(player)) {
                 CheckResult result = FlightCheck.runCheck(player, distance);
                 if (result.failed()) {

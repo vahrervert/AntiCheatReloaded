@@ -33,7 +33,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.potion.PotionEffectType;
@@ -48,6 +47,7 @@ import com.rammelkast.anticheatreloaded.check.movement.GlideCheck;
 import com.rammelkast.anticheatreloaded.check.movement.SpeedCheck;
 import com.rammelkast.anticheatreloaded.check.movement.WaterWalkCheck;
 import com.rammelkast.anticheatreloaded.check.movement.YAxisCheck;
+import com.rammelkast.anticheatreloaded.check.player.GhosthandCheck;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.providers.Lang;
 import com.rammelkast.anticheatreloaded.config.providers.Magic;
@@ -331,13 +331,6 @@ public class Backend {
         } else {
             return PASS;
         }
-    }
-
-    public CheckResult checkSprintStill(Player player, Location from, Location to) {
-        /*if(!isMovingExempt(player) && player.isSprinting() && from.getX() == to.getX() && from.getZ() == to.getZ()) {
-            return new CheckResult(Result.FAILED, player.getName()+" sprinted while standing still (xyz = "+(int)from.getX()+","+(int)from.getY()+","+(int)from.getZ()+")");
-        }*/
-        return PASS;
     }
 
     public CheckResult checkVClip(Player player, Distance distance) {

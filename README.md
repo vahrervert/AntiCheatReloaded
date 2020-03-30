@@ -48,3 +48,4 @@ Hacks blocked
 * Unicode chat
 * GhostHand
 * KillAura
+* Scaffold

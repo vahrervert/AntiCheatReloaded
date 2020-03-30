@@ -44,6 +44,7 @@ import com.rammelkast.anticheatreloaded.event.PlayerListener;
 import com.rammelkast.anticheatreloaded.event.VehicleListener;
 import com.rammelkast.anticheatreloaded.manage.AntiCheatManager;
 import com.rammelkast.anticheatreloaded.metrics.Metrics;
+import com.rammelkast.anticheatreloaded.util.UpdateManager;
 import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
@@ -58,6 +59,7 @@ public class AntiCheatReloaded extends JavaPlugin {
 	private static ProtocolManager protocolManager;
 	private static SecureRandom random;
 	private static Long loadTime;
+	private static UpdateManager updateManager;
 
 	@Override
 	public void onEnable() {
@@ -91,7 +93,7 @@ public class AntiCheatReloaded extends JavaPlugin {
 		if (!VersionUtil.isSupported()) {
 			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.RED + "The version of this server is NOT supported by ACR! The plugin will be buggy!");
 		}
-		getLogger().info("Found ProtocolLib, enabling checks that use ProtcolLib...");
+		getLogger().info("Enabling checks that use ProtcolLib");
 		// Enable packetlisteners
 		BlinkCheck.startTimer();
 		BlinkCheck.listenPackets();
@@ -144,6 +146,8 @@ public class AntiCheatReloaded extends JavaPlugin {
 				}
 			}
 		}, 90L);
+		
+		updateManager = new UpdateManager();
 		
 		// End tests
 		verboseLog("Finished loading.");
@@ -304,6 +308,10 @@ public class AntiCheatReloaded extends JavaPlugin {
 	
 	public void sendToStaff(String message) {
 		Bukkit.broadcast(message, "anticheat.system.alert");
+	}
+	
+	public static UpdateManager getUpdateManager() {
+		return updateManager;
 	}
 	
 }

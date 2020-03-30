@@ -45,14 +45,14 @@ public class KillAuraCheck {
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
 	public static void listenPackets() {
-		AntiCheatReloaded.getProtocolManager().addPacketListener(new PacketAdapter(AntiCheatReloaded.getPlugin(),
+		/*AntiCheatReloaded.getProtocolManager().addPacketListener(new PacketAdapter(AntiCheatReloaded.getPlugin(),
 				ListenerPriority.LOWEST, new PacketType[] { PacketType.Play.Client.POSITION_LOOK }) {
 			@Override
 			public void onPacketReceiving(PacketEvent e) {
 				Player player = e.getPlayer();
 				PacketContainer packet = e.getPacket();
 			}
-		});
+		});*/
 	}
 	
 	public static CheckResult checkAngle(Player player, EntityDamageEvent event) {
@@ -83,7 +83,7 @@ public class KillAuraCheck {
 		return PASS;
 	}
 	
-	private static double calculateYawDifference(Location from, Location to) {
+	public static double calculateYawDifference(Location from, Location to) {
 		Location clonedFrom = from.clone();
 		Vector startVector = clonedFrom.toVector();
 		Vector targetVector = to.toVector();

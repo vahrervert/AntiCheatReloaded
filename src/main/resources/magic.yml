@@ -259,3 +259,6 @@ KILLAURA_MAX_ANGLE_DIFFERENCE: 50
 # The maximum amount of violations before flagging player as a cheater
 # Increase this in case of false positives
 KILLAURA_MAX_ANGLE_VIOLATIONS: 3
+# The maximum angle difference allowed when placing or breaking a block
+# Increase this in case of false positives
+GHOSTHAND_MAX_ANGLE_DIFFERENCE: 50

@@ -382,4 +382,8 @@ public interface Magic {
      * The maximum amount of violations before flagging player as a cheater; TYPE=INTEGER, Leniency=INCREASE
      */
     public int KILLAURA_MAX_ANGLE_VIOLATIONS();
+    /**
+     * The maximum angle difference allowed when breaking or placing blocks; TYPE=INTEGER, Leniency=INCREASE
+     */
+    public int GHOSTHAND_MAX_ANGLE_DIFFERENCE();
 }

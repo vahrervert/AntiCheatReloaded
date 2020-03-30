@@ -19,9 +19,8 @@
 
 package com.rammelkast.anticheatreloaded.check.player;
 
-import java.util.List;
-
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -30,6 +29,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
+import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.config.providers.Magic;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 
@@ -47,7 +47,7 @@ public class GhosthandCheck {
 	}
 
 	private static CheckResult checkBlockBreak(Player player, BlockBreakEvent event) {
-		if (!isValidBreakTarget(player, event.getBlock())) {
+		if (!isValidTarget(player, event.getBlock())) {
 			return new CheckResult(CheckResult.Result.FAILED,
 					player.getName() + " tried to break a block which was out of view");
 		}
@@ -55,41 +55,44 @@ public class GhosthandCheck {
 	}
 
 	private static CheckResult checkBlockPlace(Player player, BlockPlaceEvent event) {
-		if (!isValidPlaceTarget(player, event.getBlock())) {
+		if (!isValidTarget(player, event.getBlock())) {
 			return new CheckResult(CheckResult.Result.FAILED,
 					player.getName() + " tried to place a block out of their view");
 		}
 		return PASS;
 	}
 	
-	private static boolean isValidPlaceTarget(Player player, Block block) {
+	private static boolean isValidTarget(Player player, Block block) {
 		Magic magic = AntiCheatReloaded.getManager().getConfiguration().getMagic();
 		double distance =
                 player.getGameMode() == GameMode.CREATIVE ? magic.BLOCK_MAX_DISTANCE_CREATIVE()
                         : player.getLocation().getDirection().getY() > 0.9 ? magic.BLOCK_MAX_DISTANCE_CREATIVE()
                         : magic.BLOCK_MAX_DISTANCE();
 		Block targetBlock = player.getTargetBlockExact((int) Math.ceil(distance));
+		if (targetBlock == null) {
+			return false;
+		}
+		
 		if (Utilities.isClimbableBlock(targetBlock)) {
 			if (targetBlock.getLocation().distance(player.getLocation()) <= distance) {
 				return true;
 			}
 		}
-		return targetBlock.equals(block) || targetBlock.getLocation().distance(block.getLocation()) <= 1.51;
-	}
-	
-	private static boolean isValidBreakTarget(Player player, Block block) {
-		Magic magic = AntiCheatReloaded.getManager().getConfiguration().getMagic();
-		double distance =
-                player.getGameMode() == GameMode.CREATIVE ? magic.BLOCK_MAX_DISTANCE_CREATIVE()
-                        : player.getLocation().getDirection().getY() > 0.9 ? magic.BLOCK_MAX_DISTANCE_CREATIVE()
-                        : magic.BLOCK_MAX_DISTANCE();
-		List<Block> targetBlocks = player.getLastTwoTargetBlocks(null, (int) Math.ceil(distance));
-		for (Block target : targetBlocks) {
-			if (Utilities.isClimbableBlock(target)) {
-				return true;
-			}
+		
+		if (targetBlock.equals(block)) {
+			return true;
 		}
-		return targetBlocks.contains(block);
+		
+		Location eyeLocation = player.getEyeLocation();
+
+		double yawDifference = KillAuraCheck.calculateYawDifference(eyeLocation, block.getLocation());
+		double playerYaw = player.getEyeLocation().getYaw();
+
+		double angleDifference = Math.abs(180 - Math.abs(Math.abs(yawDifference - playerYaw) - 180));
+		if (Math.round(angleDifference) > magic.GHOSTHAND_MAX_ANGLE_DIFFERENCE()) {
+			return false;
+		}
+		return true;
 	}
 	
 }
