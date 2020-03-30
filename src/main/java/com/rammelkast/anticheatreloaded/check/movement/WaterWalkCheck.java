@@ -79,7 +79,7 @@ public class WaterWalkCheck {
 											.WATER_SPEED_VIOLATION_MAX()) {
 										WATER_SPEED_VIOLATIONS.put(uuid, 0);
 										return new CheckResult(CheckResult.Result.FAILED,
-												player.getName() + " stood on water " + v + " times (can't stand on "
+												"stood on water " + v + " times (can't stand on "
 														+ block.getType() + " or "
 														+ block.getRelative(BlockFace.DOWN).getType() + ")");
 									} else {
@@ -106,7 +106,7 @@ public class WaterWalkCheck {
 					if (v >= AntiCheatReloaded.getManager().getBackend().getMagic().WATER_ASCENSION_VIOLATION_MAX()) {
 						WATER_ASCENSION_VIOLATIONS.put(uuid, 0);
 						return new CheckResult(CheckResult.Result.FAILED,
-								player.getName() + " stood on water " + v + " times (can't stand on " + block.getType()
+								"stood on water " + v + " times (can't stand on " + block.getType()
 										+ " or " + block.getRelative(BlockFace.DOWN).getType() + ")");
 					} else {
 						WATER_ASCENSION_VIOLATIONS.put(uuid, v + 1);

@@ -74,7 +74,7 @@ public class KillAuraCheck {
 				int flags = ANGLE_FLAGS.get(player.getUniqueId().toString());
 				if (flags >= AntiCheatReloaded.getManager().getConfiguration().getMagic().KILLAURA_MAX_ANGLE_VIOLATIONS()) {
 					ANGLE_FLAGS.remove(player.getUniqueId().toString());
-					return new CheckResult(CheckResult.Result.FAILED, player.getName() + " failed KillAura, tried to attack from an illegal angle (angle=" + Math.round(angleDifference) + ")");
+					return new CheckResult(CheckResult.Result.FAILED, "tried to attack from an illegal angle (angle=" + Math.round(angleDifference) + ")");
 				}
 				
 				ANGLE_FLAGS.put(player.getUniqueId().toString(), flags + 1);

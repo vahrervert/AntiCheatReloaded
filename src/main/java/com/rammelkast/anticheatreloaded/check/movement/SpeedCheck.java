@@ -79,7 +79,7 @@ public class SpeedCheck {
 						AntiCheatReloaded.getManager().getBackend().getMagic().SPEED_MAX());
 				if (num >= AntiCheatReloaded.getManager().getBackend().getMagic().SPEED_MAX()) {
 					return new CheckResult(CheckResult.Result.FAILED,
-							player.getName() + "'s speed was too high " + reason + num + " times in a row (max="
+							"speed was too high " + reason + num + " times in a row (max="
 									+ AntiCheatReloaded.getManager().getBackend().getMagic().SPEED_MAX() + ", speed="
 									+ (x > z ? x : z) + ", max speed=" + max + ")");
 				} else {

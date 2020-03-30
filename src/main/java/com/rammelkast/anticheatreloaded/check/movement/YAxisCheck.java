@@ -82,7 +82,7 @@ public class YAxisCheck {
 						}
 					}
 					return new CheckResult(CheckResult.Result.FAILED,
-							player.getName() + " tried to fly on y-axis " + Y_AXIS_VIOLATIONS.get(uuid) + " times (max ="
+							"tried to fly on y-axis " + Y_AXIS_VIOLATIONS.get(uuid) + " times (max ="
 									+ AntiCheatReloaded.getManager().getBackend().getMagic().Y_MAXVIOLATIONS() + ")");
 				} else {
 					if (Y_AXIS_VIOLATIONS.get(uuid) > AntiCheatReloaded.getManager().getBackend().getMagic()
@@ -107,7 +107,7 @@ public class YAxisCheck {
 							player.teleport(g);
 						}
 					}
-					return new CheckResult(CheckResult.Result.FAILED, player.getName() + " tried to fly on y-axis in "
+					return new CheckResult(CheckResult.Result.FAILED, "tried to fly on y-axis in "
 							+ i + " ms (min =" + AntiCheatReloaded.getManager().getBackend().getMagic().Y_TIME() + ")");
 				} else {
 					if ((y1 - LAST_Y_COORD_CACHE.get(uuid)) > AntiCheatReloaded.getManager().getBackend().getMagic().Y_MAXDIFF()

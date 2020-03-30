@@ -33,7 +33,7 @@ import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.config.providers.Magic;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 
-public class GhosthandCheck {
+public class IllegalInteract {
 
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 	
@@ -49,7 +49,7 @@ public class GhosthandCheck {
 	private static CheckResult checkBlockBreak(Player player, BlockBreakEvent event) {
 		if (!isValidTarget(player, event.getBlock())) {
 			return new CheckResult(CheckResult.Result.FAILED,
-					player.getName() + " tried to break a block which was out of view");
+					"tried to break a block which was out of view");
 		}
 		return PASS;
 	}
@@ -57,7 +57,7 @@ public class GhosthandCheck {
 	private static CheckResult checkBlockPlace(Player player, BlockPlaceEvent event) {
 		if (!isValidTarget(player, event.getBlock())) {
 			return new CheckResult(CheckResult.Result.FAILED,
-					player.getName() + " tried to place a block out of their view");
+					"tried to place a block out of their view");
 		}
 		return PASS;
 	}
@@ -70,7 +70,8 @@ public class GhosthandCheck {
                         : magic.BLOCK_MAX_DISTANCE();
 		Block targetBlock = player.getTargetBlockExact((int) Math.ceil(distance));
 		if (targetBlock == null) {
-			return false;
+			// TODO better check here
+			return true;
 		}
 		
 		if (Utilities.isClimbableBlock(targetBlock)) {
@@ -84,12 +85,10 @@ public class GhosthandCheck {
 		}
 		
 		Location eyeLocation = player.getEyeLocation();
-
 		double yawDifference = KillAuraCheck.calculateYawDifference(eyeLocation, block.getLocation());
 		double playerYaw = player.getEyeLocation().getYaw();
-
 		double angleDifference = Math.abs(180 - Math.abs(Math.abs(yawDifference - playerYaw) - 180));
-		if (Math.round(angleDifference) > magic.GHOSTHAND_MAX_ANGLE_DIFFERENCE()) {
+		if (Math.round(angleDifference) > magic.ILLEGALINTERACT_MAX_ANGLE_DIFFERENCE()) {
 			return false;
 		}
 		return true;

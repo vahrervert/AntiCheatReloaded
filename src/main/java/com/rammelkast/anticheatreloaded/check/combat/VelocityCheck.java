@@ -59,7 +59,7 @@ public class VelocityCheck {
 						if (VL_COUNT.get(p.getUniqueId()) > AntiCheatReloaded.getManager().getBackend().getMagic()
 								.VELOCITY_MAX_FLAGS()) {
 							EventListener.log(new CheckResult(CheckResult.Result.FAILED,
-									p.getName() + " failed Velocity, had zero/low velocity "
+									"had zero/low velocity "
 											+ VL_COUNT.get(p.getUniqueId()) + " times (max="
 											+ AntiCheatReloaded.getManager().getBackend().getMagic().VELOCITY_MAX_FLAGS()
 											+ ", dist=" + then.distance(p.getLocation()) + ")").getMessage(),

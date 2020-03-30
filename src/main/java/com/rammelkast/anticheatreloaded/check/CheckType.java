@@ -63,7 +63,7 @@ public enum CheckType {
 	VELOCITY(Permission.CHECK_VELOCITY),
 	CRITICALS(Permission.CHECK_CRITICALS),
 	CHAT_UNICODE(Permission.CHECK_UNICODE),
-	GHOSTHAND(Permission.CHECK_GHOSTHAND);
+	ILLEGAL_INTERACT(Permission.CHECK_ILLEGAL_INTERACT);
 	
     private final Permission permission;
     private final Map<UUID, Integer> level = new HashMap<UUID, Integer>();
@@ -124,8 +124,19 @@ public enum CheckType {
      * @return reference name
      */
     public static String getName(CheckType type) {
-        char[] chars = type.toString().replaceAll("_", " ").toLowerCase().toCharArray();
-        chars[0] = Character.toUpperCase(chars[0]);
-        return new String(chars);
+    	if (type.name().contains("_")) {
+    		String[] split = type.name().toLowerCase().split("_");
+            String name = "";
+            for (String part : split) {
+            	char[] chars = part.toCharArray();
+            	chars[0] = Character.toUpperCase(chars[0]);
+            	name += new String(chars);
+            }
+            return name;
+    	} else {
+    		char[] chars = type.name().toLowerCase().toCharArray();
+            chars[0] = Character.toUpperCase(chars[0]);
+            return new String(chars);
+    	}
     }
 }

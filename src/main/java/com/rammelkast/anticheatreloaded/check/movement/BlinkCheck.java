@@ -86,8 +86,7 @@ public class BlinkCheck {
 											@Override
 											public void run() {
 												EventListener.log(
-														new CheckResult(CheckResult.Result.FAILED, p.getName()
-																+ " failed Blink, sent " + packets
+														new CheckResult(CheckResult.Result.FAILED, "sent " + packets
 																+ " packets in one second (max=" + AntiCheatReloaded.getManager()
 																		.getBackend().getMagic().BLINK_PACKET()
 																+ ", leniency=" + finalPingLeniency + ", ping=" + ping + ")").getMessage(),

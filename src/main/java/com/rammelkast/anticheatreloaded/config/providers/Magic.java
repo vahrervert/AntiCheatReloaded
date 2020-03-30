@@ -385,5 +385,5 @@ public interface Magic {
     /**
      * The maximum angle difference allowed when breaking or placing blocks; TYPE=INTEGER, Leniency=INCREASE
      */
-    public int GHOSTHAND_MAX_ANGLE_DIFFERENCE();
+    public int ILLEGALINTERACT_MAX_ANGLE_DIFFERENCE();
 }

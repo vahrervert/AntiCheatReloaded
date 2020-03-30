@@ -58,7 +58,7 @@ public class EventListener implements Listener {
         	return;
         }
         
-        String alertMessage = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + message;
+        String alertMessage = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + player.getName() + " failed " + CheckType.getName(type) + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + message;
         if (CONFIG.getConfig().debugMode.getValue()) {
         	player.sendMessage(alertMessage);
         } else {

@@ -133,8 +133,8 @@ permissions:
   anticheat.check.unicode:
     description: Allow players to use unicode in chat
     default: false
-  anticheat.check.ghosthand:
-    description: Allow players to use ghosthand
+  anticheat.check.illegalinteract:
+    description: Allow players to place blocks in illegal places
     default: false
   anticheat.check.exempt:
     description: Total exemption from checks
@@ -167,4 +167,4 @@ permissions:
       anticheat.check.velocity: true
       anticheat.check.criticals: true
       anticheat.check.unicode: true
-      anticheat.check.ghosthand: true
+      anticheat.check.illegalinteract: true

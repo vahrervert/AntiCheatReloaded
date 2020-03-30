@@ -30,7 +30,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
-import com.rammelkast.anticheatreloaded.check.player.GhosthandCheck;
+import com.rammelkast.anticheatreloaded.check.player.IllegalInteract;
 import com.rammelkast.anticheatreloaded.util.Distance;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 
@@ -66,11 +66,11 @@ public class BlockListener extends EventListener {
             } 
         }
         
-        if (getCheckManager().willCheck(player, CheckType.GHOSTHAND)) {
-            CheckResult result = GhosthandCheck.performCheck(player, event);
+        if (getCheckManager().willCheck(player, CheckType.ILLEGAL_INTERACT)) {
+            CheckResult result = IllegalInteract.performCheck(player, event);
             if (result.failed()) {
                 event.setCancelled(!silentMode());
-                log(result.getMessage(), player, CheckType.GHOSTHAND);
+                log(result.getMessage(), player, CheckType.ILLEGAL_INTERACT);
                 noHack = false;
             } 
         }
@@ -112,11 +112,11 @@ public class BlockListener extends EventListener {
                 noHack = false;
             }
         }
-        if (getCheckManager().willCheck(player, CheckType.GHOSTHAND)) {
-            result = GhosthandCheck.performCheck(player, event);
+        if (getCheckManager().willCheck(player, CheckType.ILLEGAL_INTERACT)) {
+            result = IllegalInteract.performCheck(player, event);
             if (result.failed()) {
                 event.setCancelled(!silentMode());
-                log(result.getMessage(), player, CheckType.GHOSTHAND);
+                log(result.getMessage(), player, CheckType.ILLEGAL_INTERACT);
                 noHack = false;
             }
         }
