@@ -18,10 +18,22 @@
  */
 package com.rammelkast.anticheatreloaded.util.checkassist;
 
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
+
 public class KillauraAssist {
 
 	public KillauraAssist() {
 
+	}
+	
+	
+	public static double calculateYawDifference(Location from, Location to) {
+		Location clonedFrom = from.clone();
+		Vector startVector = clonedFrom.toVector();
+		Vector targetVector = to.toVector();
+		clonedFrom.setDirection(targetVector.subtract(startVector));
+		return clonedFrom.getYaw();
 	}
 	
 }

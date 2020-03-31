@@ -75,7 +75,7 @@ public class BlinkCheck {
 										.getMagic().BLINK_AVERAGE_PING();
 								float pingLeniency = (float) ((ping / averagePing));
 								if (pingLeniency < 1) pingLeniency = 1;
-								if (pingLeniency > 3) pingLeniency = 3;
+								if (pingLeniency > 2.5F) pingLeniency = 2.5F;
 								blinkMagic = Math.round(pingLeniency * blinkMagic);
 								final float finalPingLeniency = pingLeniency;
 								try {

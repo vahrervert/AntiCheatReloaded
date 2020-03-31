@@ -61,7 +61,7 @@ public class KillAuraCheck {
 			LivingEntity living = (LivingEntity) entity;
 			Location eyeLocation = player.getEyeLocation();
 
-			double yawDifference = calculateYawDifference(eyeLocation, living.getLocation());
+			double yawDifference = KillauraAssist.calculateYawDifference(eyeLocation, living.getLocation());
 			double playerYaw = player.getEyeLocation().getYaw();
 
 			double angleDifference = Math.abs(180 - Math.abs(Math.abs(yawDifference - playerYaw) - 180));
@@ -83,14 +83,6 @@ public class KillAuraCheck {
 		return PASS;
 	}
 	
-	public static double calculateYawDifference(Location from, Location to) {
-		Location clonedFrom = from.clone();
-		Vector startVector = clonedFrom.toVector();
-		Vector targetVector = to.toVector();
-		clonedFrom.setDirection(targetVector.subtract(startVector));
-		return clonedFrom.getYaw();
-	}
-
 	static {
 		KILLAURA_ASSIST = new KillauraAssist();
 	}

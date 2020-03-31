@@ -46,23 +46,23 @@ public class EventListener implements Listener {
 
     public static void log(String message, Player player, CheckType type) {
         User user = getUserManager().getUser(player.getUniqueId());
+        if (message == null || message.equals("")) {
+            message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + player.getName() + " failed " + CheckType.getName(type);
+        } else {
+            message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + player.getName() + " failed " + CheckType.getName(type) + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + message;
+        }
         if (user != null) { // npc
             logCheat(type, user);
-            if (user.increaseLevel(type) && message != null) {
+            if (user.increaseLevel(type)) {
                 AntiCheatReloaded.getManager().log(message);
             }
             removeDecrease(user);
         }
         
-        if (message == null || message.equals("")) {
-        	return;
-        }
-        
-        String alertMessage = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + player.getName() + " failed " + CheckType.getName(type) + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + message;
         if (CONFIG.getConfig().debugMode.getValue()) {
-        	player.sendMessage(alertMessage);
+        	player.sendMessage(message);
         } else {
-        	AntiCheatReloaded.getPlugin().sendToStaff(alertMessage);
+        	AntiCheatReloaded.getPlugin().sendToStaff(message);
         }
     }
 

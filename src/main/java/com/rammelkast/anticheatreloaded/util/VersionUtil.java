@@ -31,7 +31,7 @@ import org.bukkit.potion.PotionEffectType;
 public class VersionUtil {
 
 	private static final List<String> SUPPORTED_VERSIONS = Arrays
-			.asList(new String[] { "v1_15" });
+			.asList(new String[] { "v1_15", "v1_14", "v1_13" });
 
 	public static String getVersion() {
 		return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
@@ -46,6 +46,14 @@ public class VersionUtil {
 		return false;
 	}
 
+	public static boolean isOfVersion(String versionId) {
+		if (getVersion().startsWith(versionId)) {
+			return true;
+		}
+		return false;
+	}
+
+	
 	public static boolean isFlying(Player p) {
 		return p.isFlying() || p.isGliding() || p.hasPotionEffect(PotionEffectType.LEVITATION);
 	}

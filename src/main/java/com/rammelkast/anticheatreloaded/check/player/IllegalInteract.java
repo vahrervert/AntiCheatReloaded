@@ -32,6 +32,7 @@ import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.config.providers.Magic;
 import com.rammelkast.anticheatreloaded.util.Utilities;
+import com.rammelkast.anticheatreloaded.util.checkassist.KillauraAssist;
 
 public class IllegalInteract {
 
@@ -85,7 +86,7 @@ public class IllegalInteract {
 		}
 		
 		Location eyeLocation = player.getEyeLocation();
-		double yawDifference = KillAuraCheck.calculateYawDifference(eyeLocation, block.getLocation());
+		double yawDifference = KillauraAssist.calculateYawDifference(eyeLocation, block.getLocation());
 		double playerYaw = player.getEyeLocation().getYaw();
 		double angleDifference = Math.abs(180 - Math.abs(Math.abs(yawDifference - playerYaw) - 180));
 		if (Math.round(angleDifference) > magic.ILLEGALINTERACT_MAX_ANGLE_DIFFERENCE()) {

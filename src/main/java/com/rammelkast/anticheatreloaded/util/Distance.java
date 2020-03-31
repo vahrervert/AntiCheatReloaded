@@ -28,6 +28,8 @@ public class Distance {
 	private final double XDiff;
 	private final double YDiff;
 	private final double ZDiff;
+	
+	private final Location from;
 
 	public Distance(Location from, Location to) {
 		l1Y = to.getY();
@@ -36,6 +38,8 @@ public class Distance {
 		XDiff = Math.abs(to.getX() - from.getX());
 		ZDiff = Math.abs(to.getZ() - from.getZ());
 		YDiff = Math.abs(l1Y - l2Y);
+		
+		this.from = from;
 	}
 
 	public double fromY() {
@@ -56,5 +60,9 @@ public class Distance {
 
 	public double getYDifference() {
 		return YDiff;
+	}
+	
+	public Location getFrom() {
+		return this.from;
 	}
 }

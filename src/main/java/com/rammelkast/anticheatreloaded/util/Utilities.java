@@ -210,7 +210,6 @@ public final class Utilities {
 	public static boolean isSlab(Block block) {
 		Material type = block.getType();
 		return type.name().endsWith("SLAB");
-		// TODO does this even work?
 	}
 
 	/**
@@ -222,7 +221,6 @@ public final class Utilities {
 	public static boolean isStair(Block block) {
 		Material type = block.getType();
 		return type.name().endsWith("STAIRS");
-		// TODO does this even work?
 	}
 
 	/**
@@ -510,7 +508,7 @@ public final class Utilities {
 	}
 
 	static {
-		// START INSTANT BREAK MATERIALS
+		// Start instant break materials
 		INSTANT_BREAK.add(Material.COMPARATOR);
 		INSTANT_BREAK.add(Material.REPEATER);
 		INSTANT_BREAK.add(Material.TORCH);
@@ -528,13 +526,11 @@ public final class Utilities {
 		INSTANT_BREAK.add(Material.INFESTED_STONE_BRICKS);
 		INSTANT_BREAK.add(Material.TNT);
 		INSTANT_BREAK.add(Material.SLIME_BLOCK);
-		INSTANT_BREAK.add(Material.HONEY_BLOCK);
 		INSTANT_BREAK.add(Material.CARROTS);
 		INSTANT_BREAK.add(Material.DEAD_BUSH);
 		INSTANT_BREAK.add(Material.FERN);
 		INSTANT_BREAK.add(Material.LARGE_FERN);
 		INSTANT_BREAK.add(Material.CHORUS_FLOWER);
-		INSTANT_BREAK.add(Material.CORNFLOWER);
 		INSTANT_BREAK.add(Material.SUNFLOWER);
 		INSTANT_BREAK.add(Material.LILY_PAD);
 		INSTANT_BREAK.add(Material.MELON_STEM);
@@ -546,7 +542,6 @@ public final class Utilities {
 		INSTANT_BREAK.add(Material.PUMPKIN_STEM);
 		INSTANT_BREAK.add(Material.ATTACHED_PUMPKIN_STEM);
 		INSTANT_BREAK.add(Material.ACACIA_SAPLING);
-		INSTANT_BREAK.add(Material.BAMBOO_SAPLING);
 		INSTANT_BREAK.add(Material.BIRCH_SAPLING);
 		INSTANT_BREAK.add(Material.DARK_OAK_SAPLING);
 		INSTANT_BREAK.add(Material.JUNGLE_SAPLING);
@@ -556,9 +551,20 @@ public final class Utilities {
 		INSTANT_BREAK.add(Material.TALL_GRASS);
 		INSTANT_BREAK.add(Material.TALL_SEAGRASS);
 		INSTANT_BREAK.add(Material.WHEAT);
-		// END INSTANT BREAK MATERIALS
+		// Start 1.14 objects
+		if (VersionUtil.isOfVersion("v1_14")) {
+			INSTANT_BREAK.add(Material.BAMBOO_SAPLING);
+			INSTANT_BREAK.add(Material.CORNFLOWER);
+		}
+		// End 1.14 objects
+		// Start 1.15 objects
+		if (VersionUtil.isOfVersion("v1_15")) {
+			INSTANT_BREAK.add(Material.HONEY_BLOCK);
+		}
+		// End 1.15 objects
+		// End instant break materials
 
-		// START FOOD
+		// Start food
 		FOOD.add(Material.APPLE);
 		FOOD.add(Material.BAKED_POTATO);
 		FOOD.add(Material.BEETROOT);
@@ -579,7 +585,6 @@ public final class Utilities {
 		FOOD.add(Material.ENCHANTED_GOLDEN_APPLE);
 		FOOD.add(Material.GOLDEN_APPLE);
 		FOOD.add(Material.GOLDEN_CARROT);
-		FOOD.add(Material.HONEY_BOTTLE);
 		FOOD.add(Material.MELON_SLICE);
 		FOOD.add(Material.MUSHROOM_STEW);
 		FOOD.add(Material.POISONOUS_POTATO);
@@ -596,12 +601,21 @@ public final class Utilities {
 		FOOD.add(Material.SALMON);
 		FOOD.add(Material.ROTTEN_FLESH);
 		FOOD.add(Material.SPIDER_EYE);
-		FOOD.add(Material.SUSPICIOUS_STEW);
-		FOOD.add(Material.SWEET_BERRIES);
 		FOOD.add(Material.TROPICAL_FISH);
-		// END FOOD
+		// Start 1.14 objects
+		if (VersionUtil.isOfVersion("v1_14")) {
+			FOOD.add(Material.SUSPICIOUS_STEW);
+			FOOD.add(Material.SWEET_BERRIES);
+		}
+		// End 1.14 objects
+		// Start 1.15 objects
+		if (VersionUtil.isOfVersion("v1_15")) {
+			FOOD.add(Material.HONEY_BOTTLE);
+		}
+		// End 1.15 objects
+		// End food
 
-		// START COMBOS
+		// Start combos
 		COMBO.put(Material.SHEARS, Material.BLACK_WOOL);
 		COMBO.put(Material.SHEARS, Material.BLUE_WOOL);
 		COMBO.put(Material.SHEARS, Material.BROWN_WOOL);
@@ -624,6 +638,6 @@ public final class Utilities {
 		COMBO.put(Material.DIAMOND_SWORD, Material.COBWEB);
 		COMBO.put(Material.STONE_SWORD, Material.COBWEB);
 		COMBO.put(Material.WOODEN_SWORD, Material.COBWEB);
-		// END COMBOS
+		// End combos
 	}
 }

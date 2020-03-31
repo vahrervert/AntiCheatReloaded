@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -68,12 +69,12 @@ public class GlideCheck {
 						.GLIDE_LIMIT()) {
 					VIOLATIONS.remove(player.getUniqueId());
 					if (!AntiCheatReloaded.getManager().getBackend().silentMode()) {
-						Location to = player.getLocation();
-						to.setY(to.getY() - distanceToFall(to));
-						player.teleport(to);
+						Location prev = player.getLocation();
+						prev.setY(prev.getY() - distanceToFall(prev));
+						player.teleport(AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId()).getGoodLocation(prev));
 					}
 					return new CheckResult(CheckResult.Result.FAILED,
-							"desc_amount="
+							"type=glide, desc_amount="
 									+ new BigDecimal(yDiff).setScale(2, RoundingMode.HALF_UP) + ")");
 				} else {
 					VIOLATIONS.put(player.getUniqueId(), VIOLATIONS.get(player.getUniqueId()) + 1);
@@ -89,11 +90,8 @@ public class GlideCheck {
 
 	private static double distanceToFall(Location location) {
 		location = location.clone();
-		double firstY = location.getY();
-		Material subtractType = location.clone().add(0, -0.1, 0).getBlock().getType();
-		while (subtractType == Material.AIR || subtractType == Material.CAVE_AIR)
-			location.add(0, -0.1, 0);
-		return firstY - location.getY();
+		double highestY = location.getWorld().getHighestBlockYAt(location) + 1.02D;
+		return location.getY() - highestY;
 	}
 
 }
