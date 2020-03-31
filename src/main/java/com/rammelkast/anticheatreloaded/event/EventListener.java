@@ -29,6 +29,7 @@ import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.manage.*;
 import com.rammelkast.anticheatreloaded.util.User;
+import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -49,7 +50,7 @@ public class EventListener implements Listener {
         if (message == null || message.equals("")) {
             message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + player.getName() + " failed " + CheckType.getName(type);
         } else {
-            message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + player.getName() + " failed " + CheckType.getName(type) + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + message;
+            message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + player.getName() + " failed " + CheckType.getName(type) + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + message + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + "ping: " + VersionUtil.getPlayerPing(player) + "ms";
         }
         if (user != null) { // npc
             logCheat(type, user);

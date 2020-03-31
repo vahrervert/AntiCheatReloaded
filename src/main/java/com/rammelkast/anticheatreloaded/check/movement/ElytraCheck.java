@@ -30,9 +30,6 @@ import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Distance;
 
-/**
- * TODO
- */
 public class ElytraCheck {
 
 	public static final HashMap<String, Double> JUMP_Y_VALUE = new HashMap<String, Double>();

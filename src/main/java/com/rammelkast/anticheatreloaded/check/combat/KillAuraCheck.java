@@ -19,7 +19,9 @@
 
 package com.rammelkast.anticheatreloaded.check.combat;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
@@ -30,11 +32,15 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
+import com.rammelkast.anticheatreloaded.config.providers.Magic;
 import com.rammelkast.anticheatreloaded.util.checkassist.KillauraAssist;
 
 public class KillAuraCheck {
 
 	public static final Map<String, Integer> ANGLE_FLAGS = new HashMap<String, Integer>();
+	public static final Map<String, Integer> DEVIATION_SCORES = new HashMap<String, Integer>();
+	public static final Map<String, Integer> DIFF_MAP = new HashMap<String, Integer>();
+	public static final Map<String, ClickSpeed> CLICKSPEED_MAP = new HashMap<String, ClickSpeed>();
 	private static final KillauraAssist KILLAURA_ASSIST;
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
@@ -75,6 +81,82 @@ public class KillAuraCheck {
 			}
 		}
 		return PASS;
+	}
+	
+	public static CheckResult checkFightSpeed(Player player, EntityDamageEvent event) {
+		if (!CLICKSPEED_MAP.containsKey(player.getUniqueId().toString())) {
+			CLICKSPEED_MAP.put(player.getUniqueId().toString(), new ClickSpeed());
+			return PASS;
+		}
+		ClickSpeed clickSpeed = CLICKSPEED_MAP.get(player.getUniqueId().toString());
+		clickSpeed.registerClick();
+		int deviationScore = clickSpeed.getDeviationScore();
+		// Prevents false positives since scores under 2000 aren't reliable
+		if (deviationScore < 2000) {
+			return PASS;
+		}
+		
+		if (!DEVIATION_SCORES.containsKey(player.getUniqueId().toString())) {
+			DEVIATION_SCORES.put(player.getUniqueId().toString(), deviationScore);
+			return PASS;
+		}
+		
+		Magic magic = AntiCheatReloaded.getManager().getConfiguration().getMagic();
+		int lastScore = DEVIATION_SCORES.get(player.getUniqueId().toString());
+		DEVIATION_SCORES.put(player.getUniqueId().toString(), deviationScore);
+		int diff = Math.abs(deviationScore - lastScore);
+		if (!DIFF_MAP.containsKey(player.getUniqueId().toString())) {
+			DIFF_MAP.put(player.getUniqueId().toString(), diff);
+			return PASS;
+		}
+		int lastDiff = DIFF_MAP.get(player.getUniqueId().toString());
+		DIFF_MAP.put(player.getUniqueId().toString(), diff);
+		if (Math.abs(diff - lastDiff) < magic.KILLAURA_FIGHTSPEED_MINDIFF()) {
+			event.setCancelled(true);
+			return new CheckResult(CheckResult.Result.FAILED, "had a suspiciously consistant fighting speed (absdiff=" + Math.abs(diff - lastDiff) + ")");
+		}
+		return PASS;
+	}
+	
+	private static class ClickSpeed {
+		private final List<Long> clicks;
+		private long lastClick;
+		
+		public ClickSpeed() {
+			this.clicks = new ArrayList<Long>();
+			this.lastClick = System.currentTimeMillis();
+		}
+		
+		public void registerClick() {
+			this.lastClick = System.currentTimeMillis();
+			this.clicks.add(this.lastClick);
+		}
+		
+		public int getDeviationScore() {
+			long last = 0;
+			List<Integer> deviation = new ArrayList<Integer>();
+			List<Long> toRemove = new ArrayList<Long>();
+			for (long clickTime : this.clicks) {
+				if (clickTime > (this.lastClick - 5000)) {
+					if (last == 0) {
+						last = clickTime;
+						continue;
+					}
+					deviation.add((int) (clickTime - last));
+				} else {
+					toRemove.add(clickTime);
+				}
+			}
+			this.clicks.removeAll(toRemove);
+			if (deviation.isEmpty()) {
+				return -1;
+			}
+			float averageDeviationScore = deviation.get(0);
+			for (int i = 1; i < deviation.size(); i++) {
+				averageDeviationScore += deviation.get(i);
+			}
+			return Math.round(averageDeviationScore / deviation.size());
+		}
 	}
 	
 	static {

@@ -178,6 +178,9 @@ public class Backend {
         SpeedCheck.SPEED_VIOLATIONS.remove(player.getUniqueId());
         ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId().toString());
         KillAuraCheck.ANGLE_FLAGS.remove(player.getUniqueId().toString());
+        KillAuraCheck.CLICKSPEED_MAP.remove(player.getUniqueId().toString());
+        KillAuraCheck.DEVIATION_SCORES.remove(player.getUniqueId().toString());
+        KillAuraCheck.DIFF_MAP.remove(player.getUniqueId().toString());
     }
 
     public CheckResult checkFastBow(Player player, float force) {

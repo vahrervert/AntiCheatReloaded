@@ -93,59 +93,12 @@ public class AntiCheatReloaded extends JavaPlugin {
 		if (!VersionUtil.isSupported()) {
 			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.RED + "The version of this server is NOT supported by ACR! The plugin will be buggy!");
 		}
+		
 		getLogger().info("Enabling checks that use ProtcolLib");
 		// Enable packetlisteners
 		BlinkCheck.startTimer();
 		BlinkCheck.listenPackets();
 		KillAuraCheck.listenPackets();
-		
-		// Check if other AC's are installed
-		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
-			public void run() {
-				if (Bukkit.getPluginManager().getPlugin("NoCheatPlus") != null) {
-					getLogger().severe("*----------------------------------------------*");
-					getLogger().severe("You are also running NoCheatPlus!");
-					getLogger().severe("Multiple anticheats create false cheat detections.");
-					getLogger().severe("Please remove or disable NoCheatPlus to silence this warning.");
-					getLogger().severe("*----------------------------------------------*");
-				}
-				if (Bukkit.getPluginManager().getPlugin("Matrix") != null) {
-					getLogger().severe("*----------------------------------------------*");
-					getLogger().severe("You are also running Matrix!");
-					getLogger().severe("Multiple anticheats create false cheat detections.");
-					getLogger().severe("Please remove or disable NoCheatPlus to silence this warning.");
-					getLogger().severe("*----------------------------------------------*");
-				}
-				if (Bukkit.getPluginManager().getPlugin("AAC") != null) {
-					getLogger().severe("*----------------------------------------------*");
-					getLogger().severe("You are also running AAC!");
-					getLogger().severe("Multiple anticheats create false cheat detections.");
-					getLogger().severe("Please remove or disable AAC to silence this warning.");
-					getLogger().severe("*----------------------------------------------*");
-				}
-				if (Bukkit.getPluginManager().getPlugin("Spartan") != null) {
-					getLogger().severe("*----------------------------------------------*");
-					getLogger().severe("You are also running Spartan!");
-					getLogger().severe("Multiple anticheats create false cheat detections.");
-					getLogger().severe("Please remove or disable AAC to silence this warning.");
-					getLogger().severe("*----------------------------------------------*");
-				}
-				if (Bukkit.getPluginManager().getPlugin("NoAura") != null) {
-					getLogger().severe("*----------------------------------------------*");
-					getLogger().severe("You are also running NoAura!");
-					getLogger().severe("Multiple anticheats create false cheat detections.");
-					getLogger().severe("Please remove or disable AAC to silence this warning.");
-					getLogger().severe("*----------------------------------------------*");
-				}
-				if (Bukkit.getPluginManager().getPlugin("AntiCheat") != null || Bukkit.getPluginManager().getPlugin("AntiCheatPlus") != null) {
-					getLogger().severe("*----------------------------------------------*");
-					getLogger().severe("You are also running AntiCheat!");
-					getLogger().severe("Multiple anticheats create false cheat detections.");
-					getLogger().severe("Please remove or disable AntiCheat to silence this warning.");
-					getLogger().severe("*----------------------------------------------*");
-				}
-			}
-		}, 90L);
 		
 		updateManager = new UpdateManager();
 		
@@ -175,7 +128,6 @@ public class AntiCheatReloaded extends JavaPlugin {
 				public String call() throws Exception {
 					return VersionUtil.getVersion();
 				}
-
 			}));
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -383,6 +383,10 @@ public interface Magic {
      */
     public int KILLAURA_MAX_ANGLE_VIOLATIONS();
     /**
+     * The minimum score difference for the fight speed check to consider a player legit; TYPE=INTEGER, Leniency=DECREASE
+     */
+    public int KILLAURA_FIGHTSPEED_MINDIFF();
+    /**
      * The maximum angle difference allowed when breaking or placing blocks; TYPE=INTEGER, Leniency=INCREASE
      */
     public int ILLEGALINTERACT_MAX_ANGLE_DIFFERENCE();
