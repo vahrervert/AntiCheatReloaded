@@ -82,9 +82,9 @@ import java.util.TreeMap;
  */
 public class Rule {
 
-    private static String string;
     private static final String VARIABLE_SET_REGEX = ".*(_).*=.*";
     private static final String FUNCTION_REGEX = ".*\\..*";
+    private String string;
     private Type type;
 
     public enum Type {
@@ -129,7 +129,8 @@ public class Rule {
      * @param string the string value to load
      * @return an instance of Rule if an implementation exists to handle this rule, null if none are found
      */
-    public static Rule load(String string) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public static Rule load(String string) {
         for (Type type : Type.values()) {
             if (type.matches(string)) {
                 try {

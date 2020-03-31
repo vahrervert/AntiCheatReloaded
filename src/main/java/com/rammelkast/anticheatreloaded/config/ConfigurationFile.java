@@ -170,7 +170,8 @@ public class ConfigurationFile {
             return path;
         }
 
-        public T getValue() {
+        @SuppressWarnings("unchecked")
+		public T getValue() {
             return (T) value;
         }
 
@@ -180,7 +181,8 @@ public class ConfigurationFile {
             return value;
         }
 
-        public T getDefaultValue() {
+        @SuppressWarnings("unchecked")
+		public T getDefaultValue() {
             return (T) getDefaultConfigFile().get(path);
         }
 

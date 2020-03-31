@@ -59,7 +59,7 @@ import com.google.gson.JsonPrimitive;
  * <p>
  * Check out https://bStats.org/ to learn more about bStats!
  */
-@SuppressWarnings({ "WeakerAccess", "unused" })
+@SuppressWarnings({ "unused" })
 public class Metrics {
 
 	static {

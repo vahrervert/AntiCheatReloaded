@@ -41,6 +41,7 @@ public class CommandReset extends CommandBase {
 		super(NAME, COMMAND, USAGE, HELP, PERMISSION);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void execute(CommandSender cs, String[] args) {
 		User user;

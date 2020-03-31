@@ -57,10 +57,13 @@ public class Configuration {
         // Now load others
         enterprise = new Enterprise(plugin, this);
 
-        flatfiles = new ArrayList<ConfigurationFile>() {{
-            add(config);
-            add(enterprise);
-        }};
+		flatfiles = new ArrayList<ConfigurationFile>() {
+			private static final long serialVersionUID = 4497798966909062852L;
+			{
+				add(config);
+				add(enterprise);
+			}
+		};
 
         dbfiles = new ArrayList<ConfigurationTable>();
 

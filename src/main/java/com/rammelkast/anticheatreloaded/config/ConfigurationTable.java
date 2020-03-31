@@ -104,6 +104,7 @@ public class ConfigurationTable {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void convertToUUID(String colName) {
 		String sqlSelect = "SELECT " + colName + " FROM " + getFullTable();
 		String sqlUpdate = "UPDATE " + getFullTable() + " SET " + colName + " = ? WHERE " + colName + " = ?";

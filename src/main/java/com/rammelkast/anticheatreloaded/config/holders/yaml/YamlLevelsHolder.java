@@ -74,6 +74,6 @@ public class YamlLevelsHolder extends ConfigurationFile implements Levels {
     }
 
     private void saveLevel(UUID uuid, int level) {
-        new ConfigValue<Integer>(uuid.toString(), false).setValue(new Integer(level));
+        new ConfigValue<Integer>(uuid.toString(), false).setValue(level);
     }
 }

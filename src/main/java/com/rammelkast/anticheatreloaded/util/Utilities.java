@@ -19,7 +19,13 @@
 
 package com.rammelkast.anticheatreloaded.util;
 
-import org.bukkit.Bukkit;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -28,15 +34,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.NumberConversions;
-
-import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public final class Utilities {
 	private static final List<Material> INSTANT_BREAK = new ArrayList<Material>();
@@ -52,7 +49,6 @@ public final class Utilities {
 	 * @return true if they cannot stand there
 	 */
 	public static boolean cantStandAtSingle(Block block) {
-		// TODO: Implement Better to reduce false positives (done? lets test...)
 		Block otherBlock = block.getLocation().add(0, -0.5, 0).getBlock();
 		boolean center = otherBlock.getType() == Material.AIR || otherBlock.getType() == Material.CAVE_AIR;
 		return center;
@@ -461,6 +457,7 @@ public final class Utilities {
 	 */
 	public static ArrayList<String> stringToList(final String string) {
 		return new ArrayList<String>() {
+			private static final long serialVersionUID = 364115444874638230L;
 			{
 				add(string);
 			}

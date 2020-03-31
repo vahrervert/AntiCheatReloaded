@@ -47,7 +47,6 @@ import com.rammelkast.anticheatreloaded.check.movement.GlideCheck;
 import com.rammelkast.anticheatreloaded.check.movement.SpeedCheck;
 import com.rammelkast.anticheatreloaded.check.movement.WaterWalkCheck;
 import com.rammelkast.anticheatreloaded.check.movement.YAxisCheck;
-import com.rammelkast.anticheatreloaded.check.player.IllegalInteract;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.providers.Lang;
 import com.rammelkast.anticheatreloaded.config.providers.Magic;
