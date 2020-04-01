@@ -35,11 +35,13 @@ public class UpdateManager {
 
 	private final String latestVersion;
 	private final boolean isLatest;
+	private final boolean isAhead;
 
 	public UpdateManager() {
 		this.latestVersion = this.getOnlineData(SPIGOT_VERSION_URL);
 		if (this.latestVersion == null) {
 			this.isLatest = true;
+			this.isAhead = false;
 			return;
 		}
 		
@@ -50,6 +52,7 @@ public class UpdateManager {
 			splitCompare = currentSplit.compareTo(newSplit);
 		} catch (Exception e) {}
 		this.isLatest = splitCompare >= 0;
+		this.isAhead = splitCompare > 0;
 	}
 
 	private String getOnlineData(String url) {
@@ -64,9 +67,8 @@ public class UpdateManager {
 				builder.append((char) readChar);
 			}
 			data = builder.toString();
-		} catch (IOException exception) {
-			// TODO possibly handle this neatly?
-		} finally {
+		} catch (IOException exception) {}
+		finally {
 			if (stream != null) {
 				try {
 					stream.close();
@@ -80,35 +82,43 @@ public class UpdateManager {
 	public boolean isLatest() {
 		return this.isLatest;
 	}
+	
+	public boolean isAhead() {
+		return this.isAhead;
+	}
+	
+	public String getCurrentVersion() {
+		return AntiCheatReloaded.getVersion();
+	}
 
 	public String getLatestVersion() {
 		return this.latestVersion;
 	}
 
 	public class VersionSplit implements Comparable<VersionSplit> {
-		private final int major, sub, minor;
+		private final int major, minor, build;
 
 		public VersionSplit(String version) throws Exception {
 			if (version.endsWith("-ALPHA")) {
 				version = version.substring(0, version.length() - 6);
 			}
 
-			String[] versionSplit = version.split(".");
+			String[] versionSplit = version.split("\\.");
 			if (versionSplit.length != 3) {
 				// Illegal version
-				throw new Exception("Illegal version!");
+				throw new Exception("Version " + version + " is illegal!");
 			}
 
 			try {
 				int major = Integer.parseInt(versionSplit[0]);
-				int sub = Integer.parseInt(versionSplit[1]);
-				int minor = Integer.parseInt(versionSplit[2]);
+				int minor = Integer.parseInt(versionSplit[1]);
+				int build = Integer.parseInt(versionSplit[2]);
 				if (major <= 0) {
 					throw new Exception("Illegal version!");
 				}
 				this.major = major;
-				this.sub = sub;
 				this.minor = minor;
+				this.build = build;
 			} catch (Exception e) {
 				throw new Exception("Illegal version!");
 			}
@@ -116,42 +126,37 @@ public class UpdateManager {
 
 		@Override
 		public int compareTo(VersionSplit other) {
+			if (other.major == this.major) {
+				if (other.minor == this.minor) {
+					if (other.build == this.build) {
+						return 0;
+					}
+					if (other.build > this.build) {
+						return -1;
+					}
+					return 1;
+				}
+				if (other.minor > this.minor) {
+					return -1;
+				}
+				return 1;
+			}
 			if (other.major > this.major) {
 				return -1;
 			}
-
-			if (other.major < this.major) {
-				return 1;
-			}
-
-			if (other.sub > this.sub) {
-				return -1;
-			}
-
-			if (other.sub < this.sub) {
-				return 1;
-			}
-
-			if (other.minor > this.minor) {
-				return -1;
-			}
-
-			if (other.minor < this.minor) {
-				return 1;
-			}
-			return 0;
+			return 1;
 		}
 
 		public int getMajor() {
 			return major;
 		}
 
-		public int getSub() {
-			return sub;
-		}
-
 		public int getMinor() {
 			return minor;
+		}
+
+		public int getBuild() {
+			return build;
 		}
 	}
 

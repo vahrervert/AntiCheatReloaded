@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -67,9 +68,14 @@ public class SpeedCheck {
 					max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_POTION();
 				}
 			} else if (player.isSprinting()) {
-				reason = "while sprinting ";
-				max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_SPRINT();
-			}
+				if (player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().name().endsWith("ICE")) {
+					reason = "while sprinting on ice ";
+					max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_SPRINT() + 0.165D;
+				} else {
+					reason = "while sprinting ";
+					max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_SPRINT();
+				}
+			} 
 
 			float speed = player.getWalkSpeed();
 			max += speed > 0 ? player.getWalkSpeed() - 0.2f : 0;

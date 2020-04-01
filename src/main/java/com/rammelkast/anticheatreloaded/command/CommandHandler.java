@@ -33,6 +33,7 @@ import com.rammelkast.anticheatreloaded.command.executors.CommandLog;
 import com.rammelkast.anticheatreloaded.command.executors.CommandReload;
 import com.rammelkast.anticheatreloaded.command.executors.CommandReport;
 import com.rammelkast.anticheatreloaded.command.executors.CommandReset;
+import com.rammelkast.anticheatreloaded.command.executors.CommandVersion;
 
 public class CommandHandler implements CommandExecutor {
 
@@ -46,6 +47,7 @@ public class CommandHandler implements CommandExecutor {
         commands.add(new CommandReload());
         commands.add(new CommandReport());
         commands.add(new CommandReset());
+        commands.add(new CommandVersion());
     }
 
     @Override

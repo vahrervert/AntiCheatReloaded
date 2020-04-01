@@ -36,7 +36,7 @@ permissions:
     description: Access reloading the system
   anticheat.system.reset:
     description: Access resetting a player's cheat level
-  anticheat.system.update:
+  anticheat.system.version:
     description: Access information about whether the system is updated
   anticheat.system.calibrate:
     description: Access the calibration system
