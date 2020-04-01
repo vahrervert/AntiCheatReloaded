@@ -114,7 +114,7 @@ FASTPLACE_ZEROLIMIT: 3
 # How many blocks you can travel before being considered a cheater
 # Can be decreased to increase detection with the risk of false positives
 # Can be increased to decrease false positives, but shouldn't be necesary
-FLIGHT_BLOCK_LIMIT: 8.0
+FLIGHT_BLOCK_LIMIT: 5.5
 # Time to exempt a player from fastbreak check because of using instant break
 # Increase in case of false positives, but shouldn't be necessary
 INSTANT_BREAK_TIME: 2

@@ -70,8 +70,8 @@ public class YAxisCheck {
 				if (y1 > LAST_Y_COORD_CACHE.get(uuid)
 						&& Y_AXIS_VIOLATIONS.get(uuid) > AntiCheatReloaded.getManager().getBackend().getMagic()
 								.Y_MAXVIOLATIONS()
-						&& (System.currentTimeMillis() - LAST_Y_AXIS_VIOLATION.get(uuid)) < AntiCheatReloaded.getManager()
-								.getBackend().getMagic().Y_MAXVIOTIME()) {
+						&& (System.currentTimeMillis() - LAST_Y_AXIS_VIOLATION.get(uuid)) < AntiCheatReloaded
+								.getManager().getBackend().getMagic().Y_MAXVIOTIME()) {
 					Location g = player.getLocation();
 					Y_AXIS_VIOLATIONS.put(uuid, Y_AXIS_VIOLATIONS.get(uuid) + 1);
 					LAST_Y_AXIS_VIOLATION.put(uuid, System.currentTimeMillis());
@@ -107,11 +107,11 @@ public class YAxisCheck {
 							player.teleport(g);
 						}
 					}
-					return new CheckResult(CheckResult.Result.FAILED, "tried to fly on y-axis in "
-							+ i + " ms (min =" + AntiCheatReloaded.getManager().getBackend().getMagic().Y_TIME() + ")");
+					return new CheckResult(CheckResult.Result.FAILED, "tried to fly on y-axis in " + i + " ms (min ="
+							+ AntiCheatReloaded.getManager().getBackend().getMagic().Y_TIME() + ")");
 				} else {
-					if ((y1 - LAST_Y_COORD_CACHE.get(uuid)) > AntiCheatReloaded.getManager().getBackend().getMagic().Y_MAXDIFF()
-							+ 1
+					if ((y1 - LAST_Y_COORD_CACHE.get(uuid)) > AntiCheatReloaded.getManager().getBackend().getMagic()
+							.Y_MAXDIFF() + 1
 							|| (System.currentTimeMillis() - LAST_Y_TIME.get(uuid)) > AntiCheatReloaded.getManager()
 									.getBackend().getMagic().Y_TIME()) {
 						LAST_Y_TIME.put(uuid, System.currentTimeMillis());

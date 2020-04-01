@@ -47,7 +47,7 @@ public class ElytraCheck {
 			JUMP_Y_VALUE.remove(uuid);
 			return PASS;
 		}
-	
+
 		double changeY = distance.toY() - distance.fromY();
 		boolean upwardMovement = changeY > 0;
 		if (player.getInventory().getItemInMainHand().getType() == Material.TRIDENT) {
@@ -57,28 +57,26 @@ public class ElytraCheck {
 				return PASS;
 			}
 		}
-		
+
 		if (changeY == 0.0D) {
 			// Seen no false positives here yet
-			return new CheckResult(CheckResult.Result.FAILED,
-					"had no Y-axis dropoff when gliding with Elytra");
+			return new CheckResult(CheckResult.Result.FAILED, "had no Y-axis dropoff when gliding with Elytra");
 		}
-		
+
 		if (!JUMP_Y_VALUE.containsKey(uuid)) {
 			JUMP_Y_VALUE.put(uuid, distance.toY());
 			return PASS;
 		}
 		double lastY = JUMP_Y_VALUE.get(uuid);
 		if (lastY < distance.toY()) {
-			double diff =  distance.toY() - lastY;
+			double diff = distance.toY() - lastY;
 			if (diff > 0.7675) {
 				if (!AntiCheatReloaded.getManager().getBackend().silentMode()) {
 					Location to = player.getLocation();
 					to.setY(to.getY() - diff);
 					player.teleport(to);
 				}
-				return new CheckResult(CheckResult.Result.FAILED,
-						"tried to glide above jump level");
+				return new CheckResult(CheckResult.Result.FAILED, "tried to glide above jump level");
 			}
 		}
 		return PASS;

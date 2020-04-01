@@ -69,13 +69,14 @@ public class BlinkCheck {
 									&& !AntiCheatReloaded.getManager().getCheckManager().isOpExempt(p)
 									&& !AntiCheatReloaded.getManager().getCheckManager().isExempt(p, CheckType.BLINK)) {
 								int ping = VersionUtil.getPlayerPing(p);
-								int blinkMagic = AntiCheatReloaded.getManager().getBackend()
-										.getMagic().BLINK_PACKET();
-								int averagePing =  AntiCheatReloaded.getManager().getBackend()
-										.getMagic().BLINK_AVERAGE_PING();
+								int blinkMagic = AntiCheatReloaded.getManager().getBackend().getMagic().BLINK_PACKET();
+								int averagePing = AntiCheatReloaded.getManager().getBackend().getMagic()
+										.BLINK_AVERAGE_PING();
 								float pingLeniency = (float) ((ping / averagePing));
-								if (pingLeniency < 1) pingLeniency = 1;
-								if (pingLeniency > 2.5F) pingLeniency = 2.5F;
+								if (pingLeniency < 1)
+									pingLeniency = 1;
+								if (pingLeniency > 2.5F)
+									pingLeniency = 2.5F;
 								blinkMagic = Math.round(pingLeniency * blinkMagic);
 								final float finalPingLeniency = pingLeniency;
 								try {
@@ -85,11 +86,12 @@ public class BlinkCheck {
 										AntiCheatReloaded.sendToMainThread(new Runnable() {
 											@Override
 											public void run() {
-												EventListener.log(
-														new CheckResult(CheckResult.Result.FAILED, "sent " + packets
-																+ " packets in one second (max=" + AntiCheatReloaded.getManager()
-																		.getBackend().getMagic().BLINK_PACKET()
-																+ ", leniency=" + finalPingLeniency + ", ping=" + ping + ")").getMessage(),
+												EventListener.log(new CheckResult(CheckResult.Result.FAILED,
+														"sent " + packets + " packets in one second (max="
+																+ AntiCheatReloaded.getManager().getBackend().getMagic()
+																		.BLINK_PACKET()
+																+ ", leniency=" + finalPingLeniency + ", ping=" + ping
+																+ ")").getMessage(),
 														p, CheckType.BLINK);
 												e.setCancelled(true);
 												e.getPlayer().teleport(cur);

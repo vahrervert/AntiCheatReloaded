@@ -70,11 +70,11 @@ public class GlideCheck {
 					if (!AntiCheatReloaded.getManager().getBackend().silentMode()) {
 						Location prev = player.getLocation();
 						prev.setY(prev.getY() - distanceToFall(prev));
-						player.teleport(AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId()).getGoodLocation(prev));
+						player.teleport(AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
+								.getGoodLocation(prev));
 					}
 					return new CheckResult(CheckResult.Result.FAILED,
-							"type=glide, desc_amount="
-									+ new BigDecimal(yDiff).setScale(2, RoundingMode.HALF_UP) + ")");
+							"type=glide, desc_amount=" + new BigDecimal(yDiff).setScale(2, RoundingMode.HALF_UP) + ")");
 				} else {
 					VIOLATIONS.put(player.getUniqueId(), VIOLATIONS.get(player.getUniqueId()) + 1);
 				}

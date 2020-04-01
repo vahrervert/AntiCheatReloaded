@@ -68,14 +68,19 @@ public class SpeedCheck {
 					max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_POTION();
 				}
 			} else if (player.isSprinting()) {
-				if (player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().name().endsWith("ICE")) {
-					reason = "while sprinting on ice ";
-					max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_SPRINT() + 0.165D;
+				String blockDownName = player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().name();
+				if (blockDownName.endsWith("ICE")
+						&& ((player.getEyeLocation().getBlock().getRelative(BlockFace.UP).getType() != Material.AIR)
+								&& (player.getEyeLocation().getBlock().getRelative(BlockFace.UP)
+										.getType() != Material.CAVE_AIR))) {
+					reason = "while boosting on " + blockDownName.toLowerCase().replaceAll("_", " ") + " ";
+					max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_SPRINT()
+							+ (blockDownName.equals("BLUE_ICE") ? 0.20925D : 0.165D);
 				} else {
 					reason = "while sprinting ";
 					max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_SPRINT();
 				}
-			} 
+			}
 
 			float speed = player.getWalkSpeed();
 			max += speed > 0 ? player.getWalkSpeed() - 0.2f : 0;
