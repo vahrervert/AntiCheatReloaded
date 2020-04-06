@@ -246,10 +246,10 @@ Y_TIME: 800
 GLIDE_LIMIT: 10
 # Maximum amount of movement packets allowed per second
 # Increase this in case of false positives
-BLINK_PACKET: 25
+BLINK_PACKET: 30
 # If the blink check gives false positives replace this with the average user ping on your server
-# Not a good idea to use a value lower than 100 or higher than 200
-BLINK_AVERAGE_PING: 120
+# Not a good idea to use a value lower than 150 or higher than 300
+BLINK_AVERAGE_PING: 200
 # Maximum amount zero-velocity moments before a player is suspected
 # Increase this in case of false positives
 VELOCITY_MAX_FLAGS: 5

@@ -503,7 +503,7 @@ public final class Utilities {
 		}
 		return seconds;
 	}
-
+	
 	static {
 		// Start instant break materials
 		INSTANT_BREAK.add(Material.COMPARATOR);

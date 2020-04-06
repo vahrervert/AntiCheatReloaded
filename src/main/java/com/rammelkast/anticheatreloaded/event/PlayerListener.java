@@ -345,9 +345,6 @@ public class PlayerListener extends EventListener {
             final User user = getUserManager().getUser(player.getUniqueId());
             user.setTo(to.getX(), to.getY(), to.getZ());
             
-            //KillAuraCheck.doMove(event);
-            //TODO
-            
             if (getCheckManager().willCheckQuick(player, CheckType.FLIGHT) && !VersionUtil.isFlying(player)) {
                 CheckResult result = FlightCheck.runCheck(player, distance);
                 if (result.failed()) {
@@ -360,7 +357,6 @@ public class PlayerListener extends EventListener {
             if (getCheckManager().willCheckQuick(player, CheckType.FLIGHT) && !VersionUtil.isFlying(player)) {
                 CheckResult result = GlideCheck.runCheck(player, distance);
                 if (result.failed()) {
-                	// NO TELEPORT NEEDED HERE, HANDLED BY CHECK ITSELF
                     log(result.getMessage(), player, CheckType.FLIGHT);
                 }
             }
@@ -457,6 +453,7 @@ public class PlayerListener extends EventListener {
                 }
             }
         }
+        
         AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
     }
 

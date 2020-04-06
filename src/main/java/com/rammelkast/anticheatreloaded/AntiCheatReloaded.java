@@ -255,7 +255,7 @@ public class AntiCheatReloaded extends JavaPlugin {
 	}
 
 	public static void sendToMainThread(Runnable runnable) {
-		Bukkit.getServer().getScheduler().runTask(AntiCheatReloaded.getPlugin(), runnable);
+		Bukkit.getScheduler().runTask(AntiCheatReloaded.getPlugin(), runnable);
 	}
 	
 	public void sendToStaff(String message) {
