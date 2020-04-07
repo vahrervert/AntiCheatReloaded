@@ -31,6 +31,9 @@ import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
+/**
+ * This check is an outdated mess which needs to be replaced
+ */
 public class SpeedCheck {
 
 	public static final Map<UUID, Integer> SPEED_VIOLATIONS = new HashMap<UUID, Integer>();
@@ -73,9 +76,16 @@ public class SpeedCheck {
 						&& ((player.getEyeLocation().getBlock().getRelative(BlockFace.UP).getType() != Material.AIR)
 								&& (player.getEyeLocation().getBlock().getRelative(BlockFace.UP)
 										.getType() != Material.CAVE_AIR))) {
-					reason = "while boosting on " + blockDownName.toLowerCase().replaceAll("_", " ") + " ";
-					max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_SPRINT()
-							+ (blockDownName.equals("BLUE_ICE") ? 0.20925D : 0.165D);
+					if (player.getLocation().getBlock().getType().name().endsWith("TRAPDOOR")) {
+						reason = "while boosting on " + blockDownName.toLowerCase().replaceAll("_", " ")
+								+ " and trapdoor";
+						max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_SPRINT()
+								+ (blockDownName.equals("BLUE_ICE") ? 0.35925D : 0.35D);
+					} else {
+						reason = "while boosting on " + blockDownName.toLowerCase().replaceAll("_", " ") + " ";
+						max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_SPRINT()
+								+ (blockDownName.equals("BLUE_ICE") ? 0.20925D : 0.2D);
+					}
 				} else {
 					reason = "while sprinting ";
 					max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_SPRINT();

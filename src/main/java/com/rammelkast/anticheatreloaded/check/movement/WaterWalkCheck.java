@@ -99,7 +99,8 @@ public class WaterWalkCheck {
 				}
 			} else if (block.getRelative(BlockFace.DOWN).isLiquid()
 					&& !AntiCheatReloaded.getManager().getBackend().isAscending(player) && Utilities.cantStandAt(block)
-					&& Utilities.cantStandAt(block.getRelative(BlockFace.DOWN))) {
+					&& Utilities.cantStandAt(block.getRelative(BlockFace.DOWN)) && (y < 0.025
+							|| y == 0.09999999999999964 || y == 0.14999999999999947 || y == 0.04999999999999982)) {
 				if (WATER_ASCENSION_VIOLATIONS.containsKey(uuid)) {
 					int v = WATER_ASCENSION_VIOLATIONS.get(uuid);
 					if (v >= AntiCheatReloaded.getManager().getBackend().getMagic().WATER_ASCENSION_VIOLATION_MAX()) {

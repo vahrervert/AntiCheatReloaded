@@ -38,6 +38,7 @@ import org.bukkit.util.NumberConversions;
 public final class Utilities {
 	private static final List<Material> INSTANT_BREAK = new ArrayList<Material>();
 	private static final List<Material> FOOD = new ArrayList<Material>();
+	private static final List<Material> CLIMBABLE = new ArrayList<Material>();
 	private static final Map<Material, Material> COMBO = new HashMap<Material, Material>();
 
 	public static final String SPY_METADATA = "ac-spydata";
@@ -287,8 +288,7 @@ public final class Utilities {
 	 * @return true if climbable
 	 */
 	public static boolean isClimbableBlock(Block block) {
-		return block.getType() == Material.VINE || block.getType() == Material.LADDER
-				|| block.getType() == Material.WATER;
+		return CLIMBABLE.contains(block.getType());
 	}
 
 	/**
@@ -395,12 +395,12 @@ public final class Utilities {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Determine if a block ISN'T one of the specified types
 	 *
-	 * @param block     block to check
-	 * @param endTypes  array of possible name endings
+	 * @param block    block to check
+	 * @param endTypes array of possible name endings
 	 * @return true if the block isn't any of the materials
 	 */
 	public static boolean blockIsnt(Block block, String[] endTypes) {
@@ -503,7 +503,54 @@ public final class Utilities {
 		}
 		return seconds;
 	}
-	
+
+	/**
+	 * Code by Hawk Anticheat
+	 * (https://github.com/HawkAnticheat/Hawk/blob/master/src/me/islandscout/hawk/util/MathPlus.java)
+	 * 
+	 * @param a
+	 * @param b
+	 * @return the greatest common divisor between two floats
+	 */
+	public static float gcdRational(float a, float b) {
+		if (a == 0) {
+			return b;
+		}
+		int quotient = getIntQuotient(b, a);
+		float remainder = ((b / a) - quotient) * a;
+		if (Math.abs(remainder) < Math.max(a, b) * 1E-3F)
+			remainder = 0;
+		return gcdRational(remainder, a);
+	}
+
+	/**
+	 * Code by Hawk Anticheat
+	 * (https://github.com/HawkAnticheat/Hawk/blob/master/src/me/islandscout/hawk/util/MathPlus.java)
+	 * 
+	 * @param numbers
+	 * @return the greatest common divisor between a list of floats
+	 */
+	public static float gcdRational(List<Float> numbers) {
+		float result = numbers.get(0);
+		for (int i = 1; i < numbers.size(); i++) {
+			result = gcdRational(numbers.get(i), result);
+		}
+		return result;
+	}
+
+	/**
+	 * Code by Hawk Anticheat
+	 * (https://github.com/HawkAnticheat/Hawk/blob/master/src/me/islandscout/hawk/util/MathPlus.java)
+	 * 
+	 * @param dividend
+	 * @param divisor
+	 */
+	public static int getIntQuotient(float dividend, float divisor) {
+		float ans = dividend / divisor;
+		float error = Math.max(dividend, divisor) * 1E-3F;
+		return (int) (ans + error);
+	}
+
 	static {
 		// Start instant break materials
 		INSTANT_BREAK.add(Material.COMPARATOR);
@@ -549,7 +596,7 @@ public final class Utilities {
 		INSTANT_BREAK.add(Material.TALL_SEAGRASS);
 		INSTANT_BREAK.add(Material.WHEAT);
 		// Start 1.14 objects
-		if (VersionUtil.isOfVersion("v1_14")) {
+		if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")) {
 			INSTANT_BREAK.add(Material.BAMBOO_SAPLING);
 			INSTANT_BREAK.add(Material.CORNFLOWER);
 		}
@@ -600,7 +647,7 @@ public final class Utilities {
 		FOOD.add(Material.SPIDER_EYE);
 		FOOD.add(Material.TROPICAL_FISH);
 		// Start 1.14 objects
-		if (VersionUtil.isOfVersion("v1_14")) {
+		if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")) {
 			FOOD.add(Material.SUSPICIOUS_STEW);
 			FOOD.add(Material.SWEET_BERRIES);
 		}
@@ -630,11 +677,22 @@ public final class Utilities {
 		COMBO.put(Material.SHEARS, Material.RED_WOOL);
 		COMBO.put(Material.SHEARS, Material.WHITE_WOOL);
 		COMBO.put(Material.SHEARS, Material.YELLOW_WOOL);
-		
+
 		COMBO.put(Material.IRON_SWORD, Material.COBWEB);
 		COMBO.put(Material.DIAMOND_SWORD, Material.COBWEB);
 		COMBO.put(Material.STONE_SWORD, Material.COBWEB);
 		COMBO.put(Material.WOODEN_SWORD, Material.COBWEB);
 		// End combos
+		
+		// Start climbable
+		CLIMBABLE.add(Material.VINE);
+		CLIMBABLE.add(Material.LADDER);
+		CLIMBABLE.add(Material.WATER);
+		// Start 1.14 objects
+		if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")) {
+			CLIMBABLE.add(Material.SCAFFOLDING);
+		}
+		// End 1.14 objects
+		// End climbable
 	}
 }

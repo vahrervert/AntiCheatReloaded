@@ -33,7 +33,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.BlinkCheck;
 import com.rammelkast.anticheatreloaded.command.CommandHandler;
 import com.rammelkast.anticheatreloaded.config.Configuration;
@@ -98,7 +97,6 @@ public class AntiCheatReloaded extends JavaPlugin {
 		// Enable packetlisteners
 		BlinkCheck.startTimer();
 		BlinkCheck.listenPackets();
-		KillAuraCheck.listenPackets();
 		
 		updateManager = new UpdateManager();
 		

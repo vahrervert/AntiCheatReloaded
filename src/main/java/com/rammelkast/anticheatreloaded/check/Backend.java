@@ -19,9 +19,7 @@
 
 package com.rammelkast.anticheatreloaded.check;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -72,7 +70,7 @@ public class Backend {
 	private Map<UUID, Long> lastBlockPlaceTime = new HashMap<UUID, Long>();
 	private Map<UUID, Integer> blockPunches = new HashMap<UUID, Integer>();
 	private Map<UUID, Integer> projectilesShot = new HashMap<UUID, Integer>();
-	private Map<UUID, Long> velocitized = new HashMap<UUID, Long>();
+	private Map<UUID, Long> velocitized = new HashMap<UUID, Long>();	
 	private Map<UUID, Integer> velocitytrack = new HashMap<UUID, Integer>();
 	private Map<UUID, Long> startEat = new HashMap<UUID, Long>();
 	private Map<UUID, Long> lastHeal = new HashMap<UUID, Long>();
@@ -291,7 +289,8 @@ public class Backend {
 		UUID uuid = player.getUniqueId();
 		if (player.getGameMode() != GameMode.CREATIVE && !player.isInsideVehicle() && !player.isSleeping()
 				&& !isMovingExempt(player) && !justPlaced(player) && !Utilities.isInWater(player)
-				&& !Utilities.isInWeb(player)) {
+				&& !Utilities.isInWeb(player)
+				&& !player.getLocation().getBlock().getType().name().endsWith("TRAPDOOR")) {
 			if (player.getFallDistance() == 0) {
 				if (nofallViolation.get(uuid) == null) {
 					nofallViolation.put(uuid, 1);

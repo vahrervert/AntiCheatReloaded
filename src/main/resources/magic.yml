@@ -185,13 +185,13 @@ VELOCITY_SCHETIME: 2
 VELOCITY_TIME: 3
 # Number of times a player can fail the ascension check while in water before being considered a cheater
 # Increase in case of false positives
-WATER_ASCENSION_VIOLATION_MAX: 12
+WATER_ASCENSION_VIOLATION_MAX: 8
 # Maximum speed that a player can climb a waterfall
 # Can be increased in case of false positives, shouldn't be necesary
 WATER_CLIMB_MAX: 0.15
 # Number of times a player can be caught speeding in water before being considered a cheater
 # Increase in case of false positives
-WATER_SPEED_VIOLATION_MAX: 4
+WATER_SPEED_VIOLATION_MAX: 6
 # Maximum speed a player can travel forwards or backwards
 # This is a set value and shouldn't be changed unless you know what you're doing
 XZ_SPEED_MAX: 0.25
@@ -243,7 +243,7 @@ Y_SPEED_MAX: 0.5175
 Y_TIME: 800
 # Amount of suspicious mid-air movements before a player is suspected of glide
 # Increase this in case of false positives
-GLIDE_LIMIT: 10
+GLIDE_LIMIT: 8
 # Maximum amount of movement packets allowed per second
 # Increase this in case of false positives
 BLINK_PACKET: 30

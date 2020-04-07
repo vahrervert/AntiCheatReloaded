@@ -82,7 +82,7 @@ public class FlightCheck {
 	}
 
 	public static boolean isMovingExempt(Player player) {
-		return isDoing(player, MOVING_EXEMPT, -1);
+		return isDoing(player, MOVING_EXEMPT, -1) || player.isInsideVehicle();
 	}
 
 	private static boolean isDoing(Player player, Map<UUID, Long> map, double max) {

@@ -57,6 +57,7 @@ import org.bukkit.inventory.PlayerInventory;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
+import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
 import com.rammelkast.anticheatreloaded.check.movement.GlideCheck;
@@ -450,6 +451,12 @@ public class PlayerListener extends EventListener {
                 }
                 if (!changed) {
                     user.setGoodLocation(event.getFrom());
+                }
+            }
+            if (getCheckManager().willCheckQuick(player, CheckType.KILLAURA)) {
+            	CheckResult result = KillAuraCheck.checkAimbot(player, event);
+                if (result.failed()) {
+                    log(result.getMessage(), player, CheckType.KILLAURA);
                 }
             }
         }

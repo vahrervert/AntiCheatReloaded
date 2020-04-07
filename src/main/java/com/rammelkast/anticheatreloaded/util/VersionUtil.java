@@ -19,13 +19,10 @@
 
 package com.rammelkast.anticheatreloaded.util;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
