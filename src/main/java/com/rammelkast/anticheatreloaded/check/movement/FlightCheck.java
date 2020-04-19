@@ -55,7 +55,7 @@ public class FlightCheck {
 		if (!isMovingExempt(player) && !Utilities.isHoveringOverWater(player.getLocation(), 1)
 				&& Utilities.cantStandAtExp(player.getLocation())
 				&& Utilities.blockIsnt(player.getLocation().getBlock().getRelative(BlockFace.DOWN),
-						new Material[] { Material.IRON_BARS })
+						new Material[] { Utilities.IRON_BARS })
 				&& Utilities.blockIsnt(player.getLocation().getBlock().getRelative(BlockFace.DOWN),
 						new String[] { "FENCE", "FENCE_GATE" })) {
 			if (!BLOCKS_OVER_FLIGHT.containsKey(uuid)) {

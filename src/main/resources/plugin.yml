@@ -20,8 +20,6 @@ permissions:
     description: Access the help message
   anticheat.system.report:
     description: Access cheat reports
-  anticheat.system.spy:
-    description: Access the spy system
   anticheat.mod:
     description: Mod helper perm
     children:
@@ -29,7 +27,6 @@ permissions:
       anticheat.system.alert: true
       anticheat.system.help: true
       anticheat.system.report: true
-      anticheat.system.spy: true
   anticheat.system.log:
     description: Access turning console logging on or off
   anticheat.system.reload:

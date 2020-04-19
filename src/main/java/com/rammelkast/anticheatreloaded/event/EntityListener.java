@@ -39,6 +39,7 @@ import com.rammelkast.anticheatreloaded.check.combat.CriticalsCheck;
 import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
 import com.rammelkast.anticheatreloaded.util.Distance;
+import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class EntityListener extends EventListener {
 
@@ -114,7 +115,7 @@ public class EntityListener extends EventListener {
                 if (e.getDamager() instanceof Player) {
                     Player p = (Player) e.getDamager();
                     getBackend().logDamage(p, 1);
-                    int value = p.getInventory().getItemInMainHand().containsEnchantment(Enchantment.KNOCKBACK) ? 2 : 1;
+                    int value = VersionUtil.getItemInHand(player).containsEnchantment(Enchantment.KNOCKBACK) ? 2 : 1;
                     getBackend().logDamage(player, value);
                     if (getCheckManager().willCheck(p, CheckType.LONG_REACH)) {
                         Distance distance = new Distance(player.getLocation(), p.getLocation());

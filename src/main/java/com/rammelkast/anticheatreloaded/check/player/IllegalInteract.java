@@ -31,6 +31,7 @@ import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.config.providers.Magic;
 import com.rammelkast.anticheatreloaded.util.Utilities;
+import com.rammelkast.anticheatreloaded.util.VersionUtil;
 import com.rammelkast.anticheatreloaded.util.checkassist.KillauraAssist;
 
 public class IllegalInteract {
@@ -68,7 +69,7 @@ public class IllegalInteract {
                 player.getGameMode() == GameMode.CREATIVE ? magic.BLOCK_MAX_DISTANCE_CREATIVE()
                         : player.getLocation().getDirection().getY() > 0.9 ? magic.BLOCK_MAX_DISTANCE_CREATIVE()
                         : magic.BLOCK_MAX_DISTANCE();
-		Block targetBlock = player.getTargetBlockExact((int) Math.ceil(distance));
+		Block targetBlock = VersionUtil.getTargetBlock(player, ((int) Math.ceil(distance)));
 		if (targetBlock == null) {
 			// TODO better check here
 			return true;

@@ -247,18 +247,26 @@ public class PlayerListener extends EventListener {
         Player player = event.getPlayer();
         PlayerInventory inv = player.getInventory();
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-        	ItemStack itemInHand = ((event.getHand() == EquipmentSlot.HAND) ? inv.getItemInMainHand() : inv.getItemInOffHand());
+        	ItemStack itemInHand;
+        	if (VersionUtil.isBountifulUpdate()) {
+        		itemInHand = VersionUtil.getItemInHand(player);
+        	} else {
+        		itemInHand = ((event.getHand() == EquipmentSlot.HAND) ? inv.getItemInMainHand() : inv.getItemInOffHand());
+        	}
+        	
             if (itemInHand.getType() == Material.BOW) {
                 getBackend().logBowWindUp(player);
             } else if (Utilities.isFood(itemInHand.getType()) || Utilities.isFood(itemInHand.getType())) {
                 getBackend().logEatingStart(player);
             }
             
-            if (itemInHand.getType() == Material.FIREWORK_ROCKET) {
-                ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId().toString());
-                if (player.isGliding()) {
-                	// TODO config max elytra height?
-                	ElytraCheck.JUMP_Y_VALUE.put(player.getUniqueId().toString(), 9999.99D);
+            if (!VersionUtil.isBountifulUpdate()) {
+                if (itemInHand.getType() == Material.FIREWORK_ROCKET) {
+                    ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId().toString());
+                    if (player.isGliding()) {
+                    	// TODO config max elytra height?
+                    	ElytraCheck.JUMP_Y_VALUE.put(player.getUniqueId().toString(), 9999.99D);
+                    }
                 }
             }
         }
@@ -316,14 +324,6 @@ public class PlayerListener extends EventListener {
         user.setIsWaitingOnLevelSync(true);
         getConfig().getLevels().loadLevelToUser(user);
         getUserManager().addUser(user);
-
-        if (player.hasMetadata(Utilities.SPY_METADATA)) {
-            for (Player p : player.getServer().getOnlinePlayers()) {
-                if (!Permission.SYSTEM_SPY.get(p)) {
-                    p.hidePlayer(AntiCheatReloaded.getPlugin(), player);
-                }
-            }
-        }
 
         AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
         

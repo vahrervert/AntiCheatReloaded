@@ -29,6 +29,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Distance;
+import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class ElytraCheck {
 
@@ -36,6 +37,11 @@ public class ElytraCheck {
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
 	public static CheckResult runCheck(Player player, Distance distance) {
+		// No elytra in server version
+		if (VersionUtil.isBountifulUpdate()) {
+			return PASS;
+		}
+		
 		String uuid = player.getUniqueId().toString();
 		if (distance.getYDifference() > AntiCheatReloaded.getManager().getBackend().getMagic().TELEPORT_MIN()) {
 			// This was a teleport, so skip check.

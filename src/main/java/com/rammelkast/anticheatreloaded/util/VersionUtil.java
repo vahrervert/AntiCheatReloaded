@@ -21,8 +21,11 @@ package com.rammelkast.anticheatreloaded.util;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -31,7 +34,7 @@ import org.bukkit.potion.PotionEffectType;
 public class VersionUtil {
 
 	private static final List<String> SUPPORTED_VERSIONS = Arrays
-			.asList(new String[] { "v1_15", "v1_14", "v1_13" });
+			.asList(new String[] { "v1_15", "v1_14", "v1_13", "v1_8_R3" });
 
 	public static String getVersion() {
 		return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
@@ -53,8 +56,17 @@ public class VersionUtil {
 		return false;
 	}
 
+	/**
+	 * @return the if server is running Bountiful Update (1.8)
+	 */
+	public static boolean isBountifulUpdate() {
+		return isOfVersion("v1_8");
+	}
 	
 	public static boolean isFlying(Player p) {
+		if (isBountifulUpdate()) {
+			return p.isFlying();
+		}
 		return p.isFlying() || p.isGliding() || p.hasPotionEffect(PotionEffectType.LEVITATION);
 	}
 
@@ -63,13 +75,16 @@ public class VersionUtil {
 	}
 
 	public static boolean isFrostWalk(Player player) {
-		if (player.getInventory().getBoots() == null) {
+		if (player.getInventory().getBoots() == null || isBountifulUpdate()) {
 			return false;
 		}
 		return player.getInventory().getBoots().containsEnchantment(Enchantment.FROST_WALKER);
 	}
 
 	public static ItemStack getItemInHand(Player player) {
+		if (isBountifulUpdate()) {
+			return player.getItemInHand();
+		}
 		return player.getInventory().getItemInMainHand();
 	}
 	
@@ -81,6 +96,13 @@ public class VersionUtil {
 		} catch (Exception e) {
 			return -1;
 		}
+	}
+
+	public static Block getTargetBlock(Player player, int distance) {
+		if (isBountifulUpdate()) {
+			return player.getTargetBlock((Set<Material>) null, distance);
+		}
+		return player.getTargetBlockExact(distance);
 	}
 
 }

@@ -73,9 +73,7 @@ public class SpeedCheck {
 			} else if (player.isSprinting()) {
 				String blockDownName = player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().name();
 				if (blockDownName.endsWith("ICE")
-						&& ((player.getEyeLocation().getBlock().getRelative(BlockFace.UP).getType() != Material.AIR)
-								&& (player.getEyeLocation().getBlock().getRelative(BlockFace.UP)
-										.getType() != Material.CAVE_AIR))) {
+						&& (player.getEyeLocation().getBlock().getRelative(BlockFace.UP).getType() != Material.AIR)) {
 					if (player.getLocation().getBlock().getType().name().endsWith("TRAPDOOR")) {
 						reason = "while boosting on " + blockDownName.toLowerCase().replaceAll("_", " ")
 								+ " and trapdoor";

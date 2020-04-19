@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -69,7 +68,7 @@ public class WaterWalkCheck {
 							}
 							if (!violation && !Utilities.isFullyInWater(player.getLocation())
 									&& Utilities.isHoveringOverWater(player.getLocation(), 1) && y == 0D
-									&& !block.getType().equals(Material.LILY_PAD)) {
+									&& !block.getType().equals(Utilities.LILY_PAD)) {
 								violation = true;
 							}
 							if (violation) {

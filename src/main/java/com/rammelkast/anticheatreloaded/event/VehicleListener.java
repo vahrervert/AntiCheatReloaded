@@ -27,44 +27,47 @@ import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
+import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class VehicleListener extends EventListener {
 
-    @EventHandler(ignoreCancelled = true)
-    public void onVehicleEnter(VehicleEnterEvent event) {
-        if (event.getEntered() instanceof Player) {
-            getBackend().logEnterExit((Player) event.getEntered());
-        }
+	@EventHandler(ignoreCancelled = true)
+	public void onVehicleEnter(VehicleEnterEvent event) {
+		if (event.getEntered() instanceof Player) {
+			getBackend().logEnterExit((Player) event.getEntered());
+		}
 
-        AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
-    }
+		AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
+	}
 
-    @EventHandler(ignoreCancelled = true)
-    public void onVehicleExit(VehicleExitEvent event) {
-        if (event.getExited() instanceof Player) {
-            getBackend().logEnterExit((Player) event.getExited());
-        }
+	@EventHandler(ignoreCancelled = true)
+	public void onVehicleExit(VehicleExitEvent event) {
+		if (event.getExited() instanceof Player) {
+			getBackend().logEnterExit((Player) event.getExited());
+		}
 
-        AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
-    }
+		AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
+	}
 
+	@EventHandler(ignoreCancelled = true)
+	public void onVehicleDestroy(VehicleDestroyEvent event) {
+		if (VersionUtil.isBountifulUpdate()) {
+			if (event.getVehicle().getPassenger() != null) {
+				Entity entity = event.getVehicle().getPassenger();
+				if (entity instanceof Player) {
+					getBackend().logEnterExit((Player) entity);
+				}
+			}
+		} else {
+			if (!event.getVehicle().getPassengers().isEmpty()) {
+				for (Entity entity : event.getVehicle().getPassengers()) {
+					if (entity instanceof Player) {
+						getBackend().logEnterExit((Player) entity);
+					}
+				}
+			}
+		}
 
-    @EventHandler(ignoreCancelled = true)
-    public void onVehicleDestroy(VehicleDestroyEvent event) {
-    	// TODO fix deprecations
-        //if (event.getVehicle().getPassenger() != null && event.getVehicle().getPassenger() instanceof Player) {
-        //    getBackend().logEnterExit((Player) event.getVehicle().getPassenger());
-        //}
-    	
-    	// TODO this should work, untested though.
-    	if (!event.getVehicle().getPassengers().isEmpty()) {
-    		for (Entity entity: event.getVehicle().getPassengers()) {
-    			if (entity instanceof Player) {
-    				getBackend().logEnterExit((Player) entity);
-    			}
-    		}
-    	}
-
-        AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
-    }
+		AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
+	}
 }

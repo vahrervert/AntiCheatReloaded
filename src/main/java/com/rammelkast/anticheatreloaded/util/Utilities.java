@@ -40,8 +40,10 @@ public final class Utilities {
 	private static final List<Material> FOOD = new ArrayList<Material>();
 	private static final List<Material> CLIMBABLE = new ArrayList<Material>();
 	private static final Map<Material, Material> COMBO = new HashMap<Material, Material>();
-
-	public static final String SPY_METADATA = "ac-spydata";
+	
+	public static final Material LILY_PAD;
+	public static final Material COB_WEB;
+	public static final Material IRON_BARS;
 
 	/**
 	 * Check if only the block beneath them is standable (includes water + lava)
@@ -51,7 +53,7 @@ public final class Utilities {
 	 */
 	public static boolean cantStandAtSingle(Block block) {
 		Block otherBlock = block.getLocation().add(0, -0.5, 0).getBlock();
-		boolean center = otherBlock.getType() == Material.AIR || otherBlock.getType() == Material.CAVE_AIR;
+		boolean center = otherBlock.getType() == Material.AIR;
 		return center;
 	}
 
@@ -107,7 +109,7 @@ public final class Utilities {
 	 * @return true if the player can stand here
 	 */
 	public static boolean canStand(Block block) {
-		return !(block.isLiquid() || block.getType() == Material.AIR || block.getType() == Material.CAVE_AIR);
+		return !(block.isLiquid() || block.getType() == Material.AIR);
 	}
 
 	/**
@@ -160,7 +162,7 @@ public final class Utilities {
 	public static boolean isHoveringOverWater(Location player, int blocks) {
 		for (int i = player.getBlockY(); i > player.getBlockY() - blocks; i--) {
 			Block newloc = (new Location(player.getWorld(), player.getBlockX(), i, player.getBlockZ())).getBlock();
-			if (newloc.getType() != Material.AIR && newloc.getType() != Material.CAVE_AIR) {
+			if (newloc.getType() != Material.AIR) {
 				return newloc.isLiquid();
 			}
 		}
@@ -238,12 +240,11 @@ public final class Utilities {
 	 */
 	public static boolean isOnLilyPad(Player player) {
 		Block block = player.getLocation().getBlock();
-		Material lily = Material.LILY_PAD;
 		// TODO: Can we fix X this?
-		return block.getType() == lily || block.getRelative(BlockFace.NORTH).getType() == lily
-				|| block.getRelative(BlockFace.SOUTH).getType() == lily
-				|| block.getRelative(BlockFace.EAST).getType() == lily
-				|| block.getRelative(BlockFace.WEST).getType() == lily;
+		return block.getType() == LILY_PAD || block.getRelative(BlockFace.NORTH).getType() == LILY_PAD
+				|| block.getRelative(BlockFace.SOUTH).getType() == LILY_PAD
+				|| block.getRelative(BlockFace.EAST).getType() == LILY_PAD
+				|| block.getRelative(BlockFace.WEST).getType() == LILY_PAD;
 	}
 
 	/**
@@ -276,9 +277,9 @@ public final class Utilities {
 	 * @return true if in web
 	 */
 	public static boolean isInWeb(Player player) {
-		return player.getLocation().getBlock().getType() == Material.COBWEB
-				|| player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.COBWEB
-				|| player.getLocation().getBlock().getRelative(BlockFace.UP).getType() == Material.COBWEB;
+		return player.getLocation().getBlock().getType() == COB_WEB
+				|| player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == COB_WEB
+				|| player.getLocation().getBlock().getRelative(BlockFace.UP).getType() == COB_WEB;
 	}
 
 	/**
@@ -552,147 +553,239 @@ public final class Utilities {
 	}
 
 	static {
-		// Start instant break materials
-		INSTANT_BREAK.add(Material.COMPARATOR);
-		INSTANT_BREAK.add(Material.REPEATER);
-		INSTANT_BREAK.add(Material.TORCH);
-		INSTANT_BREAK.add(Material.REDSTONE_TORCH);
-		INSTANT_BREAK.add(Material.REDSTONE_WIRE);
-		INSTANT_BREAK.add(Material.TRIPWIRE);
-		INSTANT_BREAK.add(Material.TRIPWIRE_HOOK);
-		INSTANT_BREAK.add(Material.FIRE);
-		INSTANT_BREAK.add(Material.FLOWER_POT);
-		INSTANT_BREAK.add(Material.INFESTED_CHISELED_STONE_BRICKS);
-		INSTANT_BREAK.add(Material.INFESTED_COBBLESTONE);
-		INSTANT_BREAK.add(Material.INFESTED_CRACKED_STONE_BRICKS);
-		INSTANT_BREAK.add(Material.INFESTED_MOSSY_STONE_BRICKS);
-		INSTANT_BREAK.add(Material.INFESTED_STONE);
-		INSTANT_BREAK.add(Material.INFESTED_STONE_BRICKS);
-		INSTANT_BREAK.add(Material.TNT);
-		INSTANT_BREAK.add(Material.SLIME_BLOCK);
-		INSTANT_BREAK.add(Material.CARROTS);
-		INSTANT_BREAK.add(Material.DEAD_BUSH);
-		INSTANT_BREAK.add(Material.FERN);
-		INSTANT_BREAK.add(Material.LARGE_FERN);
-		INSTANT_BREAK.add(Material.CHORUS_FLOWER);
-		INSTANT_BREAK.add(Material.SUNFLOWER);
-		INSTANT_BREAK.add(Material.LILY_PAD);
-		INSTANT_BREAK.add(Material.MELON_STEM);
-		INSTANT_BREAK.add(Material.ATTACHED_MELON_STEM);
-		INSTANT_BREAK.add(Material.BROWN_MUSHROOM);
-		INSTANT_BREAK.add(Material.RED_MUSHROOM);
-		INSTANT_BREAK.add(Material.NETHER_WART);
-		INSTANT_BREAK.add(Material.POTATOES);
-		INSTANT_BREAK.add(Material.PUMPKIN_STEM);
-		INSTANT_BREAK.add(Material.ATTACHED_PUMPKIN_STEM);
-		INSTANT_BREAK.add(Material.ACACIA_SAPLING);
-		INSTANT_BREAK.add(Material.BIRCH_SAPLING);
-		INSTANT_BREAK.add(Material.DARK_OAK_SAPLING);
-		INSTANT_BREAK.add(Material.JUNGLE_SAPLING);
-		INSTANT_BREAK.add(Material.OAK_SAPLING);
-		INSTANT_BREAK.add(Material.SPRUCE_SAPLING);
-		INSTANT_BREAK.add(Material.SUGAR_CANE);
-		INSTANT_BREAK.add(Material.TALL_GRASS);
-		INSTANT_BREAK.add(Material.TALL_SEAGRASS);
-		INSTANT_BREAK.add(Material.WHEAT);
-		// Start 1.14 objects
-		if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")) {
-			INSTANT_BREAK.add(Material.BAMBOO_SAPLING);
-			INSTANT_BREAK.add(Material.CORNFLOWER);
-		}
-		// End 1.14 objects
-		// Start 1.15 objects
-		if (VersionUtil.isOfVersion("v1_15")) {
-			INSTANT_BREAK.add(Material.HONEY_BLOCK);
-		}
-		// End 1.15 objects
-		// End instant break materials
+		// Start 1.8.8
+		if (VersionUtil.isBountifulUpdate()) {
+			LILY_PAD = XMaterial.LILY_PAD.parseMaterial();
+			COB_WEB = XMaterial.COBWEB.parseMaterial();
+			IRON_BARS = XMaterial.IRON_BARS.parseMaterial();
 
-		// Start food
-		FOOD.add(Material.APPLE);
-		FOOD.add(Material.BAKED_POTATO);
-		FOOD.add(Material.BEETROOT);
-		FOOD.add(Material.BEETROOT_SOUP);
-		FOOD.add(Material.BREAD);
-		FOOD.add(Material.CAKE);
-		FOOD.add(Material.CARROT);
-		FOOD.add(Material.CHORUS_FRUIT);
-		FOOD.add(Material.COOKED_BEEF);
-		FOOD.add(Material.COOKED_CHICKEN);
-		FOOD.add(Material.COOKED_COD);
-		FOOD.add(Material.COOKED_MUTTON);
-		FOOD.add(Material.COOKED_PORKCHOP);
-		FOOD.add(Material.COOKED_RABBIT);
-		FOOD.add(Material.COOKED_SALMON);
-		FOOD.add(Material.COOKIE);
-		FOOD.add(Material.DRIED_KELP);
-		FOOD.add(Material.ENCHANTED_GOLDEN_APPLE);
-		FOOD.add(Material.GOLDEN_APPLE);
-		FOOD.add(Material.GOLDEN_CARROT);
-		FOOD.add(Material.MELON_SLICE);
-		FOOD.add(Material.MUSHROOM_STEW);
-		FOOD.add(Material.POISONOUS_POTATO);
-		FOOD.add(Material.POTATO);
-		FOOD.add(Material.PUFFERFISH);
-		FOOD.add(Material.PUMPKIN_PIE);
-		FOOD.add(Material.RABBIT_STEW);
-		FOOD.add(Material.BEEF);
-		FOOD.add(Material.CHICKEN);
-		FOOD.add(Material.COD);
-		FOOD.add(Material.MUTTON);
-		FOOD.add(Material.PORKCHOP);
-		FOOD.add(Material.RABBIT);
-		FOOD.add(Material.SALMON);
-		FOOD.add(Material.ROTTEN_FLESH);
-		FOOD.add(Material.SPIDER_EYE);
-		FOOD.add(Material.TROPICAL_FISH);
-		// Start 1.14 objects
-		if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")) {
-			FOOD.add(Material.SUSPICIOUS_STEW);
-			FOOD.add(Material.SWEET_BERRIES);
-		}
-		// End 1.14 objects
-		// Start 1.15 objects
-		if (VersionUtil.isOfVersion("v1_15")) {
-			FOOD.add(Material.HONEY_BOTTLE);
-		}
-		// End 1.15 objects
-		// End food
+			// Start instant break materials
+			INSTANT_BREAK.add(XMaterial.COMPARATOR.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.REPEATER.parseMaterial());
+			INSTANT_BREAK.add(Material.TORCH);
+			INSTANT_BREAK.add(XMaterial.REDSTONE_TORCH.parseMaterial());
+			INSTANT_BREAK.add(Material.REDSTONE_WIRE);
+			INSTANT_BREAK.add(Material.TRIPWIRE);
+			INSTANT_BREAK.add(Material.TRIPWIRE_HOOK);
+			INSTANT_BREAK.add(Material.FIRE);
+			INSTANT_BREAK.add(Material.FLOWER_POT);
+			INSTANT_BREAK.add(Material.TNT);
+			INSTANT_BREAK.add(Material.SLIME_BLOCK);
+			INSTANT_BREAK.add(Material.CARROT);
+			INSTANT_BREAK.add(Material.DEAD_BUSH);
+			INSTANT_BREAK.add(Material.GRASS);
+			INSTANT_BREAK.add(XMaterial.TALL_GRASS.parseMaterial());
+			INSTANT_BREAK.add(LILY_PAD);
+			INSTANT_BREAK.add(Material.MELON_STEM);
+			INSTANT_BREAK.add(Material.MELON_STEM);
+			INSTANT_BREAK.add(Material.BROWN_MUSHROOM);
+			INSTANT_BREAK.add(Material.RED_MUSHROOM);
+			INSTANT_BREAK.add(XMaterial.NETHER_WART.parseMaterial());
+			INSTANT_BREAK.add(Material.POTATO);
+			INSTANT_BREAK.add(Material.PUMPKIN_STEM);
+			INSTANT_BREAK.add(Material.PUMPKIN_STEM);
+			INSTANT_BREAK.add(XMaterial.OAK_SAPLING.parseMaterial());
+			INSTANT_BREAK.add(Material.SUGAR_CANE);
+			INSTANT_BREAK.add(Material.WHEAT);
+			// End instant break materials
 
-		// Start combos
-		COMBO.put(Material.SHEARS, Material.BLACK_WOOL);
-		COMBO.put(Material.SHEARS, Material.BLUE_WOOL);
-		COMBO.put(Material.SHEARS, Material.BROWN_WOOL);
-		COMBO.put(Material.SHEARS, Material.CYAN_WOOL);
-		COMBO.put(Material.SHEARS, Material.GRAY_WOOL);
-		COMBO.put(Material.SHEARS, Material.GREEN_WOOL);
-		COMBO.put(Material.SHEARS, Material.LIGHT_BLUE_WOOL);
-		COMBO.put(Material.SHEARS, Material.LIGHT_GRAY_WOOL);
-		COMBO.put(Material.SHEARS, Material.LIME_WOOL);
-		COMBO.put(Material.SHEARS, Material.MAGENTA_WOOL);
-		COMBO.put(Material.SHEARS, Material.MAGENTA_WOOL);
-		COMBO.put(Material.SHEARS, Material.ORANGE_WOOL);
-		COMBO.put(Material.SHEARS, Material.PINK_WOOL);
-		COMBO.put(Material.SHEARS, Material.PURPLE_WOOL);
-		COMBO.put(Material.SHEARS, Material.RED_WOOL);
-		COMBO.put(Material.SHEARS, Material.WHITE_WOOL);
-		COMBO.put(Material.SHEARS, Material.YELLOW_WOOL);
+			// Start food
+			FOOD.add(Material.APPLE);
+			FOOD.add(Material.BAKED_POTATO);
+			FOOD.add(Material.BREAD);
+			FOOD.add(Material.CAKE);
+			FOOD.add(Material.CARROT);
+			FOOD.add(Material.COOKED_CHICKEN);
+			FOOD.add(XMaterial.COOKED_COD.parseMaterial());
+			FOOD.add(XMaterial.COD.parseMaterial());
+			FOOD.add(Material.COOKED_MUTTON);
+			FOOD.add(XMaterial.COOKED_PORKCHOP.parseMaterial());
+			FOOD.add(Material.COOKED_RABBIT);
+			FOOD.add(Material.COOKIE);
+			FOOD.add(Material.GOLDEN_APPLE);
+			FOOD.add(Material.GOLDEN_CARROT);
+			FOOD.add(XMaterial.GLISTERING_MELON_SLICE.parseMaterial());
+			FOOD.add(XMaterial.MUSHROOM_STEM.parseMaterial());
+			FOOD.add(Material.POISONOUS_POTATO);
+			FOOD.add(Material.POTATO);
+			FOOD.add(Material.PUMPKIN_PIE);
+			FOOD.add(Material.RABBIT_STEW);
+			FOOD.add(Material.COOKED_BEEF);
+			FOOD.add(XMaterial.BEEF.parseMaterial());
+			FOOD.add(Material.COOKED_CHICKEN);
+			FOOD.add(XMaterial.CHICKEN.parseMaterial());
+			FOOD.add(Material.MUTTON);
+			FOOD.add(XMaterial.PORKCHOP.parseMaterial());
+			FOOD.add(Material.RABBIT);
+			FOOD.add(Material.COOKED_RABBIT);
+			FOOD.add(Material.ROTTEN_FLESH);
+			FOOD.add(Material.SPIDER_EYE);
 
-		COMBO.put(Material.IRON_SWORD, Material.COBWEB);
-		COMBO.put(Material.DIAMOND_SWORD, Material.COBWEB);
-		COMBO.put(Material.STONE_SWORD, Material.COBWEB);
-		COMBO.put(Material.WOODEN_SWORD, Material.COBWEB);
-		// End combos
-		
-		// Start climbable
-		CLIMBABLE.add(Material.VINE);
-		CLIMBABLE.add(Material.LADDER);
-		CLIMBABLE.add(Material.WATER);
-		// Start 1.14 objects
-		if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")) {
-			CLIMBABLE.add(Material.SCAFFOLDING);
+			// Start combos
+			COMBO.put(Material.SHEARS, XMaterial.WHITE_WOOL.parseMaterial());
+
+			COMBO.put(Material.IRON_SWORD, COB_WEB);
+			COMBO.put(Material.DIAMOND_SWORD, COB_WEB);
+			COMBO.put(Material.STONE_SWORD, COB_WEB);
+			COMBO.put(XMaterial.WOODEN_SWORD.parseMaterial(), COB_WEB);
+			// End combos
+			
+			// Start climbable
+			CLIMBABLE.add(Material.VINE);
+			CLIMBABLE.add(Material.LADDER);
+			CLIMBABLE.add(Material.WATER);
+			// End climbable
 		}
-		// End 1.14 objects
-		// End climbable
+		// End 1.8.8
+		// Start other version
+		else {
+			LILY_PAD = Material.LILY_PAD;
+			COB_WEB = Material.COBWEB;
+			IRON_BARS = Material.IRON_BARS;
+			
+			// Start instant break materials
+			INSTANT_BREAK.add(Material.COMPARATOR);
+			INSTANT_BREAK.add(Material.REPEATER);
+			INSTANT_BREAK.add(Material.TORCH);
+			INSTANT_BREAK.add(Material.REDSTONE_TORCH);
+			INSTANT_BREAK.add(Material.REDSTONE_WIRE);
+			INSTANT_BREAK.add(Material.TRIPWIRE);
+			INSTANT_BREAK.add(Material.TRIPWIRE_HOOK);
+			INSTANT_BREAK.add(Material.FIRE);
+			INSTANT_BREAK.add(Material.FLOWER_POT);
+			INSTANT_BREAK.add(Material.INFESTED_CHISELED_STONE_BRICKS);
+			INSTANT_BREAK.add(Material.INFESTED_COBBLESTONE);
+			INSTANT_BREAK.add(Material.INFESTED_CRACKED_STONE_BRICKS);
+			INSTANT_BREAK.add(Material.INFESTED_MOSSY_STONE_BRICKS);
+			INSTANT_BREAK.add(Material.INFESTED_STONE);
+			INSTANT_BREAK.add(Material.INFESTED_STONE_BRICKS);
+			INSTANT_BREAK.add(Material.TNT);
+			INSTANT_BREAK.add(Material.SLIME_BLOCK);
+			INSTANT_BREAK.add(Material.CARROTS);
+			INSTANT_BREAK.add(Material.DEAD_BUSH);
+			INSTANT_BREAK.add(Material.FERN);
+			INSTANT_BREAK.add(Material.LARGE_FERN);
+			INSTANT_BREAK.add(Material.CHORUS_FLOWER);
+			INSTANT_BREAK.add(Material.SUNFLOWER);
+			INSTANT_BREAK.add(Material.LILY_PAD);
+			INSTANT_BREAK.add(Material.MELON_STEM);
+			INSTANT_BREAK.add(Material.ATTACHED_MELON_STEM);
+			INSTANT_BREAK.add(Material.BROWN_MUSHROOM);
+			INSTANT_BREAK.add(Material.RED_MUSHROOM);
+			INSTANT_BREAK.add(Material.NETHER_WART);
+			INSTANT_BREAK.add(Material.POTATOES);
+			INSTANT_BREAK.add(Material.PUMPKIN_STEM);
+			INSTANT_BREAK.add(Material.ATTACHED_PUMPKIN_STEM);
+			INSTANT_BREAK.add(Material.ACACIA_SAPLING);
+			INSTANT_BREAK.add(Material.BIRCH_SAPLING);
+			INSTANT_BREAK.add(Material.DARK_OAK_SAPLING);
+			INSTANT_BREAK.add(Material.JUNGLE_SAPLING);
+			INSTANT_BREAK.add(Material.OAK_SAPLING);
+			INSTANT_BREAK.add(Material.SPRUCE_SAPLING);
+			INSTANT_BREAK.add(Material.SUGAR_CANE);
+			INSTANT_BREAK.add(Material.TALL_GRASS);
+			INSTANT_BREAK.add(Material.TALL_SEAGRASS);
+			INSTANT_BREAK.add(Material.WHEAT);
+			// Start 1.14 objects
+			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")) {
+				INSTANT_BREAK.add(Material.BAMBOO_SAPLING);
+				INSTANT_BREAK.add(Material.CORNFLOWER);
+			}
+			// End 1.14 objects
+			// Start 1.15 objects
+			if (VersionUtil.isOfVersion("v1_15")) {
+				INSTANT_BREAK.add(Material.HONEY_BLOCK);
+			}
+			// End 1.15 objects
+			// End instant break materials
+
+			// Start food
+			FOOD.add(Material.APPLE);
+			FOOD.add(Material.BAKED_POTATO);
+			FOOD.add(Material.BEETROOT);
+			FOOD.add(Material.BEETROOT_SOUP);
+			FOOD.add(Material.BREAD);
+			FOOD.add(Material.CAKE);
+			FOOD.add(Material.CARROT);
+			FOOD.add(Material.CHORUS_FRUIT);
+			FOOD.add(Material.COOKED_BEEF);
+			FOOD.add(Material.COOKED_CHICKEN);
+			FOOD.add(Material.COOKED_COD);
+			FOOD.add(Material.COOKED_MUTTON);
+			FOOD.add(Material.COOKED_PORKCHOP);
+			FOOD.add(Material.COOKED_RABBIT);
+			FOOD.add(Material.COOKED_SALMON);
+			FOOD.add(Material.COOKIE);
+			FOOD.add(Material.DRIED_KELP);
+			FOOD.add(Material.ENCHANTED_GOLDEN_APPLE);
+			FOOD.add(Material.GOLDEN_APPLE);
+			FOOD.add(Material.GOLDEN_CARROT);
+			FOOD.add(Material.MELON_SLICE);
+			FOOD.add(Material.MUSHROOM_STEW);
+			FOOD.add(Material.POISONOUS_POTATO);
+			FOOD.add(Material.POTATO);
+			FOOD.add(Material.PUFFERFISH);
+			FOOD.add(Material.PUMPKIN_PIE);
+			FOOD.add(Material.RABBIT_STEW);
+			FOOD.add(Material.BEEF);
+			FOOD.add(Material.CHICKEN);
+			FOOD.add(Material.COD);
+			FOOD.add(Material.MUTTON);
+			FOOD.add(Material.PORKCHOP);
+			FOOD.add(Material.RABBIT);
+			FOOD.add(Material.SALMON);
+			FOOD.add(Material.ROTTEN_FLESH);
+			FOOD.add(Material.SPIDER_EYE);
+			FOOD.add(Material.TROPICAL_FISH);
+			// Start 1.14 objects
+			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")) {
+				FOOD.add(Material.SUSPICIOUS_STEW);
+				FOOD.add(Material.SWEET_BERRIES);
+			}
+			// End 1.14 objects
+			// Start 1.15 objects
+			if (VersionUtil.isOfVersion("v1_15")) {
+				FOOD.add(Material.HONEY_BOTTLE);
+			}
+			// End 1.15 objects
+			// End food
+
+			// Start combos
+			COMBO.put(Material.SHEARS, Material.BLACK_WOOL);
+			COMBO.put(Material.SHEARS, Material.BLUE_WOOL);
+			COMBO.put(Material.SHEARS, Material.BROWN_WOOL);
+			COMBO.put(Material.SHEARS, Material.CYAN_WOOL);
+			COMBO.put(Material.SHEARS, Material.GRAY_WOOL);
+			COMBO.put(Material.SHEARS, Material.GREEN_WOOL);
+			COMBO.put(Material.SHEARS, Material.LIGHT_BLUE_WOOL);
+			COMBO.put(Material.SHEARS, Material.LIGHT_GRAY_WOOL);
+			COMBO.put(Material.SHEARS, Material.LIME_WOOL);
+			COMBO.put(Material.SHEARS, Material.MAGENTA_WOOL);
+			COMBO.put(Material.SHEARS, Material.MAGENTA_WOOL);
+			COMBO.put(Material.SHEARS, Material.ORANGE_WOOL);
+			COMBO.put(Material.SHEARS, Material.PINK_WOOL);
+			COMBO.put(Material.SHEARS, Material.PURPLE_WOOL);
+			COMBO.put(Material.SHEARS, Material.RED_WOOL);
+			COMBO.put(Material.SHEARS, Material.WHITE_WOOL);
+			COMBO.put(Material.SHEARS, Material.YELLOW_WOOL);
+
+			COMBO.put(Material.IRON_SWORD, Material.COBWEB);
+			COMBO.put(Material.DIAMOND_SWORD, Material.COBWEB);
+			COMBO.put(Material.STONE_SWORD, Material.COBWEB);
+			COMBO.put(Material.WOODEN_SWORD, Material.COBWEB);
+			// End combos
+			
+			// Start climbable
+			CLIMBABLE.add(Material.VINE);
+			CLIMBABLE.add(Material.LADDER);
+			CLIMBABLE.add(Material.WATER);
+			// Start 1.14 objects
+			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")) {
+				CLIMBABLE.add(Material.SCAFFOLDING);
+			}
+			// End 1.14 objects
+			// End climbable
+		}
+		// End other versions
 	}
 }
