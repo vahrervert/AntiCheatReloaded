@@ -70,10 +70,6 @@ public class VersionUtil {
 		return p.isFlying() || p.isGliding() || p.hasPotionEffect(PotionEffectType.LEVITATION);
 	}
 
-	public static long getHealTime() {
-		return 495;
-	}
-
 	public static boolean isFrostWalk(Player player) {
 		if (player.getInventory().getBoots() == null || isBountifulUpdate()) {
 			return false;

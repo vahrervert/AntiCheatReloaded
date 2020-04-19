@@ -40,7 +40,7 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 /**
  * @author Rammelkast
  */
-public class BlinkCheck {
+public class MorePacketsCheck {
 
 	public static final Map<UUID, Integer> MOVE_COUNT = new HashMap<UUID, Integer>();
 
@@ -59,48 +59,49 @@ public class BlinkCheck {
 						new PacketType[] { PacketType.Play.Client.POSITION, PacketType.Play.Client.POSITION_LOOK }) {
 					@Override
 					public void onPacketReceiving(PacketEvent e) {
-						Player p = e.getPlayer();
+						Player player = e.getPlayer();
+						if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player,
+								CheckType.MOREPACKETS)) {
+							return;
+						}
 						Location cur = e.getPlayer().getLocation();
-						if (!MOVE_COUNT.containsKey(p.getUniqueId())) {
-							MOVE_COUNT.put(p.getUniqueId(), 1);
+						if (!MOVE_COUNT.containsKey(player.getUniqueId())) {
+							MOVE_COUNT.put(player.getUniqueId(), 1);
 						} else {
-							MOVE_COUNT.put(p.getUniqueId(), MOVE_COUNT.get(p.getUniqueId()) + 1);
-							if (AntiCheatReloaded.getManager().getCheckManager().checkInWorld(p)
-									&& !AntiCheatReloaded.getManager().getCheckManager().isOpExempt(p)
-									&& !AntiCheatReloaded.getManager().getCheckManager().isExempt(p, CheckType.BLINK)) {
-								int ping = VersionUtil.getPlayerPing(p);
-								int blinkMagic = AntiCheatReloaded.getManager().getBackend().getMagic().BLINK_PACKET();
-								int averagePing = AntiCheatReloaded.getManager().getBackend().getMagic()
-										.BLINK_AVERAGE_PING();
-								float pingLeniency = (float) ((ping / averagePing));
-								if (pingLeniency < 1)
-									pingLeniency = 1;
-								if (pingLeniency > 2.5F)
-									pingLeniency = 2.5F;
-								blinkMagic = Math.round(pingLeniency * blinkMagic);
-								final float finalPingLeniency = pingLeniency;
-								try {
-									if (MOVE_COUNT.get(p.getUniqueId()) > blinkMagic) {
-										final int packets = MOVE_COUNT.get(p.getUniqueId());
-										MOVE_COUNT.remove(p.getUniqueId());
-										AntiCheatReloaded.sendToMainThread(new Runnable() {
-											@Override
-											public void run() {
-												EventListener.log(new CheckResult(CheckResult.Result.FAILED,
-														"sent " + packets + " packets in one second (max="
-																+ AntiCheatReloaded.getManager().getBackend().getMagic()
-																		.BLINK_PACKET()
-																+ ", leniency=" + finalPingLeniency + ", ping=" + ping
-																+ ")").getMessage(),
-														p, CheckType.BLINK);
-												e.setCancelled(true);
-												e.getPlayer().teleport(cur);
-											}
-										});
-									}
-								} catch (NullPointerException nullPointer) {
-									// TODO this is thrown sometimes, might have something to do with line 83
+							MOVE_COUNT.put(player.getUniqueId(), MOVE_COUNT.get(player.getUniqueId()) + 1);
+							int ping = VersionUtil.getPlayerPing(player);
+							int limit = AntiCheatReloaded.getManager().getBackend().getMagic().MOREPACKETS_LIMIT();
+							int averagePing = AntiCheatReloaded.getManager().getBackend().getMagic()
+									.MOREPACKETS_AVERAGE_PING();
+							float pingLeniency = (float) ((ping / averagePing));
+							if (pingLeniency < 1)
+								pingLeniency = 1;
+							if (pingLeniency > 2.5F)
+								pingLeniency = 2.5F;
+							limit = Math.round(pingLeniency * limit);
+							final float finalPingLeniency = pingLeniency;
+							try {
+								if (MOVE_COUNT.get(player.getUniqueId()) > limit) {
+									final int packets = MOVE_COUNT.get(player.getUniqueId());
+									MOVE_COUNT.remove(player.getUniqueId());
+									AntiCheatReloaded.sendToMainThread(new Runnable() {
+										@Override
+										public void run() {
+											EventListener.log(
+													new CheckResult(CheckResult.Result.FAILED,
+															"sent " + packets + " packets in one second (max="
+																	+ AntiCheatReloaded.getManager().getBackend()
+																			.getMagic().MOREPACKETS_LIMIT()
+																	+ ", leniency=" + finalPingLeniency + ", ping="
+																	+ ping + ")").getMessage(),
+													player, CheckType.MOREPACKETS);
+											e.setCancelled(true);
+											e.getPlayer().teleport(cur);
+										}
+									});
 								}
+							} catch (NullPointerException nullPointer) {
+								// TODO this is thrown sometimes, might have something to do with line 83
 							}
 						}
 					}

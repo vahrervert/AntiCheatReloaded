@@ -39,7 +39,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
-import com.rammelkast.anticheatreloaded.check.movement.BlinkCheck;
+import com.rammelkast.anticheatreloaded.check.movement.MorePacketsCheck;
 import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
 import com.rammelkast.anticheatreloaded.check.movement.GlideCheck;
@@ -121,7 +121,7 @@ public class Backend {
 		UUID pU = player.getUniqueId();
 
 		VelocityCheck.cleanPlayer(player);
-		BlinkCheck.MOVE_COUNT.remove(player.getUniqueId());
+		MorePacketsCheck.MOVE_COUNT.remove(player.getUniqueId());
 		blocksDropped.remove(pU);
 		blockTime.remove(pU);
 		FlightCheck.MOVING_EXEMPT.remove(pU);
@@ -690,7 +690,7 @@ public class Backend {
 	public CheckResult checkFastHeal(Player player) {
 		if (lastHeal.containsKey(player.getUniqueId())) // Otherwise it was modified by a plugin, don't worry about it.
 		{
-			long healTime = VersionUtil.getHealTime();
+			long healTime = magic.MIN_HEAL_TIME();
 			long l = lastHeal.get(player.getUniqueId());
 			lastHeal.remove(player.getUniqueId());
 			if ((System.currentTimeMillis() - l) < healTime) {

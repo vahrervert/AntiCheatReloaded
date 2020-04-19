@@ -246,10 +246,10 @@ Y_TIME: 800
 GLIDE_LIMIT: 8
 # Maximum amount of movement packets allowed per second
 # Increase this in case of false positives
-BLINK_PACKET: 30
+MOREPACKETS_LIMIT: 30
 # If the blink check gives false positives replace this with the average user ping on your server
-# Not a good idea to use a value lower than 150 or higher than 300
-BLINK_AVERAGE_PING: 200
+# Not a good idea to use a value lower than 75 or higher than 250
+MOREPACKETS_AVERAGE_PING: 80
 # Maximum amount zero-velocity moments before a player is suspected
 # Increase this in case of false positives
 VELOCITY_MAX_FLAGS: 5
@@ -266,3 +266,6 @@ KILLAURA_FIGHTSPEED_MINDIFF: 3
 # The maximum angle difference allowed when placing or breaking a block
 # Increase this in case of false positives, can be slightly decreased to tighten check
 ILLEGALINTERACT_MAX_ANGLE_DIFFERENCE: 75
+# The minimum time it takes to regenerate health
+# Decrease this in case of false positives
+MIN_HEAL_TIME: 490

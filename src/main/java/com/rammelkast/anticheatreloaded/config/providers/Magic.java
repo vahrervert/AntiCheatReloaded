@@ -365,11 +365,11 @@ public interface Magic {
     /**
      * Maximum amount of packets a player can send in a second; Type=INTEGER, Leniency=INCREASE.
      */
-    public int BLINK_PACKET();
+    public int MOREPACKETS_LIMIT();
     /**
      * The average ping settings used to account for lag; TYPE=INTEGER, Leniency=INCREASE
      */
-	public int BLINK_AVERAGE_PING();
+	public int MOREPACKETS_AVERAGE_PING();
     /**
      * Maximum amount of low/zero velocity moments before flagging; Type=INTEGER, Leniency=INCREASE.
      */
@@ -390,4 +390,8 @@ public interface Magic {
      * The maximum angle difference allowed when breaking or placing blocks; TYPE=INTEGER, Leniency=INCREASE
      */
     public int ILLEGALINTERACT_MAX_ANGLE_DIFFERENCE();
+    /**
+     * The minimum time it takes to regenerate health; TYPE=INTEGER, Leniency=DECREASE
+     */
+    public int MIN_HEAL_TIME();
 }

@@ -118,7 +118,7 @@ permissions:
   anticheat.check.autotool:
     description: Allow players to use autotool to switch tools quickly
     default: false
-  anticheat.check.blink:
+  anticheat.check.morepackets:
     description: Allow players to send lots of movement packets
     default: false
   anticheat.check.velocity:
@@ -160,7 +160,7 @@ permissions:
       anticheat.check.fastinventory: true
       anticheat.check.autotool: true
       anticheat.check.fastanimation: true
-      anticheat.check.blink: true
+      anticheat.check.morepackets: true
       anticheat.check.velocity: true
       anticheat.check.criticals: true
       anticheat.check.unicode: true

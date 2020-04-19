@@ -33,7 +33,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.rammelkast.anticheatreloaded.check.movement.BlinkCheck;
+import com.rammelkast.anticheatreloaded.check.movement.MorePacketsCheck;
 import com.rammelkast.anticheatreloaded.command.CommandHandler;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.event.BlockListener;
@@ -95,8 +95,8 @@ public class AntiCheatReloaded extends JavaPlugin {
 		
 		getLogger().info("Enabling checks that use ProtcolLib");
 		// Enable packetlisteners
-		BlinkCheck.startTimer();
-		BlinkCheck.listenPackets();
+		MorePacketsCheck.startTimer();
+		MorePacketsCheck.listenPackets();
 		
 		updateManager = new UpdateManager();
 		
