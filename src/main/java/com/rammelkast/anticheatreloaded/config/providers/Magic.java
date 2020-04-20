@@ -351,14 +351,6 @@ public interface Magic {
      */
     public int INVENTORY_TIMEMIN();
     /**
-     * The number of steps we should wait before checking if the player has used timer cheating; Type=INTEGER; Leniency=INCREASE.
-     */
-    public int TIMER_STEP_CHECK();
-    /**
-     * The minimum time it should have taken for the player to travel X steps; Type=SYSTEM; Leniency=DECREASE.
-     */
-    public int TIMER_TIMEMIN();
-    /**
      * Minimum travel distance for move to be considered a teleport and subsequently be ignored; Type=INTEGER, Leniency=INCREASE.
      */
     public int TELEPORT_MIN();

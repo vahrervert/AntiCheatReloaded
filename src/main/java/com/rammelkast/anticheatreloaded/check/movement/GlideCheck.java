@@ -80,7 +80,9 @@ public class GlideCheck {
 				}
 			}
 		} else {
-			// TODO more sophisticated check
+			if (fallDistance > LAST_FALL_DISTANCE.get(player.getUniqueId()) && !player.isOnGround()) {
+				// TODO check gravity
+			}
 		}
 		LAST_DIFFERENCE.put(player.getUniqueId(), distance.getYDifference());
 		LAST_FALL_DISTANCE.put(player.getUniqueId(), player.getFallDistance());

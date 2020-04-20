@@ -166,12 +166,6 @@ TELEPORT_MIN: 400
 # Time to exempt a player from moving because of teleporting
 # Increase in case of false positives
 TELEPORT_TIME: 1000
-# The number of steps we should wait before checking if the player has used timer cheating
-# Increase in case of false positives
-TIMER_STEP_CHECK: 50
-# The minimum time it should have taken for the player to travel X steps
-# Decrease in case of false positives
-TIMER_TIMEMIN: 2000
 # Maximum time a player is considered to have a change in velocity
 # This is a set value and shouldn't be changed unless you know what you're doing
 VELOCITY_CHECKTIME: 2100

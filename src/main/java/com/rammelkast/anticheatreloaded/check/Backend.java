@@ -372,27 +372,6 @@ public class Backend {
 		return PASS;
 	}
 
-	public CheckResult checkTimer(Player player) {
-		UUID uuid = player.getUniqueId();
-		int step = 1;
-		if (steps.containsKey(uuid)) {
-			step = steps.get(uuid) + 1;
-		}
-		if (step == 1) {
-			stepTime.put(uuid, System.currentTimeMillis());
-		}
-		incrementOld(player, steps, step);
-		if (step == magic.TIMER_STEP_CHECK()) {
-			long time = System.currentTimeMillis() - stepTime.get(uuid);
-			steps.put(uuid, 0);
-			if (time < magic.TIMER_TIMEMIN()) {
-				return new CheckResult(CheckResult.Result.FAILED, "tried to alter their timer, took " + step
-						+ " steps in " + time + " ms (min = " + magic.TIMER_TIMEMIN() + " ms)");
-			}
-		}
-		return PASS;
-	}
-
 	public void logAscension(Player player, double y1, double y2) {
 		UUID name = player.getUniqueId();
 		if (y1 < y2 && !isAscending.contains(name)) {
@@ -414,6 +393,7 @@ public class Backend {
 				&& !justBroke(player) && !Utilities.isClimbableBlock(player.getLocation().getBlock())
 				&& !player.isInsideVehicle() && !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -1, 0).getBlock())
 				&& !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -1.5, 0).getBlock())) {
+			// TODO isMoveUpBlock does not seem to be a success with stairs
 			if (y1 < y2) {
 				if (!block.getRelative(BlockFace.NORTH).isLiquid() && !block.getRelative(BlockFace.SOUTH).isLiquid()
 						&& !block.getRelative(BlockFace.EAST).isLiquid()
