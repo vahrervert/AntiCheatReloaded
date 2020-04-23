@@ -246,7 +246,7 @@ MOREPACKETS_LIMIT: 30
 MOREPACKETS_AVERAGE_PING: 80
 # Maximum amount zero-velocity moments before a player is suspected
 # Increase this in case of false positives
-VELOCITY_MAX_FLAGS: 5
+VELOCITY_MAX_FLAGS: 3
 # The maximum angle difference allowed when attacking
 # Increase this in case of false positives
 KILLAURA_MAX_ANGLE_DIFFERENCE: 50

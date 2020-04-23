@@ -118,7 +118,7 @@ public final class Utilities {
 	
 	public static boolean isNotNearSlime(Block block) {
 		return !isSlime(block.getRelative(BlockFace.NORTH)) && !isSlime(block.getRelative(BlockFace.EAST))
-				&& !isSlime(block.getRelative(BlockFace.SOUTH)) && !isSlime(block.getRelative(BlockFace.WEST));
+				&& !isSlime(block.getRelative(BlockFace.SOUTH)) && !isSlime(block.getRelative(BlockFace.WEST)) && !isSlime(block.getRelative(BlockFace.DOWN));
 	}
 	
 	/**
