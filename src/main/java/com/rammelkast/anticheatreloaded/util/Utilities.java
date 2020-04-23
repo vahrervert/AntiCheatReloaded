@@ -112,6 +112,15 @@ public final class Utilities {
 		return !(block.isLiquid() || block.getType() == Material.AIR);
 	}
 
+	public static boolean isSlime(Block block) {
+		return block.getType() == Material.SLIME_BLOCK;
+	}
+	
+	public static boolean isNotNearSlime(Block block) {
+		return !isSlime(block.getRelative(BlockFace.NORTH)) && !isSlime(block.getRelative(BlockFace.EAST))
+				&& !isSlime(block.getRelative(BlockFace.SOUTH)) && !isSlime(block.getRelative(BlockFace.WEST));
+	}
+	
 	/**
 	 * Determine whether a player is fully submerged in water
 	 *
@@ -550,6 +559,13 @@ public final class Utilities {
 		float ans = dividend / divisor;
 		float error = Math.max(dividend, divisor) * 1E-3F;
 		return (int) (ans + error);
+	}
+	
+	public static boolean isHoneyBlock(Block block) {
+		if (!VersionUtil.isOfVersion("v1_15")) {
+			return false;
+		}
+		return block.getType() == Material.HONEY_BLOCK;
 	}
 
 	static {

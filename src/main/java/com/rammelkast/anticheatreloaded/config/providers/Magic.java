@@ -386,4 +386,8 @@ public interface Magic {
      * The minimum time it takes to regenerate health; TYPE=INTEGER, Leniency=DECREASE
      */
     public int MIN_HEAL_TIME();
+    /**
+     * Maximum distance allowed between two movement packets; Type=DOUBLE, Leniency=INCREASE.
+     */
+    public double BADPACKETS_MAX_DISTANCE();
 }

@@ -1,10 +1,11 @@
 AntiCheatReloaded
 =============
-AntiCheatReloaded helps server admins easily identify and block malicious users by monitoring and analyzing the behaviour of their players. It is based on one of the oldest anti-cheats in the community, AntiCheat.
+AntiCheatReloaded helps server admins combat the use of hacked clients and spambots. It analyses the behavior of players and can prevent malicious gameplay. The plugin offers a lot of customizability and can be connected across multiple servers in case it is used in a server network context. AntiCheatReloaded is based on gravitylow's AntiCheat and has been around since 2012.
 
-+ BTC donations: bc1q5qgmzq9e63h7ptf3kneg78uf0mghtwsmvwxt8m
-+ LTC donations: LYZLe6AGRQZTey5UHe7CCF3e9HAyQooSmh
-+ ETH donations: 0x2a2171fB3600fc67951734c2872E0Ad742741Cf2
+Installation
+------------
+AntiCheatReloaded requires you to have ProtocolLib. You can download it [here](https://www.spigotmc.org/resources/protocollib.1997/).
+Simply drag and drop the AntiCheatReloaded and ProtocolLib jars in your plugin folder. You can now use AntiCheatReloaded, but be sure to have a look at the configuration files, which allow you to change every aspect of the plugin.
 
 Bug Reporting
 ------------
@@ -18,13 +19,8 @@ Please include the following information with your issue, this allows me to fix 
 * Whether or not you are using protocol hacks (ViaVersion etc.)
 * Any logs relating to the issue
 
-Usage
--------
-Simply drag and drop the plugin file and the ProtocolLib jar into your Plugins folder.
-
 Hacks blocked
 -------
-* Blink
 * Flight
 * Glide
 * Jesus
@@ -39,7 +35,6 @@ Hacks blocked
 * NoFall
 * Sneak
 * vClip
-* Timer
 * FastBreak
 * FastPlace
 * Spam
@@ -49,3 +44,5 @@ Hacks blocked
 * GhostHand
 * KillAura
 * Scaffold
+* MorePackets
+* BadPackets

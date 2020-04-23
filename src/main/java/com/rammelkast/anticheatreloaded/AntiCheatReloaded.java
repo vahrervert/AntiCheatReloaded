@@ -30,10 +30,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.rammelkast.anticheatreloaded.check.movement.MorePacketsCheck;
+import com.rammelkast.anticheatreloaded.check.packet.MorePacketsCheck;
 import com.rammelkast.anticheatreloaded.command.CommandHandler;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.event.BlockListener;
@@ -43,6 +44,7 @@ import com.rammelkast.anticheatreloaded.event.PlayerListener;
 import com.rammelkast.anticheatreloaded.event.VehicleListener;
 import com.rammelkast.anticheatreloaded.manage.AntiCheatManager;
 import com.rammelkast.anticheatreloaded.metrics.Metrics;
+import com.rammelkast.anticheatreloaded.util.PacketListener;
 import com.rammelkast.anticheatreloaded.util.UpdateManager;
 import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
@@ -59,6 +61,9 @@ public class AntiCheatReloaded extends JavaPlugin {
 	private static SecureRandom random;
 	private static Long loadTime;
 	private static UpdateManager updateManager;
+	
+	private double tps = -1;
+	private int currentTick;
 
 	@Override
 	public void onEnable() {
@@ -90,13 +95,13 @@ public class AntiCheatReloaded extends JavaPlugin {
 		
 		getLogger().info("NMS version is " + VersionUtil.getVersion());
 		if (!VersionUtil.isSupported()) {
-			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.RED + "The version of this server is NOT supported by ACR! The plugin will be buggy!");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.RED
+					+ "The version of this server is NOT supported by ACR! The plugin will not work as expected!");
 		}
 		
-		getLogger().info("Enabling checks that use ProtcolLib");
-		// Enable packetlisteners
-		MorePacketsCheck.startTimer();
-		MorePacketsCheck.listenPackets();
+		getLogger().info("Enabling packet listeners");
+		PacketListener.listenKeepAlivePackets();
+		PacketListener.listenMovementPackets();
 		
 		updateManager = new UpdateManager();
 		
@@ -130,6 +135,27 @@ public class AntiCheatReloaded extends JavaPlugin {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		// Launch TPS check
+		new BukkitRunnable() {
+            long sec;
+            long currentSec;
+            int ticks;
+
+            public void run() {
+                sec = (System.currentTimeMillis() / 1000L);
+                if (currentSec == sec) {
+                    ticks += 1;
+                } else {
+                    currentSec = sec;
+                    tps = (tps == 0.0D ? ticks : (tps + ticks) / 2.0D);
+                    ticks = 1;
+                }
+                currentTick++;
+            }
+        }.runTaskTimer(this, 40L, 1L);
+        // Launch MorePackets timer
+        MorePacketsCheck.startTimer();
 	}
 
 	@Override
@@ -262,6 +288,13 @@ public class AntiCheatReloaded extends JavaPlugin {
 	
 	public static UpdateManager getUpdateManager() {
 		return updateManager;
+	}
+	
+	public double getTPS() {
+		if (this.tps < 0) {
+			return 20;
+		}
+		return this.tps;
 	}
 	
 }

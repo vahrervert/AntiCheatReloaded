@@ -44,6 +44,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
@@ -465,9 +466,8 @@ public class PlayerListener extends EventListener {
     }
 
     @EventHandler(priority=EventPriority.HIGHEST)
-    public void onDeath(PlayerDeathEvent e) {
-    	//KillAuraCheck.cleanPlayer(e.getEntity()); // Remove bots on death to reduce lag
-    	//TODO
+    public void onRespawn(PlayerRespawnEvent event) {
+    	getBackend().logTeleport(event.getPlayer());
     }
     
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

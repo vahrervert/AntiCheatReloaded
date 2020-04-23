@@ -77,12 +77,12 @@ public class YAxisCheck {
 					LAST_Y_AXIS_VIOLATION.put(uuid, System.currentTimeMillis());
 					if (!AntiCheatReloaded.getManager().getBackend().silentMode()) {
 						g.setY(LAST_Y_COORD_CACHE.get(uuid));
-						if (g.getBlock().getType() == Material.AIR || g.getBlock().getType() == Material.CAVE_AIR) {
+						if (g.getBlock().getType() == Material.AIR) {
 							player.teleport(g);
 						}
 					}
 					return new CheckResult(CheckResult.Result.FAILED,
-							"tried to fly on y-axis " + Y_AXIS_VIOLATIONS.get(uuid) + " times (max ="
+							"tried to fly on y-axis " + Y_AXIS_VIOLATIONS.get(uuid) + " times (max="
 									+ AntiCheatReloaded.getManager().getBackend().getMagic().Y_MAXVIOLATIONS() + ")");
 				} else {
 					if (Y_AXIS_VIOLATIONS.get(uuid) > AntiCheatReloaded.getManager().getBackend().getMagic()
@@ -95,7 +95,7 @@ public class YAxisCheck {
 				}
 				long i = System.currentTimeMillis() - LAST_Y_TIME.get(uuid);
 				double diff = AntiCheatReloaded.getManager().getBackend().getMagic().Y_MAXDIFF()
-						+ (Utilities.isStair(player.getLocation().add(0, -1, 0).getBlock()) ? 0.5 : 0.0);
+						+ ((Utilities.isStair(player.getLocation().add(0, -1, 0).getBlock()) || Utilities.isStair(player.getLocation().add(0, -0.5, 0).getBlock())) ? 0.5 : 0.0);
 				if ((y1 - LAST_Y_COORD_CACHE.get(uuid)) > diff
 						&& i < AntiCheatReloaded.getManager().getBackend().getMagic().Y_TIME()) {
 					Location g = player.getLocation();
@@ -103,11 +103,11 @@ public class YAxisCheck {
 					LAST_Y_AXIS_VIOLATION.put(uuid, System.currentTimeMillis());
 					if (!AntiCheatReloaded.getManager().getBackend().silentMode()) {
 						g.setY(LAST_Y_COORD_CACHE.get(uuid));
-						if (g.getBlock().getType() == Material.AIR || g.getBlock().getType() == Material.CAVE_AIR) {
+						if (g.getBlock().getType() == Material.AIR) {
 							player.teleport(g);
 						}
 					}
-					return new CheckResult(CheckResult.Result.FAILED, "tried to fly on y-axis in " + i + " ms (min ="
+					return new CheckResult(CheckResult.Result.FAILED, "tried to fly on y-axis in " + i + " ms (min="
 							+ AntiCheatReloaded.getManager().getBackend().getMagic().Y_TIME() + ")");
 				} else {
 					if ((y1 - LAST_Y_COORD_CACHE.get(uuid)) > AntiCheatReloaded.getManager().getBackend().getMagic()
@@ -125,8 +125,7 @@ public class YAxisCheck {
 	}
 
 	public static boolean isMoveUpBlock(Block block) {
-		Material type = block.getType();
-		return type.name().endsWith("STAIRS"); // TODO slabs/others?
+		return Utilities.isStair(block);
 	}
 
 }

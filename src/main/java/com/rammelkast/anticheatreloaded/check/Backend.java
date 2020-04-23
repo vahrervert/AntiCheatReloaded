@@ -39,13 +39,13 @@ import org.bukkit.potion.PotionEffectType;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
-import com.rammelkast.anticheatreloaded.check.movement.MorePacketsCheck;
 import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
 import com.rammelkast.anticheatreloaded.check.movement.GlideCheck;
 import com.rammelkast.anticheatreloaded.check.movement.SpeedCheck;
 import com.rammelkast.anticheatreloaded.check.movement.WaterWalkCheck;
 import com.rammelkast.anticheatreloaded.check.movement.YAxisCheck;
+import com.rammelkast.anticheatreloaded.check.packet.MorePacketsCheck;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.providers.Lang;
 import com.rammelkast.anticheatreloaded.config.providers.Magic;
@@ -56,6 +56,7 @@ import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class Backend {
+	public Map<UUID, Long> velocitized = new HashMap<UUID, Long>();	
 	private List<UUID> isAscending = new ArrayList<UUID>();
 	private Map<UUID, Integer> ascensionCount = new HashMap<UUID, Integer>();
 	private Map<UUID, Integer> chatLevel = new HashMap<UUID, Integer>();
@@ -70,7 +71,6 @@ public class Backend {
 	private Map<UUID, Long> lastBlockPlaceTime = new HashMap<UUID, Long>();
 	private Map<UUID, Integer> blockPunches = new HashMap<UUID, Integer>();
 	private Map<UUID, Integer> projectilesShot = new HashMap<UUID, Integer>();
-	private Map<UUID, Long> velocitized = new HashMap<UUID, Long>();	
 	private Map<UUID, Integer> velocitytrack = new HashMap<UUID, Integer>();
 	private Map<UUID, Long> startEat = new HashMap<UUID, Long>();
 	private Map<UUID, Long> lastHeal = new HashMap<UUID, Long>();
@@ -171,7 +171,7 @@ public class Backend {
 		inventoryClicks.remove(pU);
 		lastFallPacket.remove(pU);
 		fastSneakViolations.remove(player.getUniqueId().toString());
-		GlideCheck.LAST_DIFFERENCE.remove(pU);
+		GlideCheck.LAST_MOTION_Y.remove(pU);
 		GlideCheck.LAST_FALL_DISTANCE.remove(pU);
 		GlideCheck.VIOLATIONS.remove(pU);
 		SpeedCheck.SPEED_VIOLATIONS.remove(player.getUniqueId());
@@ -392,7 +392,7 @@ public class Backend {
 		if (!isMovingExempt(player) && !Utilities.isInWater(player) && !VersionUtil.isFlying(player)
 				&& !justBroke(player) && !Utilities.isClimbableBlock(player.getLocation().getBlock())
 				&& !player.isInsideVehicle() && !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -1, 0).getBlock())
-				&& !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -1.5, 0).getBlock())) {
+				&& !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -0.5, 0).getBlock())) {
 			// TODO isMoveUpBlock does not seem to be a success with stairs
 			if (y1 < y2) {
 				if (!block.getRelative(BlockFace.NORTH).isLiquid() && !block.getRelative(BlockFace.SOUTH).isLiquid()
@@ -803,7 +803,7 @@ public class Backend {
 		YAxisCheck.LAST_Y_COORD_CACHE.remove(player.getUniqueId());
 		YAxisCheck.LAST_Y_TIME.remove(player.getUniqueId());
 		GlideCheck.LAST_FALL_DISTANCE.remove(player.getUniqueId());
-		GlideCheck.LAST_DIFFERENCE.remove(player.getUniqueId());
+		GlideCheck.LAST_MOTION_Y.remove(player.getUniqueId());
 		GlideCheck.VIOLATIONS.remove(player.getUniqueId());
 		ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId().toString());
 	}
@@ -824,7 +824,7 @@ public class Backend {
 		return isAscending.contains(player.getUniqueId());
 	}
 
-	private boolean isDoing(Player player, Map<UUID, Long> map, double max) {
+	public boolean isDoing(Player player, Map<UUID, Long> map, double max) {
 		if (map.containsKey(player.getUniqueId())) {
 			if (max != -1) {
 				if (((System.currentTimeMillis() - map.get(player.getUniqueId())) / 1000) > max) {

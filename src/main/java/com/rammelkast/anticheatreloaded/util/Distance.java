@@ -30,6 +30,7 @@ public class Distance {
 	private final double ZDiff;
 	
 	private final Location from;
+	private final Location to;
 
 	public Distance(Location from, Location to) {
 		l1Y = to.getY();
@@ -40,6 +41,7 @@ public class Distance {
 		YDiff = Math.abs(l1Y - l2Y);
 		
 		this.from = from;
+		this.to = to;
 	}
 
 	public double fromY() {
@@ -64,5 +66,9 @@ public class Distance {
 	
 	public Location getFrom() {
 		return this.from;
+	}
+	
+	public Location getTo() {
+		return this.to;
 	}
 }

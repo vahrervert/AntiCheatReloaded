@@ -28,7 +28,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
+import com.rammelkast.anticheatreloaded.check.Backend;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
+import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
@@ -39,36 +41,36 @@ public class SpeedCheck {
 	public static final Map<UUID, Integer> SPEED_VIOLATIONS = new HashMap<UUID, Integer>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
-	public static boolean isSpeedExempt(Player player) {
-		return AntiCheatReloaded.getManager().getBackend().isMovingExempt(player)
-				|| AntiCheatReloaded.getManager().getBackend().justVelocity(player) || VersionUtil.isFlying(player);
+	public static boolean isSpeedExempt(Player player, Backend backend) {
+		return backend.isMovingExempt(player) || backend.justVelocity(player) || VersionUtil.isFlying(player);
 	}
 
 	public static CheckResult checkXZSpeed(Player player, double x, double z) {
-		if (!isSpeedExempt(player) && player.getVehicle() == null) {
+		Backend backend = AntiCheatReloaded.getManager().getBackend();
+		if (!isSpeedExempt(player, backend) && player.getVehicle() == null) {
 			String reason = "";
-			double max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX();
+			double max = backend.getMagic().XZ_SPEED_MAX();
 			if (player.getLocation().getBlock().getType() == Material.SOUL_SAND) {
 				if (player.isSprinting()) {
 					reason = "on soulsand while sprinting ";
-					max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_SOULSAND_SPRINT();
+					max = backend.getMagic().XZ_SPEED_MAX_SOULSAND_SPRINT();
 				} else if (player.hasPotionEffect(PotionEffectType.SPEED)) {
 					reason = "on soulsand with speed potion ";
-					max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_SOULSAND_POTION();
+					max = backend.getMagic().XZ_SPEED_MAX_SOULSAND_POTION();
 				} else {
 					reason = "on soulsand ";
-					max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_SOULSAND();
+					max = backend.getMagic().XZ_SPEED_MAX_SOULSAND();
 				}
 			} else if (VersionUtil.isFlying(player)) {
 				reason = "while flying ";
-				max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_FLY();
+				max = backend.getMagic().XZ_SPEED_MAX_FLY();
 			} else if (player.hasPotionEffect(PotionEffectType.SPEED)) {
 				if (player.isSprinting()) {
 					reason = "with speed potion while sprinting ";
-					max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_POTION_SPRINT();
+					max = backend.getMagic().XZ_SPEED_MAX_POTION_SPRINT();
 				} else {
 					reason = "with speed potion ";
-					max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_POTION();
+					max = backend.getMagic().XZ_SPEED_MAX_POTION();
 				}
 			} else if (player.isSprinting()) {
 				String blockDownName = player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().name();
@@ -77,16 +79,16 @@ public class SpeedCheck {
 					if (player.getLocation().getBlock().getType().name().endsWith("TRAPDOOR")) {
 						reason = "while boosting on " + blockDownName.toLowerCase().replaceAll("_", " ")
 								+ " and trapdoor";
-						max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_SPRINT()
+						max = backend.getMagic().XZ_SPEED_MAX_SPRINT()
 								+ (blockDownName.equals("BLUE_ICE") ? 0.35925D : 0.35D);
 					} else {
 						reason = "while boosting on " + blockDownName.toLowerCase().replaceAll("_", " ") + " ";
-						max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_SPRINT()
+						max = backend.getMagic().XZ_SPEED_MAX_SPRINT()
 								+ (blockDownName.equals("BLUE_ICE") ? 0.20925D : 0.2D);
 					}
 				} else {
 					reason = "while sprinting ";
-					max = AntiCheatReloaded.getManager().getBackend().getMagic().XZ_SPEED_MAX_SPRINT();
+					max = backend.getMagic().XZ_SPEED_MAX_SPRINT();
 				}
 			}
 
@@ -94,13 +96,12 @@ public class SpeedCheck {
 			max += speed > 0 ? player.getWalkSpeed() - 0.2f : 0;
 
 			if (x > max || z > max) {
-				int num = AntiCheatReloaded.getManager().getBackend().increment(player, SPEED_VIOLATIONS,
-						AntiCheatReloaded.getManager().getBackend().getMagic().SPEED_MAX());
-				if (num >= AntiCheatReloaded.getManager().getBackend().getMagic().SPEED_MAX()) {
+				int num = backend.increment(player, SPEED_VIOLATIONS, backend.getMagic().SPEED_MAX());
+				if (num >= backend.getMagic().SPEED_MAX()) {
 					return new CheckResult(CheckResult.Result.FAILED,
 							"speed was too high " + reason + num + " times in a row (max="
-									+ AntiCheatReloaded.getManager().getBackend().getMagic().SPEED_MAX() + ", speed="
-									+ (x > z ? x : z) + ", max speed=" + max + ")");
+									+ backend.getMagic().SPEED_MAX() + ", speed=" + (x > z ? x : z) + ", max speed="
+									+ max + ")");
 				} else {
 					return PASS;
 				}
@@ -108,6 +109,21 @@ public class SpeedCheck {
 				SPEED_VIOLATIONS.put(player.getUniqueId(), 0);
 				return PASS;
 			}
+		} else {
+			return PASS;
+		}
+	}
+
+	public CheckResult checkYSpeed(Player player, double y) {
+		Backend backend = AntiCheatReloaded.getManager().getBackend();
+		if (!backend.isMovingExempt(player) && !player.isInsideVehicle() && !player.isSleeping()
+				&& (y > backend.getMagic().Y_SPEED_MAX())
+				&& !backend.isDoing(player, backend.velocitized, backend.getMagic().VELOCITY_TIME())
+				&& !player.hasPotionEffect(PotionEffectType.JUMP) && !VersionUtil.isFlying(player)
+				&& !Utilities.isSlime(AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
+						.getGoodLocation(player.getLocation()).getBlock())) {
+			return new CheckResult(CheckResult.Result.FAILED,
+					"y speed was too high (speed=" + y + ", max=" + backend.getMagic().Y_SPEED_MAX() + ")");
 		} else {
 			return PASS;
 		}

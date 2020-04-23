@@ -165,7 +165,7 @@ SPRINT_MAX: 0.2
 TELEPORT_MIN: 400
 # Time to exempt a player from moving because of teleporting
 # Increase in case of false positives
-TELEPORT_TIME: 1000
+TELEPORT_TIME: 800
 # Maximum time a player is considered to have a change in velocity
 # This is a set value and shouldn't be changed unless you know what you're doing
 VELOCITY_CHECKTIME: 2100
@@ -237,11 +237,11 @@ Y_SPEED_MAX: 0.5175
 Y_TIME: 800
 # Amount of suspicious mid-air movements before a player is suspected of glide
 # Increase this in case of false positives
-GLIDE_LIMIT: 8
+GLIDE_LIMIT: 5
 # Maximum amount of movement packets allowed per second
 # Increase this in case of false positives
 MOREPACKETS_LIMIT: 30
-# If the blink check gives false positives replace this with the average user ping on your server
+# If the MorePackets check gives false positives replace this with the average user ping on your server
 # Not a good idea to use a value lower than 75 or higher than 250
 MOREPACKETS_AVERAGE_PING: 80
 # Maximum amount zero-velocity moments before a player is suspected
@@ -263,3 +263,6 @@ ILLEGALINTERACT_MAX_ANGLE_DIFFERENCE: 75
 # The minimum time it takes to regenerate health
 # Decrease this in case of false positives
 MIN_HEAL_TIME: 490
+# Maximum distance allowed between two movement packets
+# Increase this in case of false positives
+BADPACKETS_MAX_DISTANCE: 25.0

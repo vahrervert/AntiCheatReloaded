@@ -52,6 +52,10 @@ public class User {
 	private boolean isWaitingOnLevelSync;
 	private Timestamp levelSyncTimestamp;
 
+	private long lastServerPing, lastClientPong;
+	private int ping = -1;
+	private int lastPing = -1;
+
 	/**
 	 * Initialize an AntiCheat user
 	 *
@@ -63,16 +67,6 @@ public class User {
 		this.id = getPlayer() != null && getPlayer().isOnline() ? getPlayer().getEntityId() : -1;
 	}
 
-	/**
-	 * Initialize an AntiCheat user
-	 *
-	 * @param name Player's name
-	 */
-	/*
-	 * public User(String name) { this.uuid = Bukkit.getPlayer(name).getUniqueId();
-	 * this.name = name; this.id = getPlayer() != null && getPlayer().isOnline() ?
-	 * getPlayer().getEntityId() : -1; }
-	 */
 	/**
 	 * Get the player's UUID
 	 *
@@ -427,6 +421,36 @@ public class User {
 
 	public Timestamp getLevelSyncTimestamp() {
 		return levelSyncTimestamp;
+	}
+
+	public void onServerPing() {
+		this.lastServerPing = System.currentTimeMillis();
+	}
+
+	public void onClientPong() {
+		this.lastClientPong = System.currentTimeMillis();
+		this.lastPing = this.ping;
+		this.ping = (int) (this.lastClientPong - this.lastServerPing);
+	}
+
+	public int getPing() {
+		int ping = this.ping;
+		if (ping < 0) {
+			return VersionUtil.getPlayerPing(this.getPlayer());
+		}
+		return ping;
+	}
+
+	public int getLastPing() {
+		int lastPing = this.lastPing;
+		if (lastPing < 0) {
+			return this.getPing();
+		}
+		return lastPing;
+	}
+
+	public boolean isLagging() {
+		return Math.abs(this.ping - this.lastPing) > 50;
 	}
 
 	@Override
