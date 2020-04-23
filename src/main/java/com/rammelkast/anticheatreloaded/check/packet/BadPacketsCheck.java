@@ -67,8 +67,10 @@ public class BadPacketsCheck {
 		if (distance > maxDistance) {
 			flag(player, event, "moved too far between packets (distance=" + new BigDecimal(distance).setScale(1, RoundingMode.HALF_UP) + ", max=" + maxDistance + ")");
 			return;
-		} else if (distance < 1E-9 && !hasNewLocation) {
-			flag(player, event, "sent the same packet twice");
+		} else if (distance < 1E-10 && !hasNewLocation) {
+			// TODO this gives false positives when teleporting
+			// Only found this in 1.8.8 though
+			//flag(player, event, "sent the same packet twice");
 			return;
 		}
 	}
