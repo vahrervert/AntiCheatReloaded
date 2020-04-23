@@ -77,6 +77,7 @@ public class VersionUtil {
 		return player.getInventory().getBoots().containsEnchantment(Enchantment.FROST_WALKER);
 	}
 
+	@SuppressWarnings("deprecation")
 	public static ItemStack getItemInHand(Player player) {
 		if (isBountifulUpdate()) {
 			return player.getItemInHand();

@@ -37,7 +37,6 @@ import com.rammelkast.anticheatreloaded.manage.AntiCheatManager;
 import com.rammelkast.anticheatreloaded.manage.CheckManager;
 import com.rammelkast.anticheatreloaded.manage.UserManager;
 import com.rammelkast.anticheatreloaded.util.User;
-import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class EventListener implements Listener {
 	private static final Map<CheckType, Integer> USAGE_LIST = new EnumMap<CheckType, Integer>(CheckType.class);

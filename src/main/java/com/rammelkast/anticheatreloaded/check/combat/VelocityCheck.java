@@ -35,11 +35,7 @@ import com.rammelkast.anticheatreloaded.event.EventListener;
 
 public class VelocityCheck {
 
-	private static final Map<UUID, Integer> VL_COUNT = new HashMap<UUID, Integer>();
-
-	public static void cleanPlayer(Player p) {
-		VL_COUNT.remove(p.getUniqueId());
-	}
+	public static final Map<UUID, Integer> VIOLATIONS = new HashMap<UUID, Integer>();
 
 	public static void runCheck(EntityDamageByEntityEvent e, final Player player) {
 		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.VELOCITY))
@@ -51,24 +47,24 @@ public class VelocityCheck {
 				if (!player.isOnline())
 					return;
 				if (then.distance(player.getLocation()) < 0.125) {
-					if (!VL_COUNT.containsKey(player.getUniqueId()))
-						VL_COUNT.put(player.getUniqueId(), 1);
+					if (!VIOLATIONS.containsKey(player.getUniqueId()))
+						VIOLATIONS.put(player.getUniqueId(), 1);
 					else {
-						VL_COUNT.put(player.getUniqueId(), VL_COUNT.get(player.getUniqueId()) + 1);
-						if (VL_COUNT.get(player.getUniqueId()) > AntiCheatReloaded.getManager().getBackend().getMagic()
+						VIOLATIONS.put(player.getUniqueId(), VIOLATIONS.get(player.getUniqueId()) + 1);
+						if (VIOLATIONS.get(player.getUniqueId()) > AntiCheatReloaded.getManager().getBackend().getMagic()
 								.VELOCITY_MAX_FLAGS()) {
 							EventListener.log(
 									new CheckResult(CheckResult.Result.FAILED,
-											"had zero/low velocity " + VL_COUNT.get(player.getUniqueId()) + " times (max="
+											"had zero/low velocity " + VIOLATIONS.get(player.getUniqueId()) + " times (max="
 													+ AntiCheatReloaded.getManager().getBackend().getMagic()
 															.VELOCITY_MAX_FLAGS()
 													+ ", dist=" + then.distance(player.getLocation()) + ")").getMessage(),
 									player, CheckType.VELOCITY);
-							VL_COUNT.remove(player.getUniqueId());
+							VIOLATIONS.remove(player.getUniqueId());
 						}
 					}
 				} else {
-					VL_COUNT.remove(player.getUniqueId());
+					VIOLATIONS.remove(player.getUniqueId());
 				}
 			}
 		}.runTaskLater(AntiCheatReloaded.getPlugin(), 4);

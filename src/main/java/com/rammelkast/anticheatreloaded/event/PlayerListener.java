@@ -29,7 +29,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
@@ -263,10 +262,10 @@ public class PlayerListener extends EventListener {
             
             if (!VersionUtil.isBountifulUpdate()) {
                 if (itemInHand.getType() == Material.FIREWORK_ROCKET) {
-                    ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId().toString());
+                    ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId());
                     if (player.isGliding()) {
                     	// TODO config max elytra height?
-                    	ElytraCheck.JUMP_Y_VALUE.put(player.getUniqueId().toString(), 9999.99D);
+                    	ElytraCheck.JUMP_Y_VALUE.put(player.getUniqueId(), 9999.99D);
                     }
                 }
             }
@@ -485,7 +484,7 @@ public class PlayerListener extends EventListener {
 
         if (getCheckManager().willCheck(player, CheckType.FLIGHT) && !player.isFlying()) {
             CheckResult result1 = YAxisCheck.runCheck(player, new Distance(from, to));
-            CheckResult result2 = getBackend().checkAscension(player, from.getY(), to.getY());
+            CheckResult result2 = FlightCheck.checkAscension(player, from.getY(), to.getY());
             String log = result1.failed() ? result1.getMessage() : result2.failed() ? result2.getMessage() : "";
             if (!log.equals("")) {
                 if (!silentMode()) {

@@ -49,6 +49,7 @@ public class VehicleListener extends EventListener {
 		AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(ignoreCancelled = true)
 	public void onVehicleDestroy(VehicleDestroyEvent event) {
 		if (VersionUtil.isBountifulUpdate()) {

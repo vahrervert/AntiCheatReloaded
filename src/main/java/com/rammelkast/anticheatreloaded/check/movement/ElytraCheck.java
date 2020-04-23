@@ -20,6 +20,7 @@
 package com.rammelkast.anticheatreloaded.check.movement;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -33,7 +34,7 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class ElytraCheck {
 
-	public static final HashMap<String, Double> JUMP_Y_VALUE = new HashMap<String, Double>();
+	public static final HashMap<UUID, Double> JUMP_Y_VALUE = new HashMap<UUID, Double>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
 	public static CheckResult runCheck(Player player, Distance distance) {
@@ -42,7 +43,7 @@ public class ElytraCheck {
 			return PASS;
 		}
 		
-		String uuid = player.getUniqueId().toString();
+		UUID uuid = player.getUniqueId();
 		if (distance.getYDifference() > AntiCheatReloaded.getManager().getBackend().getMagic().TELEPORT_MIN()) {
 			// This was a teleport, so skip check.
 			JUMP_Y_VALUE.remove(uuid);

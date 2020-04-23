@@ -64,7 +64,6 @@ public class AntiCheatReloaded extends JavaPlugin {
 	private static UpdateManager updateManager;
 	
 	private double tps = -1;
-	private int currentTick;
 
 	@Override
 	public void onEnable() {
@@ -152,7 +151,6 @@ public class AntiCheatReloaded extends JavaPlugin {
                     tps = (tps == 0.0D ? ticks : (tps + ticks) / 2.0D);
                     ticks = 1;
                 }
-                currentTick++;
             }
         }.runTaskTimer(this, 40L, 1L);
         // Launch MorePackets timer

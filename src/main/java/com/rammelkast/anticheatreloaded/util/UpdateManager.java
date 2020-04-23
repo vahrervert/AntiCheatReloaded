@@ -67,6 +67,7 @@ public class UpdateManager {
 				builder.append((char) readChar);
 			}
 			data = builder.toString();
+			reader.close();
 		} catch (IOException exception) {}
 		finally {
 			if (stream != null) {

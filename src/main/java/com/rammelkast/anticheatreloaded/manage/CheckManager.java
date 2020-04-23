@@ -19,19 +19,18 @@
 
 package com.rammelkast.anticheatreloaded.manage;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
-import com.rammelkast.anticheatreloaded.check.CheckType;
-import com.rammelkast.anticheatreloaded.config.Configuration;
-import com.rammelkast.anticheatreloaded.util.VersionUtil;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
+import com.rammelkast.anticheatreloaded.check.CheckType;
+import com.rammelkast.anticheatreloaded.config.Configuration;
+import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
  * <p/>

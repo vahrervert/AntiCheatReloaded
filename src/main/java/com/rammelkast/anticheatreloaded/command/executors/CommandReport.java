@@ -19,6 +19,10 @@
 
 package com.rammelkast.anticheatreloaded.command.executors;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -27,12 +31,10 @@ import org.bukkit.entity.Player;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.command.CommandBase;
-import com.rammelkast.anticheatreloaded.manage.CheckManager;
-import com.rammelkast.anticheatreloaded.util.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import com.rammelkast.anticheatreloaded.util.Group;
+import com.rammelkast.anticheatreloaded.util.Permission;
+import com.rammelkast.anticheatreloaded.util.User;
+import com.rammelkast.anticheatreloaded.util.Utilities;
 
 public class CommandReport extends CommandBase {
 

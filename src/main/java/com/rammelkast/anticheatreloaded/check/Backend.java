@@ -30,13 +30,11 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.potion.PotionEffectType;
 
-import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
 import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
@@ -58,7 +56,6 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 public class Backend {
 	public Map<UUID, Long> velocitized = new HashMap<UUID, Long>();
 	private List<UUID> isAscending = new ArrayList<UUID>();
-	private Map<UUID, Integer> ascensionCount = new HashMap<UUID, Integer>();
 	private Map<UUID, Integer> chatLevel = new HashMap<UUID, Integer>();
 	private Map<UUID, Integer> commandLevel = new HashMap<UUID, Integer>();
 	private Map<UUID, Integer> nofallViolation = new HashMap<UUID, Integer>();
@@ -86,11 +83,9 @@ public class Backend {
 	private Map<UUID, Long> inventoryTime = new HashMap<UUID, Long>();
 	private Map<UUID, Integer> inventoryClicks = new HashMap<UUID, Integer>();
 	private Map<UUID, Material> itemInHand = new HashMap<UUID, Material>();
-	private Map<UUID, Integer> steps = new HashMap<UUID, Integer>();
-	private Map<UUID, Long> stepTime = new HashMap<UUID, Long>();
 	private HashSet<Byte> transparent = new HashSet<Byte>();
 	private Map<UUID, Long> lastFallPacket = new HashMap<UUID, Long>();
-	private Map<String, Integer> fastSneakViolations = new HashMap<String, Integer>();
+	private Map<UUID, Integer> fastSneakViolations = new HashMap<UUID, Integer>();
 
 	private Magic magic;
 	private AntiCheatManager manager = null;
@@ -118,67 +113,66 @@ public class Backend {
 	}
 
 	public void garbageClean(Player player) {
-		UUID pU = player.getUniqueId();
+		UUID uuid = player.getUniqueId();
 
-		VelocityCheck.cleanPlayer(player);
-		MorePacketsCheck.MOVE_COUNT.remove(player.getUniqueId());
-		blocksDropped.remove(pU);
-		blockTime.remove(pU);
-		FlightCheck.MOVING_EXEMPT.remove(pU);
-		brokenBlock.remove(pU);
-		placedBlock.remove(pU);
-		bowWindUp.remove(pU);
-		startEat.remove(pU);
-		lastHeal.remove(pU);
-		sprinted.remove(pU);
-		WaterWalkCheck.IS_IN_WATER.remove(pU);
-		WaterWalkCheck.IS_IN_WATER_CACHE.remove(pU);
-		instantBreakExempt.remove(pU);
-		isAscending.remove(player.getUniqueId());
-		ascensionCount.remove(player.getUniqueId());
-		FlightCheck.BLOCKS_OVER_FLIGHT.remove(pU);
-		nofallViolation.remove(pU);
-		fastBreakViolation.remove(pU);
-		YAxisCheck.Y_AXIS_VIOLATIONS.remove(pU);
-		YAxisCheck.LAST_Y_AXIS_VIOLATION.remove(pU);
-		YAxisCheck.LAST_Y_COORD_CACHE.remove(pU);
-		YAxisCheck.LAST_Y_TIME.remove(pU);
-		WaterWalkCheck.WATER_ASCENSION_VIOLATIONS.remove(pU);
-		WaterWalkCheck.WATER_SPEED_VIOLATIONS.remove(pU);
-		fastBreaks.remove(pU);
-		blockBreakHolder.remove(pU);
-		lastBlockBroken.remove(pU);
-		fastPlaceViolation.remove(pU);
-		lastBlockPlaced.remove(pU);
-		lastBlockPlaceTime.remove(pU);
-		blockPunches.remove(pU);
-		projectilesShot.remove(pU);
-		velocitized.remove(pU);
-		velocitytrack.remove(pU);
-		startEat.remove(pU);
-		lastHeal.remove(pU);
-		projectileTime.remove(pU);
-		bowWindUp.remove(pU);
-		instantBreakExempt.remove(pU);
-		sprinted.remove(pU);
-		brokenBlock.remove(pU);
-		placedBlock.remove(pU);
-		FlightCheck.MOVING_EXEMPT.remove(pU);
-		blockTime.remove(pU);
-		blocksDropped.remove(pU);
-		lastInventoryTime.remove(pU);
-		inventoryTime.remove(pU);
-		inventoryClicks.remove(pU);
-		lastFallPacket.remove(pU);
-		fastSneakViolations.remove(player.getUniqueId().toString());
-		GlideCheck.LAST_MOTION_Y.remove(pU);
-		GlideCheck.LAST_FALL_DISTANCE.remove(pU);
-		GlideCheck.VIOLATIONS.remove(pU);
-		SpeedCheck.SPEED_VIOLATIONS.remove(player.getUniqueId());
-		ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId().toString());
-		KillAuraCheck.ANGLE_FLAGS.remove(pU);
-		KillAuraCheck.PITCH_MOVEMENTS_CACHE.remove(pU);
-		KillAuraCheck.GCD_CACHE.remove(pU);
+		blocksDropped.remove(uuid);
+		blockTime.remove(uuid);
+		brokenBlock.remove(uuid);
+		placedBlock.remove(uuid);
+		bowWindUp.remove(uuid);
+		startEat.remove(uuid);
+		lastHeal.remove(uuid);
+		sprinted.remove(uuid);
+		instantBreakExempt.remove(uuid);
+		isAscending.remove(uuid);
+		nofallViolation.remove(uuid);
+		fastBreakViolation.remove(uuid);
+		fastBreaks.remove(uuid);
+		blockBreakHolder.remove(uuid);
+		lastBlockBroken.remove(uuid);
+		fastPlaceViolation.remove(uuid);
+		lastBlockPlaced.remove(uuid);
+		lastBlockPlaceTime.remove(uuid);
+		blockPunches.remove(uuid);
+		projectilesShot.remove(uuid);
+		velocitized.remove(uuid);
+		velocitytrack.remove(uuid);
+		startEat.remove(uuid);
+		lastHeal.remove(uuid);
+		projectileTime.remove(uuid);
+		bowWindUp.remove(uuid);
+		instantBreakExempt.remove(uuid);
+		sprinted.remove(uuid);
+		brokenBlock.remove(uuid);
+		placedBlock.remove(uuid);
+		blockTime.remove(uuid);
+		blocksDropped.remove(uuid);
+		lastInventoryTime.remove(uuid);
+		inventoryTime.remove(uuid);
+		inventoryClicks.remove(uuid);
+		lastFallPacket.remove(uuid);
+		fastSneakViolations.remove(uuid);
+		VelocityCheck.VIOLATIONS.remove(uuid);
+		MorePacketsCheck.MOVE_COUNT.remove(uuid);
+		GlideCheck.LAST_MOTION_Y.remove(uuid);
+		GlideCheck.LAST_FALL_DISTANCE.remove(uuid);
+		GlideCheck.VIOLATIONS.remove(uuid);
+		SpeedCheck.SPEED_VIOLATIONS.remove(uuid);
+		ElytraCheck.JUMP_Y_VALUE.remove(uuid);
+		KillAuraCheck.ANGLE_FLAGS.remove(uuid);
+		KillAuraCheck.PITCH_MOVEMENTS_CACHE.remove(uuid);
+		KillAuraCheck.GCD_CACHE.remove(uuid);
+		FlightCheck.MOVING_EXEMPT.remove(uuid);
+		FlightCheck.ASCENSION_COUNT.remove(uuid);
+		FlightCheck.BLOCKS_OVER_FLIGHT.remove(uuid);
+		YAxisCheck.Y_AXIS_VIOLATIONS.remove(uuid);
+		YAxisCheck.LAST_Y_AXIS_VIOLATION.remove(uuid);
+		YAxisCheck.LAST_Y_COORD_CACHE.remove(uuid);
+		YAxisCheck.LAST_Y_TIME.remove(uuid);
+		WaterWalkCheck.IS_IN_WATER.remove(uuid);
+		WaterWalkCheck.IS_IN_WATER_CACHE.remove(uuid);
+		WaterWalkCheck.WATER_ASCENSION_VIOLATIONS.remove(uuid);
+		WaterWalkCheck.WATER_SPEED_VIOLATIONS.remove(uuid);
 	}
 
 	public CheckResult checkFastBow(Player player, float force) {
@@ -321,24 +315,24 @@ public class Backend {
 				&& !Utilities.cantStandAtExp(location)) {
 			double i = x > magic.XZ_SPEED_MAX_SNEAK() ? x : z > magic.XZ_SPEED_MAX_SNEAK() ? z : -1;
 			if (i != -1) {
-				if (this.fastSneakViolations.containsKey(player.getUniqueId().toString())) {
-					int flags = this.fastSneakViolations.get(player.getUniqueId().toString());
+				if (this.fastSneakViolations.containsKey(player.getUniqueId())) {
+					int flags = this.fastSneakViolations.get(player.getUniqueId());
 					if (flags >= 3) { // TODO possible config
 						return new CheckResult(CheckResult.Result.FAILED,
 								"was sneaking too fast (speed=" + i + ", max=" + magic.XZ_SPEED_MAX_SNEAK() + ")");
 					}
-					this.fastSneakViolations.put(player.getUniqueId().toString(), flags + 1);
+					this.fastSneakViolations.put(player.getUniqueId(), flags + 1);
 					return PASS;
 				} else {
-					this.fastSneakViolations.put(player.getUniqueId().toString(), 1);
+					this.fastSneakViolations.put(player.getUniqueId(), 1);
 					return PASS;
 				}
 			} else {
-				this.fastSneakViolations.remove(player.getUniqueId().toString());
+				this.fastSneakViolations.remove(player.getUniqueId());
 				return PASS;
 			}
 		} else {
-			this.fastSneakViolations.remove(player.getUniqueId().toString());
+			this.fastSneakViolations.remove(player.getUniqueId());
 			return PASS;
 		}
 	}
@@ -381,39 +375,6 @@ public class Backend {
 		} else {
 			isAscending.remove(name);
 		}
-	}
-
-	public CheckResult checkAscension(Player player, double y1, double y2) {
-		int max = magic.ASCENSION_COUNT_MAX();
-		String string = "";
-		if (player.hasPotionEffect(PotionEffectType.JUMP)) {
-			max += 12;
-			string = " with jump potion";
-		}
-		Block block = player.getLocation().getBlock();
-		if (!isMovingExempt(player) && !Utilities.isInWater(player) && !VersionUtil.isFlying(player)
-				&& !justBroke(player) && !Utilities.isClimbableBlock(player.getLocation().getBlock())
-				&& !Utilities.isClimbableBlock(player.getEyeLocation().getBlock())
-				&& !Utilities.isClimbableBlock(player.getLocation().clone().add(0, -0.98, 0).getBlock())
-				&& !player.isInsideVehicle() && !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -1, 0).getBlock())
-				&& !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -0.5, 0).getBlock())) {
-			// TODO isMoveUpBlock does not seem to be a success with stairs
-			if (y1 < y2) {
-				if (!block.getRelative(BlockFace.NORTH).isLiquid() && !block.getRelative(BlockFace.SOUTH).isLiquid()
-						&& !block.getRelative(BlockFace.EAST).isLiquid()
-						&& !block.getRelative(BlockFace.WEST).isLiquid()) {
-					increment(player, ascensionCount, max);
-					if (ascensionCount.get(player.getUniqueId()) >= max) {
-						return new CheckResult(CheckResult.Result.FAILED,
-								"ascended " + ascensionCount.get(player.getUniqueId()) + " times in a row (max = " + max
-										+ string + ")");
-					}
-				}
-			} else {
-				ascensionCount.put(player.getUniqueId(), 0);
-			}
-		}
-		return PASS;
 	}
 
 	public CheckResult checkSwing(Player player, Block block) {
@@ -809,7 +770,7 @@ public class Backend {
 		GlideCheck.LAST_FALL_DISTANCE.remove(player.getUniqueId());
 		GlideCheck.LAST_MOTION_Y.remove(player.getUniqueId());
 		GlideCheck.VIOLATIONS.remove(player.getUniqueId());
-		ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId().toString());
+		ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId());
 	}
 
 	public void logExitFly(final Player player) {
@@ -887,35 +848,35 @@ public class Backend {
 		commandLevel.put(user.getUUID(), level + 1);
 	}
 
-	public int increment(Player player, Map<UUID, Integer> ascensionCount2, int num) {
+	public int increment(Player player, Map<UUID, Integer> map, int num) {
 		UUID name = player.getUniqueId();
-		if (ascensionCount2.get(name) == null) {
-			ascensionCount2.put(name, 1);
+		if (map.get(name) == null) {
+			map.put(name, 1);
 			return 1;
 		} else {
-			int amount = ascensionCount2.get(name) + 1;
+			int amount = map.get(name) + 1;
 			if (amount < num + 1) {
-				ascensionCount2.put(name, amount);
+				map.put(name, amount);
 				return amount;
 			} else {
-				ascensionCount2.put(name, num);
+				map.put(name, num);
 				return num;
 			}
 		}
 	}
 
-	public int incrementOld(Player player, Map<UUID, Integer> ascensionCount2, int num) {
+	public int incrementOld(Player player, Map<UUID, Integer> map, int num) {
 		UUID uuid = player.getUniqueId();
-		if (ascensionCount2.get(uuid) == null) {
-			ascensionCount2.put(uuid, 1);
+		if (map.get(uuid) == null) {
+			map.put(uuid, 1);
 			return 1;
 		} else {
-			int amount = ascensionCount2.get(uuid) + 1;
+			int amount = map.get(uuid) + 1;
 			if (amount < num + 1) {
-				ascensionCount2.put(uuid, amount);
+				map.put(uuid, amount);
 				return amount;
 			} else {
-				ascensionCount2.put(uuid, num);
+				map.put(uuid, num);
 				return num;
 			}
 		}

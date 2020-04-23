@@ -24,10 +24,13 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
+import com.rammelkast.anticheatreloaded.check.Backend;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Distance;
 import com.rammelkast.anticheatreloaded.util.Utilities;
@@ -40,6 +43,7 @@ public class FlightCheck {
 
 	public static final Map<UUID, Double> BLOCKS_OVER_FLIGHT = new HashMap<UUID, Double>();
 	public static final Map<UUID, Long> MOVING_EXEMPT = new HashMap<UUID, Long>();
+	public static final Map<UUID, Integer> ASCENSION_COUNT = new HashMap<UUID, Integer>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
 	public static CheckResult runCheck(Player player, Distance distance) {
@@ -77,6 +81,40 @@ public class FlightCheck {
 			}
 		} else {
 			BLOCKS_OVER_FLIGHT.put(uuid, 0D);
+		}
+		return PASS;
+	}
+	
+	public static CheckResult checkAscension(Player player, double y1, double y2) {
+		Backend backend = AntiCheatReloaded.getManager().getBackend();
+		int max = backend.getMagic().ASCENSION_COUNT_MAX();
+		String string = "";
+		if (player.hasPotionEffect(PotionEffectType.JUMP)) {
+			max += 12;
+			string = " with jump potion";
+		}
+		Block block = player.getLocation().getBlock();
+		if (!isMovingExempt(player) && !Utilities.isInWater(player) && !VersionUtil.isFlying(player)
+				&& !backend.justBroke(player) && !Utilities.isClimbableBlock(player.getLocation().getBlock())
+				&& !Utilities.isClimbableBlock(player.getEyeLocation().getBlock())
+				&& !Utilities.isClimbableBlock(player.getLocation().clone().add(0, -0.98, 0).getBlock())
+				&& !player.isInsideVehicle() && !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -1, 0).getBlock())
+				&& !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -0.5, 0).getBlock())) {
+			// TODO isMoveUpBlock does not seem to be a success with stairs
+			if (y1 < y2) {
+				if (!block.getRelative(BlockFace.NORTH).isLiquid() && !block.getRelative(BlockFace.SOUTH).isLiquid()
+						&& !block.getRelative(BlockFace.EAST).isLiquid()
+						&& !block.getRelative(BlockFace.WEST).isLiquid()) {
+					backend.increment(player, ASCENSION_COUNT, max);
+					if (ASCENSION_COUNT.get(player.getUniqueId()) >= max) {
+						return new CheckResult(CheckResult.Result.FAILED,
+								"ascended " + ASCENSION_COUNT.get(player.getUniqueId()) + " times in a row (max = " + max
+										+ string + ")");
+					}
+				}
+			} else {
+				ASCENSION_COUNT.put(player.getUniqueId(), 0);
+			}
 		}
 		return PASS;
 	}

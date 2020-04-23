@@ -30,7 +30,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
-import com.rammelkast.anticheatreloaded.check.Backend;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Distance;
 import com.rammelkast.anticheatreloaded.util.Utilities;
