@@ -143,6 +143,8 @@ public class Backend {
 		YAxisCheck.LAST_Y_AXIS_VIOLATION.remove(pU);
 		YAxisCheck.LAST_Y_COORD_CACHE.remove(pU);
 		YAxisCheck.LAST_Y_TIME.remove(pU);
+		WaterWalkCheck.WATER_ASCENSION_VIOLATIONS.remove(pU);
+		WaterWalkCheck.WATER_SPEED_VIOLATIONS.remove(pU);
 		fastBreaks.remove(pU);
 		blockBreakHolder.remove(pU);
 		lastBlockBroken.remove(pU);
@@ -150,8 +152,6 @@ public class Backend {
 		lastBlockPlaced.remove(pU);
 		lastBlockPlaceTime.remove(pU);
 		blockPunches.remove(pU);
-		WaterWalkCheck.WATER_ASCENSION_VIOLATIONS.remove(pU);
-		WaterWalkCheck.WATER_SPEED_VIOLATIONS.remove(pU);
 		projectilesShot.remove(pU);
 		velocitized.remove(pU);
 		velocitytrack.remove(pU);
@@ -176,10 +176,9 @@ public class Backend {
 		GlideCheck.VIOLATIONS.remove(pU);
 		SpeedCheck.SPEED_VIOLATIONS.remove(player.getUniqueId());
 		ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId().toString());
-		KillAuraCheck.ANGLE_FLAGS.remove(player.getUniqueId().toString());
-		KillAuraCheck.CLICKSPEED_MAP.remove(player.getUniqueId().toString());
-		KillAuraCheck.DEVIATION_SCORES.remove(player.getUniqueId().toString());
-		KillAuraCheck.DIFF_MAP.remove(player.getUniqueId().toString());
+		KillAuraCheck.ANGLE_FLAGS.remove(pU);
+		KillAuraCheck.PITCH_MOVEMENTS_CACHE.remove(pU);
+		KillAuraCheck.GCD_CACHE.remove(pU);
 	}
 
 	public CheckResult checkFastBow(Player player, float force) {
@@ -543,6 +542,10 @@ public class Backend {
 
 	public void logEatingStart(Player player) {
 		startEat.put(player.getUniqueId(), System.currentTimeMillis());
+	}
+	
+	public boolean isEating(Player player) {
+		return startEat.containsKey(player.getUniqueId()) && startEat.get(player.getUniqueId()) < magic.EAT_TIME_MIN();
 	}
 
 	public void logHeal(Player player) {

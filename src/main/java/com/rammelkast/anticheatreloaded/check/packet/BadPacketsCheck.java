@@ -37,7 +37,7 @@ public class BadPacketsCheck {
 	public static void runCheck(Player player, PacketEvent event) {
 		Backend backend = AntiCheatReloaded.getManager().getBackend();
 		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.BADPACKETS)
-				|| backend.isMovingExempt(player)) {
+				|| backend.isMovingExempt(player) || AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId()).isWaitingOnLevelSync()) {
 			return;
 		}
 
@@ -58,8 +58,12 @@ public class BadPacketsCheck {
 		Location current = new Location(previous.getWorld(), x, y, z, yaw, pitch);
 		double distance = previous.distanceSquared(current);
 		double maxDistance = backend.getMagic().BADPACKETS_MAX_DISTANCE();
+		boolean hasNewLocation = packet.getBooleans().read(0);
 		if (distance > maxDistance) {
 			flag(player, event, "moved too far between packets (distance=" + new BigDecimal(distance).setScale(1, RoundingMode.HALF_UP) + ", max=" + maxDistance + ")");
+			return;
+		} else if (distance < 1E-9 && !hasNewLocation) {
+			flag(player, event, "sent the same packet twice");
 			return;
 		}
 	}
@@ -71,7 +75,7 @@ public class BadPacketsCheck {
 			@Override
 			public void run() {
 				EventListener.log(new CheckResult(CheckResult.Result.FAILED, message).getMessage(), player,
-						CheckType.MOREPACKETS);
+						CheckType.BADPACKETS);
 				player.teleport(player.getLocation());
 			}
 		});

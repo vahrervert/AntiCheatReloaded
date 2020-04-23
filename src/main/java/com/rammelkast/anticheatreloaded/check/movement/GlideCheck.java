@@ -30,6 +30,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
+import com.rammelkast.anticheatreloaded.check.Backend;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Distance;
 import com.rammelkast.anticheatreloaded.util.Utilities;
@@ -81,8 +82,11 @@ public class GlideCheck {
 			}
 		} else {
 			if (fallDistance > LAST_FALL_DISTANCE.get(player.getUniqueId()) && !player.isOnGround()
-					&& Utilities.isNotNearSlime(distance.getTo().getBlock()) && fallDistance < 1.5) {
-				// TODO that fallDistance check is a horrible way to prevent a certain false positive
+					&& Utilities.isNotNearSlime(distance.getTo().getBlock()) && fallDistance < 1.5
+					&& !Utilities.isClimbableBlock(distance.getTo().getBlock()) && !player.isSneaking()
+					&& !AntiCheatReloaded.getManager().getBackend().isEating(player)) {
+				// TODO that fallDistance check is a horrible way to prevent a certain false
+				// positive
 				// Needs to be fixed since this only works for slight above ground movements
 				float predicted = calculateNextMotionY(LAST_MOTION_Y.get(player.getUniqueId()).floatValue());
 				float actual = Double.valueOf(motionY).floatValue();

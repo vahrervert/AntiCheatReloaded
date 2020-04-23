@@ -29,15 +29,15 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
+import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.config.providers.Magic;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
-import com.rammelkast.anticheatreloaded.util.checkassist.KillauraAssist;
 
 public class IllegalInteract {
 
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
-	
+
 	public static CheckResult performCheck(Player player, Event event) {
 		if (event instanceof BlockPlaceEvent) {
 			return checkBlockPlace(player, (BlockPlaceEvent) event);
@@ -49,44 +49,41 @@ public class IllegalInteract {
 
 	private static CheckResult checkBlockBreak(Player player, BlockBreakEvent event) {
 		if (!isValidTarget(player, event.getBlock())) {
-			return new CheckResult(CheckResult.Result.FAILED,
-					"tried to break a block which was out of view");
+			return new CheckResult(CheckResult.Result.FAILED, "tried to break a block which was out of view");
 		}
 		return PASS;
 	}
 
 	private static CheckResult checkBlockPlace(Player player, BlockPlaceEvent event) {
 		if (!isValidTarget(player, event.getBlock())) {
-			return new CheckResult(CheckResult.Result.FAILED,
-					"tried to place a block out of their view");
+			return new CheckResult(CheckResult.Result.FAILED, "tried to place a block out of their view");
 		}
 		return PASS;
 	}
-	
+
 	private static boolean isValidTarget(Player player, Block block) {
 		Magic magic = AntiCheatReloaded.getManager().getConfiguration().getMagic();
-		double distance =
-                player.getGameMode() == GameMode.CREATIVE ? magic.BLOCK_MAX_DISTANCE_CREATIVE()
-                        : player.getLocation().getDirection().getY() > 0.9 ? magic.BLOCK_MAX_DISTANCE_CREATIVE()
-                        : magic.BLOCK_MAX_DISTANCE();
+		double distance = player.getGameMode() == GameMode.CREATIVE ? magic.BLOCK_MAX_DISTANCE_CREATIVE()
+				: player.getLocation().getDirection().getY() > 0.9 ? magic.BLOCK_MAX_DISTANCE_CREATIVE()
+						: magic.BLOCK_MAX_DISTANCE();
 		Block targetBlock = VersionUtil.getTargetBlock(player, ((int) Math.ceil(distance)));
 		if (targetBlock == null) {
 			// TODO better check here
 			return true;
 		}
-		
+
 		if (Utilities.isClimbableBlock(targetBlock)) {
 			if (targetBlock.getLocation().distance(player.getLocation()) <= distance) {
 				return true;
 			}
 		}
-		
+
 		if (targetBlock.equals(block)) {
 			return true;
 		}
-		
+
 		Location eyeLocation = player.getEyeLocation();
-		double yawDifference = KillauraAssist.calculateYawDifference(eyeLocation, block.getLocation());
+		double yawDifference = KillAuraCheck.calculateYawDifference(eyeLocation, block.getLocation());
 		double playerYaw = player.getEyeLocation().getYaw();
 		double angleDifference = Math.abs(180 - Math.abs(Math.abs(yawDifference - playerYaw) - 180));
 		if (Math.round(angleDifference) > magic.ILLEGALINTERACT_MAX_ANGLE_DIFFERENCE()) {
@@ -94,5 +91,5 @@ public class IllegalInteract {
 		}
 		return true;
 	}
-	
+
 }

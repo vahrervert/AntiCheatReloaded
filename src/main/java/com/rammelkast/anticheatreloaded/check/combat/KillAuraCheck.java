@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -29,36 +30,30 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.util.Vector;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
-import com.rammelkast.anticheatreloaded.config.providers.Magic;
 import com.rammelkast.anticheatreloaded.util.Utilities;
-import com.rammelkast.anticheatreloaded.util.checkassist.KillauraAssist;
 
 public class KillAuraCheck {
 
 	// Angle check
-	public static final Map<String, Integer> ANGLE_FLAGS = new HashMap<String, Integer>();
-	// Heuristic fight speed check
-	public static final Map<String, Integer> DEVIATION_SCORES = new HashMap<String, Integer>();
-	public static final Map<String, Integer> DIFF_MAP = new HashMap<String, Integer>();
-	public static final Map<String, ClickSpeed> CLICKSPEED_MAP = new HashMap<String, ClickSpeed>();
-	// Heuristic aimbot check
-	public static final Map<String, List<Float>> PITCH_MOVEMENTS_CACHE = new HashMap<String, List<Float>>();
-	public static final Map<String, Float> GCD_CACHE = new HashMap<String, Float>();
+	public static final Map<UUID, Integer> ANGLE_FLAGS = new HashMap<UUID, Integer>();
+	// Aimbot check
+	public static final Map<UUID, List<Float>> PITCH_MOVEMENTS_CACHE = new HashMap<UUID, List<Float>>();
+	public static final Map<UUID, Float> GCD_CACHE = new HashMap<UUID, Float>();
 	// Not used as of now, code not committed yet
-	private static final KillauraAssist KILLAURA_ASSIST;
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 	
 	public static CheckResult checkAngle(Player player, EntityDamageEvent event) {
-		String uuid = player.getUniqueId().toString();
+		UUID uuid = player.getUniqueId();
 		Entity entity = event.getEntity();
 		if (entity instanceof LivingEntity) {
 			LivingEntity living = (LivingEntity) entity;
 			Location eyeLocation = player.getEyeLocation();
 
-			double yawDifference = KillauraAssist.calculateYawDifference(eyeLocation, living.getLocation());
+			double yawDifference = calculateYawDifference(eyeLocation, living.getLocation());
 			double playerYaw = player.getEyeLocation().getYaw();
 
 			double angleDifference = Math.abs(180 - Math.abs(Math.abs(yawDifference - playerYaw) - 180));
@@ -79,48 +74,12 @@ public class KillAuraCheck {
 		}
 		return PASS;
 	}
-	
-	public static CheckResult checkFightSpeed(Player player, EntityDamageEvent event) {
-		String uuid = player.getUniqueId().toString();
-		if (!CLICKSPEED_MAP.containsKey(uuid)) {
-			CLICKSPEED_MAP.put(uuid, new ClickSpeed());
-			return PASS;
-		}
-		ClickSpeed clickSpeed = CLICKSPEED_MAP.get(uuid);
-		clickSpeed.registerClick();
-		int deviationScore = clickSpeed.getDeviationScore();
-		// Prevents false positives since scores under 2000 aren't reliable
-		if (deviationScore < 2000) {
-			return PASS;
-		}
-		
-		if (!DEVIATION_SCORES.containsKey(uuid)) {
-			DEVIATION_SCORES.put(uuid, deviationScore);
-			return PASS;
-		}
-		
-		Magic magic = AntiCheatReloaded.getManager().getConfiguration().getMagic();
-		int lastScore = DEVIATION_SCORES.get(uuid);
-		DEVIATION_SCORES.put(uuid, deviationScore);
-		int diff = Math.abs(deviationScore - lastScore);
-		if (!DIFF_MAP.containsKey(uuid)) {
-			DIFF_MAP.put(uuid, diff);
-			return PASS;
-		}
-		int lastDiff = DIFF_MAP.get(uuid);
-		DIFF_MAP.put(uuid, diff);
-		if (Math.abs(diff - lastDiff) < magic.KILLAURA_FIGHTSPEED_MINDIFF()) {
-			event.setCancelled(true);
-			return new CheckResult(CheckResult.Result.FAILED, "had a suspiciously consistant fighting speed (absdiff=" + Math.abs(diff - lastDiff) + ")");
-		}
-		return PASS;
-	}
 
 	/**
 	 * Check idea by Hawk AntiCheat (https://github.com/HawkAnticheat/Hawk)
 	 */
 	public static CheckResult checkAimbot(Player player, PlayerMoveEvent event) {
-		String uuid = player.getUniqueId().toString();
+		UUID uuid = player.getUniqueId();
 		float pitchMovement = event.getTo().getPitch() - event.getFrom().getPitch();
 		if (!PITCH_MOVEMENTS_CACHE.containsKey(uuid)) {
 			PITCH_MOVEMENTS_CACHE.put(uuid, new ArrayList<Float>());
@@ -152,49 +111,12 @@ public class KillAuraCheck {
 		return PASS;
 	}
 	
-	private static class ClickSpeed {
-		private final List<Long> clicks;
-		private long lastClick;
-		
-		public ClickSpeed() {
-			this.clicks = new ArrayList<Long>();
-			this.lastClick = System.currentTimeMillis();
-		}
-		
-		public void registerClick() {
-			this.lastClick = System.currentTimeMillis();
-			this.clicks.add(this.lastClick);
-		}
-		
-		public int getDeviationScore() {
-			long last = 0;
-			List<Integer> deviation = new ArrayList<Integer>();
-			List<Long> toRemove = new ArrayList<Long>();
-			for (long clickTime : this.clicks) {
-				if (clickTime > (this.lastClick - 5000)) {
-					if (last == 0) {
-						last = clickTime;
-						continue;
-					}
-					deviation.add((int) (clickTime - last));
-				} else {
-					toRemove.add(clickTime);
-				}
-			}
-			this.clicks.removeAll(toRemove);
-			if (deviation.isEmpty()) {
-				return -1;
-			}
-			float averageDeviationScore = deviation.get(0);
-			for (int i = 1; i < deviation.size(); i++) {
-				averageDeviationScore += deviation.get(i);
-			}
-			return Math.round(averageDeviationScore / deviation.size());
-		}
-	}
 	
-	static {
-		KILLAURA_ASSIST = new KillauraAssist();
+	public static double calculateYawDifference(Location from, Location to) {
+		Location clonedFrom = from.clone();
+		Vector startVector = clonedFrom.toVector();
+		Vector targetVector = to.toVector();
+		clonedFrom.setDirection(targetVector.subtract(startVector));
+		return clonedFrom.getYaw();
 	}
-
 }
