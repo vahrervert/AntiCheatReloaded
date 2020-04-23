@@ -56,7 +56,7 @@ import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class Backend {
-	public Map<UUID, Long> velocitized = new HashMap<UUID, Long>();	
+	public Map<UUID, Long> velocitized = new HashMap<UUID, Long>();
 	private List<UUID> isAscending = new ArrayList<UUID>();
 	private Map<UUID, Integer> ascensionCount = new HashMap<UUID, Integer>();
 	private Map<UUID, Integer> chatLevel = new HashMap<UUID, Integer>();
@@ -265,9 +265,11 @@ public class Backend {
 
 	public CheckResult checkSpider(Player player, double y) {
 		if (y <= magic.LADDER_Y_MAX() && y >= magic.LADDER_Y_MIN()
-				&& !Utilities.isClimbableBlock(player.getLocation().getBlock())) {
+				&& !Utilities.isClimbableBlock(player.getLocation().getBlock())
+				&& !Utilities.isClimbableBlock(player.getEyeLocation().getBlock())
+				&& !Utilities.isClimbableBlock(player.getLocation().clone().add(0, -0.98, 0).getBlock())) {
 			return new CheckResult(CheckResult.Result.FAILED,
-					"tried to climb a non-ladder (" + player.getLocation().getBlock().getType() + ")");
+					"tried to climb a non-climbable block (" + player.getLocation().getBlock().getType() + ")");
 		} else {
 			return PASS;
 		}
@@ -390,6 +392,8 @@ public class Backend {
 		Block block = player.getLocation().getBlock();
 		if (!isMovingExempt(player) && !Utilities.isInWater(player) && !VersionUtil.isFlying(player)
 				&& !justBroke(player) && !Utilities.isClimbableBlock(player.getLocation().getBlock())
+				&& !Utilities.isClimbableBlock(player.getEyeLocation().getBlock())
+				&& !Utilities.isClimbableBlock(player.getLocation().clone().add(0, -0.98, 0).getBlock())
 				&& !player.isInsideVehicle() && !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -1, 0).getBlock())
 				&& !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -0.5, 0).getBlock())) {
 			// TODO isMoveUpBlock does not seem to be a success with stairs
@@ -543,7 +547,7 @@ public class Backend {
 	public void logEatingStart(Player player) {
 		startEat.put(player.getUniqueId(), System.currentTimeMillis());
 	}
-	
+
 	public boolean isEating(Player player) {
 		return startEat.containsKey(player.getUniqueId()) && startEat.get(player.getUniqueId()) < magic.EAT_TIME_MIN();
 	}

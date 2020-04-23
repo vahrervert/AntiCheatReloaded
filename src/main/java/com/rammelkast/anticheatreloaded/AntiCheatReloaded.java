@@ -291,7 +291,7 @@ public class AntiCheatReloaded extends JavaPlugin {
 	}
 	
 	public double getTPS() {
-		if (this.tps < 0) {
+		if (this.tps < 0 || this.tps > 20) {
 			return 20;
 		}
 		return this.tps;

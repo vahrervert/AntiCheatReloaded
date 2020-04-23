@@ -37,7 +37,7 @@ public class BadPacketsCheck {
 	public static void runCheck(Player player, PacketEvent event) {
 		Backend backend = AntiCheatReloaded.getManager().getBackend();
 		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.BADPACKETS)
-				|| backend.isMovingExempt(player) || AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId()).isWaitingOnLevelSync()) {
+				|| backend.isMovingExempt(player)) {
 			return;
 		}
 
@@ -46,6 +46,11 @@ public class BadPacketsCheck {
 		// Check for derp
 		if (Math.abs(pitch) > 90) {
 			flag(player, event, "had an illegal pitch");
+			return;
+		}
+		
+		// TODO more precise checking for this
+		if (AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId()).isLagging()) {
 			return;
 		}
 		
