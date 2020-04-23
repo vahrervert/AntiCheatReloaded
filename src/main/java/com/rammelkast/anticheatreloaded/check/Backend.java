@@ -510,16 +510,12 @@ public class Backend {
 				fastPlaceViolation.put(uuid, 0);
 			}
 		} else if (fastPlaceViolation.containsKey(uuid) && fastPlaceViolation.get(uuid) > violations) {
-			AntiCheatReloaded.debugLog("Noted that fastPlaceViolation contains key " + uuid + " with value "
-					+ fastPlaceViolation.get(uuid));
 			Long math = System.currentTimeMillis() - lastBlockPlaced.get(uuid);
-			AntiCheatReloaded.debugLog("Player lastBlockPlaced value = " + lastBlockPlaced + ", diff=" + math);
 			if (lastBlockPlaced.get(uuid) > 0 && math < magic.FASTPLACE_MAXVIOLATIONTIME()) {
 				lastBlockPlaced.put(uuid, time);
 				return new CheckResult(CheckResult.Result.FAILED, "placed blocks too fast "
 						+ fastBreakViolation.get(uuid) + " times in a row (max=" + violations + ")");
 			} else if (lastBlockPlaced.get(uuid) > 0 && math > magic.FASTPLACE_MAXVIOLATIONTIME()) {
-				AntiCheatReloaded.debugLog("Reset facePlaceViolation for " + uuid);
 				fastPlaceViolation.put(uuid, 0);
 			}
 		} else if (lastBlockPlaced.containsKey(uuid)) {

@@ -18,6 +18,8 @@ permissions:
     description: See alerts when a player might be cheating
   anticheat.system.help:
     description: Access the help message
+  anticheat.system.mute:
+    description: Access the mute function
   anticheat.system.report:
     description: Access cheat reports
   anticheat.mod:
@@ -27,6 +29,7 @@ permissions:
       anticheat.system.alert: true
       anticheat.system.help: true
       anticheat.system.report: true
+      anticheat.system.mute: true
   anticheat.system.log:
     description: Access turning console logging on or off
   anticheat.system.reload:
@@ -35,10 +38,6 @@ permissions:
     description: Access resetting a player's cheat level
   anticheat.system.version:
     description: Access information about whether the system is updated
-  anticheat.system.calibrate:
-    description: Access the calibration system
-  anticheat.system.debug:
-    description: Access debug reports
   anticheat.admin:
     description: Admin helper perm
     children:
@@ -46,9 +45,7 @@ permissions:
       anticheat.system.log: true
       anticheat.system.reload: true
       anticheat.system.reset: true
-      anticheat.system.update: true
-      anticheat.system.calibrate: true
-      anticheat.system.debug: true
+      anticheat.system.mute: true
   anticheat.check.flight:
     description: Allow players to use fly cheats
     default: false

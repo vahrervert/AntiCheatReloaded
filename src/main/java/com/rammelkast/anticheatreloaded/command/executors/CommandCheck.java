@@ -29,7 +29,7 @@ import java.util.List;
 
 public class CommandCheck extends CommandBase {
 
-    private static final String NAME = "AntiCheat Check Management";
+    private static final String NAME = "AntiCheatReloaded Check Management";
     private static final String COMMAND = "check";
     private static final String USAGE = "anticheat check [check] [on/off]";
     private static final Permission PERMISSION = Permission.SYSTEM_CHECK;

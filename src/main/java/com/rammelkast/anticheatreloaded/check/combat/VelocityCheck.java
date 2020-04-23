@@ -41,34 +41,34 @@ public class VelocityCheck {
 		VL_COUNT.remove(p.getUniqueId());
 	}
 
-	public static void runCheck(EntityDamageByEntityEvent e, final Player p) {
-		if (AntiCheatReloaded.getManager().getCheckManager().isOpExempt(p)
-				|| AntiCheatReloaded.getManager().getCheckManager().isExempt(p, CheckType.VELOCITY))
+	public static void runCheck(EntityDamageByEntityEvent e, final Player player) {
+		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.VELOCITY))
 			return;
-		final Location then = p.getLocation();
+		final Location then = player.getLocation();
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				if (!p.isOnline())
+				if (!player.isOnline())
 					return;
-				if (then.distance(p.getLocation()) < 0.125) {
-					if (!VL_COUNT.containsKey(p.getUniqueId()))
-						VL_COUNT.put(p.getUniqueId(), 1);
+				if (then.distance(player.getLocation()) < 0.125) {
+					if (!VL_COUNT.containsKey(player.getUniqueId()))
+						VL_COUNT.put(player.getUniqueId(), 1);
 					else {
-						VL_COUNT.put(p.getUniqueId(), VL_COUNT.get(p.getUniqueId()) + 1);
-						if (VL_COUNT.get(p.getUniqueId()) > AntiCheatReloaded.getManager().getBackend().getMagic()
+						VL_COUNT.put(player.getUniqueId(), VL_COUNT.get(player.getUniqueId()) + 1);
+						if (VL_COUNT.get(player.getUniqueId()) > AntiCheatReloaded.getManager().getBackend().getMagic()
 								.VELOCITY_MAX_FLAGS()) {
-							EventListener.log(new CheckResult(CheckResult.Result.FAILED,
-									"had zero/low velocity "
-											+ VL_COUNT.get(p.getUniqueId()) + " times (max="
-											+ AntiCheatReloaded.getManager().getBackend().getMagic().VELOCITY_MAX_FLAGS()
-											+ ", dist=" + then.distance(p.getLocation()) + ")").getMessage(),
-									p, CheckType.VELOCITY);
-							VL_COUNT.remove(p.getUniqueId());
+							EventListener.log(
+									new CheckResult(CheckResult.Result.FAILED,
+											"had zero/low velocity " + VL_COUNT.get(player.getUniqueId()) + " times (max="
+													+ AntiCheatReloaded.getManager().getBackend().getMagic()
+															.VELOCITY_MAX_FLAGS()
+													+ ", dist=" + then.distance(player.getLocation()) + ")").getMessage(),
+									player, CheckType.VELOCITY);
+							VL_COUNT.remove(player.getUniqueId());
 						}
 					}
 				} else {
-					VL_COUNT.remove(p.getUniqueId());
+					VL_COUNT.remove(player.getUniqueId());
 				}
 			}
 		}.runTaskLater(AntiCheatReloaded.getPlugin(), 4);

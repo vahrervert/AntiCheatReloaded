@@ -16,51 +16,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.rammelkast.anticheatreloaded.command.executors;
 
-import org.bukkit.Bukkit;
+import java.util.UUID;
+
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.command.CommandBase;
 import com.rammelkast.anticheatreloaded.util.Permission;
-import com.rammelkast.anticheatreloaded.util.User;
 
-public class CommandReset extends CommandBase {
+public class CommandMute extends CommandBase {
 
-	private static final String NAME = "AntiCheatReloaded Resetting";
-	private static final String COMMAND = "reset";
-	private static final String USAGE = "anticheat reset [user]";
-	private static final Permission PERMISSION = Permission.SYSTEM_RESET;
+	private static final String NAME = "AntiCheatReloaded Mute";
+	private static final String COMMAND = "mute";
+	private static final String USAGE = "anticheat reload";
+	private static final Permission PERMISSION = Permission.SYSTEM_RELOAD;
 	private static final String[] HELP = {
-			GRAY + "Use: " + AQUA + "/anticheat reset [user]" + GRAY + " to reset this user's hack level",
-	};
+			GRAY + "Use: " + AQUA + "/anticheat mute" + GRAY + " to mute all notifications", };
 
-	public CommandReset() {
+	public CommandMute() {
 		super(NAME, COMMAND, USAGE, HELP, PERMISSION);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void execute(CommandSender cs, String[] args) {
-		User user;
-		if (args.length == 1) {
-			if (Bukkit.getPlayer(args[0]) != null) {
-				user = USER_MANAGER.getUser(Bukkit.getPlayer(args[0]).getUniqueId());
-			} else {
-				user = USER_MANAGER.getUser(Bukkit.getOfflinePlayer(args[0]).getUniqueId());
-			}
-			if (user != null) {
-				user.resetLevel();
-				user.clearMessages();
-				AntiCheatReloaded.getManager().getBackend().resetChatLevel(user);
-				cs.sendMessage(GOLD + args[0] + GRAY + " has been reset.");
-			} else {
-				cs.sendMessage(RED + "Player: " +args[0] + " not found.");
-			}
+		if (!(cs instanceof Player)) {
+			cs.sendMessage(ChatColor.BOLD + "" + GOLD + "ACR " + GRAY + "This command is only for players");
+			return;
+		}
+		UUID uuid = ((Player) cs).getUniqueId();
+		if (AntiCheatReloaded.MUTE_ENABLED_MODS.contains(uuid)) {
+			cs.sendMessage(GOLD + "" + ChatColor.BOLD + "ACR " + GRAY + "Player alerts have been unmuted");
+			AntiCheatReloaded.MUTE_ENABLED_MODS.remove(uuid);
+			return;
 		} else {
-			sendHelp(cs);
+			cs.sendMessage(GOLD + "" + ChatColor.BOLD + "ACR " + GRAY + "Player alerts have been muted");
+			AntiCheatReloaded.MUTE_ENABLED_MODS.add(uuid);
+			return;
 		}
 	}
 }

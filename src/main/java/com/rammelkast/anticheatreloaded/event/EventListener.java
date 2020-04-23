@@ -70,9 +70,8 @@ public class EventListener implements Listener {
 
 		if (CONFIG.getConfig().debugMode.getValue()) {
 			player.sendMessage(message);
-		} else {
-			AntiCheatReloaded.getPlugin().sendToStaff(message);
 		}
+		AntiCheatReloaded.getPlugin().sendToStaff(message);
 	}
 
 	private static void logCheat(CheckType type, User user) {

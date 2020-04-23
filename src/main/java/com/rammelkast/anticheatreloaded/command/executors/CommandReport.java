@@ -36,7 +36,7 @@ import java.util.UUID;
 
 public class CommandReport extends CommandBase {
 
-    private static final String NAME = "AntiCheat Reports";
+    private static final String NAME = "AntiCheatReloaded Reports";
     private static final String COMMAND = "report";
     private static final String USAGE = "anticheat report [group/user]";
     private static final Permission PERMISSION = Permission.SYSTEM_REPORT;
@@ -181,20 +181,6 @@ public class CommandReport extends CommandBase {
             } else {
                 cs.sendMessage(RED + "Page not found. Requested " + WHITE + page + RED + ", Max " + WHITE + pages + 1);
             }
-        }
-
-        if (AntiCheatReloaded.developerMode()) {
-            int permission = 0;
-            int check = 0;
-            for (Permission perm : Permission.values()) {
-                if (perm.get(user.getPlayer())) permission++;
-            }
-            CheckManager manager = AntiCheatReloaded.getManager().getCheckManager();
-            for (CheckType type : CheckType.values()) {
-                if (manager.willCheck(user.getPlayer(), type)) check++;
-            }
-            cs.sendMessage(ChatColor.GOLD + "User has " + permission + "/" + Permission.values().length + " permissions");
-            cs.sendMessage(ChatColor.GOLD + "User will be checked for " + check + "/" + CheckType.values().length + " checks");
         }
     }
 }

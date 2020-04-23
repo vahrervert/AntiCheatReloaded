@@ -51,12 +51,13 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class AntiCheatReloaded extends JavaPlugin {
 
+	public static final List<UUID> MUTE_ENABLED_MODS = new ArrayList<UUID>();
+	
 	private static AntiCheatManager manager;
 	private static AntiCheatReloaded plugin;
 	private static List<Listener> eventList = new ArrayList<Listener>();
 	private static Configuration config;
 	private static boolean verbose;
-	private static boolean developer;
 	private static ProtocolManager protocolManager;
 	private static SecureRandom random;
 	private static Long loadTime;
@@ -232,19 +233,11 @@ public class AntiCheatReloaded extends JavaPlugin {
 		manager = null;
 		config = null;
 	}
-
-	public static boolean developerMode() {
-		return developer;
-	}
-
-	public static void setDeveloperMode(boolean b) {
-		developer = b;
-	}
-
+	
 	public static void debugLog(final String string) {
 		Bukkit.getScheduler().runTask(getPlugin(), new Runnable() {
 			public void run() {
-				if (developer) {
+				if (getManager().getConfiguration().getConfig().debugMode.getValue()) {
 					manager.debugLog("[DEBUG] " + string);
 				}
 			}
@@ -283,7 +276,14 @@ public class AntiCheatReloaded extends JavaPlugin {
 	}
 	
 	public void sendToStaff(String message) {
-		Bukkit.broadcast(message, "anticheat.system.alert");
+		Bukkit.getOnlinePlayers().forEach(player -> {
+			if (player.hasPermission("anticheat.system.alert")) {
+				if (!MUTE_ENABLED_MODS.contains(player.getUniqueId())) {
+					player.sendMessage(message);
+				}
+			}
+		});
+		Bukkit.getConsoleSender().sendMessage(message);
 	}
 	
 	public static UpdateManager getUpdateManager() {

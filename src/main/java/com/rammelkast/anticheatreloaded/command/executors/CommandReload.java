@@ -26,7 +26,7 @@ import com.rammelkast.anticheatreloaded.util.Permission;
 
 public class CommandReload extends CommandBase {
 
-    private static final String NAME = "AntiCheat Reload";
+    private static final String NAME = "AntiCheatReloaded Reload";
     private static final String COMMAND = "reload";
     private static final String USAGE = "anticheat reload";
     private static final Permission PERMISSION = Permission.SYSTEM_RELOAD;

@@ -27,7 +27,7 @@ import com.rammelkast.anticheatreloaded.util.Permission;
 
 public class CommandLog extends CommandBase {
 
-    private static final String NAME = "AntiCheat Logging";
+    private static final String NAME = "AntiCheatReloaded Logging";
     private static final String COMMAND = "log";
     private static final String USAGE = "anticheat log [file/console] [on/off]";
     private static final Permission PERMISSION = Permission.SYSTEM_LOG;

@@ -34,6 +34,7 @@ public class CommandHelp extends CommandBase {
     		GOLD + "/acr " + GRAY + "help",
     		GOLD + "/acr " + GRAY + "reload",
             GOLD + "/acr " + GRAY + "version",
+            GOLD + "/acr " + GRAY + "mute",
     		GOLD + "/acr " + GRAY + "check " + WHITE + "[check] [on/off]",
             GOLD + "/acr " + GRAY + "log " + WHITE + "[file/console] [on/off]",
             GOLD + "/acr " + GRAY + "report " + WHITE + "[group/user]",
