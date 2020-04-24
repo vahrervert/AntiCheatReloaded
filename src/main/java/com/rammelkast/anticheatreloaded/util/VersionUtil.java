@@ -70,6 +70,13 @@ public class VersionUtil {
 		return p.isFlying() || p.isGliding() || p.hasPotionEffect(PotionEffectType.LEVITATION);
 	}
 
+	public static boolean isSlowFalling(Player player) {
+		if (isBountifulUpdate()) {
+			return false;
+		}
+		return player.hasPotionEffect(PotionEffectType.SLOW_FALLING);
+	}
+	
 	public static boolean isFrostWalk(Player player) {
 		if (player.getInventory().getBoots() == null || isBountifulUpdate()) {
 			return false;

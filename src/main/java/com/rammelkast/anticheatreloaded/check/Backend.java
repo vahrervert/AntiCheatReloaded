@@ -285,8 +285,8 @@ public class Backend {
 		UUID uuid = player.getUniqueId();
 		if (player.getGameMode() != GameMode.CREATIVE && !player.isInsideVehicle() && !player.isSleeping()
 				&& !isMovingExempt(player) && !justPlaced(player) && !Utilities.isInWater(player)
-				&& !Utilities.isInWeb(player)
-				&& !player.getLocation().getBlock().getType().name().endsWith("TRAPDOOR")) {
+				&& !Utilities.isInWeb(player) && !player.getLocation().getBlock().getType().name().endsWith("TRAPDOOR")
+				&& !VersionUtil.isSlowFalling(player)) {
 			if (player.getFallDistance() == 0) {
 				if (nofallViolation.get(uuid) == null) {
 					nofallViolation.put(uuid, 1);
