@@ -59,6 +59,7 @@ import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
+import com.rammelkast.anticheatreloaded.check.movement.FastLadderCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
 import com.rammelkast.anticheatreloaded.check.movement.GlideCheck;
 import com.rammelkast.anticheatreloaded.check.movement.SpeedCheck;
@@ -446,6 +447,17 @@ public class PlayerListener extends EventListener {
                             event.setTo(user.getGoodLocation(from.clone()));
                         }
                         log(result.getMessage(), player, CheckType.SPIDER);
+                        changed = true;
+                    }
+                }
+                if (getCheckManager().willCheckQuick(player, CheckType.FASTLADDER)) {
+                	// Does not use y value created before because that value is absolute
+                    CheckResult result = FastLadderCheck.runCheck(player, event.getTo().getY() - event.getFrom().getY());
+                    if (result.failed()) {
+                        if (!silentMode()) {
+                            event.setTo(user.getGoodLocation(from.clone()));
+                        }
+                        log(result.getMessage(), player, CheckType.FASTLADDER);
                         changed = true;
                     }
                 }

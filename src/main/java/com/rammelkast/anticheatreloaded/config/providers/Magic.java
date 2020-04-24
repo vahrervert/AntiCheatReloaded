@@ -283,6 +283,10 @@ public interface Magic {
      */
     public double LADDER_Y_MIN();
     /**
+     * Maximum speed a player on a ladder can travel downwards
+     */
+    public double LADDER_DOWN_MAX();
+    /**
      * Maximum speed a player can travel up; Type=DOUBLE, Leniency=INCREASE.
      */
     public double Y_SPEED_MAX();
@@ -390,4 +394,8 @@ public interface Magic {
      * Maximum distance allowed between two movement packets; Type=DOUBLE, Leniency=INCREASE.
      */
     public double BADPACKETS_MAX_DISTANCE();
+    /**
+     * Maximum amount of fastladder movements before flagging; TYPE=INTEGER, Leniency=INCREASE
+     */
+    public int FASTLADDER_MAX_FLAGS();
 }

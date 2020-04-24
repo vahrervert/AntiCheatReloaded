@@ -130,6 +130,9 @@ permissions:
   anticheat.check.illegalinteract:
     description: Allow players to place blocks in illegal places
     default: false
+  anticheat.check.fastladder:
+    description: Allow players to climb ladders faster
+    default: false
   anticheat.check.exempt:
     description: Total exemption from checks
     default: false
@@ -162,3 +165,4 @@ permissions:
       anticheat.check.criticals: true
       anticheat.check.unicode: true
       anticheat.check.illegalinteract: true
+      anticheat.check.fastladder: true

@@ -138,6 +138,9 @@ LADDER_Y_MAX: 0.11761
 # Minimum speed a player on a ladder can travel
 # This is a set value and shouldn't be changed unless you know what you're doing
 LADDER_Y_MIN: 0.11759
+# Maximum speed a player on a ladder can travel downwards
+# This is a set value and shouldn't be changed unless you know what you're doing
+LADDER_DOWN_MAX: 0.15
 # Number of times a player can fail the nofall check before being considered a cheater
 # Can be decreased to improve detenction with the risk of false positives
 # Increase in case of false positives
@@ -266,3 +269,6 @@ MIN_HEAL_TIME: 490
 # Maximum distance allowed between two movement packets
 # Increase this in case of false positives
 BADPACKETS_MAX_DISTANCE: 25.0
+# Maximum distance allowed between two movement packets
+# Maximum amount of fastladder movements before flagging
+FASTLADDER_MAX_FLAGS: 3

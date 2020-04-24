@@ -82,7 +82,8 @@ public class GlideCheck {
 		} else {
 			if (fallDistance > LAST_FALL_DISTANCE.get(player.getUniqueId()) && !player.isOnGround()
 					&& Utilities.isNotNearSlime(distance.getTo().getBlock()) && fallDistance < 1.5
-					&& !Utilities.isClimbableBlock(distance.getTo().getBlock()) && !player.isSneaking()
+					&& !Utilities.isNearClimbable(player)
+					&& !player.isSneaking()
 					&& !AntiCheatReloaded.getManager().getBackend().isEating(player)) {
 				// TODO that fallDistance check is a horrible way to prevent a certain false
 				// positive

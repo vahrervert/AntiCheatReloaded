@@ -23,6 +23,7 @@ Hacks blocked
 -------
 * Flight
 * Glide
+* FastLadder
 * Jesus
 * Step
 * Criticals

@@ -290,6 +290,22 @@ public final class Utilities {
 				|| player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == COB_WEB
 				|| player.getLocation().getBlock().getRelative(BlockFace.UP).getType() == COB_WEB;
 	}
+	
+	/**
+	 * Determine whether a player is near a climbable block
+	 *
+	 * @param player player to check
+	 * @return true if near climbable block
+	 */
+	public static boolean isNearClimbable(Player player) {
+		return isClimbableBlock(player.getLocation().getBlock())
+				|| isClimbableBlock(player.getLocation().getBlock().getRelative(BlockFace.DOWN))
+				|| isClimbableBlock(player.getLocation().getBlock().getRelative(BlockFace.UP))
+				|| isClimbableBlock(player.getLocation().getBlock().getRelative(BlockFace.NORTH))
+				|| isClimbableBlock(player.getLocation().getBlock().getRelative(BlockFace.SOUTH))
+				|| isClimbableBlock(player.getLocation().getBlock().getRelative(BlockFace.EAST))
+				|| isClimbableBlock(player.getLocation().getBlock().getRelative(BlockFace.WEST));
+	}
 
 	/**
 	 * Determine whether a block is climbable
