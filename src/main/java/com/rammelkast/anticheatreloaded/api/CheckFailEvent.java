@@ -59,7 +59,7 @@ public class CheckFailEvent extends Event {
         return type;
     }
 
-    public HandlerList getHandlers() {
+    public static HandlerList getHandlers() {
         return handlers;
     }
 
