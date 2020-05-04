@@ -84,7 +84,8 @@ public class GlideCheck {
 					&& Utilities.isNotNearSlime(distance.getTo().getBlock()) && fallDistance < 1.5
 					&& !Utilities.isNearClimbable(player)
 					&& !player.isSneaking()
-					&& !AntiCheatReloaded.getManager().getBackend().isEating(player)) {
+					&& !AntiCheatReloaded.getManager().getBackend().isEating(player)
+					&& !Utilities.isInWater(player)) {
 				// TODO that fallDistance check is a horrible way to prevent a certain false
 				// positive
 				// Needs to be fixed since this only works for slight above ground movements

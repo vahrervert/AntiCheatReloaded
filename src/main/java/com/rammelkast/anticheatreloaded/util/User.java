@@ -48,7 +48,9 @@ public class User {
 	private Long[] messageTimes = new Long[2];
 	private String[] commands = new String[2];
 	private Long[] commandTimes = new Long[2];
-
+	private MinecraftSmooth yawSmooth = new MinecraftSmooth(), pitchSmooth = new MinecraftSmooth();
+	private boolean usingOptifine = false;
+	
 	private boolean isWaitingOnLevelSync;
 	private Timestamp levelSyncTimestamp;
 
@@ -453,8 +455,36 @@ public class User {
 		return Math.abs(this.ping - this.lastPing) > 50;
 	}
 
+	/**
+	 * Checks if user is using optifine zoom to prevent false positives
+	 * @param yaw
+	 * @param pitch
+	 */
+	public void checkForOptifine(float yaw, float pitch) {
+		float yawDelta = Math.abs(this.getPlayer().getLocation().getYaw() - yaw);
+		float modifiedYaw = this.modifyValue(yawDelta);
+		float pitchDelta = Math.abs(this.getPlayer().getLocation().getPitch() - pitch);
+		float modifiedPitch = this.modifyValue(pitchDelta);
+		float yawSmooth = this.yawSmooth.smooth(modifiedYaw, modifiedYaw * 0.05f);
+		float pitchSmooth = this.pitchSmooth.smooth(modifiedPitch, modifiedPitch * 0.05f);
+		if (Math.abs(yawSmooth - modifiedYaw) < 0.08f || Math.abs(pitchSmooth - modifiedPitch) < 0.04f) {
+			this.usingOptifine = true;
+		} else {
+			this.usingOptifine = false;
+		}
+	}
+	
+	private float modifyValue(float value) {
+        return ((float) Math.cbrt((value / 0.15f) / 8f) - 0.2f) / .6f;
+    }
+	
+	public boolean isUsingOptifine() {
+		return this.usingOptifine;
+	}
+	
 	@Override
 	public String toString() {
 		return "User {name = " + getName() + ", level = " + level + "}";
 	}
+
 }

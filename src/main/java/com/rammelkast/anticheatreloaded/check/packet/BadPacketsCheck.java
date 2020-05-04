@@ -31,6 +31,7 @@ import com.rammelkast.anticheatreloaded.check.Backend;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.event.EventListener;
+import com.rammelkast.anticheatreloaded.util.User;
 
 public class BadPacketsCheck {
 
@@ -41,6 +42,7 @@ public class BadPacketsCheck {
 			return;
 		}
 
+		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
 		PacketContainer packet = event.getPacket();
 		float pitch = packet.getFloat().read(1);
 		// Check for derp
@@ -50,7 +52,7 @@ public class BadPacketsCheck {
 		}
 		
 		// TODO more precise checking for this
-		if (AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId()).isLagging()) {
+		if (user.isLagging()) {
 			return;
 		}
 		
@@ -73,6 +75,8 @@ public class BadPacketsCheck {
 			//flag(player, event, "sent the same packet twice");
 			return;
 		}
+		
+		user.checkForOptifine(yaw, pitch);
 	}
 
 	private static void flag(Player player, PacketEvent event, String message) {
