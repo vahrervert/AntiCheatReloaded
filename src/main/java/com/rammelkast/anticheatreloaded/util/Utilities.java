@@ -219,6 +219,29 @@ public final class Utilities {
 		Material type = block.getType();
 		return type.name().endsWith("SLAB");
 	}
+	
+	/**
+	 * Determine whether a block is a bed
+	 *
+	 * @param block block to bed
+	 * @return true if bed
+	 */
+	public static boolean isBed(Block block) {
+		Material type = block.getType();
+		return type.name().endsWith("BED");
+	}
+	
+	public static boolean isNearBed(Location location) {
+		return isBed(location.getBlock())
+				|| isBed(location.getBlock().getRelative(BlockFace.NORTH))
+				|| isBed(location.getBlock().getRelative(BlockFace.SOUTH))
+				|| isBed(location.getBlock().getRelative(BlockFace.EAST))
+				|| isBed(location.getBlock().getRelative(BlockFace.WEST))
+				|| isBed(location.getBlock().getRelative(BlockFace.NORTH_EAST))
+				|| isBed(location.getBlock().getRelative(BlockFace.NORTH_WEST))
+				|| isBed(location.getBlock().getRelative(BlockFace.SOUTH_EAST))
+				|| isBed(location.getBlock().getRelative(BlockFace.SOUTH_WEST));
+	}
 
 	/**
 	 * Determine whether a block is a stair

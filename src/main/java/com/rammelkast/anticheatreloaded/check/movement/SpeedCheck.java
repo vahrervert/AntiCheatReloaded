@@ -30,6 +30,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.Backend;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
+import com.rammelkast.anticheatreloaded.util.Distance;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
@@ -114,16 +115,17 @@ public class SpeedCheck {
 		}
 	}
 
-	public CheckResult checkYSpeed(Player player, double y) {
+	public static CheckResult checkYSpeed(Player player, Distance distance) {
 		Backend backend = AntiCheatReloaded.getManager().getBackend();
 		if (!backend.isMovingExempt(player) && !player.isInsideVehicle() && !player.isSleeping()
-				&& (y > backend.getMagic().Y_SPEED_MAX())
+				&& (distance.getYDifference() > backend.getMagic().Y_SPEED_MAX())
 				&& !backend.isDoing(player, backend.velocitized, backend.getMagic().VELOCITY_TIME())
 				&& !player.hasPotionEffect(PotionEffectType.JUMP) && !VersionUtil.isFlying(player)
+				&& !Utilities.isNearBed(distance.getTo())
 				&& !Utilities.isSlime(AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
 						.getGoodLocation(player.getLocation()).getBlock())) {
 			return new CheckResult(CheckResult.Result.FAILED,
-					"y speed was too high (speed=" + y + ", max=" + backend.getMagic().Y_SPEED_MAX() + ")");
+					"y speed was too high (speed=" + distance.getYDifference() + ", max=" + backend.getMagic().Y_SPEED_MAX() + ")");
 		} else {
 			return PASS;
 		}

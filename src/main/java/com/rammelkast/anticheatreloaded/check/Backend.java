@@ -269,18 +269,6 @@ public class Backend {
 		}
 	}
 
-	public CheckResult checkYSpeed(Player player, double y) {
-		if (!isMovingExempt(player) && !player.isInsideVehicle() && !player.isSleeping() && (y > magic.Y_SPEED_MAX())
-				&& !isDoing(player, velocitized, magic.VELOCITY_TIME())
-				&& !player.hasPotionEffect(PotionEffectType.JUMP) && !VersionUtil.isFlying(player)
-				&& !Utilities.isSlime(player.getLocation().getBlock())) {
-			return new CheckResult(CheckResult.Result.FAILED,
-					"y speed was too high (speed=" + y + ", max=" + magic.Y_SPEED_MAX() + ")");
-		} else {
-			return PASS;
-		}
-	}
-
 	public CheckResult checkNoFall(Player player, double y) {
 		UUID uuid = player.getUniqueId();
 		if (player.getGameMode() != GameMode.CREATIVE && !player.isInsideVehicle() && !player.isSleeping()

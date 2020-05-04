@@ -76,7 +76,7 @@ public class LoggingManager {
     }
 
     public void logToConsole(String message) {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + message);
+    	Bukkit.getConsoleSender().sendMessage(message);
     }
 
     public void logToFile(String message) {

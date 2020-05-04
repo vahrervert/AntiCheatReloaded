@@ -401,7 +401,7 @@ public class PlayerListener extends EventListener {
                 double z = distance.getZDifference();
                 if (getCheckManager().willCheckQuick(player, CheckType.SPEED) && getCheckManager().willCheck(player, CheckType.FLIGHT)) {
                     if (event.getFrom().getY() < event.getTo().getY()) {
-                        CheckResult result = getBackend().checkYSpeed(player, y);
+                        CheckResult result = SpeedCheck.checkYSpeed(player, distance);
                         if (result.failed()) {
                             if (!silentMode()) {
                                 event.setTo(user.getGoodLocation(from.clone()));

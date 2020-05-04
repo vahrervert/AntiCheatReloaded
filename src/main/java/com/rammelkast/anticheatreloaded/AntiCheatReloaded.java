@@ -281,7 +281,6 @@ public class AntiCheatReloaded extends JavaPlugin {
 				}
 			}
 		});
-		Bukkit.getConsoleSender().sendMessage(message);
 	}
 	
 	public static UpdateManager getUpdateManager() {

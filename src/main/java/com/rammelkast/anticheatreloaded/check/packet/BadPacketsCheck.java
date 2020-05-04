@@ -75,8 +75,6 @@ public class BadPacketsCheck {
 			//flag(player, event, "sent the same packet twice");
 			return;
 		}
-		
-		user.checkForOptifine(yaw, pitch);
 	}
 
 	private static void flag(Player player, PacketEvent event, String message) {
