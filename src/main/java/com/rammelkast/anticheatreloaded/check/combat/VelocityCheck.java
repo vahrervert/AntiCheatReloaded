@@ -33,6 +33,9 @@ import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.event.EventListener;
 
+/*
+ * TODO improve
+ */
 public class VelocityCheck {
 
 	public static final Map<UUID, Integer> VIOLATIONS = new HashMap<UUID, Integer>();

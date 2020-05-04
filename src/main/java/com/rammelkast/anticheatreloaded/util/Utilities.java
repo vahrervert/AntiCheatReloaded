@@ -272,7 +272,6 @@ public final class Utilities {
 	 */
 	public static boolean isOnLilyPad(Player player) {
 		Block block = player.getLocation().getBlock();
-		// TODO: Can we fix X this?
 		return block.getType() == LILY_PAD || block.getRelative(BlockFace.NORTH).getType() == LILY_PAD
 				|| block.getRelative(BlockFace.SOUTH).getType() == LILY_PAD
 				|| block.getRelative(BlockFace.EAST).getType() == LILY_PAD

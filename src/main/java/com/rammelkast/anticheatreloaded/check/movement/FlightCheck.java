@@ -100,6 +100,7 @@ public class FlightCheck {
 				&& !player.isInsideVehicle() && !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -1, 0).getBlock())
 				&& !YAxisCheck.isMoveUpBlock(player.getLocation().add(0, -0.5, 0).getBlock())) {
 			// TODO isMoveUpBlock does not seem to be a success with stairs
+			// I suddenly could not replicate this, man this check is a mess
 			if (y1 < y2) {
 				if (!block.getRelative(BlockFace.NORTH).isLiquid() && !block.getRelative(BlockFace.SOUTH).isLiquid()
 						&& !block.getRelative(BlockFace.EAST).isLiquid()

@@ -96,8 +96,8 @@ public class MorePacketsCheck {
 						}
 					});
 				}
-			} catch (NullPointerException nullPointer) {
-				// TODO this is thrown sometimes, might have something to do with line 83
+			} catch (NullPointerException exception) {
+				// Irrelevant
 			}
 		}
 	}

@@ -389,7 +389,7 @@ public class PlayerListener extends EventListener {
                 if (result.failed()) {
                     if (!silentMode()) {
                         event.setTo(user.getGoodLocation(from.clone()));
-                        /*TODO: player.damage(1); better system for this, too exploitable*/
+                        // TODO better handling of this
                     }
                     log(result.getMessage(), player, CheckType.NOFALL);
                 }
