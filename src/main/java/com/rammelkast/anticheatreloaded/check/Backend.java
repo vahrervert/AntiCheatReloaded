@@ -276,7 +276,7 @@ public class Backend {
 	public CheckResult checkNoFall(Player player, double y) {
 		UUID uuid = player.getUniqueId();
 		if (player.getGameMode() != GameMode.CREATIVE && !player.isInsideVehicle() && !player.isSleeping()
-				&& !isMovingExempt(player) && !justPlaced(player) && !Utilities.isInWater(player)
+				&& !isMovingExempt(player) && !justPlaced(player) && !Utilities.isNearWater(player)
 				&& !Utilities.isInWeb(player) && !player.getLocation().getBlock().getType().name().endsWith("TRAPDOOR")
 				&& !VersionUtil.isSlowFalling(player)) {
 			if (player.getFallDistance() == 0) {

@@ -93,7 +93,7 @@ public class FlightCheck {
 			string = " with jump potion";
 		}
 		Block block = player.getLocation().getBlock();
-		if (!isMovingExempt(player) && !Utilities.isInWater(player) && !VersionUtil.isFlying(player)
+		if (!isMovingExempt(player) && !Utilities.isNearWater(player) && !VersionUtil.isFlying(player)
 				&& !backend.justBroke(player) && !Utilities.isClimbableBlock(player.getLocation().getBlock())
 				&& !Utilities.isClimbableBlock(player.getEyeLocation().getBlock())
 				&& !Utilities.isClimbableBlock(player.getLocation().clone().add(0, -0.98, 0).getBlock())

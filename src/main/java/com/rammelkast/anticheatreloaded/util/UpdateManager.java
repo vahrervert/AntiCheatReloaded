@@ -102,6 +102,8 @@ public class UpdateManager {
 		public VersionSplit(String version) throws Exception {
 			if (version.endsWith("-ALPHA")) {
 				version = version.substring(0, version.length() - 6);
+			} else if (version.endsWith("-PRE")) {
+				version = version.substring(0, version.length() - 4);
 			}
 
 			String[] versionSplit = version.split("\\.");

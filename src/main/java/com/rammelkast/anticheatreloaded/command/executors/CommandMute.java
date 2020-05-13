@@ -32,8 +32,8 @@ public class CommandMute extends CommandBase {
 
 	private static final String NAME = "AntiCheatReloaded Mute";
 	private static final String COMMAND = "mute";
-	private static final String USAGE = "anticheat reload";
-	private static final Permission PERMISSION = Permission.SYSTEM_RELOAD;
+	private static final String USAGE = "anticheat mute";
+	private static final Permission PERMISSION = Permission.SYSTEM_MUTE;
 	private static final String[] HELP = {
 			GRAY + "Use: " + AQUA + "/anticheat mute" + GRAY + " to mute all notifications", };
 
