@@ -157,9 +157,11 @@ public class Backend {
 		inventoryClicks.remove(uuid);
 		lastFallPacket.remove(uuid);
 		fastSneakViolations.remove(uuid);
+		lastSneak.remove(uuid);
 		AimbotCheck.LAST_DELTA_YAW.remove(uuid);
 		VelocityCheck.VIOLATIONS.remove(uuid);
-		MorePacketsCheck.MOVE_COUNT.remove(uuid);
+		MorePacketsCheck.LAST_PACKET_TIME.remove(uuid);
+		MorePacketsCheck.PACKET_BALANCE.remove(uuid);
 		GlideCheck.LAST_MOTION_Y.remove(uuid);
 		GlideCheck.LAST_FALL_DISTANCE.remove(uuid);
 		GlideCheck.VIOLATIONS.remove(uuid);
@@ -640,9 +642,15 @@ public class Backend {
 	}
 
 	public CheckResult checkFastHeal(Player player) {
+		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
 		if (lastHeal.containsKey(player.getUniqueId())) // Otherwise it was modified by a plugin, don't worry about it.
 		{
-			long healTime = magic.MIN_HEAL_TIME();
+			double tps = AntiCheatReloaded.getPlugin().getTPS();
+			if (tps < 17.5
+					|| user.isLagging()) {
+				return PASS;
+			}
+			long healTime = magic.MIN_HEAL_TIME() - (tps >= 18.5 ? 0 : 50);
 			long l = lastHeal.get(player.getUniqueId());
 			lastHeal.remove(player.getUniqueId());
 			if ((System.currentTimeMillis() - l) < healTime) {
@@ -654,8 +662,13 @@ public class Backend {
 	}
 
 	public CheckResult checkFastEat(Player player) {
+		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
 		if (startEat.containsKey(player.getUniqueId())) // Otherwise it was modified by a plugin, don't worry about it.
 		{
+			if (AntiCheatReloaded.getPlugin().getTPS() < 17.5
+					|| user.isLagging()) {
+				return PASS;
+			}
 			long l = startEat.get(player.getUniqueId());
 			startEat.remove(player.getUniqueId());
 			if ((System.currentTimeMillis() - l) < magic.EAT_TIME_MIN()) {

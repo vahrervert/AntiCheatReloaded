@@ -166,8 +166,6 @@ public class AntiCheatReloaded extends JavaPlugin {
                 }
             }
         }.runTaskTimer(this, 40L, 1L);
-        // Launch MorePackets timer
-        MorePacketsCheck.startTimer();
 	}
 
 	@Override

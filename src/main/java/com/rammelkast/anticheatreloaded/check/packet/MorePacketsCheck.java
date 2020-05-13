@@ -23,14 +23,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import com.comphenix.protocol.events.PacketEvent;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
+import com.rammelkast.anticheatreloaded.config.providers.Magic;
 import com.rammelkast.anticheatreloaded.event.EventListener;
 
 /**
@@ -38,16 +37,8 @@ import com.rammelkast.anticheatreloaded.event.EventListener;
  */
 public class MorePacketsCheck {
 
-	public static final Map<UUID, Integer> MOVE_COUNT = new HashMap<UUID, Integer>();
-
-	public static void startTimer() {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				MOVE_COUNT.clear();
-			}
-		}.runTaskTimer(AntiCheatReloaded.getPlugin(), 20, 20);
-	}
+	public static final Map<UUID, Long> LAST_PACKET_TIME = new HashMap<UUID, Long>();
+	public static final Map<UUID, Double> PACKET_BALANCE = new HashMap<UUID, Double>();
 
 	public static void runCheck(Player player, PacketEvent event) {
 		// Confirm if we should even check for MorePackets
@@ -56,50 +47,47 @@ public class MorePacketsCheck {
 		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.MOREPACKETS) || tps < 15) {
 			return;
 		}
-		Location currentLocation = event.getPlayer().getLocation();
-		if (!MOVE_COUNT.containsKey(player.getUniqueId())) {
-			MOVE_COUNT.put(player.getUniqueId(), 1);
-		} else {
-			MOVE_COUNT.put(player.getUniqueId(), MOVE_COUNT.get(player.getUniqueId()) + 1);
-			int ping = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId()).getPing();
-			int limit = AntiCheatReloaded.getManager().getBackend().getMagic().MOREPACKETS_LIMIT();
-			int averagePing = AntiCheatReloaded.getManager().getBackend().getMagic().MOREPACKETS_AVERAGE_PING();
-			float pingLeniency = (float) ((ping / averagePing));
-			if (pingLeniency < 1)
-				pingLeniency = 1;
-			if (pingLeniency > 2)
-				pingLeniency = 2;
-			float tpsLeniency = (float) ((19 / tps));
-			if (tps > 19) {
-				tpsLeniency = 1;
-			}
-			float leniency = pingLeniency * tpsLeniency;
-			limit = Math.round(leniency * limit);
-			final float finalLeniency = leniency;
-			try {
-				if (MOVE_COUNT.get(player.getUniqueId()) > limit) {
-					final int packets = MOVE_COUNT.get(player.getUniqueId());
-					MOVE_COUNT.remove(player.getUniqueId());
-					event.setCancelled(true);
-					// We are currently not in the main server thread, so switch
-					AntiCheatReloaded.sendToMainThread(new Runnable() {
-						@Override
-						public void run() {
-							EventListener
-									.log(new CheckResult(CheckResult.Result.FAILED,
-											"sent " + packets + " packets in one second (max="
-													+ AntiCheatReloaded.getManager().getBackend().getMagic()
-															.MOREPACKETS_LIMIT()
-													+ ", leniency=" + finalLeniency + ")").getMessage(),
-											player, CheckType.MOREPACKETS);
-							player.teleport(currentLocation);
-						}
-					});
-				}
-			} catch (NullPointerException exception) {
-				// Irrelevant
-			}
+
+		UUID uuid = player.getUniqueId();
+		Magic magic = AntiCheatReloaded.getManager().getConfiguration().getMagic();
+		long packetTimeNow = System.currentTimeMillis();
+		long lastPacketTime = LAST_PACKET_TIME.getOrDefault(uuid, packetTimeNow - 50L);
+		double packetBalance = PACKET_BALANCE.getOrDefault(uuid, 0D);
+
+		long rate = packetTimeNow - lastPacketTime;
+		packetBalance += 50;
+		packetBalance -= rate;
+		if (packetBalance >= magic.MOREPACKETS_TRIGGER_BALANCE()) {
+			int ticks = (int) Math.round(packetBalance / 50);
+			packetBalance = -1 * (magic.MOREPACKETS_TRIGGER_BALANCE() / 2);
+			flag(player, event, "overshot timer by " + ticks + " tick(s)");
+		} else if (packetBalance < -1 * (magic.MOREPACKETS_MINIMUM_CLAMP())) {
+			// Clamp minimum, 50ms=1tick of lag leniency
+			packetBalance = -1 * (magic.MOREPACKETS_MINIMUM_CLAMP());
 		}
+
+		LAST_PACKET_TIME.put(uuid, packetTimeNow);
+		PACKET_BALANCE.put(uuid, packetBalance);
+	}
+
+	private static void flag(Player player, PacketEvent event, String message) {
+		event.setCancelled(true);
+		// We are currently not in the main server thread, so switch
+		AntiCheatReloaded.sendToMainThread(new Runnable() {
+			@Override
+			public void run() {
+				EventListener.log(new CheckResult(CheckResult.Result.FAILED, message).getMessage(), player,
+						CheckType.MOREPACKETS);
+				player.teleport(player.getLocation());
+			}
+		});
+	}
+
+	public static void compensate(Player player) {
+		UUID uuid = player.getUniqueId();
+		Magic magic = AntiCheatReloaded.getManager().getConfiguration().getMagic();
+		double packetBalance = PACKET_BALANCE.getOrDefault(uuid, 0D);
+		PACKET_BALANCE.put(uuid, packetBalance - magic.MOREPACKETS_TELEPORT_COMPENSATION());
 	}
 
 }

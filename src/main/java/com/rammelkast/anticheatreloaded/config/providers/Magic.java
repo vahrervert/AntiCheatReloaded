@@ -359,13 +359,17 @@ public interface Magic {
      */
     public int TELEPORT_MIN();
     /**
-     * Maximum amount of packets a player can send in a second; Type=INTEGER, Leniency=INCREASE.
+     * The amount of milliseconds to compensate for a teleport; Type=INTEGER, Leniency=INCREASE.
      */
-    public int MOREPACKETS_LIMIT();
+    public int MOREPACKETS_TELEPORT_COMPENSATION();
     /**
-     * The average ping settings used to account for lag; TYPE=INTEGER, Leniency=INCREASE
+     * The amount of milliseconds that were offset to flag for MorePackets; Type=INTEGER, Leniency=INCREASE.
      */
-	public int MOREPACKETS_AVERAGE_PING();
+    public int MOREPACKETS_TRIGGER_BALANCE();
+    /**
+     * The maximum amount of overall lag compensating in milliseconds; Type=INTEGER, Leniency=INCREASE.
+     */
+    public int MOREPACKETS_MINIMUM_CLAMP();
     /**
      * Maximum amount of low/zero velocity moments before flagging; Type=INTEGER, Leniency=INCREASE.
      */
@@ -398,4 +402,8 @@ public interface Magic {
      * Maximum amount of fastladder movements before flagging; TYPE=INTEGER, Leniency=INCREASE
      */
     public int FASTLADDER_MAX_FLAGS();
+    /**
+     * The change milliseconds between two keepalives before considering a player to be lagging; TYPE=INTEGER, Leniency=DECREASE
+     */
+    public int LAG_DETERMINATION();
 }

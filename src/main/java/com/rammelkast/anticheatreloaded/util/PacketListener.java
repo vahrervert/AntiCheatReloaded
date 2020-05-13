@@ -47,6 +47,15 @@ public class PacketListener {
 					BadPacketsCheck.runCheck(player, event);
 				}
 			}
+			
+			@Override
+			public void onPacketSending(PacketEvent event) {
+				Player player = event.getPlayer();
+				User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
+				
+				// Compensate for teleport
+				MorePacketsCheck.compensate(player);
+			}
 		});
 	}
 	

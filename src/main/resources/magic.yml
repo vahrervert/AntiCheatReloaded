@@ -241,12 +241,18 @@ Y_TIME: 800
 # Amount of suspicious mid-air movements before a player is suspected of glide
 # Increase this in case of false positives
 GLIDE_LIMIT: 5
-# Maximum amount of movement packets allowed per second
+# The amount of milliseconds to compensate for a teleport (50ms = 1 tick)
 # Increase this in case of false positives
-MOREPACKETS_LIMIT: 30
-# If the MorePackets check gives false positives replace this with the average user ping on your server
-# Not a good idea to use a value lower than 75 or higher than 250
-MOREPACKETS_AVERAGE_PING: 80
+# Can be decreased in to tighten check
+MOREPACKETS_TELEPORT_COMPENSATION: 200
+# The amount of milliseconds that were offset to flag for MorePackets (50ms = 1 tick)
+# Increase this in case of false positives
+# Can be decreased in to tighten check
+MOREPACKETS_TRIGGER_BALANCE: 50
+# The maximum amount of overall lag compensating in milliseconds (50ms = 1 tick)
+# Increase this in case of false positives
+# Can be decreased in to tighten check
+MOREPACKETS_MINIMUM_CLAMP: 200
 # Maximum amount zero-velocity moments before a player is suspected
 # Increase this in case of false positives
 VELOCITY_MAX_FLAGS: 3
@@ -269,6 +275,10 @@ MIN_HEAL_TIME: 490
 # Maximum distance allowed between two movement packets
 # Increase this in case of false positives
 BADPACKETS_MAX_DISTANCE: 25.0
-# Maximum distance allowed between two movement packets
 # Maximum amount of fastladder movements before flagging
+# Increase this in case of false positives
 FASTLADDER_MAX_FLAGS: 3
+# The change milliseconds between two keepalives before considering a player to be lagging
+# Decrease this in case of clientside lag-related false positives
+# Do not lower below 50 or increase above 75
+LAG_DETERMINATION: 60

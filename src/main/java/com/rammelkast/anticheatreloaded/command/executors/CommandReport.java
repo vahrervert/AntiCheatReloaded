@@ -157,6 +157,7 @@ public class CommandReport extends CommandBase {
         if (page <= pages && page > 0) {
             cs.sendMessage(GOLD + "----------------------[" + GRAY + "Page " + page + "/" + pages + "" + GOLD + "]----------------------");
             cs.sendMessage(GRAY + "Player: " + WHITE + name);
+            cs.sendMessage(GRAY + "Ping: " + WHITE + user.getPing() + "ms " + (user.isLagging() ? ChatColor.RED + "(lagging)" : ChatColor.GREEN + "(not lagging)"));
             cs.sendMessage(GRAY + "Group: " + groupString);
             for (int x = 0; x < 6; x++) {
                 int index = ((page - 1) * 5) + (x + ((page - 1)));
@@ -177,6 +178,7 @@ public class CommandReport extends CommandBase {
             if (pages == 0 && page == 1) {
             	cs.sendMessage(GOLD + "----------------------[" + GRAY + "Page 1/1" + GOLD + "]----------------------");
                 cs.sendMessage(GRAY + "Player: " + WHITE + name);
+                cs.sendMessage(GRAY + "Ping: " + WHITE + user.getPing() + "ms " + (user.isLagging() ? ChatColor.RED + "(lagging)" : ChatColor.GREEN + "(not lagging)"));
                 cs.sendMessage(GRAY + "Group: " + groupString);
                 cs.sendMessage(GRAY + "This user has not failed any checks.");
                 cs.sendMessage(MENU_END);
