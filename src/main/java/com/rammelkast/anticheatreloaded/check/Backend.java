@@ -37,6 +37,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
+import com.rammelkast.anticheatreloaded.check.movement.AimbotCheck;
 import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
 import com.rammelkast.anticheatreloaded.check.movement.GlideCheck;
@@ -152,6 +153,7 @@ public class Backend {
 		inventoryClicks.remove(uuid);
 		lastFallPacket.remove(uuid);
 		fastSneakViolations.remove(uuid);
+		AimbotCheck.LAST_DELTA_YAW.remove(uuid);
 		VelocityCheck.VIOLATIONS.remove(uuid);
 		MorePacketsCheck.MOVE_COUNT.remove(uuid);
 		GlideCheck.LAST_MOTION_Y.remove(uuid);
@@ -160,8 +162,6 @@ public class Backend {
 		SpeedCheck.SPEED_VIOLATIONS.remove(uuid);
 		ElytraCheck.JUMP_Y_VALUE.remove(uuid);
 		KillAuraCheck.ANGLE_FLAGS.remove(uuid);
-		KillAuraCheck.PITCH_MOVEMENTS_CACHE.remove(uuid);
-		KillAuraCheck.GCD_CACHE.remove(uuid);
 		FlightCheck.MOVING_EXEMPT.remove(uuid);
 		FlightCheck.ASCENSION_COUNT.remove(uuid);
 		FlightCheck.BLOCKS_OVER_FLIGHT.remove(uuid);

@@ -64,6 +64,7 @@ public class AntiCheatReloaded extends JavaPlugin {
 	private static UpdateManager updateManager;
 	
 	private double tps = -1;
+	private String symbiosisMetric = "None";
 
 	@Override
 	public void onEnable() {
@@ -109,32 +110,44 @@ public class AntiCheatReloaded extends JavaPlugin {
 		verboseLog("Finished loading.");
 
 		// Metrics
-		try {
-			Metrics metrics = new Metrics(this, 202);
-			metrics.addCustomChart(new Metrics.SingleLineChart("cheaters_kicked", new Callable<Integer>() {
-				@Override
-				public Integer call() throws Exception {
-					int kicked = playersKicked;
-					// Reset so we don't keep sending the same value
-					playersKicked = 0;
-					return kicked;
+		getServer().getScheduler().runTaskLater(this, new Runnable() {
+			@Override
+			public void run() {
+				checkForSymbiosis();
+				try {
+					Metrics metrics = new Metrics(AntiCheatReloaded.this, 202);
+					metrics.addCustomChart(new Metrics.SingleLineChart("cheaters_kicked", new Callable<Integer>() {
+						@Override
+						public Integer call() throws Exception {
+							int kicked = playersKicked;
+							// Reset so we don't keep sending the same value
+							playersKicked = 0;
+							return kicked;
+						}
+					}));
+					metrics.addCustomChart(new Metrics.SimplePie("protocollib_version", new Callable<String>() {
+						@Override
+						public String call() throws Exception {
+							return Bukkit.getPluginManager().getPlugin("ProtocolLib").getDescription().getVersion();
+						}
+					}));
+					metrics.addCustomChart(new Metrics.SimplePie("nms_version", new Callable<String>() {
+						@Override
+						public String call() throws Exception {
+							return VersionUtil.getVersion();
+						}
+					}));
+					metrics.addCustomChart(new Metrics.SimplePie("symbiosis", new Callable<String>() {
+						@Override
+						public String call() throws Exception {
+							return symbiosisMetric;
+						}
+					}));
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			}));
-			metrics.addCustomChart(new Metrics.SimplePie("protocollib_version", new Callable<String>() {
-				@Override
-				public String call() throws Exception {
-					return Bukkit.getPluginManager().getPlugin("ProtocolLib").getDescription().getVersion();
-				}
-			}));
-			metrics.addCustomChart(new Metrics.SimplePie("nms_version", new Callable<String>() {
-				@Override
-				public String call() throws Exception {
-					return VersionUtil.getVersion();
-				}
-			}));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			}
+		}, 90L);
 		
 		// Launch TPS check
 		new BukkitRunnable() {
@@ -267,6 +280,49 @@ public class AntiCheatReloaded extends JavaPlugin {
 
 	public void onPlayerKicked() {
 		this.playersKicked++;
+	}
+
+	/**
+	 * Creates metric that checks for anti-cheat symbiosis
+	 * I use this to see if AntiCheatReloaded is actively being used
+	 * together with other anti-cheats, so I can account for that.
+	 */
+	protected void checkForSymbiosis() {
+		if (Bukkit.getPluginManager().getPlugin("NoCheatPlus") != null) {
+			if (this.symbiosisMetric.equals("None")) {
+				this.symbiosisMetric = "NoCheatPlus";
+			} else {
+				this.symbiosisMetric += ", NoCheatPlus";
+			}
+		}
+		if (Bukkit.getPluginManager().getPlugin("Matrix") != null) {
+			if (this.symbiosisMetric.equals("None")) {
+				this.symbiosisMetric = "Matrix";
+			} else {
+				this.symbiosisMetric += ", Matrix";
+			}
+		}
+		if (Bukkit.getPluginManager().getPlugin("AAC") != null) {
+			if (this.symbiosisMetric.equals("None")) {
+				this.symbiosisMetric = "AAC";
+			} else {
+				this.symbiosisMetric += ", AAC";
+			}
+		}
+		if (Bukkit.getPluginManager().getPlugin("Spartan") != null) {
+			if (this.symbiosisMetric.equals("None")) {
+				this.symbiosisMetric = "Spartan";
+			} else {
+				this.symbiosisMetric += ", Spartan";
+			}
+		}
+		if (Bukkit.getPluginManager().getPlugin("Negativity") != null) {
+			if (this.symbiosisMetric.equals("None")) {
+				this.symbiosisMetric = "Negativity";
+			} else {
+				this.symbiosisMetric += ", Negativity";
+			}
+		}
 	}
 
 	public static void sendToMainThread(Runnable runnable) {

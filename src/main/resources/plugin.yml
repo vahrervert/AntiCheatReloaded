@@ -133,6 +133,9 @@ permissions:
   anticheat.check.fastladder:
     description: Allow players to climb ladders faster
     default: false
+  anticheat.check.aimbot:
+    description: Allow players to use aimbot
+    default: false
   anticheat.check.exempt:
     description: Total exemption from checks
     default: false
@@ -166,3 +169,4 @@ permissions:
       anticheat.check.unicode: true
       anticheat.check.illegalinteract: true
       anticheat.check.fastladder: true
+      anticheat.check.aimbot: true

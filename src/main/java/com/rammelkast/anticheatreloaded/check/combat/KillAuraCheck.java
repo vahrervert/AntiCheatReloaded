@@ -18,9 +18,7 @@
  */
 package com.rammelkast.anticheatreloaded.check.combat;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -29,22 +27,15 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
-import com.rammelkast.anticheatreloaded.util.User;
-import com.rammelkast.anticheatreloaded.util.Utilities;
 
 public class KillAuraCheck {
 
 	// Angle check
 	public static final Map<UUID, Integer> ANGLE_FLAGS = new HashMap<UUID, Integer>();
-	// Aimbot check
-	public static final Map<UUID, List<Float>> PITCH_MOVEMENTS_CACHE = new HashMap<UUID, List<Float>>();
-	public static final Map<UUID, Float> GCD_CACHE = new HashMap<UUID, Float>();
-	// Not used as of now, code not committed yet
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 	
 	public static CheckResult checkAngle(Player player, EntityDamageEvent event) {
@@ -75,43 +66,6 @@ public class KillAuraCheck {
 		}
 		return PASS;
 	}
-
-	/**
-	 * Check idea by Hawk AntiCheat (https://github.com/HawkAnticheat/Hawk)
-	 */
-	public static CheckResult checkAimbot(Player player, PlayerMoveEvent event) {
-		UUID uuid = player.getUniqueId();
-		float pitchMovement = event.getTo().getPitch() - event.getFrom().getPitch();
-		if (!PITCH_MOVEMENTS_CACHE.containsKey(uuid)) {
-			PITCH_MOVEMENTS_CACHE.put(uuid, new ArrayList<Float>());
-			return PASS;
-		}
-		List<Float> pitchMovements = PITCH_MOVEMENTS_CACHE.get(uuid);
-		if (pitchMovement != 0 && Math.abs(pitchMovement) <= 10 && Math.abs(event.getTo().getPitch()) != 90) {
-			pitchMovements.add(Math.abs(pitchMovement));
-		}
-		
-		if (pitchMovements.size() >= 20) {
-			float greatestCommonDivisor = Utilities.gcdRational(pitchMovements);
-			if (!GCD_CACHE.containsKey(uuid)) {
-				GCD_CACHE.put(uuid, greatestCommonDivisor);
-			}
-			
-			float divisorDifference = Math.abs(greatestCommonDivisor - GCD_CACHE.get(uuid));
-			if (divisorDifference > 0.00425 || greatestCommonDivisor < 0.00001) {
-				pitchMovements.clear();
-				GCD_CACHE.put(uuid, greatestCommonDivisor);
-				PITCH_MOVEMENTS_CACHE.put(uuid, pitchMovements);
-				return new CheckResult(CheckResult.Result.FAILED, "performed aimbot-like movements (divisor-diff=" + divisorDifference + ")");
-			}
-			pitchMovements.clear();
-			GCD_CACHE.put(uuid, greatestCommonDivisor);
-			PITCH_MOVEMENTS_CACHE.put(uuid, pitchMovements);
-		}
-		PITCH_MOVEMENTS_CACHE.put(uuid, pitchMovements);
-		return PASS;
-	}
-	
 	
 	public static double calculateYawDifference(Location from, Location to) {
 		Location clonedFrom = from.clone();

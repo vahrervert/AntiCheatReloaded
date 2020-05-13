@@ -58,6 +58,7 @@ import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
+import com.rammelkast.anticheatreloaded.check.movement.AimbotCheck;
 import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FastLadderCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
@@ -465,10 +466,10 @@ public class PlayerListener extends EventListener {
                     user.setGoodLocation(event.getFrom());
                 }
             }
-            if (getCheckManager().willCheckQuick(player, CheckType.KILLAURA)) {
-            	CheckResult result = KillAuraCheck.checkAimbot(player, event);
+            if (getCheckManager().willCheckQuick(player, CheckType.AIMBOT)) {
+            	CheckResult result = AimbotCheck.runCheck(player, event);
                 if (result.failed()) {
-                    log(result.getMessage(), player, CheckType.KILLAURA);
+                    log(result.getMessage(), player, CheckType.AIMBOT);
                 }
             }
         }

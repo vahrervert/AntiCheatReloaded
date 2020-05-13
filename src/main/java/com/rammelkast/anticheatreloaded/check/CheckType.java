@@ -65,7 +65,8 @@ public enum CheckType {
 	CRITICALS(Permission.CHECK_CRITICALS),
 	CHAT_UNICODE(Permission.CHECK_UNICODE),
 	ILLEGAL_INTERACT(Permission.CHECK_ILLEGAL_INTERACT),
-	FASTLADDER(Permission.CHECK_FASTLADDER);
+	FASTLADDER(Permission.CHECK_FASTLADDER),
+	AIMBOT(Permission.CHECK_AIMBOT);
 	
     private final Permission permission;
     private final Map<UUID, Integer> level = new HashMap<UUID, Integer>();
