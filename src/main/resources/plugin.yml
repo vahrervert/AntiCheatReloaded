@@ -71,7 +71,7 @@ permissions:
     description: Allow players to sprint when hungry
     default: false
   anticheat.check.sneak:
-    description: Allow players to use auto-sneak
+    description: Allow players to use sneak hacks
     default: false
   anticheat.check.speed:
     description: Allow players to speed

@@ -35,6 +35,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.potion.PotionEffectType;
 
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
+import com.rammelkast.anticheatreloaded.check.CheckResult.Result;
 import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
 import com.rammelkast.anticheatreloaded.check.movement.AimbotCheck;
@@ -49,6 +51,7 @@ import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.providers.Lang;
 import com.rammelkast.anticheatreloaded.config.providers.Magic;
 import com.rammelkast.anticheatreloaded.manage.AntiCheatManager;
+import com.rammelkast.anticheatreloaded.manage.UserManager;
 import com.rammelkast.anticheatreloaded.util.Distance;
 import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.Utilities;
@@ -87,6 +90,7 @@ public class Backend {
 	private HashSet<Byte> transparent = new HashSet<Byte>();
 	private Map<UUID, Long> lastFallPacket = new HashMap<UUID, Long>();
 	private Map<UUID, Integer> fastSneakViolations = new HashMap<UUID, Integer>();
+	private Map<UUID, Long> lastSneak = new HashMap<UUID, Long>();
 
 	private Magic magic;
 	private AntiCheatManager manager = null;
@@ -323,6 +327,21 @@ public class Backend {
 			this.fastSneakViolations.remove(player.getUniqueId());
 			return PASS;
 		}
+	}
+
+	public CheckResult checkSneakToggle(Player player) {
+		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
+		final long lastSneak = this.lastSneak.getOrDefault(player.getUniqueId(), (long) 0);
+		this.lastSneak.put(player.getUniqueId(), System.currentTimeMillis());
+		if (System.currentTimeMillis() - lastSneak < 75 && (AntiCheatReloaded.getPlugin().getTPS() > 12
+				&& !user.isLagging())) {
+			if (!this.silentMode()) {
+				player.teleport(user.getGoodLocation(player.getLocation()));
+			}
+			return new CheckResult(Result.FAILED,
+					"toggled sneak too fast (time=" + (System.currentTimeMillis() - lastSneak) + ")");
+		}
+		return PASS;
 	}
 
 	public CheckResult checkSprintHungry(PlayerToggleSprintEvent event) {

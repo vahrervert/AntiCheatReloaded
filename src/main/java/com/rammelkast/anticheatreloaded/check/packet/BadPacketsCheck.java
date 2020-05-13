@@ -37,11 +37,10 @@ public class BadPacketsCheck {
 
 	public static void runCheck(Player player, PacketEvent event) {
 		Backend backend = AntiCheatReloaded.getManager().getBackend();
-		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.BADPACKETS)
-				|| backend.isMovingExempt(player)) {
+		// Confirm if we should even check for BadPackets
+		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.BADPACKETS) || backend.isMovingExempt(player)) {
 			return;
 		}
-
 		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
 		PacketContainer packet = event.getPacket();
 		float pitch = packet.getFloat().read(1);
@@ -52,7 +51,8 @@ public class BadPacketsCheck {
 		}
 		
 		// TODO more precise checking for this
-		if (user.isLagging()) {
+		double tps = AntiCheatReloaded.getPlugin().getTPS();
+		if (user.isLagging() || tps < 18) {
 			return;
 		}
 		

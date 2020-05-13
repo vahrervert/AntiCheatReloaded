@@ -148,8 +148,16 @@ public class PlayerListener extends EventListener {
 
     @EventHandler
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
+    	Player player = event.getPlayer();
         if (event.isSneaking()) {
-            getBackend().logToggleSneak(event.getPlayer());
+            if (getCheckManager().willCheck(player, CheckType.SNEAK)) {
+                CheckResult result = getBackend().checkSneakToggle(player);
+                if (result.failed()) {
+                    event.setCancelled(!silentMode());
+                    log(result.getMessage(), player, CheckType.SNEAK);
+                }
+            }
+           // getBackend().logToggleSneak(event.getPlayer());
         }
 
         AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
