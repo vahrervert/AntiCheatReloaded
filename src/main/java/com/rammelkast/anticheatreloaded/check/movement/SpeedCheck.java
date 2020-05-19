@@ -121,6 +121,7 @@ public class SpeedCheck {
 				&& (distance.getYDifference() > backend.getMagic().Y_SPEED_MAX())
 				&& !backend.isDoing(player, backend.velocitized, backend.getMagic().VELOCITY_TIME())
 				&& !player.hasPotionEffect(PotionEffectType.JUMP) && !VersionUtil.isFlying(player)
+				&& !VersionUtil.isRiptiding(player)
 				&& !Utilities.isNearBed(distance.getTo())
 				&& !Utilities.isSlime(AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
 						.getGoodLocation(player.getLocation()).getBlock())) {

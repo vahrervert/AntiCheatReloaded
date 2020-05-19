@@ -262,10 +262,6 @@ KILLAURA_MAX_ANGLE_DIFFERENCE: 50
 # The maximum amount of violations before flagging player as a cheater
 # Increase this in case of false positives
 KILLAURA_MAX_ANGLE_VIOLATIONS: 3
-# The minimum score difference for the fight speed check to consider a player legit
-# Increasing this will tighten check but might punish combat consistancy
-# Decrease this in case of false positives
-KILLAURA_FIGHTSPEED_MINDIFF: 3
 # The maximum angle difference allowed when placing or breaking a block
 # Increase this in case of false positives, can be slightly decreased to tighten check
 ILLEGALINTERACT_MAX_ANGLE_DIFFERENCE: 75

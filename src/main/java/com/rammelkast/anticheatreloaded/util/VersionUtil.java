@@ -69,6 +69,13 @@ public class VersionUtil {
 		}
 		return p.isFlying() || p.isGliding() || p.hasPotionEffect(PotionEffectType.LEVITATION);
 	}
+	
+	public static boolean isRiptiding(Player player) {
+		if (isBountifulUpdate()) {
+			return false;
+		}
+		return player.isRiptiding();
+	}
 
 	public static boolean isSlowFalling(Player player) {
 		if (isBountifulUpdate()) {
