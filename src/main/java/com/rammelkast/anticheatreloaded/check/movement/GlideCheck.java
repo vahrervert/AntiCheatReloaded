@@ -86,9 +86,7 @@ public class GlideCheck {
 					&& !player.isSneaking()
 					&& !AntiCheatReloaded.getManager().getBackend().isEating(player)
 					&& !Utilities.isInWater(player)) {
-				// TODO that fallDistance check is a horrible way to prevent a certain false
-				// positive
-				// Needs to be fixed since this only works for slight above ground movements
+				// TODO change this, way too much falses
 				float predicted = calculateNextMotionY(LAST_MOTION_Y.get(player.getUniqueId()).floatValue());
 				float actual = Double.valueOf(motionY).floatValue();
 				float scaledDifference = Math.abs((predicted - actual) + 0.1568f);
