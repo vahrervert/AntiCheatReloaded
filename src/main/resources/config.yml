@@ -31,8 +31,13 @@ system:
   # Should Enterprise options be enabled? Only set this to true if you're an advanced user.
   enterprise: false
   # Running AntiCheatReloaded in debug mode will send alerts to the cheating players and enable debug logging
+  # Use this when locating and/or reporting false positives or when testing AntiCheatReloaded
   # Do NOT enable this in a production environment!
   debug-mode: false
+  # To prevent spamming, staff and the console will only be notified every x violations
+  # Minimum value is 1, default is 5
+  # Example with 5: notifications after 5 vl, 10vl, 15vl, etc.
+  notify-every-vl: 5
 # Use /AntiCheatReloaded check for a list of valid checks
 disabled-checks:
 - EXAMPLE_CHECK

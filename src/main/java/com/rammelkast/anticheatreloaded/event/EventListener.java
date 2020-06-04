@@ -50,27 +50,47 @@ public class EventListener implements Listener {
 	
 	public static void log(String message, Player player, CheckType type) {
 		User user = getUserManager().getUser(player.getUniqueId());
+		if (user == null)
+			return;
+		
+		boolean debugMode = CONFIG.getConfig().debugMode.getValue();
+		int vlForType = type.getUses(player.getUniqueId()) + 1;
+		int notifyEveryVl = CONFIG.getConfig().notifyEveryVl.getValue();
 		if (message == null || message.equals("")) {
-			message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + player.getName() + " failed "
-					+ CheckType.getName(type);
-		} else {
-			message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + player.getName() + " failed "
-					+ CheckType.getName(type) + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + message
-					+ ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + "ping: " + user.getPing() + "ms"
-					+ ", tps: " + TPS_FORMAT.format(AntiCheatReloaded.getPlugin().getTPS());
-		}
-		if (user != null) { // npc
-			logCheat(type, user);
-			if (user.increaseLevel(type)) {
-				AntiCheatReloaded.getManager().log(message);
+			if (debugMode) {
+				message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + player.getName() + " failed "
+						+ CheckType.getName(type);
+			} else {
+				message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + player.getName() + " failed "
+						+ CheckType.getName(type) + ChatColor.GOLD + " (x" + vlForType + ")";
 			}
-			removeDecrease(user);
+		} else {
+			if (debugMode) {
+				message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + player.getName() + " failed "
+						+ CheckType.getName(type) + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + message
+						+ ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + "ping: " + user.getPing() + "ms"
+						+ ", tps: " + TPS_FORMAT.format(AntiCheatReloaded.getPlugin().getTPS());
+			} else {
+				message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.GRAY + player.getName() + " failed "
+						+ CheckType.getName(type) + ChatColor.GOLD + " (x" + vlForType + ")" + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + "ping: " + user.getPing() + "ms"
+						+ ", tps: " + TPS_FORMAT.format(AntiCheatReloaded.getPlugin().getTPS());
+			}
 		}
+		
+		logCheat(type, user);
+		if (user.increaseLevel(type) && (!debugMode && vlForType % notifyEveryVl == 0)) {
+			AntiCheatReloaded.getManager().log(message);
+		}
+		removeDecrease(user);
 
-		if (CONFIG.getConfig().debugMode.getValue()) {
+		if (debugMode) {
 			player.sendMessage(message);
+			return;
 		}
-		AntiCheatReloaded.getPlugin().sendToStaff(message);
+		
+		if (vlForType % notifyEveryVl == 0) {
+			AntiCheatReloaded.getPlugin().sendToStaff(message);
+		}
 	}
 
 	private static void logCheat(CheckType type, User user) {

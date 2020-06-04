@@ -38,6 +38,7 @@ import com.rammelkast.anticheatreloaded.event.EventListener;
 public class MorePacketsCheck {
 
 	public static final Map<UUID, Long> LAST_PACKET_TIME = new HashMap<UUID, Long>();
+	public static final Map<UUID, Long> EXEMPT_TIMINGS = new HashMap<UUID, Long>();
 	public static final Map<UUID, Double> PACKET_BALANCE = new HashMap<UUID, Double>();
 
 	public static void runCheck(Player player, PacketEvent event) {
@@ -50,6 +51,9 @@ public class MorePacketsCheck {
 
 		UUID uuid = player.getUniqueId();
 		Magic magic = AntiCheatReloaded.getManager().getConfiguration().getMagic();
+		if (AntiCheatReloaded.getManager().getBackend().isDoing(player, EXEMPT_TIMINGS, -1)) {
+			return;
+		}
 		long packetTimeNow = System.currentTimeMillis();
 		long lastPacketTime = LAST_PACKET_TIME.getOrDefault(uuid, packetTimeNow - 50L);
 		double packetBalance = PACKET_BALANCE.getOrDefault(uuid, 0D);

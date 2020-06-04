@@ -26,6 +26,8 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
+import com.rammelkast.anticheatreloaded.check.Backend;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 
 public class AimbotCheck {
@@ -34,6 +36,10 @@ public class AimbotCheck {
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 	
 	public static CheckResult runCheck(Player player, PlayerMoveEvent event) {
+		Backend backend = AntiCheatReloaded.getManager().getBackend();
+		if (backend.isMovingExempt(player)) {
+			return PASS;
+		}
 		UUID uuid = player.getUniqueId();
 		float dYaw = Math.abs(event.getTo().getYaw() - event.getFrom().getYaw());
 		float dPitch = Math.abs(event.getTo().getPitch() - event.getFrom().getPitch());

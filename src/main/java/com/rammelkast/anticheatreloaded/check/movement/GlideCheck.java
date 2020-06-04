@@ -32,13 +32,13 @@ import org.bukkit.entity.Player;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Distance;
-import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class GlideCheck {
 
 	public static final Map<UUID, Double> LAST_MOTION_Y = new HashMap<UUID, Double>();
 	public static final Map<UUID, Float> LAST_FALL_DISTANCE = new HashMap<UUID, Float>();
+	public static final Map<UUID, Integer> AIR_TICKS = new HashMap<UUID, Integer>();
 	public static final Map<UUID, Integer> VIOLATIONS = new HashMap<UUID, Integer>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
@@ -48,18 +48,22 @@ public class GlideCheck {
 			VIOLATIONS.put(player.getUniqueId(), 0);
 			return PASS;
 		}
+		
 		if (player.getLocation().getBlock().getType() == Material.LADDER
 				|| player.getLocation().getBlock().getRelative(0, 1, 0).getType() == Material.LADDER) {
 			return PASS;
 		}
+		
 		if (!LAST_MOTION_Y.containsKey(player.getUniqueId())) {
 			LAST_MOTION_Y.put(player.getUniqueId(), distance.getYDifference());
 			return PASS;
 		}
+		
 		if (!LAST_FALL_DISTANCE.containsKey(player.getUniqueId())) {
 			LAST_FALL_DISTANCE.put(player.getUniqueId(), player.getFallDistance());
 			return PASS;
 		}
+		
 		int violations = VIOLATIONS.getOrDefault(player.getUniqueId(), 0);
 		double motionY = distance.getYDifference();
 		float fallDistance = player.getFallDistance();
@@ -80,34 +84,7 @@ public class GlideCheck {
 				return PASS;
 			}
 		} else {
-			if (fallDistance > LAST_FALL_DISTANCE.get(player.getUniqueId()) && !player.isOnGround()
-					&& Utilities.isNotNearSlime(distance.getTo().getBlock()) && fallDistance < 1.5
-					&& !Utilities.isNearClimbable(player)
-					&& !player.isSneaking()
-					&& !AntiCheatReloaded.getManager().getBackend().isEating(player)
-					&& !Utilities.isInWater(player)) {
-				// TODO change this, way too much falses
-				float predicted = calculateNextMotionY(LAST_MOTION_Y.get(player.getUniqueId()).floatValue());
-				float actual = Double.valueOf(motionY).floatValue();
-				float scaledDifference = Math.abs((predicted - actual) + 0.1568f);
-				if (scaledDifference > 3E-8) {
-					if (violations + 1 >= AntiCheatReloaded.getManager().getBackend().getMagic().GLIDE_LIMIT()
-							&& !Utilities.canStand(distance.getTo().getBlock())) {
-						VIOLATIONS.put(player.getUniqueId(), 1);
-						if (!AntiCheatReloaded.getManager().getBackend().silentMode()) {
-							Location prev = player.getLocation().clone();
-							prev.setY(prev.getY() - distanceToFall(prev));
-							player.teleport(AntiCheatReloaded.getManager().getUserManager()
-									.getUser(player.getUniqueId()).getGoodLocation(prev));
-						}
-						return new CheckResult(CheckResult.Result.FAILED, "type=gravity, offset="
-								+ new BigDecimal(scaledDifference).setScale(2, RoundingMode.HALF_UP) + ")");
-					} else {
-						VIOLATIONS.put(player.getUniqueId(), violations + 1);
-						return PASS;
-					}
-				}
-			}
+			// TODO redo this
 		}
 		LAST_MOTION_Y.put(player.getUniqueId(), distance.getYDifference());
 		LAST_FALL_DISTANCE.put(player.getUniqueId(), player.getFallDistance());
@@ -115,10 +92,6 @@ public class GlideCheck {
 			VIOLATIONS.put(player.getUniqueId(), violations - 1);
 		}
 		return PASS;
-	}
-
-	private static float calculateNextMotionY(float motionY) {
-		return (motionY - 0.08f) * 0.98f;
 	}
 
 	private static double distanceToFall(Location location) {

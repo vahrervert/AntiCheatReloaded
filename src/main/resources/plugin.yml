@@ -49,7 +49,7 @@ permissions:
   anticheat.check.flight:
     description: Allow players to use fly cheats
     default: false
-  anticheat.check.elytra:
+  anticheat.check.elytrafly:
     description: Allow players to use ElytraFly cheats
     default: false
   anticheat.check.waterwalk:
@@ -64,8 +64,11 @@ permissions:
   anticheat.check.fastplace:
     description: Allow players to use build hacks and fastplace
     default: false
-  anticheat.check.spam:
-    description: Allow players to spam the server
+  anticheat.check.chatspam:
+    description: Allow players to spam chat messages
+    default: false
+  anticheat.check.commandspam:
+    description: Allow players to spam chat messages
     default: false
   anticheat.check.sprint:
     description: Allow players to sprint when hungry
@@ -74,7 +77,10 @@ permissions:
     description: Allow players to use sneak hacks
     default: false
   anticheat.check.speed:
-    description: Allow players to speed
+    description: Allow players to use speed hacks
+    default: false
+  anticheat.check.vclip:
+    description: Allow players clip through walls
     default: false
   anticheat.check.spider:
     description: Allow players to climb non-climbable surfaces
@@ -97,17 +103,14 @@ permissions:
   anticheat.check.longreach:
     description: Allow players to use longreaching hacks
     default: false
-  anticheat.check.projectile:
-    description: Allow players to quickly launch projectiles
+  anticheat.check.unicode:
+    description: Allow players to use unicode in chat
+    default: false
+  anticheat.check.fastprojectile:
+    description: Allow players to spam projectiles (fastbow etc.)
     default: false
   anticheat.check.itemspam:
     description: Allow players to use inventory drop spam hacks
-    default: false
-  anticheat.check.visual:
-    description: Allow players to interact with objects out of their view
-    default: false
-  anticheat.check.vclip:
-    description: Allow players to become slimeballs and clip down through blocks
     default: false
   anticheat.check.fastinventory:
     description: Allow players to use fastloot and similar inventory hacks
@@ -116,7 +119,7 @@ permissions:
     description: Allow players to use autotool to switch tools quickly
     default: false
   anticheat.check.morepackets:
-    description: Allow players to send lots of movement packets
+    description: Allow players to send lots of movement packets or modify their timer
     default: false
   anticheat.check.badpackets:
     description: Allow players to send invalid movement packets
@@ -126,9 +129,6 @@ permissions:
     default: false
   anticheat.check.criticals:
     description: Allow players to use criticals
-    default: false
-  anticheat.check.unicode:
-    description: Allow players to use unicode in chat
     default: false
   anticheat.check.illegalinteract:
     description: Allow players to place blocks in illegal places
@@ -149,10 +149,12 @@ permissions:
       anticheat.check.noswing: true
       anticheat.check.fastbreak: true
       anticheat.check.fastplace: true
-      anticheat.check.spam: true
+      anticheat.check.chatspam: true
+      anticheat.check.commandspam: true
       anticheat.check.sprint: true
       anticheat.check.sneak: true
       anticheat.check.speed: true
+      anticheat.check.vclip: true
       anticheat.check.spider: true
       anticheat.check.nofall: true
       anticheat.check.fastbow: true
@@ -160,18 +162,15 @@ permissions:
       anticheat.check.fastheal: true
       anticheat.check.killaura: true
       anticheat.check.longreach: true
-      anticheat.check.projectile: true
+      anticheat.check.unicode: true
+      anticheat.check.fastprojectile: true
       anticheat.check.itemspam: true
-      anticheat.check.visual: true
-      anticheat.check.vclip: true
       anticheat.check.fastinventory: true
       anticheat.check.autotool: true
-      anticheat.check.fastanimation: true
       anticheat.check.morepackets: true
       anticheat.check.badpackets: true
       anticheat.check.velocity: true
       anticheat.check.criticals: true
-      anticheat.check.unicode: true
       anticheat.check.illegalinteract: true
       anticheat.check.fastladder: true
       anticheat.check.aimbot: true

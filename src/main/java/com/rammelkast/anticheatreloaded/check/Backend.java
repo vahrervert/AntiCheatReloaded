@@ -51,7 +51,6 @@ import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.providers.Lang;
 import com.rammelkast.anticheatreloaded.config.providers.Magic;
 import com.rammelkast.anticheatreloaded.manage.AntiCheatManager;
-import com.rammelkast.anticheatreloaded.manage.UserManager;
 import com.rammelkast.anticheatreloaded.util.Distance;
 import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.Utilities;
@@ -162,6 +161,7 @@ public class Backend {
 		VelocityCheck.VIOLATIONS.remove(uuid);
 		MorePacketsCheck.LAST_PACKET_TIME.remove(uuid);
 		MorePacketsCheck.PACKET_BALANCE.remove(uuid);
+		MorePacketsCheck.EXEMPT_TIMINGS.remove(uuid);
 		GlideCheck.LAST_MOTION_Y.remove(uuid);
 		GlideCheck.LAST_FALL_DISTANCE.remove(uuid);
 		GlideCheck.VIOLATIONS.remove(uuid);
@@ -312,13 +312,14 @@ public class Backend {
 				if (this.fastSneakViolations.containsKey(player.getUniqueId())) {
 					int flags = this.fastSneakViolations.get(player.getUniqueId());
 					if (flags >= 3) { // TODO possible config
+						this.fastSneakViolations.put(player.getUniqueId(), flags - 1);
 						return new CheckResult(CheckResult.Result.FAILED,
 								"was sneaking too fast (speed=" + i + ", max=" + magic.XZ_SPEED_MAX_SNEAK() + ")");
 					}
 					this.fastSneakViolations.put(player.getUniqueId(), flags + 1);
 					return PASS;
 				} else {
-					this.fastSneakViolations.put(player.getUniqueId(), 1);
+					this.fastSneakViolations.put(player.getUniqueId(), 0);
 					return PASS;
 				}
 			} else {
@@ -799,6 +800,7 @@ public class Backend {
 
 	public void logJoin(final Player player) {
 		FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + magic.JOIN_TIME());
+		MorePacketsCheck.EXEMPT_TIMINGS.put(player.getUniqueId(), System.currentTimeMillis() + magic.JOIN_TIME());
 	}
 
 	public boolean isMovingExempt(Player player) {

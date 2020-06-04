@@ -50,6 +50,8 @@ public class Config extends ConfigurationFile {
 
     public ConfigValue<List<String>> disabledWorlds;
     public ConfigValue<List<String>> disabledChecks;
+    
+    public ConfigValue<Integer> notifyEveryVl;
 
     public Config(AntiCheatReloaded plugin, Configuration config) {
         super(plugin, config, FILENAME);
@@ -80,5 +82,10 @@ public class Config extends ConfigurationFile {
 
         disabledWorlds = new ConfigValue<List<String>>("disable-in");
         disabledChecks = new ConfigValue<List<String>>("disabled-checks");
+        
+        notifyEveryVl = new ConfigValue<Integer>("system.notify-every-vl");
+        if (notifyEveryVl.getValue() < 1) {
+        	notifyEveryVl.setValue(5);
+        }
     }
 }

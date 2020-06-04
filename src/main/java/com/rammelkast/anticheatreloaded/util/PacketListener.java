@@ -37,7 +37,6 @@ public class PacketListener {
 			@Override
 			public void onPacketReceiving(PacketEvent event) {
 				Player player = event.getPlayer();
-				User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
 				
 				// Run MorePackets check
 				MorePacketsCheck.runCheck(player, event);
@@ -51,7 +50,6 @@ public class PacketListener {
 			@Override
 			public void onPacketSending(PacketEvent event) {
 				Player player = event.getPlayer();
-				User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
 				
 				// Compensate for teleport
 				MorePacketsCheck.compensate(player);
