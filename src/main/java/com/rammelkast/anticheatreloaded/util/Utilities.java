@@ -31,6 +31,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Boat;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.NumberConversions;
@@ -119,6 +121,14 @@ public final class Utilities {
 	public static boolean isNotNearSlime(Block block) {
 		return !isSlime(block.getRelative(BlockFace.NORTH)) && !isSlime(block.getRelative(BlockFace.EAST))
 				&& !isSlime(block.getRelative(BlockFace.SOUTH)) && !isSlime(block.getRelative(BlockFace.WEST)) && !isSlime(block.getRelative(BlockFace.DOWN));
+	}
+	
+	public static boolean couldBeOnBoat(Player player) {
+		for (Entity entity : player.getNearbyEntities(0.25, 0.25, 0.25)) {
+			if (entity instanceof Boat)
+				return true;
+		}
+		return false;
 	}
 	
 	/**

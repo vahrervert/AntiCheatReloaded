@@ -124,7 +124,8 @@ public class SpeedCheck {
 				&& !VersionUtil.isRiptiding(player)
 				&& !Utilities.isNearBed(distance.getTo())
 				&& !Utilities.isSlime(AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
-						.getGoodLocation(player.getLocation()).getBlock())) {
+						.getGoodLocation(player.getLocation()).getBlock())
+				&& !Utilities.couldBeOnBoat(player)) {
 			return new CheckResult(CheckResult.Result.FAILED,
 					"y speed was too high (speed=" + distance.getYDifference() + ", max=" + backend.getMagic().Y_SPEED_MAX() + ")");
 		} else {

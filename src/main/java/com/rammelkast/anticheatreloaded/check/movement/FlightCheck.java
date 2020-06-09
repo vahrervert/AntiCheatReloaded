@@ -60,7 +60,8 @@ public class FlightCheck {
 				&& Utilities.blockIsnt(player.getLocation().getBlock().getRelative(BlockFace.DOWN),
 						new Material[] { Utilities.IRON_BARS })
 				&& Utilities.blockIsnt(player.getLocation().getBlock().getRelative(BlockFace.DOWN),
-						new String[] { "FENCE", "FENCE_GATE" })) {
+						new String[] { "FENCE", "FENCE_GATE" })
+				&& !Utilities.couldBeOnBoat(player)) {
 			if (!BLOCKS_OVER_FLIGHT.containsKey(uuid)) {
 				BLOCKS_OVER_FLIGHT.put(uuid, 0D);
 			}

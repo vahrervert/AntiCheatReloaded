@@ -798,6 +798,11 @@ public class Backend {
 	public void logExitFly(final Player player) {
 		FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + magic.EXIT_FLY_TIME());
 	}
+	
+	public void logBoatCollision(final Player player) {
+		// TODO config
+		FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + 100 /* 2 ticks */);
+	}
 
 	public void logJoin(final Player player) {
 		FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + magic.JOIN_TIME());

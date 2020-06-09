@@ -248,7 +248,7 @@ MOREPACKETS_TELEPORT_COMPENSATION: 200
 # The amount of milliseconds that were offset to flag for MorePackets (50ms = 1 tick)
 # Increase this in case of false positives
 # Can be decreased in to tighten check
-MOREPACKETS_TRIGGER_BALANCE: 50
+MOREPACKETS_TRIGGER_BALANCE: 100
 # The maximum amount of overall lag compensating in milliseconds (50ms = 1 tick)
 # Increase this in case of false positives
 # Can be decreased in to tighten check
