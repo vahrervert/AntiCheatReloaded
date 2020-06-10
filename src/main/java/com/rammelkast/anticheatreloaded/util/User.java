@@ -55,6 +55,8 @@ public class User {
 	private long lastServerPing, lastClientPong;
 	private int ping = -1;
 	private int lastPing = -1;
+	
+	private MovementManager movementManager;
 
 	/**
 	 * Initialize an AntiCheat user
@@ -65,6 +67,7 @@ public class User {
 		this.uuid = uuid;
 		this.name = getPlayer() != null && getPlayer().isOnline() ? getPlayer().getName() : "";
 		this.id = getPlayer() != null && getPlayer().isOnline() ? getPlayer().getEntityId() : -1;
+		this.movementManager = new MovementManager();
 	}
 
 	/**
@@ -218,7 +221,12 @@ public class User {
 			return location;
 		}
 
-		return goodLocation;
+		Location moveTo = goodLocation;
+		if (location != null) {
+			moveTo.setPitch(location.getPitch());
+			moveTo.setYaw(location.getYaw());
+		}
+		return moveTo;
 	}
 
 	/**
@@ -451,6 +459,10 @@ public class User {
 
 	public boolean isLagging() {
 		return Math.abs(this.ping - this.lastPing) > config.getMagic().LAG_DETERMINATION();
+	}
+	
+	public MovementManager getMovementManager() {
+		return this.movementManager;
 	}
 
 	@Override

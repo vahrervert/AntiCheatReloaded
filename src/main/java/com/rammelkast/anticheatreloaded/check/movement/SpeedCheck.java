@@ -22,8 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -31,88 +30,92 @@ import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.Backend;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Distance;
+import com.rammelkast.anticheatreloaded.util.MovementManager;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
- * This check is an outdated mess which needs to be replaced
+ * @author Rammelkast
+ *
+ * Features:
+ * + AirSpeed A
+ * + AirAcceleration A
+ * + JumpBehaviour A
+ * 
+ * Planned:
+ * + GroundSpeed A
+ * + GroundAcceleration A
+ * + AirSpeed B
+ * + JumpBehaviour B
  */
 public class SpeedCheck {
 
-	public static final Map<UUID, Integer> SPEED_VIOLATIONS = new HashMap<UUID, Integer>();
+	public static final Map<UUID, Integer> JUMPBEHAVIOUR_VIOLATIONS = new HashMap<UUID, Integer>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
 	public static boolean isSpeedExempt(Player player, Backend backend) {
 		return backend.isMovingExempt(player) || backend.justVelocity(player) || VersionUtil.isFlying(player);
 	}
 
-	public static CheckResult checkXZSpeed(Player player, double x, double z) {
+	public static CheckResult checkXZSpeed(Player player, double x, double z, Location movingTowards) {
 		Backend backend = AntiCheatReloaded.getManager().getBackend();
-		if (!isSpeedExempt(player, backend) && player.getVehicle() == null) {
-			String reason = "";
-			double max = backend.getMagic().XZ_SPEED_MAX();
-			if (player.getLocation().getBlock().getType() == Material.SOUL_SAND) {
-				if (player.isSprinting()) {
-					reason = "on soulsand while sprinting ";
-					max = backend.getMagic().XZ_SPEED_MAX_SOULSAND_SPRINT();
-				} else if (player.hasPotionEffect(PotionEffectType.SPEED)) {
-					reason = "on soulsand with speed potion ";
-					max = backend.getMagic().XZ_SPEED_MAX_SOULSAND_POTION();
-				} else {
-					reason = "on soulsand ";
-					max = backend.getMagic().XZ_SPEED_MAX_SOULSAND();
-				}
-			} else if (VersionUtil.isFlying(player)) {
-				reason = "while flying ";
-				max = backend.getMagic().XZ_SPEED_MAX_FLY();
-			} else if (player.hasPotionEffect(PotionEffectType.SPEED)) {
-				if (player.isSprinting()) {
-					reason = "with speed potion while sprinting ";
-					max = backend.getMagic().XZ_SPEED_MAX_POTION_SPRINT();
-				} else {
-					reason = "with speed potion ";
-					max = backend.getMagic().XZ_SPEED_MAX_POTION();
-				}
-			} else if (player.isSprinting()) {
-				String blockDownName = player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().name();
-				if (blockDownName.endsWith("ICE")
-						&& (player.getEyeLocation().getBlock().getRelative(BlockFace.UP).getType() != Material.AIR)) {
-					if (player.getLocation().getBlock().getType().name().endsWith("TRAPDOOR")) {
-						reason = "while boosting on " + blockDownName.toLowerCase().replaceAll("_", " ")
-								+ " and trapdoor";
-						max = backend.getMagic().XZ_SPEED_MAX_SPRINT()
-								+ (blockDownName.equals("BLUE_ICE") ? 0.35925D : 0.35D);
-					} else {
-						reason = "while boosting on " + blockDownName.toLowerCase().replaceAll("_", " ") + " ";
-						max = backend.getMagic().XZ_SPEED_MAX_SPRINT()
-								+ (blockDownName.equals("BLUE_ICE") ? 0.20925D : 0.2D);
-					}
-				} else {
-					reason = "while sprinting ";
-					max = backend.getMagic().XZ_SPEED_MAX_SPRINT();
-				}
-			}
-
-			float speed = player.getWalkSpeed();
-			max += speed > 0 ? player.getWalkSpeed() - 0.2f : 0;
-
-			if (x > max || z > max) {
-				int num = backend.increment(player, SPEED_VIOLATIONS, backend.getMagic().SPEED_MAX());
-				if (num >= backend.getMagic().SPEED_MAX()) {
-					return new CheckResult(CheckResult.Result.FAILED,
-							"speed was too high " + reason + num + " times in a row (max="
-									+ backend.getMagic().SPEED_MAX() + ", speed=" + (x > z ? x : z) + ", max speed="
-									+ max + ")");
-				} else {
-					return PASS;
-				}
-			} else {
-				SPEED_VIOLATIONS.put(player.getUniqueId(), 0);
-				return PASS;
-			}
-		} else {
+		if (isSpeedExempt(player, backend) || player.getVehicle() != null)
 			return PASS;
+
+		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
+				.getMovementManager();
+		double distanceXZ = Math.sqrt(x * x + z * z);
+
+		// AirSpeed A
+		// As of right now, this falses with speed effects and slimes
+		if (movementManager.airTicks > 1) {
+			double multiplier = 0.9808305131D;
+			double predict = 0.3597320645 * Math.pow(multiplier, movementManager.airTicks + 1);
+			// Adjust for ice boost
+			if (movementManager.iceInfluenceTicks > 0) {
+				predict += 0.105 * Math.pow(1.09, movementManager.iceInfluenceTicks);
+			}
+			if (distanceXZ - predict > 0.03075) {
+				return new CheckResult(CheckResult.Result.FAILED,
+						"moved too fast in air (speed=" + distanceXZ + ", predict=" + predict + ")");
+			}
 		}
+
+		// AirAcceleration A
+		// As of right now, this falses with speed effects and slimes
+		if (movementManager.airTicks > 1 && movementManager.iceInfluenceTicks <= 0) {
+			double initialAcceleration = movementManager.acceleration;
+			// TODO calculate instead of defined value
+			if (initialAcceleration > 0.36) {
+				return new CheckResult(CheckResult.Result.FAILED,
+						"exceeded acceleration limits (acceleration=" + initialAcceleration + ", max=0.36)");
+			}
+		}
+
+		// JumpBehaviour A
+		// Has a rare false positive when sprintjumping around corners
+		// Works against YPorts and mini jumps
+		if (movementManager.touchedGroundThisTick) {
+			// This happens naturally as well when walking next to walls
+			if (movementManager.airTicksBeforeGrounded == movementManager.groundTicks) {
+				boolean movingFreely = Utilities.cantStandClose(movingTowards.getBlock())
+						&& Utilities.cantStandFar(movingTowards.getBlock());
+				if (movingFreely) {
+					int vl = JUMPBEHAVIOUR_VIOLATIONS.getOrDefault(player.getUniqueId(), 0);
+					// TODO config for this value
+					if (vl++ > 1) {
+						JUMPBEHAVIOUR_VIOLATIONS.remove(player.getUniqueId());
+						return new CheckResult(CheckResult.Result.FAILED,
+								"had unexpected jumping behaviour");
+					}
+					JUMPBEHAVIOUR_VIOLATIONS.put(player.getUniqueId(), vl);
+					return PASS;
+				} else {
+					JUMPBEHAVIOUR_VIOLATIONS.remove(player.getUniqueId());
+				}
+			}
+		}
+		return PASS;
 	}
 
 	public static CheckResult checkYSpeed(Player player, Distance distance) {
@@ -121,13 +124,12 @@ public class SpeedCheck {
 				&& (distance.getYDifference() > backend.getMagic().Y_SPEED_MAX())
 				&& !backend.isDoing(player, backend.velocitized, backend.getMagic().VELOCITY_TIME())
 				&& !player.hasPotionEffect(PotionEffectType.JUMP) && !VersionUtil.isFlying(player)
-				&& !VersionUtil.isRiptiding(player)
-				&& !Utilities.isNearBed(distance.getTo())
+				&& !VersionUtil.isRiptiding(player) && !Utilities.isNearBed(distance.getTo())
 				&& !Utilities.isSlime(AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
 						.getGoodLocation(player.getLocation()).getBlock())
 				&& !Utilities.couldBeOnBoat(player)) {
-			return new CheckResult(CheckResult.Result.FAILED,
-					"y speed was too high (speed=" + distance.getYDifference() + ", max=" + backend.getMagic().Y_SPEED_MAX() + ")");
+			return new CheckResult(CheckResult.Result.FAILED, "y speed was too high (speed=" + distance.getYDifference()
+					+ ", max=" + backend.getMagic().Y_SPEED_MAX() + ")");
 		} else {
 			return PASS;
 		}

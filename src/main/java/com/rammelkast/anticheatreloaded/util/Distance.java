@@ -43,6 +43,18 @@ public class Distance {
 		this.from = from;
 		this.to = to;
 	}
+	
+	public Distance() {
+		l1Y = 0;
+		l2Y = 0;
+
+		XDiff = 0;
+		ZDiff = 0;
+		YDiff = 0;
+		
+		this.from = null;
+		this.to = null;
+	}
 
 	public double fromY() {
 		return l2Y;

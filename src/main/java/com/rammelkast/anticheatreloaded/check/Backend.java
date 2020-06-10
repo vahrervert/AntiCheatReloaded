@@ -166,7 +166,7 @@ public class Backend {
 		GlideCheck.LAST_MOTION_Y.remove(uuid);
 		GlideCheck.LAST_FALL_DISTANCE.remove(uuid);
 		GlideCheck.VIOLATIONS.remove(uuid);
-		SpeedCheck.SPEED_VIOLATIONS.remove(uuid);
+		SpeedCheck.JUMPBEHAVIOUR_VIOLATIONS.remove(uuid);
 		ElytraCheck.JUMP_Y_VALUE.remove(uuid);
 		KillAuraCheck.ANGLE_FLAGS.remove(uuid);
 		FlightCheck.MOVING_EXEMPT.remove(uuid);
@@ -780,7 +780,8 @@ public class Backend {
 	}
 
 	public void logTeleport(final Player player) {
-		FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + magic.TELEPORT_TIME());
+		// TODO check this
+		//FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + magic.TELEPORT_TIME());
 
 		/* Data for fly/speed should be reset */
 		nofallViolation.remove(player.getUniqueId());

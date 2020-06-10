@@ -21,29 +21,32 @@ Please include the following information with your issue, this allows me to fix 
 
 Hacks blocked
 -------
-* Flight
-* Glide
-* FastLadder
-* Jesus
-* Step
-* Criticals
-* Anti-Knockback
-* FastBow
-* FastDrop
-* Reach
-* Spider
-* Speed
-* NoFall
-* Sneak
-* vClip
+* Flight/Glide
+* ElytraFly
+* WaterWalk/Jesus
+* NoSwing
 * FastBreak
 * FastPlace
-* Spam
+* Chat spam
+* Command spam
+* Sprint
+* (Packet)Sneak
+* Speed
+* Vclip
+* Spider
+* NoFall
+* FastBow
 * FastEat
-* ElytraFly
+* FastHeal
+* KillAura (Aimbot)
+* Reach
 * Unicode chat
-* GhostHand
-* KillAura
-* Scaffold
-* MorePackets
+* FastProjectile
+* ItemSpam
+* FastInventory
+* AutoTool
+* MorePackets/Timer
 * BadPackets
+* Velocity/Anti-Knockback
+* IllegalInteract (Scaffold)
+* FastLadder

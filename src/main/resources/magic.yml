@@ -244,11 +244,11 @@ GLIDE_LIMIT: 5
 # The amount of milliseconds to compensate for a teleport (50ms = 1 tick)
 # Increase this in case of false positives
 # Can be decreased in to tighten check
-MOREPACKETS_TELEPORT_COMPENSATION: 200
+MOREPACKETS_TELEPORT_COMPENSATION: 150
 # The amount of milliseconds that were offset to flag for MorePackets (50ms = 1 tick)
 # Increase this in case of false positives
 # Can be decreased in to tighten check
-MOREPACKETS_TRIGGER_BALANCE: 100
+MOREPACKETS_TRIGGER_BALANCE: 50
 # The maximum amount of overall lag compensating in milliseconds (50ms = 1 tick)
 # Increase this in case of false positives
 # Can be decreased in to tighten check

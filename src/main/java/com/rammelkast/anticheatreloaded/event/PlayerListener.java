@@ -366,6 +366,7 @@ public class PlayerListener extends EventListener {
 
             final User user = getUserManager().getUser(player.getUniqueId());
             user.setTo(to.getX(), to.getY(), to.getZ());
+            user.getMovementManager().handle(player, from, to, distance);
             
             if (getCheckManager().willCheckQuick(player, CheckType.FLIGHT) && !VersionUtil.isFlying(player)) {
                 CheckResult result = FlightCheck.runCheck(player, distance);
@@ -430,7 +431,7 @@ public class PlayerListener extends EventListener {
                             changed = true;
                         }
                     }
-                    CheckResult result = SpeedCheck.checkXZSpeed(player, x, z);
+                    CheckResult result = SpeedCheck.checkXZSpeed(player, x, z, event.getTo());
                     if (result.failed()) {
                         if (!silentMode()) {
                             event.setTo(user.getGoodLocation(from.clone()));

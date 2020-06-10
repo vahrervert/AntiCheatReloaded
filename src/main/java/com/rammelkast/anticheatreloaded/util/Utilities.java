@@ -132,6 +132,41 @@ public final class Utilities {
 	}
 	
 	/**
+	 * Determine whether a player could be standing on ice
+	 *
+	 * @param location the location to check
+	 * @return true if the player could be standing on ice
+	 */
+	public static boolean couldBeOnIce(Location location) {
+		return isNearIce(new Location(location.getWorld(), fixXAxis(location.getX()), location.getY() - 0.01D,
+				location.getBlockZ()));
+	}
+	
+	
+	/**
+	 * Determine whether a block is a type of ice
+	 *
+	 * @param block block to check
+	 * @return true if block is a type of ice
+	 */
+	public static boolean isIce(Block block) {
+		Material type = block.getType();
+		return type.name().endsWith("ICE");
+	}
+	
+	public static boolean isNearIce(Location location) {
+		return isIce(location.getBlock())
+				|| isIce(location.getBlock().getRelative(BlockFace.NORTH))
+				|| isIce(location.getBlock().getRelative(BlockFace.SOUTH))
+				|| isIce(location.getBlock().getRelative(BlockFace.EAST))
+				|| isIce(location.getBlock().getRelative(BlockFace.WEST))
+				|| isIce(location.getBlock().getRelative(BlockFace.NORTH_EAST))
+				|| isBed(location.getBlock().getRelative(BlockFace.NORTH_WEST))
+				|| isIce(location.getBlock().getRelative(BlockFace.SOUTH_EAST))
+				|| isIce(location.getBlock().getRelative(BlockFace.SOUTH_WEST));
+	}
+	
+	/**
 	 * Determine whether a player is fully submerged in water
 	 *
 	 * @param player the player's location

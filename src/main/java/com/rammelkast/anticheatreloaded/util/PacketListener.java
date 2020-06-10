@@ -33,7 +33,7 @@ public class PacketListener {
 	public static void listenMovementPackets() {
 		AntiCheatReloaded.getProtocolManager()
 		.addPacketListener(new PacketAdapter(AntiCheatReloaded.getPlugin(), ListenerPriority.LOWEST,
-				new PacketType[] { PacketType.Play.Client.POSITION, PacketType.Play.Client.POSITION_LOOK}) {
+				new PacketType[] { PacketType.Play.Client.POSITION, PacketType.Play.Client.POSITION_LOOK, PacketType.Play.Server.POSITION }) {
 			@Override
 			public void onPacketReceiving(PacketEvent event) {
 				Player player = event.getPlayer();
@@ -50,7 +50,6 @@ public class PacketListener {
 			@Override
 			public void onPacketSending(PacketEvent event) {
 				Player player = event.getPlayer();
-				
 				// Compensate for teleport
 				MorePacketsCheck.compensate(player);
 			}
