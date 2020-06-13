@@ -117,15 +117,6 @@ public class EntityListener extends EventListener {
                     getBackend().logDamage(p, 1);
                     int value = VersionUtil.getItemInHand(player).containsEnchantment(Enchantment.KNOCKBACK) ? 2 : 1;
                     getBackend().logDamage(player, value);
-                    if (getCheckManager().willCheck(p, CheckType.LONG_REACH)) {
-                        Distance distance = new Distance(player.getLocation(), p.getLocation());
-                        CheckResult result = getBackend().checkLongReachDamage(player, distance.getXDifference(), distance.getYDifference(), distance.getZDifference());
-                        if (result.failed()) {
-                            event.setCancelled(!silentMode());
-                            log(result.getMessage(), p, CheckType.LONG_REACH);
-                            noHack = false;
-                        }
-                    }
                 } else {
                     if (e.getDamager() instanceof TNTPrimed || e.getDamager() instanceof Creeper) {
                         getBackend().logDamage(player, 3);
@@ -155,6 +146,14 @@ public class EntityListener extends EventListener {
                 }
                 if (getCheckManager().willCheck(player, CheckType.KILLAURA)) {
                     CheckResult result = KillAuraCheck.checkAngle(player, event);
+                    if (result.failed()) {
+                        event.setCancelled(!silentMode());
+                        log(result.getMessage(), player, CheckType.KILLAURA);
+                        noHack = false;
+                    }
+                }
+                if (getCheckManager().willCheck(player, CheckType.KILLAURA)) {
+                    CheckResult result = KillAuraCheck.checkReach(player, event.getEntity());
                     if (result.failed()) {
                         event.setCancelled(!silentMode());
                         log(result.getMessage(), player, CheckType.KILLAURA);

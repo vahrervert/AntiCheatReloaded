@@ -166,12 +166,9 @@ public class Backend {
 		GlideCheck.LAST_MOTION_Y.remove(uuid);
 		GlideCheck.LAST_FALL_DISTANCE.remove(uuid);
 		GlideCheck.VIOLATIONS.remove(uuid);
-		SpeedCheck.JUMPBEHAVIOUR_VIOLATIONS.remove(uuid);
 		ElytraCheck.JUMP_Y_VALUE.remove(uuid);
 		KillAuraCheck.ANGLE_FLAGS.remove(uuid);
 		FlightCheck.MOVING_EXEMPT.remove(uuid);
-		FlightCheck.ASCENSION_COUNT.remove(uuid);
-		FlightCheck.BLOCKS_OVER_FLIGHT.remove(uuid);
 		YAxisCheck.Y_AXIS_VIOLATIONS.remove(uuid);
 		YAxisCheck.LAST_Y_AXIS_VIOLATION.remove(uuid);
 		YAxisCheck.LAST_Y_COORD_CACHE.remove(uuid);
@@ -249,18 +246,6 @@ public class Backend {
 			} else {
 				return PASS;
 			}
-		}
-	}
-
-	public CheckResult checkLongReachDamage(Player player, double x, double y, double z) {
-		String string = "reached too far for an entity";
-		double i = x >= magic.ENTITY_MAX_DISTANCE() ? x
-				: y > magic.ENTITY_MAX_DISTANCE() ? y : z > magic.ENTITY_MAX_DISTANCE() ? z : -1;
-		if (i != -1) {
-			return new CheckResult(CheckResult.Result.FAILED,
-					string + " (distance=" + i + ", max=" + magic.ENTITY_MAX_DISTANCE() + ")");
-		} else {
-			return PASS;
 		}
 	}
 
@@ -785,7 +770,6 @@ public class Backend {
 
 		/* Data for fly/speed should be reset */
 		nofallViolation.remove(player.getUniqueId());
-		FlightCheck.BLOCKS_OVER_FLIGHT.remove(player.getUniqueId());
 		YAxisCheck.Y_AXIS_VIOLATIONS.remove(player.getUniqueId());
 		YAxisCheck.LAST_Y_AXIS_VIOLATION.remove(player.getUniqueId());
 		YAxisCheck.LAST_Y_COORD_CACHE.remove(player.getUniqueId());

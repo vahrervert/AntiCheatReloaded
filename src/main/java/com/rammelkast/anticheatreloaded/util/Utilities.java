@@ -113,10 +113,6 @@ public final class Utilities {
 	public static boolean canStand(Block block) {
 		return !(block.isLiquid() || block.getType() == Material.AIR);
 	}
-
-	public static boolean isSlime(Block block) {
-		return block.getType() == Material.SLIME_BLOCK;
-	}
 	
 	public static boolean isNotNearSlime(Block block) {
 		return !isSlime(block.getRelative(BlockFace.NORTH)) && !isSlime(block.getRelative(BlockFace.EAST))
@@ -124,7 +120,7 @@ public final class Utilities {
 	}
 	
 	public static boolean couldBeOnBoat(Player player) {
-		for (Entity entity : player.getNearbyEntities(0.25, 0.25, 0.25)) {
+		for (Entity entity : player.getNearbyEntities(0.3, 0.3, 0.3)) {
 			if (entity instanceof Boat)
 				return true;
 		}
@@ -161,9 +157,74 @@ public final class Utilities {
 				|| isIce(location.getBlock().getRelative(BlockFace.EAST))
 				|| isIce(location.getBlock().getRelative(BlockFace.WEST))
 				|| isIce(location.getBlock().getRelative(BlockFace.NORTH_EAST))
-				|| isBed(location.getBlock().getRelative(BlockFace.NORTH_WEST))
+				|| isIce(location.getBlock().getRelative(BlockFace.NORTH_WEST))
 				|| isIce(location.getBlock().getRelative(BlockFace.SOUTH_EAST))
 				|| isIce(location.getBlock().getRelative(BlockFace.SOUTH_WEST));
+	}
+	
+	/**
+	 * Determine whether a player could be standing on a halfblock
+	 *
+	 * @param location the location to check
+	 * @return true if the player could be standing on a halfblock
+	 */
+	public static boolean couldBeOnHalfblock(Location location) {
+		return isNearHalfblock(new Location(location.getWorld(), location.getX(), location.getY() - 0.01D,
+				location.getBlockZ())) || isNearHalfblock(new Location(location.getWorld(), location.getX(), location.getY() - 0.51D,
+						location.getBlockZ()));
+	}
+	
+	public static boolean isNearHalfblock(Location location) {
+		return isHalfblock(location.getBlock())
+				|| isHalfblock(location.getBlock().getRelative(BlockFace.NORTH))
+				|| isHalfblock(location.getBlock().getRelative(BlockFace.SOUTH))
+				|| isHalfblock(location.getBlock().getRelative(BlockFace.EAST))
+				|| isHalfblock(location.getBlock().getRelative(BlockFace.WEST))
+				|| isHalfblock(location.getBlock().getRelative(BlockFace.NORTH_EAST))
+				|| isHalfblock(location.getBlock().getRelative(BlockFace.NORTH_WEST))
+				|| isHalfblock(location.getBlock().getRelative(BlockFace.SOUTH_EAST))
+				|| isHalfblock(location.getBlock().getRelative(BlockFace.SOUTH_WEST));
+	}
+	
+	public static boolean isHalfblock(Block block) {
+		return isSlab(block) || isStair(block);
+	}
+	
+	
+	/**
+	 * Determine whether a player could be standing on slime
+	 *
+	 * @param location the location to check
+	 * @return true if the player could be standing on slime
+	 */
+	public static boolean couldBeOnSlime(Location location) {
+		return isNearSlime(new Location(location.getWorld(), fixXAxis(location.getX()), location.getY() - 0.01D,
+				location.getBlockZ())) || isNearSlime(new Location(location.getWorld(), fixXAxis(location.getX()), location.getY() - 0.51D,
+						location.getBlockZ()));
+	}
+	
+	
+	/**
+	 * Determine whether a block is a type of slime
+	 *
+	 * @param block block to check
+	 * @return true if block is a type of slime
+	 */
+	public static boolean isSlime(Block block) {
+		Material type = block.getType();
+		return type.equals(XMaterial.SLIME_BLOCK.parseMaterial());
+	}
+	
+	public static boolean isNearSlime(Location location) {
+		return isSlime(location.getBlock())
+				|| isSlime(location.getBlock().getRelative(BlockFace.NORTH))
+				|| isSlime(location.getBlock().getRelative(BlockFace.SOUTH))
+				|| isSlime(location.getBlock().getRelative(BlockFace.EAST))
+				|| isSlime(location.getBlock().getRelative(BlockFace.WEST))
+				|| isSlime(location.getBlock().getRelative(BlockFace.NORTH_EAST))
+				|| isSlime(location.getBlock().getRelative(BlockFace.NORTH_WEST))
+				|| isSlime(location.getBlock().getRelative(BlockFace.SOUTH_EAST))
+				|| isSlime(location.getBlock().getRelative(BlockFace.SOUTH_WEST));
 	}
 	
 	/**
@@ -411,7 +472,7 @@ public final class Utilities {
 	 * @return true if on vine
 	 */
 	public static boolean isOnVine(Player player) {
-		return player.getLocation().getBlock().getType() == Material.VINE;
+		return player.getLocation().getBlock().getType() == XMaterial.VINE.parseMaterial();
 	}
 
 	/**
@@ -453,7 +514,7 @@ public final class Utilities {
 	 * @return time in milliseconds to break
 	 */
 	public static long calcSurvivalFastBreak(ItemStack tool, Material block) {
-		if (isInstantBreak(block) || (tool.getType() == Material.SHEARS && block.name().endsWith("LEAVES"))) {
+		if (isInstantBreak(block) || (tool.getType() == XMaterial.SHEARS.parseMaterial() && block.name().endsWith("LEAVES"))) {
 			return 0;
 		}
 		double bhardness = BlockHardness.getBlockHardness(block);
@@ -668,7 +729,7 @@ public final class Utilities {
 		if (!VersionUtil.isOfVersion("v1_15")) {
 			return false;
 		}
-		return block.getType() == Material.HONEY_BLOCK;
+		return block.getType() == XMaterial.HONEY_BLOCK.parseMaterial();
 	}
 
 	static {

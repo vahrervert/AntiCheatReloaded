@@ -51,7 +51,6 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
-import org.bukkit.event.vehicle.VehicleCollisionEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -67,7 +66,6 @@ import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
 import com.rammelkast.anticheatreloaded.check.movement.GlideCheck;
 import com.rammelkast.anticheatreloaded.check.movement.SpeedCheck;
 import com.rammelkast.anticheatreloaded.check.movement.WaterWalkCheck;
-import com.rammelkast.anticheatreloaded.check.movement.YAxisCheck;
 import com.rammelkast.anticheatreloaded.util.Distance;
 import com.rammelkast.anticheatreloaded.util.Permission;
 import com.rammelkast.anticheatreloaded.util.User;
@@ -422,7 +420,7 @@ public class PlayerListener extends EventListener {
                 double z = distance.getZDifference();
                 if (getCheckManager().willCheckQuick(player, CheckType.SPEED) && getCheckManager().willCheck(player, CheckType.FLIGHT)) {
                     if (event.getFrom().getY() < event.getTo().getY()) {
-                        CheckResult result = SpeedCheck.checkYSpeed(player, distance);
+                        CheckResult result = SpeedCheck.checkVerticalSpeed(player, distance);
                         if (result.failed()) {
                             if (!silentMode()) {
                                 event.setTo(user.getGoodLocation(from.clone()));
@@ -502,29 +500,4 @@ public class PlayerListener extends EventListener {
     	getBackend().logTeleport(event.getPlayer());
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void checkFly(PlayerMoveEvent event) {
-        // Check flight on highest to make sure other plugins have a chance to change the values first.
-        final Player player = event.getPlayer();
-        final User user = getUserManager().getUser(player.getUniqueId());
-        final Location from = event.getFrom();
-        final Location to = event.getTo();
-
-        if (!user.checkTo(to.getX(), to.getY(), to.getZ())) {
-            // The to value has been modified by another plugin
-            return;
-        }
-
-        if (getCheckManager().willCheck(player, CheckType.FLIGHT) && !player.isFlying()) {
-            CheckResult result1 = YAxisCheck.runCheck(player, new Distance(from, to));
-            CheckResult result2 = FlightCheck.checkAscension(player, from.getY(), to.getY());
-            String log = result1.failed() ? result1.getMessage() : result2.failed() ? result2.getMessage() : "";
-            if (!log.equals("")) {
-                if (!silentMode()) {
-                    event.setTo(user.getGoodLocation(from.clone()));
-                }
-                log(log, player, CheckType.FLIGHT);
-            }
-        }
-    }
 }

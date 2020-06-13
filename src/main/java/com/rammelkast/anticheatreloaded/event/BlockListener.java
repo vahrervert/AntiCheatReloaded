@@ -103,7 +103,8 @@ public class BlockListener extends EventListener {
                 noHack = false;
             }
         }
-        if (getCheckManager().willCheck(player, CheckType.LONG_REACH)) {
+        // TODO fix
+       /* if (getCheckManager().willCheck(player, CheckType.LONG_REACH)) {
             Distance distance = new Distance(player.getLocation(), block.getLocation());
             result = getBackend().checkLongReachBlock(player, distance.getXDifference(), distance.getYDifference(), distance.getZDifference());
             if (result.failed()) {
@@ -111,7 +112,7 @@ public class BlockListener extends EventListener {
                 log(result.getMessage(), player, CheckType.LONG_REACH);
                 noHack = false;
             }
-        }
+        }*/
         if (getCheckManager().willCheck(player, CheckType.ILLEGAL_INTERACT)) {
             result = IllegalInteract.performCheck(player, event);
             if (result.failed()) {

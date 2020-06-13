@@ -18,11 +18,8 @@
  */
 package com.rammelkast.anticheatreloaded.check.movement;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -41,6 +38,7 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
  * + AirSpeed A
  * + AirAcceleration A
  * + JumpBehaviour A
+ * + VerticalSpeed
  * 
  * Planned:
  * + GroundSpeed A
@@ -50,7 +48,6 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
  */
 public class SpeedCheck {
 
-	public static final Map<UUID, Integer> JUMPBEHAVIOUR_VIOLATIONS = new HashMap<UUID, Integer>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
 	public static boolean isSpeedExempt(Player player, Backend backend) {
@@ -65,74 +62,145 @@ public class SpeedCheck {
 		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
 				.getMovementManager();
 		double distanceXZ = Math.sqrt(x * x + z * z);
-
+		boolean boxedIn = movementManager.topSolid && movementManager.bottomSolid;
+		
 		// AirSpeed A
-		// As of right now, this falses with speed effects and slimes
 		if (movementManager.airTicks > 1) {
 			double multiplier = 0.9808305131D;
 			double predict = 0.3597320645 * Math.pow(multiplier, movementManager.airTicks + 1);
-			// Adjust for ice boost
+			double limit = 0.03075D;
+			// Adjust for ice
 			if (movementManager.iceInfluenceTicks > 0) {
-				predict += 0.105 * Math.pow(1.09, movementManager.iceInfluenceTicks);
+				double iceIncrement = 0.02 * Math.pow(1.0375, movementManager.iceInfluenceTicks);
+				// Clamp to max value
+				if (iceIncrement > 0.18D)
+					iceIncrement = 0.18D;
+				if (boxedIn)
+					iceIncrement += 0.5D;
+				predict += iceIncrement;
 			}
-			if (distanceXZ - predict > 0.03075) {
+			// Adjust for slime
+			if (movementManager.slimeInfluenceTicks > 0) {
+				double slimeIncrement = 0.022 * Math.pow(1.0375, movementManager.slimeInfluenceTicks);
+				// Clamp to max value
+				if (slimeIncrement > 0.12D)
+					slimeIncrement = 0.12D;
+				predict += slimeIncrement;
+			}
+			// Adjust for speed effects
+			if (player.hasPotionEffect(PotionEffectType.SPEED))
+				predict += player.getPotionEffect(PotionEffectType.SPEED).getAmplifier() * 0.05D;
+			// Adjust for custom walking speed
+			predict += 1.4D * (Math.pow(1.1, ((player.getWalkSpeed() / 0.20) - 1)) - 1);
+			// Slabs sometimes allow for a slight boost after jump
+			if (movementManager.halfMovementHistoryCounter > 0)
+				predict *= 2.125D;
+			if (Utilities.couldBeOnHalfblock(movingTowards) && movementManager.halfMovementHistoryCounter == 0)
+				predict *= 1.25D;
+			if (distanceXZ - predict > limit) {
 				return new CheckResult(CheckResult.Result.FAILED,
-						"moved too fast in air (speed=" + distanceXZ + ", predict=" + predict + ")");
+						"moved too fast in air (speed=" + distanceXZ + ", limit=" + predict + ")");
 			}
 		}
 
 		// AirAcceleration A
-		// As of right now, this falses with speed effects and slimes
-		if (movementManager.airTicks > 1 && movementManager.iceInfluenceTicks <= 0) {
+		// As of right now, this falses sometimes, dont know why
+		if (movementManager.airTicks > 1 && movementManager.iceInfluenceTicks <= 0 && movementManager.slimeInfluenceTicks <= 0) {
 			double initialAcceleration = movementManager.acceleration;
-			// TODO calculate instead of defined value
-			if (initialAcceleration > 0.36) {
+			double limit = 0.3725D;
+			// Adjust for speed effects
+			if (player.hasPotionEffect(PotionEffectType.SPEED) )
+				limit += player.getPotionEffect(PotionEffectType.SPEED).getAmplifier() * 0.0225D;
+			// Adjust for slabs
+			if (movementManager.halfMovementHistoryCounter > 15)
+				limit *= 2.0D;
+			// Adjust for custom walking speed
+			limit += 1.4D * (Math.pow(1.1, ((player.getWalkSpeed() / 0.20) - 1)) - 1);
+			if (initialAcceleration > limit) {
 				return new CheckResult(CheckResult.Result.FAILED,
-						"exceeded acceleration limits (acceleration=" + initialAcceleration + ", max=0.36)");
+						"exceeded acceleration limits (acceleration=" + initialAcceleration + ", max=" + limit + ")");
 			}
 		}
 
 		// JumpBehaviour A
-		// Has a rare false positive when sprintjumping around corners
 		// Works against YPorts and mini jumps
-		if (movementManager.touchedGroundThisTick) {
+		if (movementManager.touchedGroundThisTick && !boxedIn && movementManager.slimeInfluenceTicks <= 10) {
 			// This happens naturally as well when walking next to walls
 			if (movementManager.airTicksBeforeGrounded == movementManager.groundTicks) {
 				boolean movingFreely = Utilities.cantStandClose(movingTowards.getBlock())
 						&& Utilities.cantStandFar(movingTowards.getBlock());
-				if (movingFreely) {
-					int vl = JUMPBEHAVIOUR_VIOLATIONS.getOrDefault(player.getUniqueId(), 0);
-					// TODO config for this value
-					if (vl++ > 1) {
-						JUMPBEHAVIOUR_VIOLATIONS.remove(player.getUniqueId());
-						return new CheckResult(CheckResult.Result.FAILED,
-								"had unexpected jumping behaviour");
-					}
-					JUMPBEHAVIOUR_VIOLATIONS.put(player.getUniqueId(), vl);
-					return PASS;
-				} else {
-					JUMPBEHAVIOUR_VIOLATIONS.remove(player.getUniqueId());
+				// TODO calculation for distanceXZ value
+				if (movingFreely && distanceXZ >= 0.42) {
+					return new CheckResult(CheckResult.Result.FAILED,
+							"had unexpected jumping behaviour");
 				}
 			}
+		}
+		
+		// GroundSpeed A
+		if (movementManager.groundTicks > 1) {
+			 double limit = 0.34 - 0.0055 * Math.min(9, movementManager.groundTicks);
+			 if (movementManager.groundTicks < 5)
+				 limit += 0.1D;
+			 if (!Utilities.cantStandAtExp(movingTowards.clone().add(0, 0.51, 0))
+						|| !Utilities.cantStandAtExp(movingTowards.clone().add(0, 0.11, 0)))
+				 limit *= 2.2D;
+			 if (movementManager.halfMovementHistoryCounter > 8)
+				 limit += 0.2D;
+			 if (movementManager.iceInfluenceTicks >= 55) {
+				 if (!Utilities.isIce(movingTowards.getBlock().getRelative(BlockFace.DOWN)))
+					 limit += 0.75D;
+				 else {
+					 if (movementManager.topSolid && movementManager.bottomSolid)
+						 limit *= 2.5D;
+					 else
+						 limit += 0.03D;
+				 }
+			 }
+			 if (Utilities.isNearBed(movingTowards) || Utilities.couldBeOnHalfblock(movingTowards)
+						|| Utilities.isNearBed(movingTowards.clone().add(0, -0.5, 0)))
+				 limit *= 2.0D;
+			 if (Utilities.couldBeOnBoat(player))
+				 limit += 0.2D;
+			 if (movementManager.signInfluenceTicks > 0)
+				 limit += 0.08D;
+			 if (distanceXZ - limit > 0) {
+				 return new CheckResult(CheckResult.Result.FAILED,
+							"moved too fast on ground (speed=" + distanceXZ + ", limit=" + limit + ")");
+			 }
 		}
 		return PASS;
 	}
 
-	public static CheckResult checkYSpeed(Player player, Distance distance) {
+	public static CheckResult checkVerticalSpeed(Player player, Distance distance) {
 		Backend backend = AntiCheatReloaded.getManager().getBackend();
-		if (!backend.isMovingExempt(player) && !player.isInsideVehicle() && !player.isSleeping()
-				&& (distance.getYDifference() > backend.getMagic().Y_SPEED_MAX())
-				&& !backend.isDoing(player, backend.velocitized, backend.getMagic().VELOCITY_TIME())
-				&& !player.hasPotionEffect(PotionEffectType.JUMP) && !VersionUtil.isFlying(player)
-				&& !VersionUtil.isRiptiding(player) && !Utilities.isNearBed(distance.getTo())
-				&& !Utilities.isSlime(AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
-						.getGoodLocation(player.getLocation()).getBlock())
-				&& !Utilities.couldBeOnBoat(player)) {
-			return new CheckResult(CheckResult.Result.FAILED, "y speed was too high (speed=" + distance.getYDifference()
-					+ ", max=" + backend.getMagic().Y_SPEED_MAX() + ")");
-		} else {
+		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
+				.getMovementManager();
+		if (player.isInsideVehicle() || player.isSleeping()
+				|| backend.isDoing(player, backend.velocitized, backend.getMagic().VELOCITY_TIME()) || VersionUtil.isFlying(player)
+				|| VersionUtil.isRiptiding(player)) {
 			return PASS;
 		}
+		
+		double maxMotionY = getMaxAcceptableMotionY(player, Utilities.isNearBed(distance.getTo()),
+				Utilities.couldBeOnBoat(player), Utilities.isClimbableBlock(distance.getFrom().getBlock())
+						|| Utilities.isClimbableBlock(distance.getFrom().getBlock().getRelative(BlockFace.DOWN)));
+		if (movementManager.motionY > maxMotionY && movementManager.slimeInfluenceTicks <= 0
+				&& !movementManager.halfMovement) {
+			return new CheckResult(CheckResult.Result.FAILED,
+					"exceeded vertical speed limit (mY=" + movementManager.motionY + ", max=" + maxMotionY + ")");
+		}
+		return PASS;
+	}
+	
+	private static double getMaxAcceptableMotionY(Player player, boolean nearBed, boolean couldBeOnBoat, boolean fromClimbable) { 
+		double base = couldBeOnBoat ? 0.600000025 : (nearBed ? 0.5625 : 0.42);
+		if (fromClimbable)
+			base += 0.04;
+		if (player.hasPotionEffect(PotionEffectType.JUMP) ) {
+			base += player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() * 0.15D;
+		}
+		return base;
 	}
 
 }

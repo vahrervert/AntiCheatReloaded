@@ -43,9 +43,9 @@ public class MorePacketsCheck {
 
 	public static void runCheck(Player player, PacketEvent event) {
 		// Confirm if we should even check for MorePackets
-		// If your TPS is lower than 15 you are running a shitshow
+		// Upped TPS min to 17.5, need to add lag-based compensation to combat falses
 		double tps = AntiCheatReloaded.getPlugin().getTPS();
-		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.MOREPACKETS) || tps < 15) {
+		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.MOREPACKETS) || tps < 17.5) {
 			return;
 		}
 
