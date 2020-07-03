@@ -36,47 +36,50 @@ import java.util.UUID;
  */
 
 public enum CheckType {
-    FLIGHT(Permission.CHECK_FLIGHT),
-    ELYTRAFLY(Permission.CHECK_FLIGHT),
-    WATER_WALK(Permission.CHECK_WATERWALK),
-    NO_SWING(Permission.CHECK_NOSWING),
-    FAST_BREAK(Permission.CHECK_FASTBREAK),
-    FAST_PLACE(Permission.CHECK_FASTPLACE),
-    CHAT_SPAM(Permission.CHECK_CHATSPAM),
-    COMMAND_SPAM(Permission.CHECK_COMMANDSPAM),
-    SPRINT(Permission.CHECK_SPRINT),
-    SNEAK(Permission.CHECK_SNEAK),
-    SPEED(Permission.CHECK_SPEED),
-    VCLIP(Permission.CHECK_VCLIP),
-    SPIDER(Permission.CHECK_SPIDER),
-    NOFALL(Permission.CHECK_NOFALL),
-    FAST_BOW(Permission.CHECK_FASTBOW),
-    FAST_EAT(Permission.CHECK_FASTEAT),
-    FAST_HEAL(Permission.CHECK_FASTHEAL),
-    KILLAURA(Permission.CHECK_KILLAURA),
-    FAST_PROJECTILE(Permission.CHECK_FASTPROJECTILE),
-    ITEM_SPAM(Permission.CHECK_ITEMSPAM),
-    FAST_INVENTORY(Permission.CHECK_FASTINVENTORY),
-    AUTOTOOL(Permission.CHECK_AUTOTOOL),
-    MOREPACKETS(Permission.CHECK_MOREPACKETS),
-    BADPACKETS(Permission.CHECK_BADPACKETS),
-	VELOCITY(Permission.CHECK_VELOCITY),
-	CRITICALS(Permission.CHECK_CRITICALS),
-	CHAT_UNICODE(Permission.CHECK_UNICODE),
-	ILLEGAL_INTERACT(Permission.CHECK_ILLEGALINTERACT),
-	FASTLADDER(Permission.CHECK_FASTLADDER),
-	AIMBOT(Permission.CHECK_AIMBOT);
+    FLIGHT(Permission.CHECK_FLIGHT, "Flight"),
+    ELYTRAFLY(Permission.CHECK_FLIGHT, "ElytraFly"),
+    WATER_WALK(Permission.CHECK_WATERWALK, "WaterWalk"),
+    NO_SWING(Permission.CHECK_NOSWING, "NoSwing"),
+    FAST_BREAK(Permission.CHECK_FASTBREAK, "FastBreak"),
+    FAST_PLACE(Permission.CHECK_FASTPLACE, "FastPlace"),
+    CHAT_SPAM(Permission.CHECK_CHATSPAM, "ChatSpam"),
+    COMMAND_SPAM(Permission.CHECK_COMMANDSPAM, "CommandSpam"),
+    SPRINT(Permission.CHECK_SPRINT, "Sprint"),
+    SNEAK(Permission.CHECK_SNEAK, "Sneak"),
+    SPEED(Permission.CHECK_SPEED, "Speed"),
+    VCLIP(Permission.CHECK_VCLIP, "vClip"),
+    SPIDER(Permission.CHECK_SPIDER, "Spider"),
+    NOFALL(Permission.CHECK_NOFALL, "NoFall"),
+    FAST_BOW(Permission.CHECK_FASTBOW, "FastBow"),
+    FAST_EAT(Permission.CHECK_FASTEAT, "FastEat"),
+    FAST_HEAL(Permission.CHECK_FASTHEAL, "FastHeal"),
+    KILLAURA(Permission.CHECK_KILLAURA, "KillAura"),
+    FAST_PROJECTILE(Permission.CHECK_FASTPROJECTILE, "FastProjectile"),
+    ITEM_SPAM(Permission.CHECK_ITEMSPAM, "ItemSpam"),
+    FAST_INVENTORY(Permission.CHECK_FASTINVENTORY, "FastInventory"),
+    AUTOTOOL(Permission.CHECK_AUTOTOOL, "AutoTool"),
+    MOREPACKETS(Permission.CHECK_MOREPACKETS, "MorePackets"),
+    BADPACKETS(Permission.CHECK_BADPACKETS, "BadPackets"),
+	VELOCITY(Permission.CHECK_VELOCITY, "Velocity"),
+	CRITICALS(Permission.CHECK_CRITICALS, "Criticals"),
+	CHAT_UNICODE(Permission.CHECK_UNICODE, "ChatUnicode"),
+	ILLEGAL_INTERACT(Permission.CHECK_ILLEGALINTERACT, "IllegalInteract"),
+	FASTLADDER(Permission.CHECK_FASTLADDER, "FastLadder"),
+	AIMBOT(Permission.CHECK_AIMBOT, "Aimbot");
 	
     private final Permission permission;
+    private final String displayName;
     private final Map<UUID, Integer> level = new HashMap<UUID, Integer>();
 
     /**
      * Initialize a CheckType
      *
-     * @param perm Permission that applies to this check
+     * @param permission Permission that applies to this check
+     * @peram displayName The chat display name
      */
-    private CheckType(Permission perm) {
-        this.permission = perm;
+    private CheckType(Permission permission, String displayName) {
+        this.permission = permission;
+        this.displayName = displayName;
     }
 
     /**
@@ -122,23 +125,9 @@ public enum CheckType {
     /**
      * Get the reference name of a check
      *
-     * @param type Type of check
      * @return reference name
      */
-    public static String getName(CheckType type) {
-    	if (type.name().contains("_")) {
-    		String[] split = type.name().toLowerCase().split("_");
-            String name = "";
-            for (String part : split) {
-            	char[] chars = part.toCharArray();
-            	chars[0] = Character.toUpperCase(chars[0]);
-            	name += new String(chars);
-            }
-            return name;
-    	} else {
-    		char[] chars = type.name().toLowerCase().toCharArray();
-            chars[0] = Character.toUpperCase(chars[0]);
-            return new String(chars);
-    	}
+    public String getName() {
+    	return this.displayName;
     }
 }

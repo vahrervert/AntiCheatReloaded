@@ -19,6 +19,8 @@
 
 package com.rammelkast.anticheatreloaded.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -120,7 +122,11 @@ public final class Utilities {
 	}
 	
 	public static boolean couldBeOnBoat(Player player) {
-		for (Entity entity : player.getNearbyEntities(0.3, 0.3, 0.3)) {
+		return couldBeOnBoat(player, 0.35);
+	}
+	
+	public static boolean couldBeOnBoat(Player player, double range) {
+		for (Entity entity : player.getNearbyEntities(range, range, range)) {
 			if (entity instanceof Boat)
 				return true;
 		}
@@ -135,7 +141,8 @@ public final class Utilities {
 	 */
 	public static boolean couldBeOnIce(Location location) {
 		return isNearIce(new Location(location.getWorld(), fixXAxis(location.getX()), location.getY() - 0.01D,
-				location.getBlockZ()));
+				location.getBlockZ())) || isNearIce(new Location(location.getWorld(), fixXAxis(location.getX()), location.getY() - 0.26D,
+						location.getBlockZ()));
 	}
 	
 	
@@ -187,7 +194,7 @@ public final class Utilities {
 	}
 	
 	public static boolean isHalfblock(Block block) {
-		return isSlab(block) || isStair(block);
+		return isSlab(block) || isStair(block) || isWall(block);
 	}
 	
 	
@@ -359,6 +366,17 @@ public final class Utilities {
 		Material type = block.getType();
 		return type.name().endsWith("STAIRS");
 	}
+	
+	/**
+	 * Determine whether a block is a wall
+	 *
+	 * @param block block to check
+	 * @return true if wall
+	 */
+	public static boolean isWall(Block block) {
+		Material type = block.getType();
+		return type.name().endsWith("WALL");
+	}
 
 	/**
 	 * Determine whether a player is sprinting or flying
@@ -415,8 +433,8 @@ public final class Utilities {
 	 */
 	public static boolean isNearWater(Player player) {
 		return player.getLocation().getBlock().isLiquid()
-				|| player.getLocation().getBlock().getRelative(BlockFace.DOWN).isLiquid()
 				|| player.getLocation().getBlock().getRelative(BlockFace.UP).isLiquid()
+				|| player.getLocation().getBlock().getRelative(BlockFace.DOWN).isLiquid()
 				|| player.getLocation().getBlock().getRelative(BlockFace.NORTH).isLiquid()
 				|| player.getLocation().getBlock().getRelative(BlockFace.SOUTH).isLiquid()
 				|| player.getLocation().getBlock().getRelative(BlockFace.EAST).isLiquid()
@@ -679,51 +697,29 @@ public final class Utilities {
 	}
 
 	/**
-	 * Code by Hawk Anticheat
-	 * (https://github.com/HawkAnticheat/Hawk/blob/master/src/me/islandscout/hawk/util/MathPlus.java)
-	 * 
-	 * @param a
-	 * @param b
-	 * @return the greatest common divisor between two floats
+	 * Rounds a float value to a scale
+	 * @param value Value to round
+	 * @param scale Scale
+	 * @return rounded value
 	 */
-	public static float gcdRational(float a, float b) {
-		if (a == 0) {
-			return b;
-		}
-		int quotient = getIntQuotient(b, a);
-		float remainder = ((b / a) - quotient) * a;
-		if (Math.abs(remainder) < Math.max(a, b) * 1E-3F)
-			remainder = 0;
-		return gcdRational(remainder, a);
+	public static float roundFloat(float value, int scale) {
+		return new BigDecimal(value).setScale(scale, RoundingMode.HALF_UP).floatValue();
 	}
-
+	
 	/**
-	 * Code by Hawk Anticheat
-	 * (https://github.com/HawkAnticheat/Hawk/blob/master/src/me/islandscout/hawk/util/MathPlus.java)
-	 * 
-	 * @param numbers
-	 * @return the greatest common divisor between a list of floats
+	 * Rounds a double value to a scale
+	 * @param value Value to round
+	 * @param scale Scale
+	 * @return rounded value
 	 */
-	public static float gcdRational(List<Float> numbers) {
-		float result = numbers.get(0);
-		for (int i = 1; i < numbers.size(); i++) {
-			result = gcdRational(numbers.get(i), result);
-		}
-		return result;
+	public static double roundDouble(double value, int scale) {
+		return new BigDecimal(value).setScale(scale, RoundingMode.HALF_UP).doubleValue();
 	}
-
-	/**
-	 * Code by Hawk Anticheat
-	 * (https://github.com/HawkAnticheat/Hawk/blob/master/src/me/islandscout/hawk/util/MathPlus.java)
-	 * 
-	 * @param dividend
-	 * @param divisor
-	 */
-	public static int getIntQuotient(float dividend, float divisor) {
-		float ans = dividend / divisor;
-		float error = Math.max(dividend, divisor) * 1E-3F;
-		return (int) (ans + error);
-	}
+	
+	public static int floor(double value) {
+        int rounded = (int) value;
+        return value < rounded ? rounded - 1 : rounded;
+    }
 	
 	public static boolean isHoneyBlock(Block block) {
 		if (!VersionUtil.isOfVersion("v1_15")) {
@@ -867,13 +863,13 @@ public final class Utilities {
 			INSTANT_BREAK.add(Material.TALL_SEAGRASS);
 			INSTANT_BREAK.add(Material.WHEAT);
 			// Start 1.14 objects
-			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")) {
+			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15") || VersionUtil.isOfVersion("v1_16")) {
 				INSTANT_BREAK.add(Material.BAMBOO_SAPLING);
 				INSTANT_BREAK.add(Material.CORNFLOWER);
 			}
 			// End 1.14 objects
 			// Start 1.15 objects
-			if (VersionUtil.isOfVersion("v1_15")) {
+			if (VersionUtil.isOfVersion("v1_15") || VersionUtil.isOfVersion("v1_16")) {
 				INSTANT_BREAK.add(Material.HONEY_BLOCK);
 			}
 			// End 1.15 objects
@@ -918,13 +914,13 @@ public final class Utilities {
 			FOOD.add(Material.SPIDER_EYE);
 			FOOD.add(Material.TROPICAL_FISH);
 			// Start 1.14 objects
-			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")) {
+			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15") || VersionUtil.isOfVersion("v1_16")) {
 				FOOD.add(Material.SUSPICIOUS_STEW);
 				FOOD.add(Material.SWEET_BERRIES);
 			}
 			// End 1.14 objects
 			// Start 1.15 objects
-			if (VersionUtil.isOfVersion("v1_15")) {
+			if (VersionUtil.isOfVersion("v1_15") || VersionUtil.isOfVersion("v1_16")) {
 				FOOD.add(Material.HONEY_BOTTLE);
 			}
 			// End 1.15 objects
@@ -960,10 +956,19 @@ public final class Utilities {
 			CLIMBABLE.add(Material.LADDER);
 			CLIMBABLE.add(Material.WATER);
 			// Start 1.14 objects
-			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")) {
+			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15") || VersionUtil.isOfVersion("v1_16")) {
 				CLIMBABLE.add(Material.SCAFFOLDING);
 			}
 			// End 1.14 objects
+			
+			// Start 1.16 objects
+			if (VersionUtil.isOfVersion("v1_16")) {
+				CLIMBABLE.add(XMaterial.TWISTING_VINES.parseMaterial());
+				CLIMBABLE.add(XMaterial.TWISTING_VINES_PLANT.parseMaterial());
+				CLIMBABLE.add(XMaterial.WEEPING_VINES.parseMaterial());
+				CLIMBABLE.add(XMaterial.TWISTING_VINES_PLANT.parseMaterial());
+			}
+			// End 1.16 objects
 			// End climbable
 		}
 		// End other versions

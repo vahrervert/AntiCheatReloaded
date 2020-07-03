@@ -170,7 +170,7 @@ public class CommandReport extends CommandBase {
                     } else if (use > 50) {
                         color = RED;
                     }
-                    cs.sendMessage(GRAY + CheckType.getName(type) + ": " + color + use);
+                    cs.sendMessage(GRAY + type.getName() + ": " + color + use);
                 }
             }
             cs.sendMessage(MENU_END);

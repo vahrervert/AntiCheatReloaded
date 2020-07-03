@@ -44,9 +44,7 @@ import com.rammelkast.anticheatreloaded.check.movement.AimbotCheck;
 import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
 import com.rammelkast.anticheatreloaded.check.movement.GlideCheck;
-import com.rammelkast.anticheatreloaded.check.movement.SpeedCheck;
 import com.rammelkast.anticheatreloaded.check.movement.WaterWalkCheck;
-import com.rammelkast.anticheatreloaded.check.movement.YAxisCheck;
 import com.rammelkast.anticheatreloaded.check.packet.MorePacketsCheck;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.providers.Lang;
@@ -59,6 +57,7 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class Backend {
 	public Map<UUID, Long> velocitized = new HashMap<UUID, Long>();
+	private Map<UUID, Long> levitatingEnd = new HashMap<UUID, Long>();
 	private List<UUID> isAscending = new ArrayList<UUID>();
 	private Map<UUID, Integer> chatLevel = new HashMap<UUID, Integer>();
 	private Map<UUID, Integer> commandLevel = new HashMap<UUID, Integer>();
@@ -80,7 +79,7 @@ public class Backend {
 	private Map<UUID, Long> instantBreakExempt = new HashMap<UUID, Long>();
 	private Map<UUID, Long> sprinted = new HashMap<UUID, Long>();
 	private Map<UUID, Long> brokenBlock = new HashMap<UUID, Long>();
-	private Map<UUID, Long> placedBlock = new HashMap<UUID, Long>();
+	public Map<UUID, Long> placedBlock = new HashMap<UUID, Long>();
 	private Map<UUID, Long> blockTime = new HashMap<UUID, Long>();
 	private Map<UUID, Integer> blocksDropped = new HashMap<UUID, Integer>();
 	private Map<UUID, Long> lastInventoryTime = new HashMap<UUID, Long>();
@@ -158,6 +157,7 @@ public class Backend {
 		lastFallPacket.remove(uuid);
 		fastSneakViolations.remove(uuid);
 		lastSneak.remove(uuid);
+		levitatingEnd.remove(uuid);
 		AimbotCheck.LAST_DELTA_YAW.remove(uuid);
 		VelocityCheck.VIOLATIONS.remove(uuid);
 		MorePacketsCheck.LAST_PACKET_TIME.remove(uuid);
@@ -169,10 +169,6 @@ public class Backend {
 		ElytraCheck.JUMP_Y_VALUE.remove(uuid);
 		KillAuraCheck.ANGLE_FLAGS.remove(uuid);
 		FlightCheck.MOVING_EXEMPT.remove(uuid);
-		YAxisCheck.Y_AXIS_VIOLATIONS.remove(uuid);
-		YAxisCheck.LAST_Y_AXIS_VIOLATION.remove(uuid);
-		YAxisCheck.LAST_Y_COORD_CACHE.remove(uuid);
-		YAxisCheck.LAST_Y_TIME.remove(uuid);
 		WaterWalkCheck.IS_IN_WATER.remove(uuid);
 		WaterWalkCheck.IS_IN_WATER_CACHE.remove(uuid);
 		WaterWalkCheck.WATER_ASCENSION_VIOLATIONS.remove(uuid);
@@ -472,7 +468,7 @@ public class Backend {
 			if (lastBlockPlaced.get(uuid) > 0 && math < magic.FASTPLACE_MAXVIOLATIONTIME()) {
 				lastBlockPlaced.put(uuid, time);
 				return new CheckResult(CheckResult.Result.FAILED, "placed blocks too fast "
-						+ fastBreakViolation.get(uuid) + " times in a row (max=" + violations + ")");
+						+ fastPlaceViolation.get(uuid) + " times in a row (max=" + violations + ")");
 			} else if (lastBlockPlaced.get(uuid) > 0 && math > magic.FASTPLACE_MAXVIOLATIONTIME()) {
 				fastPlaceViolation.put(uuid, 0);
 			}
@@ -548,7 +544,9 @@ public class Backend {
 			if (Character.UnicodeBlock.of(ch) != Character.UnicodeBlock.BASIC_LATIN
 					&& Character.UnicodeBlock.of(ch) != Character.UnicodeBlock.LATIN_1_SUPPLEMENT
 					&& Character.UnicodeBlock.of(ch) != Character.UnicodeBlock.LATIN_EXTENDED_A
-					&& Character.UnicodeBlock.of(ch) != Character.UnicodeBlock.GENERAL_PUNCTUATION) {
+					&& Character.UnicodeBlock.of(ch) != Character.UnicodeBlock.GENERAL_PUNCTUATION
+					&& Character.UnicodeBlock.of(ch) != Character.UnicodeBlock.CYRILLIC
+					&& Character.UnicodeBlock.of(ch) != Character.UnicodeBlock.CYRILLIC_EXTENDED_A) {
 				return new CheckResult(CheckResult.Result.FAILED, "Unicode chat is not allowed.");
 			}
 		}
@@ -678,16 +676,6 @@ public class Backend {
 		sprinted.put(player.getUniqueId(), System.currentTimeMillis());
 	}
 
-	public boolean isHoveringOverWaterAfterViolation(Player player) {
-		if (WaterWalkCheck.WATER_SPEED_VIOLATIONS.containsKey(player.getUniqueId())) {
-			if (WaterWalkCheck.WATER_SPEED_VIOLATIONS.get(player.getUniqueId()) >= magic.WATER_SPEED_VIOLATION_MAX()
-					&& Utilities.isHoveringOverWater(player.getLocation())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public void logBlockBreak(final Player player) {
 		brokenBlock.put(player.getUniqueId(), System.currentTimeMillis());
 	}
@@ -700,9 +688,19 @@ public class Backend {
 		velocitized.put(player.getUniqueId(), System.currentTimeMillis());
 	}
 
+	public void logLevitating(final Player player, final int duration) {
+		levitatingEnd.put(player.getUniqueId(), System.currentTimeMillis() + (duration * 1000L));
+	}
+	
 	public boolean justVelocity(Player player) {
 		return (velocitized.containsKey(player.getUniqueId())
 				? (System.currentTimeMillis() - velocitized.get(player.getUniqueId())) < magic.VELOCITY_CHECKTIME()
+				: false);
+	}
+	
+	public boolean justLevitated(Player player) {
+		return (levitatingEnd.containsKey(player.getUniqueId())
+				? (System.currentTimeMillis() - levitatingEnd.get(player.getUniqueId())) < magic.VELOCITY_CHECKTIME()
 				: false);
 	}
 
@@ -765,15 +763,9 @@ public class Backend {
 	}
 
 	public void logTeleport(final Player player) {
-		// TODO check this
-		//FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + magic.TELEPORT_TIME());
-
+		manager.getUserManager().getUser(player.getUniqueId()).getMovementManager().lastTeleport = System.currentTimeMillis();
 		/* Data for fly/speed should be reset */
 		nofallViolation.remove(player.getUniqueId());
-		YAxisCheck.Y_AXIS_VIOLATIONS.remove(player.getUniqueId());
-		YAxisCheck.LAST_Y_AXIS_VIOLATION.remove(player.getUniqueId());
-		YAxisCheck.LAST_Y_COORD_CACHE.remove(player.getUniqueId());
-		YAxisCheck.LAST_Y_TIME.remove(player.getUniqueId());
 		GlideCheck.LAST_FALL_DISTANCE.remove(player.getUniqueId());
 		GlideCheck.LAST_MOTION_Y.remove(player.getUniqueId());
 		GlideCheck.VIOLATIONS.remove(player.getUniqueId());

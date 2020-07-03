@@ -40,6 +40,7 @@ public class AimbotCheck {
 		if (backend.isMovingExempt(player)) {
 			return PASS;
 		}
+		
 		UUID uuid = player.getUniqueId();
 		float dYaw = Math.abs(event.getTo().getYaw() - event.getFrom().getYaw());
 		float dPitch = Math.abs(event.getTo().getPitch() - event.getFrom().getPitch());
@@ -56,9 +57,8 @@ public class AimbotCheck {
 		LAST_DELTA_YAW.put(uuid, dYaw);
 		
 		float absoluteYawDifference = Math.abs(dYaw - lastDeltaYaw);
-		if (absoluteYawDifference < 1E-8 && dYaw > 30 && dYaw < 355) {
+		if (absoluteYawDifference < 1E-8 && dYaw > 30 && dYaw < 355)
 			return new CheckResult(CheckResult.Result.FAILED, "repeated yaw difference (dYaw=" + dYaw + ")");
-		}
 		return PASS;
 	}
 

@@ -1,0 +1,192 @@
+# AntiCheatReloaded checks configuration file
+# Speed check settings
+speed:
+  # Checks movement speed in the air
+  # Debugs as 'moved too fast in air'
+  airSpeed:
+    # Should this part of the check be enabled?
+    enabled: true
+    # Base unadjusted air speed limit
+    baseLimit: 0.03125
+    # Prediction multiplier for custom walk speeds
+    walkSpeedMultiplier: 1.4
+
+  # Checks movement acceleration in the air
+  # Debugs as 'exceeded acceleration limits'
+  airAcceleration:
+    # Should this part of the check be enabled?
+    enabled: true
+    # Base unadjusted air acceleration limit
+    baseLimit: 0.3725
+    # Limit multiplier for custom walk speeds
+    walkSpeedMultiplier: 1.4
+
+  # Checks movement acceleration in the air
+  # Debugs as 'had unexpected jumping behaviour'
+  jumpBehaviour:
+    # Should this part of the check be enabled?
+    enabled: true
+    # Minimum movement distance needed to flag
+    minimumDistXZ: 0.42
+
+  # Checks movement speed on the ground
+  # Debugs as 'moved too fast on ground'
+  groundSpeed:
+    # Should this part of the check be enabled?
+    enabled: true
+    # Initial speed limit value
+    initialLimit: 0.34
+
+  # Checks movement acceleration in the air
+  # Debugs as 'exceeded vertical speed limit'
+  verticalSpeed:
+    # Should this part of the check be enabled?
+    enabled: true
+    # Extra compensation when moving off a ladder up a slab
+    climbableCompensation: 0.04
+
+# Flight check settings
+flight:
+  # Checks for gliding behaviour
+  # Debugs as 'had gliding behaviour'
+  glide:
+    # Should this part of the check be enabled?
+    enabled: true
+    # Amount of glide-like moves before flagging
+    vlBeforeFlag: 3
+  # Checks for prolonged air movement
+  # Debugs as 'tried to fly on the Y-axis' or 'had too little Y dropoff'
+  airFlight:
+    # Should this part of the check be enabled?
+    enabled: true
+    # How many milliseconds to account for block placement
+    # Increase this if you get false positives when building a tower
+    accountForBlockPlacement: 1200
+    # How many milliseconds to account for TPS drops
+    # Increase this if you get false positives when building a tower during TPS drops
+    accountForTpsDrops: 250
+    # How many milliseconds to account for teleports
+    # Increase this is you debug 'had too little Y dropoff' after teleports
+    accountForTeleports: 50
+  # Checks for climbing behaviour in air
+  # Debugs as 'tried to climb air'
+  airClimb:
+    # Should this part of the check be enabled?
+    enabled: true
+    # How many milliseconds to account for teleports
+    # Increase this is you debug 'tried to climb air' after teleports
+    accountForTeleports: 50
+  # Checks if a player is faking it's ground status to fly
+  # Debugs as 'faked ground to fly'
+  groundFlight:
+    # Should this part of the check be enabled?
+    enabled: true
+
+# FastLadder check settings
+fastladder:
+  # Should this check be enabled?
+  enabled: true
+  # Maximum speed a player on a ladder can travel
+  speedMax: 0.11761
+  # Minimum speed a player on a ladder will travel
+  speedMin: 0.11759
+  # Maximum speed a player on a ladder can travel downwards
+  speedDownMax: 0.15
+  # Amount of illegal ladder moves before flagging
+  vlBeforeFlag: 3
+
+# KillAura check settings
+killaura:
+  # Checks reach distance in fights
+  # Debugs as 'reached too far'
+  reach:
+    # Should this part of the check be enabled?
+    enabled: true
+    # Maximum base reach distances
+    baseMaxValue:
+      # Maximum base reach value
+      normal: 3.6
+      # Maximum base reach value when a player has velocity
+      velocitized: 4.0
+    # Settings for lag compensation
+    lagCompensation:
+      # Basic extra allowed reach when a player is lagging
+      lagExtraReach: 0.2
+      # Extra allowed reach distance per millisecond of ping
+      pingCompensation: 0.0025
+    # The multiplier of extra compensation for velocity
+    velocityMultiplier: 1.2
+
+  # Checks if the target it within a players viewing angle
+  # Debugs as 'tried to attack from an illegal angle'
+  angle:
+    # Should this part of the check be enabled?
+    enabled: true
+    # Maximum difference in angle from the players view
+    maxDifference: 50
+    # Amount of illegally angled hits before flagging
+    vlBeforeFlag: 3
+
+# Aimbot check settings
+aimbot:
+  # Should this check be enabled?
+  enabled: true
+  # Minimum yaw difference when repeated
+  minYaw: 30
+  # Maximum yaw difference when repeated
+  maxYaw: 355
+
+# Criticals check settings
+criticals:
+  # Should this check be enabled?
+  enabled: true
+
+# Velocity check settings
+velocity:
+  # Should this check be enabled?
+  enabled: true
+  # Minimum distance a player has to move after taking velocity
+  minVelocitizedDistance: 0.125
+  # Amount of zero-velocity moments before flagging
+  vlBeforeFlag: 3
+
+# IllegalInteract check settings
+illegalinteract:
+  # Maximum difference in angle from the players view
+  maxAngleDifference: 80
+  # Checks angle when breaking a block
+  # Debugs as 'tried to break a block which was out of view'
+  break:
+    # Should this part of the check be enabled?
+    enabled: true
+  # Checks angle when placing a block
+  # Debugs as 'tried to place a block which was out of view'
+  place:
+    # Should this part of the check be enabled?
+    enabled: true
+
+# BadPackets check settings
+badpackets:
+  # Should this check be enabled?
+  enabled: true
+  # Minimum server TPS needed for BadPackets to be active
+  minimumTps: 17.5
+  # Maximum distance a player can move between packets
+  maxDistance: 25.0
+
+# MorePackets check settings
+morepackets:
+  # Should this check be enabled?
+  enabled: true
+  # Minimum server TPS needed for MorePackets to be active
+  minimumTps: 17.5
+  # Maximum amount of lag compensation a player can acquire (50ms = 1 tick)
+  minimumClamp: 500
+  # The amount of milliseconds offset between packets before flagging (50ms = 1 tick)
+  triggerBalance: 100
+  # Should MorePackets be disabled for 'lagging' players?
+  # This can easily be spoofed by clients!
+  disableForLagging: false
+  # Maximum ping value before MorePackets stops checking a player (-1 to disable)
+  # This can easily be spoofed by clients!
+  maxPing: -1

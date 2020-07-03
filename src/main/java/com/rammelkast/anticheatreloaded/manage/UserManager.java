@@ -209,7 +209,7 @@ public class UserManager {
                     } else if (event.equalsIgnoreCase("KICK")) {
                         user.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&', kickReason));
                         AntiCheatReloaded.getPlugin().onPlayerKicked();
-                        String msg = ChatColor.translateAlternateColorCodes('&', config.getLang().KICK_BROADCAST().replaceAll("%player%", name) + " (" + CheckType.getName(type) + ")");
+                        String msg = ChatColor.translateAlternateColorCodes('&', config.getLang().KICK_BROADCAST().replaceAll("%player%", name) + " (" + type.getName() + ")");
                         if (!msg.equals("")) {
                             manager.log(msg);
                             manager.playerLog(msg);
@@ -224,7 +224,7 @@ public class UserManager {
                     } else if (event.equalsIgnoreCase("BAN")) {
                         Bukkit.getBanList(Type.NAME).addBan(user.getPlayer().getName(), ChatColor.translateAlternateColorCodes('&', banReason), null, null);
                         user.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&', banReason));
-                        String msg = ChatColor.translateAlternateColorCodes('&', config.getLang().BAN_BROADCAST().replaceAll("%player%", name) + " (" + CheckType.getName(type) + ")");
+                        String msg = ChatColor.translateAlternateColorCodes('&', config.getLang().BAN_BROADCAST().replaceAll("%player%", name) + " (" + type.getName() + ")");
                         if (!msg.equals("")) {
                             manager.log(msg);
                             manager.playerLog(msg);

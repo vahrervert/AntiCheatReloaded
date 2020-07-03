@@ -18,7 +18,12 @@
  */
 package com.rammelkast.anticheatreloaded.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public class MovementManager {
@@ -37,10 +42,12 @@ public class MovementManager {
 	public int iceInfluenceTicks = 0;
 	// Ticks influenced by slime
 	public int slimeInfluenceTicks = 0;
-	// Ticks influenced by sign
-	public int signInfluenceTicks = 0;
-	// Last Y motion
+	// Y motion of the movement
 	public double motionY;
+	// Previous Y motion of the movement
+	public double lastMotionY;
+	// Horizontal distance of movement
+	public double distanceXZ;
 	// If the player touched the ground again this tick
 	public boolean touchedGroundThisTick = false;
 	// Last recorded distance
@@ -53,14 +60,29 @@ public class MovementManager {
 	public boolean bottomSolid;
 	// If the current movement is up a slab or stair
 	public boolean halfMovement;
+	// If the player is on the ground
+	public boolean onGround;
 	// Ticks counter for last halfMovement
 	public int halfMovementHistoryCounter = 0;
+	// Time of last teleport
+	public long lastTeleport;
+	// Elytra effect ticks
+	public int elytraEffectTicks;
 
 	public void handle(Player player, Location from, Location to, Distance distance) {
-		boolean serverOnGround = !Utilities.cantStandAtExp(to) || Utilities.couldBeOnBoat(player);
+		this.onGround = player.isOnGround(); // TODO temp solution, can be spoofed
+		
+		double x = distance.getXDifference();
+        double z = distance.getZDifference();
+		this.distanceXZ = Math.sqrt(x * x + z * z);
+		
+		// Account for standing on boat
+		if (Utilities.couldBeOnBoat(player, 0.25))
+			this.onGround = true;
+		
 		this.touchedGroundThisTick = false;
 		this.halfMovement = false;
-		if (!serverOnGround) {
+		if (!this.onGround) {
 			this.groundTicks = 0;
 			this.airTicks++;
 		} else {
@@ -71,14 +93,6 @@ public class MovementManager {
 			this.groundTicks++;
 		}
 		
-		if (to.getBlock().getType().name().endsWith("SIGN") || to.getBlock().getType().name().endsWith("POST")
-				|| from.getBlock().getType().name().endsWith("SIGN")
-				|| from.getBlock().getType().name().endsWith("POST"))
-			this.signInfluenceTicks = 3;
-		else
-			if (this.signInfluenceTicks > 0)
-				this.signInfluenceTicks--;
-
 		if (Utilities.couldBeOnIce(to)) {
 			this.iceTicks++;
 			this.iceInfluenceTicks = 60;
@@ -97,12 +111,20 @@ public class MovementManager {
 				this.slimeInfluenceTicks--;
 		}
 		
+		if (VersionUtil.isGliding(player)) {
+			this.elytraEffectTicks = 30;
+		} else {
+			if (this.elytraEffectTicks > 0)
+				this.elytraEffectTicks--;
+		}
+		
 		double lastDistanceSq = Math.sqrt(this.lastDistance.getXDifference() * this.lastDistance.getXDifference()
 				+ this.lastDistance.getZDifference() * this.lastDistance.getZDifference());
 		double currentDistanceSq = Math.sqrt(distance.getXDifference() * distance.getXDifference()
 				+ distance.getZDifference() * distance.getZDifference());
 		this.acceleration = currentDistanceSq - lastDistanceSq;
 		
+		this.lastMotionY = this.motionY;
 		this.motionY = to.getY() - from.getY();
 		
 		Location top = to.clone().add(0, 2, 0);
@@ -118,5 +140,4 @@ public class MovementManager {
 				this.halfMovementHistoryCounter--;
 		}
 	}
-
 }

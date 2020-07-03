@@ -4,12 +4,12 @@ ANIMATION_INTERACT_MAX: 3
 # Minimum time between animations
 # Changing this value is almost never required
 ANIMATION_MIN: 200
-# Number of times a player can fail the ascension check before being considered a cheater
-# Increase in case of false positives
-ASCENSION_COUNT_MAX: 8
 # Minimum time in between block breaks
 # Decrease in case of false positives
 BLOCK_BREAK_MIN: 0.1
+# Maximum speed a player can travel forwards or backwards while sneaking
+# This is a set value and shouldn't be changed unless you know what you're doing
+XZ_SPEED_MAX_SNEAK: 0.15
 # Maximum distance a player can break a block from
 # Changing this value is almost never required
 BLOCK_MAX_DISTANCE: 5.5
@@ -154,9 +154,6 @@ PROJECTILE_TIME_MIN: 1500
 # Time to exempt a player from moving because of entering/exiting sneak mode
 # Increase in case of false positives, shouldn't be necessary
 SNEAK_TIME: 250
-# Maximum times a player can fail the speed check before being considered a cheater
-# Increase in case of false positives
-SPEED_MAX: 3
 # Number of times a player can sprint without proper food level before being considered a cheater
 # Can either be increased or decreased to your liking. Shouldn't make a massive difference.
 SPRINT_FOOD_MIN: 6
@@ -180,64 +177,9 @@ VELOCITY_PREVENT: 5000
 VELOCITY_SCHETIME: 2
 # This is a set value and shouldn't be changed unless you know what you're doing
 VELOCITY_TIME: 3
-# Number of times a player can fail the ascension check while in water before being considered a cheater
-# Increase in case of false positives
-WATER_ASCENSION_VIOLATION_MAX: 8
 # Maximum speed that a player can climb a waterfall
 # Can be increased in case of false positives, shouldn't be necesary
 WATER_CLIMB_MAX: 0.15
-# Number of times a player can be caught speeding in water before being considered a cheater
-# Increase in case of false positives
-WATER_SPEED_VIOLATION_MAX: 6
-# Maximum speed a player can travel forwards or backwards
-# This is a set value and shouldn't be changed unless you know what you're doing
-XZ_SPEED_MAX: 0.25
-# aximum speed a player can travel forwards or backwards while flying
-# This is a set value and shouldn't be changed unless you know what you're doing
-XZ_SPEED_MAX_FLY: 0.56
-# Maximum speed a player can travel forwards or backwards while under the influence
-# This is a set value and shouldn't be changed unless you know what you're doing
-XZ_SPEED_MAX_POTION: 0.7
-# Maximum speed a player can travel forwards or backwards while sprinting while under the influence
-# This is a set value and shouldn't be changed unless you know what you're doing
-XZ_SPEED_MAX_POTION_SPRINT: 0.95
-# Maximum speed a player can travel forwards or backwards while sneaking
-# This is a set value and shouldn't be changed unless you know what you're doing
-XZ_SPEED_MAX_SNEAK: 0.15
-# Maximum speed a player can travel forwards or backwards on soul sand
-# This is a set value and shouldn't be changed unless you know what you're doing
-XZ_SPEED_MAX_SOULSAND: 0.13
-# Maximum speed a player can travel forwards or backwards on soul sand while under the influenc
-# This is a set value and shouldn't be changed unless you know what you're doing
-XZ_SPEED_MAX_SOULSAND_POTION: 0.16
-# Maximum speed a player can travel forwards or backwards on soul sand while sprintin
-# This is a set value and shouldn't be changed unless you know what you're doing
-XZ_SPEED_MAX_SOULSAND_SPRINT: 0.2
-# Maximum speed a player can travel forwards or backwards while sprinting
-# This is a set value and shouldn't be changed unless you know what you're doing
-XZ_SPEED_MAX_SPRINT: 0.65
-# Maximum speed a player can travel forwards or backwards in water
-# This is a set value and shouldn't be changed unless you know what you're doing
-XZ_SPEED_MAX_WATER: 0.19
-# Maximum speed a player can travel forwards or backwards in water while sprinting
-# This is a set value and shouldn't be changed unless you know what you're doing
-XZ_SPEED_MAX_WATER_SPRINT: 0.3
-# Maximum difference between the player's last two Y values when traveling up
-# Can be decreased slightly to improve detection with the risk of false positives
-# Increase in case of false positives
-Y_MAXDIFF: 5.0
-# Number of times a player can fly on the y-axis before being considered a cheater
-# Increase in case of false positives
-Y_MAXVIOLATIONS: 1
-# Time a player is forced to wait after flyhacking on the y-axis
-# Should be changed to personal preference
-Y_MAXVIOTIME: 5500
-# Maximum speed a player can travel up
-# This is a set value and shouldn't be changed unless you know what you're doing
-Y_SPEED_MAX: 0.5175
-# Time in between Y difference measures
-# This is a set value and shouldn't be changed unless you know what you're doing
-Y_TIME: 800
 # Amount of suspicious mid-air movements before a player is suspected of glide
 # Increase this in case of false positives
 GLIDE_LIMIT: 5
@@ -248,11 +190,11 @@ MOREPACKETS_TELEPORT_COMPENSATION: 150
 # The amount of milliseconds that were offset to flag for MorePackets (50ms = 1 tick)
 # Increase this in case of false positives
 # Can be decreased in to tighten check
-MOREPACKETS_TRIGGER_BALANCE: 50
+MOREPACKETS_TRIGGER_BALANCE: 100
 # The maximum amount of overall lag compensating in milliseconds (50ms = 1 tick)
 # Increase this in case of false positives
 # Can be decreased in to tighten check
-MOREPACKETS_MINIMUM_CLAMP: 200
+MOREPACKETS_MINIMUM_CLAMP: 500
 # Maximum amount zero-velocity moments before a player is suspected
 # Increase this in case of false positives
 VELOCITY_MAX_FLAGS: 3
@@ -264,7 +206,7 @@ KILLAURA_MAX_ANGLE_DIFFERENCE: 50
 KILLAURA_MAX_ANGLE_VIOLATIONS: 3
 # The maximum angle difference allowed when placing or breaking a block
 # Increase this in case of false positives, can be slightly decreased to tighten check
-ILLEGALINTERACT_MAX_ANGLE_DIFFERENCE: 75
+ILLEGALINTERACT_MAX_ANGLE_DIFFERENCE: 80
 # The minimum time it takes to regenerate health
 # Decrease this in case of false positives
 MIN_HEAL_TIME: 490

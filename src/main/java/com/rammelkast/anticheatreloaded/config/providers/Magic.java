@@ -167,14 +167,6 @@ public interface Magic {
      */
     public double WATER_CLIMB_MAX();
     /**
-     * Number of times a player can fly on the y-axis before action is taken; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int Y_MAXVIOLATIONS();
-    /**
-     * Time a player is forced to wait after flying on the y-axis; Type=SYSTEM, Leniency=DECREASE.
-     */
-    public int Y_MAXVIOTIME();
-    /**
      * Number of times a player can fail a velocity check before action is taken; Type=INTEGER, Leniency=INCREASE.
      */
     public int VELOCITY_TIME();
@@ -198,18 +190,6 @@ public interface Magic {
      * Number of times a player can fail the nofall check before action is taken; Type=INTEGER, Leniency=INCREASE.
      */
     public int NOFALL_LIMIT();
-    /**
-     * Number of times a player can fail the ascension check before action is taken; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int ASCENSION_COUNT_MAX();
-    /**
-     * Number of times a player can fail the ascension check while in water before action is taken; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int WATER_ASCENSION_VIOLATION_MAX();
-    /**
-     * Number of times a player can be caught speeding in water before action is taken; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int WATER_SPEED_VIOLATION_MAX();
     /**
      * Number of times a player can sprint without proper food level before action is taken; Type=INTEGER, Leniency=INCREASE.
      */
@@ -287,65 +267,9 @@ public interface Magic {
      */
     public double LADDER_DOWN_MAX();
     /**
-     * Maximum speed a player can travel up; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double Y_SPEED_MAX();
-    /**
-     * Maximum difference between the player's last 2 Y values when traveling up; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double Y_MAXDIFF();
-    /**
-     * Time in between Y difference measures; Type=SYSTEM, Leniency=DECREASE.
-     */
-    public int Y_TIME();
-    /**
-     * Maximum speed a player can travel forwards or backwards; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double XZ_SPEED_MAX();
-    /**
-     * Maximum speed a player can travel forwards or backwards while sprinting; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double XZ_SPEED_MAX_SPRINT();
-    /**
-     * Maximum speed a player can travel forwards or backwards while flying; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double XZ_SPEED_MAX_FLY();
-    /**
-     * Maximum speed a player can travel forwards or backwards while under the influence; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double XZ_SPEED_MAX_POTION();
-    /**
-     * Maximum speed a player can travel forwards or backwards while sprinting while under the influence; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double XZ_SPEED_MAX_POTION_SPRINT();
-    /**
      * Maximum speed a player can travel forwards or backwards while sneaking; Type=DOUBLE, Leniency=INCREASE.
      */
     public double XZ_SPEED_MAX_SNEAK();
-    /**
-     * Maximum speed a player can travel forwards or backwards in water; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double XZ_SPEED_MAX_WATER();
-    /**
-     * Maximum speed a player can travel forwards or backwards in water while sprinting; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double XZ_SPEED_MAX_WATER_SPRINT();
-    /**
-     * Maximum speed a player can travel forwards or backwards on soul sand; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double XZ_SPEED_MAX_SOULSAND();
-    /**
-     * Maximum speed a player can travel forwards or backwards on soul sand while sprinting; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double XZ_SPEED_MAX_SOULSAND_SPRINT();
-    /**
-     * Maximum speed a player can travel forwards or backwards on soul sand while under the influence; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double XZ_SPEED_MAX_SOULSAND_POTION();
-    /**
-     * Maximum times a player can fail the speed check before action is taken; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int SPEED_MAX();
     /**
      * The number of clicks we should wait before checking if the player has used fast inventory; Type=INTEGER; Leniency=INCREASE.
      */

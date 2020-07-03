@@ -36,7 +36,7 @@ import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
- * This check should be replaced It works, but not great
+ * TODO recode
  */
 public class WaterWalkCheck {
 
@@ -57,13 +57,14 @@ public class WaterWalkCheck {
 					if (IS_IN_WATER_CACHE.contains(uuid)) {
 						if (player.getNearbyEntities(1, 1, 1).isEmpty()) {
 							boolean violation;
-							if (!Utilities.sprintFly(player)) {
+							/*if (!Utilities.sprintFly(player)) {
 								violation = x > backend.getMagic().XZ_SPEED_MAX_WATER()
 										|| z > backend.getMagic().XZ_SPEED_MAX_WATER();
 							} else {
 								violation = x > backend.getMagic().XZ_SPEED_MAX_WATER_SPRINT()
 										|| z > backend.getMagic().XZ_SPEED_MAX_WATER_SPRINT();
-							}
+							}*/
+							violation = false;
 							if (!violation && !Utilities.isFullyInWater(player.getLocation())
 									&& Utilities.isHoveringOverWater(player.getLocation(), 1) && y == 0D
 									&& !block.getType().equals(Utilities.LILY_PAD)) {
@@ -72,7 +73,7 @@ public class WaterWalkCheck {
 							if (violation) {
 								if (WATER_SPEED_VIOLATIONS.containsKey(uuid)) {
 									int v = WATER_SPEED_VIOLATIONS.get(uuid);
-									if (v >= backend.getMagic().WATER_SPEED_VIOLATION_MAX()) {
+									if (v >= 8) {
 										WATER_SPEED_VIOLATIONS.put(uuid, 0);
 										return new CheckResult(CheckResult.Result.FAILED,
 												"stood on water " + v + " times (can't stand on " + block.getType()
@@ -99,7 +100,7 @@ public class WaterWalkCheck {
 							|| y == 0.04999999999999982)) {
 				if (WATER_ASCENSION_VIOLATIONS.containsKey(uuid)) {
 					int v = WATER_ASCENSION_VIOLATIONS.get(uuid);
-					if (v >= backend.getMagic().WATER_ASCENSION_VIOLATION_MAX()) {
+					if (v >= 8) {
 						WATER_ASCENSION_VIOLATIONS.put(uuid, 0);
 						return new CheckResult(CheckResult.Result.FAILED,
 								"stood on water " + v + " times (can't stand on " + block.getType() + " or "

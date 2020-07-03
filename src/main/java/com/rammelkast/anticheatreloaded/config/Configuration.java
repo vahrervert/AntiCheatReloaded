@@ -19,20 +19,34 @@
 
 package com.rammelkast.anticheatreloaded.config;
 
+import java.io.File;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.config.files.Config;
 import com.rammelkast.anticheatreloaded.config.files.Enterprise;
-import com.rammelkast.anticheatreloaded.config.holders.mysql.*;
-import com.rammelkast.anticheatreloaded.config.holders.yaml.*;
-import com.rammelkast.anticheatreloaded.config.providers.*;
+import com.rammelkast.anticheatreloaded.config.holders.mysql.MySQLGroupsHolder;
+import com.rammelkast.anticheatreloaded.config.holders.mysql.MySQLLangHolder;
+import com.rammelkast.anticheatreloaded.config.holders.mysql.MySQLLevelsHolder;
+import com.rammelkast.anticheatreloaded.config.holders.mysql.MySQLMagicHolder;
+import com.rammelkast.anticheatreloaded.config.holders.mysql.MySQLRulesHolder;
+import com.rammelkast.anticheatreloaded.config.holders.yaml.YamlChecksHolder;
+import com.rammelkast.anticheatreloaded.config.holders.yaml.YamlGroupsHolder;
+import com.rammelkast.anticheatreloaded.config.holders.yaml.YamlLangHolder;
+import com.rammelkast.anticheatreloaded.config.holders.yaml.YamlLevelsHolder;
+import com.rammelkast.anticheatreloaded.config.holders.yaml.YamlMagicHolder;
+import com.rammelkast.anticheatreloaded.config.holders.yaml.YamlRulesHolder;
+import com.rammelkast.anticheatreloaded.config.providers.Checks;
+import com.rammelkast.anticheatreloaded.config.providers.Groups;
+import com.rammelkast.anticheatreloaded.config.providers.Lang;
+import com.rammelkast.anticheatreloaded.config.providers.Levels;
+import com.rammelkast.anticheatreloaded.config.providers.Magic;
+import com.rammelkast.anticheatreloaded.config.providers.Rules;
 import com.rammelkast.anticheatreloaded.manage.AntiCheatManager;
-
-import java.io.File;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 
 public class Configuration {
 
@@ -45,6 +59,7 @@ public class Configuration {
     private Groups groups;
     private Levels levels;
     private Rules rules;
+    private Checks checks;
 
     private ArrayList<ConfigurationFile> flatfiles;
     private ArrayList<ConfigurationTable> dbfiles;
@@ -83,6 +98,9 @@ public class Configuration {
             rules = new YamlRulesHolder(plugin, this);
             flatfiles.add((YamlRulesHolder) rules);
         }
+        
+        checks = new YamlChecksHolder(plugin, this);
+        flatfiles.add((YamlChecksHolder) checks);
 
         InvocationHandler handler;
         if (config.enterprise.getValue() && enterprise.configMagic.getValue()) {
@@ -194,5 +212,9 @@ public class Configuration {
 
     public Magic getMagic() {
         return magic;
+    }
+    
+    public Checks getChecks() {
+    	return checks;
     }
 }

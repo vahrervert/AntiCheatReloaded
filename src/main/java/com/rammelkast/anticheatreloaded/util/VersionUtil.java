@@ -29,12 +29,15 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 
 public class VersionUtil {
 
 	private static final List<String> SUPPORTED_VERSIONS = Arrays
-			.asList(new String[] { "v1_15", "v1_14", "v1_13", "v1_8_R3" });
+			.asList(new String[] { "v1_16", "v1_15", "v1_14", "v1_13", "v1_8_R3" });
 
 	public static String getVersion() {
 		return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
@@ -62,14 +65,15 @@ public class VersionUtil {
 	public static boolean isBountifulUpdate() {
 		return isOfVersion("v1_8");
 	}
-	
-	public static boolean isFlying(Player p) {
+
+	public static boolean isFlying(Player player) {
 		if (isBountifulUpdate()) {
-			return p.isFlying();
+			return player.isFlying();
 		}
-		return p.isFlying() || p.isGliding() || p.hasPotionEffect(PotionEffectType.LEVITATION);
+		return player.isFlying() || player.isGliding() || player.hasPotionEffect(PotionEffectType.LEVITATION)
+				|| AntiCheatReloaded.getManager().getBackend().justLevitated(player);
 	}
-	
+
 	public static boolean isRiptiding(Player player) {
 		if (isBountifulUpdate()) {
 			return false;
@@ -83,7 +87,7 @@ public class VersionUtil {
 		}
 		return player.hasPotionEffect(PotionEffectType.SLOW_FALLING);
 	}
-	
+
 	public static boolean isFrostWalk(Player player) {
 		if (player.getInventory().getBoots() == null || isBountifulUpdate()) {
 			return false;
@@ -98,7 +102,7 @@ public class VersionUtil {
 		}
 		return player.getInventory().getItemInMainHand();
 	}
-	
+
 	public static int getPlayerPing(Player player) {
 		try {
 			Object entityPlayer = player.getClass().getMethod("getHandle").invoke(player);
@@ -114,6 +118,20 @@ public class VersionUtil {
 			return player.getTargetBlock((Set<Material>) null, distance);
 		}
 		return player.getTargetBlockExact(distance);
+	}
+
+	public static boolean isGliding(Player player) {
+		if (isBountifulUpdate()) {
+			return false;
+		}
+		return player.isGliding();
+	}
+
+	public static boolean isLevitationEffect(PotionEffect effect) {
+		if (isBountifulUpdate()) {
+			return false;
+		}
+		return effect.getType().equals(PotionEffectType.LEVITATION);
 	}
 
 }

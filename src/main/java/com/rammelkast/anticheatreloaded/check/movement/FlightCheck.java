@@ -22,12 +22,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
+import com.rammelkast.anticheatreloaded.check.CheckType;
+import com.rammelkast.anticheatreloaded.config.providers.Checks;
 import com.rammelkast.anticheatreloaded.util.Distance;
 import com.rammelkast.anticheatreloaded.util.MovementManager;
+import com.rammelkast.anticheatreloaded.util.User;
+import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
@@ -37,7 +43,7 @@ public class FlightCheck {
 
 	public static final Map<UUID, Long> MOVING_EXEMPT = new HashMap<UUID, Long>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
-
+	
 	public static CheckResult runCheck(Player player, Distance distance) {
 		if (distance.getYDifference() >= AntiCheatReloaded.getManager().getBackend().getMagic().TELEPORT_MIN()
 				|| VersionUtil.isFlying(player)) {
@@ -46,8 +52,79 @@ public class FlightCheck {
 			return PASS;
 		}
 		
-		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
-				.getMovementManager();
+		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
+		MovementManager movementManager = user.getMovementManager();
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+		
+		if (Utilities.isNearWater(player) || movementManager.halfMovement
+				|| Utilities.isClimbableBlock(distance.getFrom().getBlock())
+				|| Utilities.isClimbableBlock(distance.getFrom().getBlock().getRelative(BlockFace.DOWN))
+				|| Utilities.isClimbableBlock(distance.getFrom().getBlock().getRelative(BlockFace.UP)))
+			return PASS;
+		
+		int minAirTicks = 13;
+		if (player.hasPotionEffect(PotionEffectType.JUMP) ) {
+			minAirTicks += player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() * 3;
+		}
+		
+		if (movementManager.halfMovementHistoryCounter > 25)
+			minAirTicks += 5;
+		
+		// Start AirFlight
+		if (checksConfig.isSubcheckEnabled(CheckType.FLIGHT, "airFlight") && movementManager.airTicks > minAirTicks) {
+			// Config default base is 1200ms
+			// Ping clamped to max. 1000 to prevent spoofing for an advantage
+			int blockPlaceAccountingTime = (int) (checksConfig.getInteger(CheckType.FLIGHT, "airFlight", "accountForBlockPlacement") + (0.25 * (user.getPing() > 1000 ? 1000 : user.getPing())));
+			// Config default account is 250ms
+			if (AntiCheatReloaded.getPlugin().getTPS() < 18.0)
+				blockPlaceAccountingTime += checksConfig.getInteger(CheckType.FLIGHT, "airFlight", "accountForTpsDrops");
+			long lastPlacedBlock = AntiCheatReloaded.getManager().getBackend().placedBlock
+					.containsKey(player.getUniqueId())
+							? AntiCheatReloaded.getManager().getBackend().placedBlock.get(player.getUniqueId())
+							: (blockPlaceAccountingTime + 1);
+			double maxMotionY = System.currentTimeMillis() - lastPlacedBlock > blockPlaceAccountingTime ? 0 : 0.42;
+			if (movementManager.motionY > maxMotionY && movementManager.slimeInfluenceTicks <= 0)
+				return new CheckResult(CheckResult.Result.FAILED,
+						"tried to fly on the Y-axis (mY=" + movementManager.motionY + ", max=" + maxMotionY + ")");
+
+			if (Math.abs(movementManager.motionY - movementManager.lastMotionY) < 0.01
+					&& !Utilities.couldBeOnBoat(player)
+					&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig.getInteger(CheckType.FLIGHT, "airFlight", "accountForTeleports"))
+					&& !VersionUtil.isSlowFalling(player))
+				return new CheckResult(CheckResult.Result.FAILED, "had too little Y dropoff (diff="
+						+ Math.abs(movementManager.motionY - movementManager.lastMotionY) + ")");
+		}
+		// End AirFlight
+		
+		// Start AirClimb
+		// TODO two hardcoded values here shouldn't be there, temp against false positive
+		if (checksConfig.isSubcheckEnabled(CheckType.FLIGHT, "airClimb") && movementManager.lastMotionY > 0
+				&& movementManager.motionY > 0 && movementManager.airTicks == 2
+				&& Math.round(movementManager.lastMotionY * 1000) != 420
+				&& !(Math.round(movementManager.motionY * 1000) == 333 && Math.round(movementManager.lastMotionY * 1000) != 333)
+				&& !AntiCheatReloaded.getManager().getBackend().justVelocity(player)
+				&& !player.hasPotionEffect(PotionEffectType.JUMP)
+				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports")))
+			return new CheckResult(CheckResult.Result.FAILED,
+					"tried to climb air (mY=" + movementManager.motionY + ")");
+
+		if (checksConfig.isSubcheckEnabled(CheckType.FLIGHT, "airClimb") && movementManager.motionY > 0.42
+				&& movementManager.airTicks > 2 && !AntiCheatReloaded.getManager().getBackend().justVelocity(player)
+				&& !player.hasPotionEffect(PotionEffectType.JUMP)
+				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports")))
+			return new CheckResult(CheckResult.Result.FAILED,
+					"tried to climb air (mY=" + movementManager.motionY + ", at=" + movementManager.airTicks + ")");
+		// End AirClimb
+		
+		// Start GroundFlight
+		if (checksConfig.isSubcheckEnabled(CheckType.FLIGHT, "groundFlight") && movementManager.onGround
+				&& Utilities.cantStandAt(distance.getTo().getBlock().getRelative(BlockFace.DOWN))
+				&& Utilities.cantStandAt(distance.getFrom().getBlock().getRelative(BlockFace.DOWN))
+				&& movementManager.groundTicks > 2) {
+			return new CheckResult(CheckResult.Result.FAILED,
+					"faked ground to fly (mY=" + movementManager.motionY + ", gt=" + movementManager.groundTicks + ")");
+		}
+		// End GroundFlight
 		
 		return PASS;
 	}

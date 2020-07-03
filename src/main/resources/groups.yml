@@ -1,5 +1,7 @@
 # AntiCheatReloaded configuration file
+# Options; WARN, KICK, COMMAND[your command here] or NONE
+# To disable warnings or kicking, change WARN and/or KICK to NONE
 groups:
-    - 'Medium : 50 : YELLOW : WARN'
-    - 'High : 100 : RED : KICK'
+    - 'Medium : 75 : YELLOW : WARN'
+    - 'High : 150 : RED : KICK'
     - 'Custom : -1 : GREEN : COMMAND[ban %player%;]'

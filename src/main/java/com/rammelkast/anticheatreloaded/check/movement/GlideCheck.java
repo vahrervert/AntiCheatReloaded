@@ -19,8 +19,6 @@
 
 package com.rammelkast.anticheatreloaded.check.movement;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -32,6 +30,7 @@ import org.bukkit.entity.Player;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Distance;
+import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class GlideCheck {
@@ -78,13 +77,11 @@ public class GlideCheck {
 							.getGoodLocation(prev));
 				}
 				return new CheckResult(CheckResult.Result.FAILED,
-						"type=glide, desc_amount=" + new BigDecimal(motionY).setScale(2, RoundingMode.HALF_UP) + ")");
+						"had gliding behaviour (amt=" + Utilities.roundDouble(motionY, 5) + ")");
 			} else {
 				VIOLATIONS.put(player.getUniqueId(), violations + 1);
 				return PASS;
 			}
-		} else {
-			// TODO redo this
 		}
 		LAST_MOTION_Y.put(player.getUniqueId(), distance.getYDifference());
 		LAST_FALL_DISTANCE.put(player.getUniqueId(), player.getFallDistance());
