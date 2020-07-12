@@ -29,6 +29,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
+import com.rammelkast.anticheatreloaded.config.providers.Checks;
 import com.rammelkast.anticheatreloaded.config.providers.Magic;
 import com.rammelkast.anticheatreloaded.event.EventListener;
 
@@ -50,7 +51,7 @@ public class MorePacketsCheck {
 		}
 
 		UUID uuid = player.getUniqueId();
-		Magic magic = AntiCheatReloaded.getManager().getConfiguration().getMagic();
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		if (AntiCheatReloaded.getManager().getBackend().isDoing(player, EXEMPT_TIMINGS, -1)) {
 			return;
 		}
@@ -61,13 +62,15 @@ public class MorePacketsCheck {
 		long rate = packetTimeNow - lastPacketTime;
 		packetBalance += 50;
 		packetBalance -= rate;
-		if (packetBalance >= magic.MOREPACKETS_TRIGGER_BALANCE()) {
+		int triggerBalance = checksConfig.getInteger(CheckType.MOREPACKETS, "triggerBalance");
+		int minimumClamp = checksConfig.getInteger(CheckType.MOREPACKETS, "minimumClamp");
+		if (packetBalance >= triggerBalance) {
 			int ticks = (int) Math.round(packetBalance / 50);
-			packetBalance = -1 * (magic.MOREPACKETS_TRIGGER_BALANCE() / 2);
+			packetBalance = -1 * (triggerBalance / 2);
 			flag(player, event, "overshot timer by " + ticks + " tick(s)");
-		} else if (packetBalance < -1 * (magic.MOREPACKETS_MINIMUM_CLAMP())) {
+		} else if (packetBalance < -1 * minimumClamp) {
 			// Clamp minimum, 50ms=1tick of lag leniency
-			packetBalance = -1 * (magic.MOREPACKETS_MINIMUM_CLAMP());
+			packetBalance = -1 * minimumClamp;
 		}
 
 		LAST_PACKET_TIME.put(uuid, packetTimeNow);

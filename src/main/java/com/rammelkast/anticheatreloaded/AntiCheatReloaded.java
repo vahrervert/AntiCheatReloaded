@@ -34,7 +34,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.rammelkast.anticheatreloaded.check.packet.MorePacketsCheck;
 import com.rammelkast.anticheatreloaded.command.CommandHandler;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.event.BlockListener;
@@ -89,17 +88,18 @@ public class AntiCheatReloaded extends JavaPlugin {
 		if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
 			this.setupProtocol();
 		} else {
-			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.RED + "Shutting down, ProtocolLib not found!");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.DARK_GRAY + "> " + ChatColor.RED
+					+ "Could not find ProtocolLib. Shutting down!");
 			Bukkit.getPluginManager().disablePlugin(this);
 			return;
 		}
 		
-		getLogger().info("NMS version is " + VersionUtil.getVersion());
-		if (!VersionUtil.isSupported()) {
-			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.RED
-					+ "The version of this server is NOT supported by ACR! The plugin will not work as expected!");
-		}
-		
+		Bukkit.getConsoleSender()
+				.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.DARK_GRAY + "> " + ChatColor.GRAY
+						+ "Running Minecraft version " + VersionUtil.getVersion() + " "
+						+ (VersionUtil.isSupported() ? (ChatColor.GREEN + "(supported)")
+								: (ChatColor.RED + "(NOT SUPPORTED!)")));
+
 		getLogger().info("Enabling packet listeners");
 		PacketListener.listenKeepAlivePackets();
 		PacketListener.listenMovementPackets();

@@ -18,6 +18,9 @@
  */
 package com.rammelkast.anticheatreloaded.config.holders.yaml;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.config.Configuration;
@@ -78,8 +81,13 @@ public class YamlChecksHolder extends ConfigurationFile implements Checks {
 	@Override
 	public boolean isEnabled(CheckType checkType) {
 		// If the root of a check has no enabled or disabled option, it has to be configured on a subcheck basis
-		if (!this.getConfigFile().getConfigurationSection(checkType.name().toLowerCase()).contains("enabled"))
+		if (!this.getConfigFile().isConfigurationSection(checkType.getName().toLowerCase())) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.RED
+					+ "Missing configuration settings for " + checkType.getName() + "!");
 			return true;
-		return this.getConfigFile().getConfigurationSection(checkType.name().toLowerCase()).getBoolean("enabled");
+		}
+		if (!this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).contains("enabled"))
+			return true;
+		return this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).getBoolean("enabled");
 	}
 }

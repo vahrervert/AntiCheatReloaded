@@ -38,9 +38,7 @@ system:
   # Minimum value is 1, default is 5
   # Example with 5: notifications after 5 vl, 10vl, 15vl, etc.
   notify-every-vl: 5
-# Use /AntiCheatReloaded check for a list of valid checks
-disabled-checks:
-- EXAMPLE_CHECK
+# Use /AntiCheatReloaded checks for a list of valid checks
 disable-in:
 - example-world
 - example-world-2

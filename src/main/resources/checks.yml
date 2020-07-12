@@ -1,4 +1,46 @@
 # AntiCheatReloaded checks configuration file
+# Flight check settings
+flight:
+  # Checks for gliding behaviour
+  # Debugs as 'had gliding behaviour'
+  glide:
+    # Should this part of the check be enabled?
+    enabled: true
+    # Amount of glide-like moves before flagging
+    vlBeforeFlag: 3
+  # Checks for prolonged air movement
+  # Debugs as 'tried to fly on the Y-axis' or 'had too little Y dropoff'
+  airFlight:
+    # Should this part of the check be enabled?
+    enabled: true
+    # How many milliseconds to account for block placement
+    # Increase this if you get false positives when building a tower
+    accountForBlockPlacement: 1200
+    # How many milliseconds to account for TPS drops
+    # Increase this if you get false positives when building a tower during TPS drops
+    accountForTpsDrops: 250
+    # How many milliseconds to account for teleports
+    # Increase this is you debug 'had too little Y dropoff' after teleports
+    accountForTeleports: 50
+  # Checks for climbing behaviour in air
+  # Debugs as 'tried to climb air'
+  airClimb:
+    # Should this part of the check be enabled?
+    enabled: true
+    # How many milliseconds to account for teleports
+    # Increase this is you debug 'tried to climb air' after teleports
+    accountForTeleports: 50
+  # Checks if a player is faking it's ground status to fly
+  # Debugs as 'faked ground to fly'
+  groundFlight:
+    # Should this part of the check be enabled?
+    enabled: true
+
+# ElytraFly check settings
+elytrafly:
+  # Should this check be enabled?
+  enabled: true
+
 # Speed check settings
 speed:
   # Checks movement speed in the air
@@ -45,42 +87,10 @@ speed:
     # Extra compensation when moving off a ladder up a slab
     climbableCompensation: 0.04
 
-# Flight check settings
-flight:
-  # Checks for gliding behaviour
-  # Debugs as 'had gliding behaviour'
-  glide:
-    # Should this part of the check be enabled?
-    enabled: true
-    # Amount of glide-like moves before flagging
-    vlBeforeFlag: 3
-  # Checks for prolonged air movement
-  # Debugs as 'tried to fly on the Y-axis' or 'had too little Y dropoff'
-  airFlight:
-    # Should this part of the check be enabled?
-    enabled: true
-    # How many milliseconds to account for block placement
-    # Increase this if you get false positives when building a tower
-    accountForBlockPlacement: 1200
-    # How many milliseconds to account for TPS drops
-    # Increase this if you get false positives when building a tower during TPS drops
-    accountForTpsDrops: 250
-    # How many milliseconds to account for teleports
-    # Increase this is you debug 'had too little Y dropoff' after teleports
-    accountForTeleports: 50
-  # Checks for climbing behaviour in air
-  # Debugs as 'tried to climb air'
-  airClimb:
-    # Should this part of the check be enabled?
-    enabled: true
-    # How many milliseconds to account for teleports
-    # Increase this is you debug 'tried to climb air' after teleports
-    accountForTeleports: 50
-  # Checks if a player is faking it's ground status to fly
-  # Debugs as 'faked ground to fly'
-  groundFlight:
-    # Should this part of the check be enabled?
-    enabled: true
+# WaterWalk check settings
+waterwalk:
+  # Should this check be enabled?
+  enabled: true
 
 # FastLadder check settings
 fastladder:
@@ -150,6 +160,16 @@ velocity:
   # Amount of zero-velocity moments before flagging
   vlBeforeFlag: 3
 
+# FastBreak check settings
+fastbreak:
+  # Should this check be enabled?
+  enabled: true
+
+# FastPlace check settings
+fastplace:
+  # Should this check be enabled?
+  enabled: true
+
 # IllegalInteract check settings
 illegalinteract:
   # Maximum difference in angle from the players view
@@ -190,3 +210,83 @@ morepackets:
   # Maximum ping value before MorePackets stops checking a player (-1 to disable)
   # This can easily be spoofed by clients!
   maxPing: -1
+
+# Sneak check settings
+sneak:
+  # Should this check be enabled?
+  enabled: true
+
+# Spider check settings
+spider:
+  # Should this check be enabled?
+  enabled: true
+
+# NoFall check settings
+nofall:
+  # Should this check be enabled?
+  enabled: true
+
+# NoSwing check settings
+noswing:
+  # Should this check be enabled?
+  enabled: true
+
+# Sprint check settings
+sprint:
+  # Should this check be enabled?
+  enabled: true
+
+# FastBow check settings
+fastbow:
+  # Should this check be enabled?
+  enabled: true
+
+# FastEat check settings
+fasteat:
+  # Should this check be enabled?
+  enabled: true
+
+# FastHeal check settings
+fastheal:
+  # Should this check be enabled?
+  enabled: true
+
+# FastProjectile check settings
+fastprojectile:
+  # Should this check be enabled?
+  enabled: true
+
+# ItemSpam check settings
+itemspam:
+  # Should this check be enabled?
+  enabled: true
+
+# FastInventory check settings
+fastinventory:
+  # Should this check be enabled?
+  enabled: true
+
+# AutoTool check settings
+autotool:
+  # Should this check be enabled?
+  enabled: true
+
+# vClip check settings
+vclip:
+  # Should this check be enabled?
+  enabled: true
+
+# ChatUnicode check settings
+chatunicode:
+  # Should this check be enabled?
+  enabled: true
+
+# ChatSpam check settings
+chatspam:
+  # Should this check be enabled?
+  enabled: true
+  
+# CommandSpam check settings
+commandspam:
+  # Should this check be enabled?
+  enabled: true

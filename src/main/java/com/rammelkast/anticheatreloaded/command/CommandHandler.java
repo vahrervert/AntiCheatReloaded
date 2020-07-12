@@ -26,7 +26,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import com.rammelkast.anticheatreloaded.command.executors.CommandCheck;
+import com.rammelkast.anticheatreloaded.command.executors.CommandChecks;
 import com.rammelkast.anticheatreloaded.command.executors.CommandHelp;
 import com.rammelkast.anticheatreloaded.command.executors.CommandLog;
 import com.rammelkast.anticheatreloaded.command.executors.CommandMute;
@@ -41,7 +41,7 @@ public class CommandHandler implements CommandExecutor {
 
     public CommandHandler() {
         commands.add(new CommandHelp());
-        commands.add(new CommandCheck());
+        commands.add(new CommandChecks());
         commands.add(new CommandLog());
         commands.add(new CommandReload());
         commands.add(new CommandReport());

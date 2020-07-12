@@ -49,7 +49,6 @@ public class Config extends ConfigurationFile {
     public ConfigValue<Boolean> logToFile;
 
     public ConfigValue<List<String>> disabledWorlds;
-    public ConfigValue<List<String>> disabledChecks;
     
     public ConfigValue<Integer> notifyEveryVl;
 
@@ -81,7 +80,6 @@ public class Config extends ConfigurationFile {
         logToFile = new ConfigValue<Boolean>("system.log-to-file");
 
         disabledWorlds = new ConfigValue<List<String>>("disable-in");
-        disabledChecks = new ConfigValue<List<String>>("disabled-checks");
         
         notifyEveryVl = new ConfigValue<Integer>("system.notify-every-vl");
         if (notifyEveryVl.getValue() < 1) {

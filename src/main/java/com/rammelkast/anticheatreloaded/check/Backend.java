@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.rammelkast.anticheatreloaded.check;
 
 import java.util.ArrayList;
@@ -756,10 +755,6 @@ public class Backend {
 
 	public void logEnterExit(final Player player) {
 		FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + magic.ENTERED_EXITED_TIME());
-	}
-
-	public void logToggleSneak(final Player player) {
-		FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + magic.SNEAK_TIME());
 	}
 
 	public void logTeleport(final Player player) {

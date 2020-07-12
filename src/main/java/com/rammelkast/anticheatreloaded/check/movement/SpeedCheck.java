@@ -105,10 +105,14 @@ public class SpeedCheck {
 			// Players can move faster in air with slow falling
 			if (VersionUtil.isSlowFalling(player))
 				predict *= 1.25D;
+			// Prevent NoSlow
+			// TODO better way for this
+			if (player.isBlocking() && movementManager.airTicks > 2)
+				predict *= 0.8D;
 			
 			if (distanceXZ - predict > limit) {
 				return new CheckResult(CheckResult.Result.FAILED,
-						"moved too fast in air (speed=" + distanceXZ + ", limit=" + predict + ")");
+						"moved too fast in air (speed=" + distanceXZ + ", limit=" + predict + ", blocking=" + player.isBlocking() + ")");
 			}
 		}
 
@@ -175,14 +179,19 @@ public class SpeedCheck {
 						limit *= 1.25D;
 				}
 			}
+			// Increased speed when stepping on/off half blocks
 			if (Utilities.isNearBed(movingTowards) || Utilities.couldBeOnHalfblock(movingTowards)
 					|| Utilities.isNearBed(movingTowards.clone().add(0, -0.5, 0)))
 				limit *= 2.0D;
+			// Increased speed when stepping on/off boat
 			if (Utilities.couldBeOnBoat(player))
 				limit += 0.2D;
+			// Prevent NoSlow
+			if (player.isBlocking() && movementManager.groundTicks > 2)
+				limit *= 0.45D;
 			if (distanceXZ - limit > 0) {
 				return new CheckResult(CheckResult.Result.FAILED,
-						"moved too fast on ground (speed=" + distanceXZ + ", limit=" + limit + ")");
+						"moved too fast on ground (speed=" + distanceXZ + ", limit=" + limit + ", blocking=" + player.isBlocking() + ")");
 			}
 		}
 		return PASS;

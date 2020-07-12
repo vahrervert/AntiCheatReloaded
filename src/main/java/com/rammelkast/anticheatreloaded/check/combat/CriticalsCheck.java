@@ -46,6 +46,7 @@ public class CriticalsCheck {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private static boolean isCritical(Player player) {
 		return player.getFallDistance() > 0.0f && !player.isOnGround() && !player.isInsideVehicle()
 				&& !player.hasPotionEffect(PotionEffectType.BLINDNESS)

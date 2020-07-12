@@ -18,12 +18,7 @@
  */
 package com.rammelkast.anticheatreloaded.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public class MovementManager {
@@ -69,6 +64,7 @@ public class MovementManager {
 	// Elytra effect ticks
 	public int elytraEffectTicks;
 
+	@SuppressWarnings("deprecation")
 	public void handle(Player player, Location from, Location to, Distance distance) {
 		this.onGround = player.isOnGround(); // TODO temp solution, can be spoofed
 		

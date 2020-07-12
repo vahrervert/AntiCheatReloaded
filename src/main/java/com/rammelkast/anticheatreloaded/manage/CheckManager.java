@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.rammelkast.anticheatreloaded.check.CheckType;
@@ -47,13 +48,16 @@ public class CheckManager {
         this.manager = manager;
         this.config = manager.getConfiguration();
 
-        for (String string : config.getConfig().disabledChecks.getValue()) {
-            for (CheckType type : CheckType.values()) {
-                if (type.toString().equalsIgnoreCase(string)) {
-                    checkIgnoreList.add(type);
-                    break;
-                }
+        for (CheckType type : CheckType.values()) {
+            if (!config.getChecks().isEnabled(type)) {
+                checkIgnoreList.add(type);
+                break;
             }
+        }
+        
+        if (!checkIgnoreList.isEmpty()) {
+        	Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.DARK_GRAY + "> " + ChatColor.GRAY
+					+ checkIgnoreList.size() + " check(s) have been disabled");
         }
     }
 
