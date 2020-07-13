@@ -28,7 +28,8 @@ import org.bukkit.entity.Player;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckResult.Result;
-import com.rammelkast.anticheatreloaded.config.providers.Magic;
+import com.rammelkast.anticheatreloaded.check.CheckType;
+import com.rammelkast.anticheatreloaded.config.providers.Checks;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 
 public class FastLadderCheck {
@@ -37,7 +38,6 @@ public class FastLadderCheck {
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
 	public static CheckResult runCheck(Player player, double y) {
-		Magic magic = AntiCheatReloaded.getManager().getBackend().getMagic();
 		// Only check if fully on ladder
 		// Liquids are climbable blocks, so we have to add a seperate check
 		if (!Utilities.isClimbableBlock(player.getLocation().getBlock())
@@ -47,12 +47,14 @@ public class FastLadderCheck {
 		}
 
 		int vlCount = VIOLATIONS.getOrDefault(player.getUniqueId(), 0);
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+		int vlBeforeFlag = checksConfig.getInteger(CheckType.FASTLADDER, "vlBeforeFlag");
 		if (y > 0) {
 			// Check moving up
-			double max = magic.LADDER_Y_MAX();
+			double max = checksConfig.getDouble(CheckType.FASTLADDER, "speedUpMax");
 			// Check if going faster than max Y climbing speed
 			if (y - max > 0) {
-				if (vlCount++ > magic.FASTLADDER_MAX_FLAGS()) {
+				if (vlCount++ > vlBeforeFlag) {
 					vlCount = 0;
 					return new CheckResult(Result.FAILED,
 							"tried to climb up too fast (speed=" + y + ", max=" + max + ")");
@@ -63,11 +65,12 @@ public class FastLadderCheck {
 			}
 		} else if (y < 0) {
 			// Check moving down
-			if (Math.abs(y) > magic.LADDER_DOWN_MAX() + 6E-9) {
-				if (vlCount++ > magic.FASTLADDER_MAX_FLAGS()) {
+			double max = checksConfig.getDouble(CheckType.FASTLADDER, "speedDownMax");
+			if (Math.abs(y) > max + 6E-9) {
+				if (vlCount++ > vlBeforeFlag) {
 					vlCount = 0;
 					return new CheckResult(Result.FAILED, "tried to climb down too fast (speed=" + Math.abs(y)
-							+ ", max=" + magic.LADDER_DOWN_MAX() + ")");
+							+ ", max=" + max + ")");
 				}
 			} else {
 				if (vlCount > 0)

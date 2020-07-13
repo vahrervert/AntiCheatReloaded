@@ -31,6 +31,7 @@ import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.check.player.IllegalInteract;
+import com.rammelkast.anticheatreloaded.util.Distance;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 
 public class BlockListener extends EventListener {
@@ -102,16 +103,6 @@ public class BlockListener extends EventListener {
                 noHack = false;
             }
         }
-        // TODO fix
-       /* if (getCheckManager().willCheck(player, CheckType.LONG_REACH)) {
-            Distance distance = new Distance(player.getLocation(), block.getLocation());
-            result = getBackend().checkLongReachBlock(player, distance.getXDifference(), distance.getYDifference(), distance.getZDifference());
-            if (result.failed()) {
-                event.setCancelled(!silentMode());
-                log(result.getMessage(), player, CheckType.LONG_REACH);
-                noHack = false;
-            }
-        }*/
         if (getCheckManager().willCheck(player, CheckType.ILLEGAL_INTERACT)) {
             result = IllegalInteract.performCheck(player, event);
             if (result.failed()) {

@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.rammelkast.anticheatreloaded.check.movement;
 
 import java.util.HashMap;
@@ -29,6 +28,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.Backend;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
+import com.rammelkast.anticheatreloaded.check.CheckType;
+import com.rammelkast.anticheatreloaded.config.providers.Checks;
 
 public class AimbotCheck {
 
@@ -37,6 +38,7 @@ public class AimbotCheck {
 	
 	public static CheckResult runCheck(Player player, PlayerMoveEvent event) {
 		Backend backend = AntiCheatReloaded.getManager().getBackend();
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		if (backend.isMovingExempt(player)) {
 			return PASS;
 		}
@@ -57,7 +59,9 @@ public class AimbotCheck {
 		LAST_DELTA_YAW.put(uuid, dYaw);
 		
 		float absoluteYawDifference = Math.abs(dYaw - lastDeltaYaw);
-		if (absoluteYawDifference < 1E-8 && dYaw > 30 && dYaw < 355)
+		int minYaw = checksConfig.getInteger(CheckType.AIMBOT, "minYaw");
+		int maxYaw = checksConfig.getInteger(CheckType.AIMBOT, "maxYaw");
+		if (absoluteYawDifference < 1E-8 && minYaw > 30 && dYaw < maxYaw)
 			return new CheckResult(CheckResult.Result.FAILED, "repeated yaw difference (dYaw=" + dYaw + ")");
 		return PASS;
 	}

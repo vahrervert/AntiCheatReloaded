@@ -63,9 +63,9 @@ import com.rammelkast.anticheatreloaded.check.movement.AimbotCheck;
 import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FastLadderCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
-import com.rammelkast.anticheatreloaded.check.movement.GlideCheck;
 import com.rammelkast.anticheatreloaded.check.movement.SpeedCheck;
 import com.rammelkast.anticheatreloaded.check.movement.WaterWalkCheck;
+import com.rammelkast.anticheatreloaded.check.player.IllegalInteract;
 import com.rammelkast.anticheatreloaded.util.Distance;
 import com.rammelkast.anticheatreloaded.util.Permission;
 import com.rammelkast.anticheatreloaded.util.User;
@@ -289,13 +289,18 @@ public class PlayerListener extends EventListener {
                 }
             }
         }
+
         Block block = event.getClickedBlock();
-
-        if (block != null) {
-            Distance distance = new Distance(player.getLocation(), block.getLocation());
-            getBackend().checkLongReachBlock(player, distance.getXDifference(), distance.getYDifference(), distance.getZDifference());
+        if (block != null && (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_BLOCK)) {
+            if (getCheckManager().willCheck(player, CheckType.ILLEGAL_INTERACT)) {
+                CheckResult result = IllegalInteract.performCheck(player, event);
+                if (result.failed()) {
+                    event.setCancelled(!silentMode());
+                    log(result.getMessage(), player, CheckType.ILLEGAL_INTERACT);
+                }
+            }
         }
-
+        
         AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
     }
 
@@ -372,12 +377,6 @@ public class PlayerListener extends EventListener {
                     if (!silentMode()) {
                         event.setTo(user.getGoodLocation(from.clone()));
                     }
-                    log(result.getMessage(), player, CheckType.FLIGHT);
-                }
-            }
-            if (getCheckManager().willCheckQuick(player, CheckType.FLIGHT) && !VersionUtil.isFlying(player)) {
-                CheckResult result = GlideCheck.runCheck(player, distance);
-                if (result.failed()) {
                     log(result.getMessage(), player, CheckType.FLIGHT);
                 }
             }

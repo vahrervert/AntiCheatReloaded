@@ -42,7 +42,7 @@ public class YamlChecksHolder extends ConfigurationFile implements Checks {
 
 	@Override
 	public boolean getBoolean(CheckType checkType, String subcheck, String name) {
-		return this.getConfigFile().getConfigurationSection(checkType.name().toLowerCase()).getConfigurationSection(subcheck)
+		return this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).getConfigurationSection(subcheck)
 				.getBoolean(name);
 	}
 
@@ -53,29 +53,29 @@ public class YamlChecksHolder extends ConfigurationFile implements Checks {
 
 	@Override
 	public double getDouble(CheckType checkType, String subcheck, String name) {
-		return this.getConfigFile().getConfigurationSection(checkType.name().toLowerCase()).getConfigurationSection(subcheck)
+		return this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).getConfigurationSection(subcheck)
 				.getDouble(name);
 	}
 
 	@Override
 	public int getInteger(CheckType checkType, String subcheck, String name) {
-		return this.getConfigFile().getConfigurationSection(checkType.name().toLowerCase()).getConfigurationSection(subcheck)
+		return this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).getConfigurationSection(subcheck)
 				.getInt(name);
 	}
 
 	@Override
 	public boolean getBoolean(CheckType checkType, String name) {
-		return this.getConfigFile().getConfigurationSection(checkType.name().toLowerCase()).getBoolean(name);
+		return this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).getBoolean(name);
 	}
 
 	@Override
 	public double getDouble(CheckType checkType, String name) {
-		return this.getConfigFile().getConfigurationSection(checkType.name().toLowerCase()).getDouble(name);
+		return this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).getDouble(name);
 	}
 
 	@Override
 	public int getInteger(CheckType checkType, String name) {
-		return this.getConfigFile().getConfigurationSection(checkType.name().toLowerCase()).getInt(name);
+		return this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).getInt(name);
 	}
 
 	@Override

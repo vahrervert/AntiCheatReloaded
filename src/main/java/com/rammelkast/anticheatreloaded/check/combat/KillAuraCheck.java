@@ -31,7 +31,10 @@ import org.bukkit.util.Vector;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
+import com.rammelkast.anticheatreloaded.check.CheckType;
+import com.rammelkast.anticheatreloaded.config.providers.Checks;
 import com.rammelkast.anticheatreloaded.util.User;
+import com.rammelkast.anticheatreloaded.util.Utilities;
 
 public class KillAuraCheck {
 
@@ -42,32 +45,49 @@ public class KillAuraCheck {
 	public static CheckResult checkReach(Player player, Entity target) {
 		if (!(target instanceof LivingEntity))
 			return PASS;
-		// TODO add configs for everything here
 		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
-		double allowedReach = target.getVelocity().length() < 0.08 ? 3.6D : 4.0D;
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+
+		// Check if enabled
+		if (!checksConfig.isSubcheckEnabled(CheckType.KILLAURA, "reach"))
+			return PASS;
+
+		double allowedReach = target.getVelocity().length() < 0.08
+				? checksConfig.getDouble(CheckType.KILLAURA, "reach", "baseMaxValue.normal")
+				: checksConfig.getDouble(CheckType.KILLAURA, "reach", "baseMaxValue.velocitized");
 		// Lag compensation
-		allowedReach += user.getPing() * 0.0025D;
+		double lagExtraReach = checksConfig.getDouble(CheckType.KILLAURA, "reach", "lagCompensation.lagExtraReach");
+		double pingCompensation = checksConfig.getDouble(CheckType.KILLAURA, "reach",
+				"lagCompensation.pingCompensation");
+		allowedReach += user.getPing() * pingCompensation;
 		if (user.isLagging())
-			allowedReach += 0.2D;
+			allowedReach += lagExtraReach;
 		if (target instanceof Player) {
 			User targetUser = AntiCheatReloaded.getManager().getUserManager().getUser(target.getUniqueId());
-			allowedReach += targetUser.getPing()
-					* 0.0025D;
+			allowedReach += targetUser.getPing() * pingCompensation;
 			if (targetUser.isLagging())
-				allowedReach += 0.2D;
+				allowedReach += lagExtraReach;
 		}
 		// Velocity compensation
-		allowedReach += Math.abs(target.getVelocity().length()) * 1.2D;
-		double reachedDistance = ((LivingEntity)target).getLocation().toVector().distance(player.getLocation().toVector());
+		double velocityMultiplier = checksConfig.getDouble(CheckType.KILLAURA, "reach", "velocityMultiplier");
+		allowedReach += Math.abs(target.getVelocity().length()) * velocityMultiplier;
+		double reachedDistance = ((LivingEntity) target).getLocation().toVector()
+				.distance(player.getLocation().toVector());
 		if (reachedDistance > allowedReach)
 			return new CheckResult(CheckResult.Result.FAILED,
-					"reached too far (distance=" + reachedDistance + ", max=" + allowedReach + ")");
+					"reached too far (distance=" + Utilities.roundDouble(reachedDistance, 6) + ", max=" + Utilities.roundDouble(allowedReach, 6) + ")");
 		return PASS;
 	}
 
 	public static CheckResult checkAngle(Player player, EntityDamageEvent event) {
 		UUID uuid = player.getUniqueId();
 		Entity entity = event.getEntity();
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+
+		// Check if enabled
+		if (!checksConfig.isSubcheckEnabled(CheckType.KILLAURA, "angle"))
+			return PASS;
+
 		if (entity instanceof LivingEntity) {
 			LivingEntity living = (LivingEntity) entity;
 			Location eyeLocation = player.getEyeLocation();
@@ -76,16 +96,16 @@ public class KillAuraCheck {
 			double playerYaw = player.getEyeLocation().getYaw();
 
 			double angleDifference = Math.abs(180 - Math.abs(Math.abs(yawDifference - playerYaw) - 180));
-			if (Math.round(angleDifference) > AntiCheatReloaded.getManager().getConfiguration().getMagic()
-					.KILLAURA_MAX_ANGLE_DIFFERENCE()) {
+			int maxDifference = checksConfig.getInteger(CheckType.KILLAURA, "angle", "maxDifference");
+			if (Math.round(angleDifference) > maxDifference) {
 				if (!ANGLE_FLAGS.containsKey(uuid)) {
 					ANGLE_FLAGS.put(uuid, 1);
 					return PASS;
 				}
 
 				int flags = ANGLE_FLAGS.get(uuid);
-				if (flags >= AntiCheatReloaded.getManager().getConfiguration().getMagic()
-						.KILLAURA_MAX_ANGLE_VIOLATIONS()) {
+				int vlBeforeFlag = checksConfig.getInteger(CheckType.KILLAURA, "angle", "vlBeforeFlag");
+				if (flags >= vlBeforeFlag) {
 					ANGLE_FLAGS.remove(uuid);
 					return new CheckResult(CheckResult.Result.FAILED,
 							"tried to attack from an illegal angle (angle=" + Math.round(angleDifference) + ")");

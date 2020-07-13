@@ -1,13 +1,6 @@
 # AntiCheatReloaded checks configuration file
 # Flight check settings
 flight:
-  # Checks for gliding behaviour
-  # Debugs as 'had gliding behaviour'
-  glide:
-    # Should this part of the check be enabled?
-    enabled: true
-    # Amount of glide-like moves before flagging
-    vlBeforeFlag: 3
   # Checks for prolonged air movement
   # Debugs as 'tried to fly on the Y-axis' or 'had too little Y dropoff'
   airFlight:
@@ -21,7 +14,7 @@ flight:
     accountForTpsDrops: 250
     # How many milliseconds to account for teleports
     # Increase this is you debug 'had too little Y dropoff' after teleports
-    accountForTeleports: 50
+    accountForTeleports: 100
   # Checks for climbing behaviour in air
   # Debugs as 'tried to climb air'
   airClimb:
@@ -35,8 +28,21 @@ flight:
   groundFlight:
     # Should this part of the check be enabled?
     enabled: true
+  # Checks if a player ignores gravity
+  # Debugs as 'ignored gravity'
+  gravity:
+    # Should this part of the check be enabled?
+    enabled: true
+    # Maximum offset between predicted and actual gravity
+    maxOffset: 0.005
+    # How many milliseconds to account for teleports
+    # Increase this is you debug 'ignored gravity' after teleports
+    accountForTeleports: 100
+    # Amount of illegal moves before flagging
+    vlBeforeFlag: 5
 
 # ElytraFly check settings
+# Checks for illegal upward elytra movement
 elytrafly:
   # Should this check be enabled?
   enabled: true
@@ -88,18 +94,18 @@ speed:
     climbableCompensation: 0.04
 
 # WaterWalk check settings
+# Checks if a player is walking on water
 waterwalk:
   # Should this check be enabled?
   enabled: true
 
 # FastLadder check settings
+# Checks if a player moves too fast on a ladder
 fastladder:
   # Should this check be enabled?
   enabled: true
-  # Maximum speed a player on a ladder can travel
-  speedMax: 0.11761
-  # Minimum speed a player on a ladder will travel
-  speedMin: 0.11759
+  # Maximum speed a player on a ladder can travel upwards
+  speedUpMax: 0.11761
   # Maximum speed a player on a ladder can travel downwards
   speedDownMax: 0.15
   # Amount of illegal ladder moves before flagging
@@ -169,11 +175,13 @@ fastbreak:
 fastplace:
   # Should this check be enabled?
   enabled: true
+  # Minimum time in milliseconds between block places
+  minimumTime: 50
 
 # IllegalInteract check settings
 illegalinteract:
   # Maximum difference in angle from the players view
-  maxAngleDifference: 80
+  maxAngleDifference: 90
   # Checks angle when breaking a block
   # Debugs as 'tried to break a block which was out of view'
   break:
@@ -184,6 +192,19 @@ illegalinteract:
   place:
     # Should this part of the check be enabled?
     enabled: true
+  # Checks angle when placing a block
+  # Debugs as 'tried to interact out of range' or 'tried to interact out of view'
+  interact:
+    # Should this part of the check be enabled?
+    enabled: true
+    # Default survival interact range
+    survivalRange: 5.5
+    # Default creative interact range
+    creativeRange: 6.5
+    # Extra allowed reach distance per millisecond of ping
+    pingCompensation: 0.0045
+    # The multiplier of extra compensation for velocity
+    velocityMultiplier: 1.5
 
 # BadPackets check settings
 badpackets:
@@ -204,6 +225,8 @@ morepackets:
   minimumClamp: 500
   # The amount of milliseconds offset between packets before flagging (50ms = 1 tick)
   triggerBalance: 100
+  # The amount of milliseconds to compensate for a teleport (50ms = 1 tick)
+  teleportCompensation: 150
   # Should MorePackets be disabled for 'lagging' players?
   # This can easily be spoofed by clients!
   disableForLagging: false
@@ -212,9 +235,14 @@ morepackets:
   maxPing: -1
 
 # Sneak check settings
+# Checks if a player moves too fast when sneaking
 sneak:
   # Should this check be enabled?
   enabled: true
+  # Maximum speed a player can travel on the xz-axis while sneaking
+  xzMaxSneaking: 0.15
+  # Amount of illegal movements before flagging
+  vlBeforeFlag: 3
 
 # Spider check settings
 spider:
@@ -225,6 +253,8 @@ spider:
 nofall:
   # Should this check be enabled?
   enabled: true
+  # Amount of moves with a modified fall distance before flagging
+  vlBeforeFlag: 6
 
 # NoSwing check settings
 noswing:
@@ -250,6 +280,15 @@ fasteat:
 fastheal:
   # Should this check be enabled?
   enabled: true
+  # Minimum server TPS needed for FastHeal to be active
+  minimumTps: 17.5
+  # Should FastHeal be disabled for 'lagging' players?
+  # This can easily be spoofed by clients!
+  disableForLagging: false
+  # The minimum time it takes to regenerate health in milliseconds
+  minHealTime: 495
+  # Amount of milliseconds a player can heal faster per millisecond of ping
+  pingCompensation: 0.15
 
 # FastProjectile check settings
 fastprojectile:

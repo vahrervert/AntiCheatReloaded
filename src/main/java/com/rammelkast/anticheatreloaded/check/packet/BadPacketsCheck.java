@@ -30,6 +30,7 @@ import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.Backend;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
+import com.rammelkast.anticheatreloaded.config.providers.Checks;
 import com.rammelkast.anticheatreloaded.event.EventListener;
 import com.rammelkast.anticheatreloaded.util.User;
 
@@ -51,8 +52,9 @@ public class BadPacketsCheck {
 		}
 		
 		// TODO more precise checking for this
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		double tps = AntiCheatReloaded.getPlugin().getTPS();
-		if (user.isLagging() || tps < 18) {
+		if (user.isLagging() || tps < checksConfig.getDouble(CheckType.MOREPACKETS, "minimumTps")) {
 			return;
 		}
 		
@@ -64,7 +66,7 @@ public class BadPacketsCheck {
 		Location previous = player.getLocation();
 		Location current = new Location(previous.getWorld(), x, y, z, yaw, pitch);
 		double distance = previous.distanceSquared(current);
-		double maxDistance = backend.getMagic().BADPACKETS_MAX_DISTANCE();
+		double maxDistance = checksConfig.getDouble(CheckType.BADPACKETS, "maxDistance");
 		boolean hasNewLocation = packet.getBooleans().read(0);
 		if (distance > maxDistance) {
 			flag(player, event, "moved too far between packets (distance=" + new BigDecimal(distance).setScale(1, RoundingMode.HALF_UP) + ", max=" + maxDistance + ")");

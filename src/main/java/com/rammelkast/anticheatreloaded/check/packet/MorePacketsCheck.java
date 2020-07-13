@@ -30,8 +30,8 @@ import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.config.providers.Checks;
-import com.rammelkast.anticheatreloaded.config.providers.Magic;
 import com.rammelkast.anticheatreloaded.event.EventListener;
+import com.rammelkast.anticheatreloaded.util.User;
 
 /**
  * @author Rammelkast
@@ -44,15 +44,19 @@ public class MorePacketsCheck {
 
 	public static void runCheck(Player player, PacketEvent event) {
 		// Confirm if we should even check for MorePackets
-		// Upped TPS min to 17.5, need to add lag-based compensation to combat falses
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		double tps = AntiCheatReloaded.getPlugin().getTPS();
-		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.MOREPACKETS) || tps < 17.5) {
+		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.MOREPACKETS)
+				|| tps < checksConfig.getDouble(CheckType.MOREPACKETS, "minimumTps")) {
 			return;
 		}
 
 		UUID uuid = player.getUniqueId();
-		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
-		if (AntiCheatReloaded.getManager().getBackend().isDoing(player, EXEMPT_TIMINGS, -1)) {
+		User user = AntiCheatReloaded.getManager().getUserManager().getUser(uuid);
+		int maxPing = checksConfig.getInteger(CheckType.MOREPACKETS, "maxPing");
+		boolean disableForLagging = checksConfig.getBoolean(CheckType.MOREPACKETS, "disableForLagging");
+		if (AntiCheatReloaded.getManager().getBackend().isDoing(player, EXEMPT_TIMINGS, -1)
+				|| (maxPing > 0 && user.getPing() > maxPing) || (disableForLagging && user.isLagging())) {
 			return;
 		}
 		long packetTimeNow = System.currentTimeMillis();
@@ -92,9 +96,9 @@ public class MorePacketsCheck {
 
 	public static void compensate(Player player) {
 		UUID uuid = player.getUniqueId();
-		Magic magic = AntiCheatReloaded.getManager().getConfiguration().getMagic();
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		double packetBalance = PACKET_BALANCE.getOrDefault(uuid, 0D);
-		PACKET_BALANCE.put(uuid, packetBalance - magic.MOREPACKETS_TELEPORT_COMPENSATION());
+		PACKET_BALANCE.put(uuid, packetBalance - checksConfig.getInteger(CheckType.MOREPACKETS, "teleportCompensation"));
 	}
 
 }

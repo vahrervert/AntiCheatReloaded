@@ -31,10 +31,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
+import com.rammelkast.anticheatreloaded.config.providers.Checks;
 import com.rammelkast.anticheatreloaded.event.EventListener;
 
 /*
- * TODO improve
+ * TODO recode
  */
 public class VelocityCheck {
 
@@ -43,25 +44,26 @@ public class VelocityCheck {
 	public static void runCheck(EntityDamageByEntityEvent e, final Player player) {
 		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.VELOCITY))
 			return;
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+		final double minVelocitizedDistance = checksConfig.getDouble(CheckType.VELOCITY, "minVelocitizedDistance");
+		final int vlBeforeFlag = checksConfig.getInteger(CheckType.VELOCITY, "vlBeforeFlag");
 		final Location then = player.getLocation();
 		new BukkitRunnable() {
 			@Override
 			public void run() {
 				if (!player.isOnline())
 					return;
-				if (then.distance(player.getLocation()) < 0.125) {
+				if (then.distance(player.getLocation()) < minVelocitizedDistance) {
 					if (!VIOLATIONS.containsKey(player.getUniqueId()))
 						VIOLATIONS.put(player.getUniqueId(), 1);
 					else {
 						VIOLATIONS.put(player.getUniqueId(), VIOLATIONS.get(player.getUniqueId()) + 1);
-						if (VIOLATIONS.get(player.getUniqueId()) > AntiCheatReloaded.getManager().getBackend().getMagic()
-								.VELOCITY_MAX_FLAGS()) {
+						if (VIOLATIONS.get(player.getUniqueId()) > vlBeforeFlag) {
 							EventListener.log(
 									new CheckResult(CheckResult.Result.FAILED,
-											"had zero/low velocity " + VIOLATIONS.get(player.getUniqueId()) + " times (max="
-													+ AntiCheatReloaded.getManager().getBackend().getMagic()
-															.VELOCITY_MAX_FLAGS()
-													+ ", dist=" + then.distance(player.getLocation()) + ")").getMessage(),
+											"had zero/low velocity " + VIOLATIONS.get(player.getUniqueId())
+													+ " times (max=" + vlBeforeFlag + ", dist="
+													+ then.distance(player.getLocation()) + ")").getMessage(),
 									player, CheckType.VELOCITY);
 							VIOLATIONS.remove(player.getUniqueId());
 						}

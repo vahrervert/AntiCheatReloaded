@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.rammelkast.anticheatreloaded.check.player;
 
 import org.bukkit.GameMode;
@@ -26,11 +25,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
+import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
+import com.rammelkast.anticheatreloaded.config.providers.Checks;
 import com.rammelkast.anticheatreloaded.config.providers.Magic;
+import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
@@ -39,10 +42,33 @@ public class IllegalInteract {
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
 	public static CheckResult performCheck(Player player, Event event) {
-		if (event instanceof BlockPlaceEvent) {
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+		if (event instanceof BlockPlaceEvent && checksConfig.isSubcheckEnabled(CheckType.ILLEGAL_INTERACT, "place")) {
 			return checkBlockPlace(player, (BlockPlaceEvent) event);
-		} else if (event instanceof BlockBreakEvent) {
+		} else if (event instanceof BlockBreakEvent
+				&& checksConfig.isSubcheckEnabled(CheckType.ILLEGAL_INTERACT, "break")) {
 			return checkBlockBreak(player, (BlockBreakEvent) event);
+		} else if (event instanceof PlayerInteractEvent && checksConfig.isSubcheckEnabled(CheckType.ILLEGAL_INTERACT, "interact")) {
+			return checkInteract(player, (PlayerInteractEvent) event);
+		}
+		return PASS;
+	}
+
+	private static CheckResult checkInteract(Player player, PlayerInteractEvent event) {
+		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+		double distance = player.getEyeLocation().toVector().distance(event.getClickedBlock().getLocation().toVector());
+		double maxDistance = player.getGameMode() == GameMode.CREATIVE
+				? checksConfig.getDouble(CheckType.ILLEGAL_INTERACT, "interact", "creativeRange")
+				: checksConfig.getDouble(CheckType.ILLEGAL_INTERACT, "interact", "survivalRange");
+
+		maxDistance += user.isLagging() ? 0.12 : 0;
+		maxDistance += user.getPing()
+				* checksConfig.getInteger(CheckType.ILLEGAL_INTERACT, "interact", "pingCompensation");
+		maxDistance += player.getVelocity().length()
+				* checksConfig.getDouble(CheckType.ILLEGAL_INTERACT, "interact", "velocityMultiplier");
+		if (distance > maxDistance) {
+			return new CheckResult(CheckResult.Result.FAILED, "tried to interact out of range (dist=" + distance + ", max=" + maxDistance + ")");
 		}
 		return PASS;
 	}
@@ -63,6 +89,7 @@ public class IllegalInteract {
 
 	private static boolean isValidTarget(Player player, Block block) {
 		Magic magic = AntiCheatReloaded.getManager().getConfiguration().getMagic();
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		double distance = player.getGameMode() == GameMode.CREATIVE ? magic.BLOCK_MAX_DISTANCE_CREATIVE()
 				: player.getLocation().getDirection().getY() > 0.9 ? magic.BLOCK_MAX_DISTANCE_CREATIVE()
 						: magic.BLOCK_MAX_DISTANCE();
@@ -86,7 +113,7 @@ public class IllegalInteract {
 		double yawDifference = KillAuraCheck.calculateYawDifference(eyeLocation, block.getLocation());
 		double playerYaw = player.getEyeLocation().getYaw();
 		double angleDifference = Math.abs(180 - Math.abs(Math.abs(yawDifference - playerYaw) - 180));
-		if (Math.round(angleDifference) > magic.ILLEGALINTERACT_MAX_ANGLE_DIFFERENCE()) {
+		if (Math.round(angleDifference) > checksConfig.getInteger(CheckType.ILLEGAL_INTERACT, "maxAngleDifference")) {
 			return false;
 		}
 		return true;

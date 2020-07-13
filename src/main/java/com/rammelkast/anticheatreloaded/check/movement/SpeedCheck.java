@@ -67,11 +67,14 @@ public class SpeedCheck {
 				if (iceIncrement > 0.18D)
 					iceIncrement = 0.18D;
 				if (boxedIn)
-					iceIncrement += 0.5D;
+					iceIncrement += 0.45D;
 				if (!Utilities.couldBeOnIce(movingTowards))
 					 iceIncrement *= 2.5D;
 				predict += iceIncrement;
 			}
+			// Leniency when boxed in
+			if (boxedIn && movementManager.airTicks < 3)
+				limit *= 1.2D;
 			// Adjust for slime
 			if (movementManager.slimeInfluenceTicks > 0) {
 				double slimeIncrement = 0.022 * Math.pow(1.0375, movementManager.slimeInfluenceTicks);
@@ -111,8 +114,8 @@ public class SpeedCheck {
 				predict *= 0.8D;
 			
 			if (distanceXZ - predict > limit) {
-				return new CheckResult(CheckResult.Result.FAILED,
-						"moved too fast in air (speed=" + distanceXZ + ", limit=" + predict + ", blocking=" + player.isBlocking() + ")");
+				return new CheckResult(CheckResult.Result.FAILED, "moved too fast in air (speed=" + distanceXZ
+						+ ", limit=" + predict + ", block=" + player.isBlocking() + ", box=" + boxedIn + ", at=" + movementManager.airTicks + ")");
 			}
 		}
 
@@ -123,6 +126,9 @@ public class SpeedCheck {
 				&& movementManager.elytraEffectTicks <= 0) {
 			double initialAcceleration = movementManager.acceleration;
 			double limit = checksConfig.getDouble(CheckType.SPEED, "airAcceleration", "baseLimit"); // Default 0.3725
+			// Slight increase when boxed in
+			if (boxedIn)
+				limit *= 1.05D;
 			// Adjust for speed effects
 			if (player.hasPotionEffect(PotionEffectType.SPEED))
 				limit += (player.getPotionEffect(PotionEffectType.SPEED).getAmplifier() + 1) * 0.0225D;
@@ -164,6 +170,9 @@ public class SpeedCheck {
 			// Slab leniency
 			if (movementManager.halfMovementHistoryCounter > 8)
 				limit += 0.2D;
+			// Leniency when boxed in
+			if (boxedIn)
+				limit *= 1.1D;
 			// Adjust for speed effects
 			if (player.hasPotionEffect(PotionEffectType.SPEED))
 				limit += (player.getPotionEffect(PotionEffectType.SPEED).getAmplifier() + 1) * 0.06D;
@@ -206,7 +215,7 @@ public class SpeedCheck {
 			return PASS;
 		
 		if (player.isInsideVehicle() || player.isSleeping()
-				|| backend.isDoing(player, backend.velocitized, backend.getMagic().VELOCITY_TIME()) || VersionUtil.isFlying(player)
+				|| backend.isDoing(player, backend.velocitized, backend.getMagic().VELOCITY_SCHETIME()) || VersionUtil.isFlying(player)
 				|| VersionUtil.isRiptiding(player)) {
 			return PASS;
 		}

@@ -55,7 +55,7 @@ public class MovementManager {
 	public boolean bottomSolid;
 	// If the current movement is up a slab or stair
 	public boolean halfMovement;
-	// If the player is on the ground
+	// If the player is on the ground (determined clientside!)
 	public boolean onGround;
 	// Ticks counter for last halfMovement
 	public int halfMovementHistoryCounter = 0;
@@ -66,7 +66,10 @@ public class MovementManager {
 
 	@SuppressWarnings("deprecation")
 	public void handle(Player player, Location from, Location to, Distance distance) {
-		this.onGround = player.isOnGround(); // TODO temp solution, can be spoofed
+		// TODO as of now, we "trust" the client to send the right thing
+		// This is checked for spoofing by "GroundFlight"
+		// Also seems to make NoFall cheats flag for speed lmao
+		this.onGround = player.isOnGround();
 		
 		double x = distance.getXDifference();
         double z = distance.getZDifference();

@@ -43,10 +43,6 @@ public interface Magic {
      */
     public int ENTERED_EXITED_TIME();
     /**
-     * Time to exempt a player from moving because of entering/exiting sneak mode; Type=SYSTEM, Leniency=INCREASE.
-     */
-    public int SNEAK_TIME();
-    /**
      * Time to exempt a player from moving because of teleporting; Type=SYSTEM, Leniency=INCREASE.
      */
     public int TELEPORT_TIME();
@@ -115,14 +111,6 @@ public interface Magic {
      */
     public int FASTBREAK_MAXVIOLATIONTIME();
     /**
-     * Number of blocks that can be broken without being hit before taking action; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int FASTPLACE_ZEROLIMIT();
-    /**
-     * Minimum time in between block places; Type=SYSTEM, Leniency=DECREASE.
-     */
-    public int FASTPLACE_TIMEMIN();
-    /**
      * Number of times fastplace can be observed before taking action; Type=INTEGER, Leniency=INCREASE.
      */
     public int FASTPLACE_MAXVIOLATIONS();
@@ -155,22 +143,6 @@ public interface Magic {
      */
     public int CHAT_ACTION_TWO_LEVEL();
     /**
-     * Number of times a player can be caught in-glide before action is taken; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int GLIDE_LIMIT();
-    /**
-     * How many blocks you can travel before action is taken; Type=INTEGER, Leniency=INCREASE.
-     */
-    public double FLIGHT_BLOCK_LIMIT();
-    /**
-     * Maximum speed that a player can climb a waterfall; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double WATER_CLIMB_MAX();
-    /**
-     * Number of times a player can fail a velocity check before action is taken; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int VELOCITY_TIME();
-    /**
      * Time used to schedule increasing a players velocity count - probably not touching this would be good; Type=INTEGER.
      */
     public int VELOCITY_SCHETIME();
@@ -186,10 +158,6 @@ public interface Magic {
      * Number of times a player can fail the velocity check before action is taken; Type=INTEGER, Leniency=INCREASE.
      */
     public int VELOCITY_MAXTIMES();
-    /**
-     * Number of times a player can fail the nofall check before action is taken; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int NOFALL_LIMIT();
     /**
      * Number of times a player can sprint without proper food level before action is taken; Type=INTEGER, Leniency=INCREASE.
      */
@@ -263,14 +231,6 @@ public interface Magic {
      */
     public double LADDER_Y_MIN();
     /**
-     * Maximum speed a player on a ladder can travel downwards
-     */
-    public double LADDER_DOWN_MAX();
-    /**
-     * Maximum speed a player can travel forwards or backwards while sneaking; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double XZ_SPEED_MAX_SNEAK();
-    /**
      * The number of clicks we should wait before checking if the player has used fast inventory; Type=INTEGER; Leniency=INCREASE.
      */
     public int INVENTORY_CHECK();
@@ -282,46 +242,6 @@ public interface Magic {
      * Minimum travel distance for move to be considered a teleport and subsequently be ignored; Type=INTEGER, Leniency=INCREASE.
      */
     public int TELEPORT_MIN();
-    /**
-     * The amount of milliseconds to compensate for a teleport; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int MOREPACKETS_TELEPORT_COMPENSATION();
-    /**
-     * The amount of milliseconds that were offset to flag for MorePackets; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int MOREPACKETS_TRIGGER_BALANCE();
-    /**
-     * The maximum amount of overall lag compensating in milliseconds; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int MOREPACKETS_MINIMUM_CLAMP();
-    /**
-     * Maximum amount of low/zero velocity moments before flagging; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int VELOCITY_MAX_FLAGS();
-    /**
-     * The maximum angle difference allowed when attacking; TYPE=INTEGER, Leniency=INCREASE
-     */
-    public int KILLAURA_MAX_ANGLE_DIFFERENCE();
-    /**
-     * The maximum amount of violations before flagging player as a cheater; TYPE=INTEGER, Leniency=INCREASE
-     */
-    public int KILLAURA_MAX_ANGLE_VIOLATIONS();
-    /**
-     * The maximum angle difference allowed when breaking or placing blocks; TYPE=INTEGER, Leniency=INCREASE
-     */
-    public int ILLEGALINTERACT_MAX_ANGLE_DIFFERENCE();
-    /**
-     * The minimum time it takes to regenerate health; TYPE=INTEGER, Leniency=DECREASE
-     */
-    public int MIN_HEAL_TIME();
-    /**
-     * Maximum distance allowed between two movement packets; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double BADPACKETS_MAX_DISTANCE();
-    /**
-     * Maximum amount of fastladder movements before flagging; TYPE=INTEGER, Leniency=INCREASE
-     */
-    public int FASTLADDER_MAX_FLAGS();
     /**
      * The change milliseconds between two keepalives before considering a player to be lagging; TYPE=INTEGER, Leniency=DECREASE
      */

@@ -31,17 +31,17 @@ import com.rammelkast.anticheatreloaded.util.Utilities;
 
 public class CriticalsCheck {
 
-	public static void doDamageEvent(EntityDamageByEntityEvent e, Player damager) {
-		if (!(e.getDamager() instanceof Player) || e.getCause() != DamageCause.ENTITY_ATTACK)
+	public static void doDamageEvent(EntityDamageByEntityEvent event, Player damager) {
+		if (!(event.getDamager() instanceof Player) || event.getCause() != DamageCause.ENTITY_ATTACK)
 			return;
-		Player p = (Player) e.getDamager();
-		if (isCritical(p)) {
-			if ((p.getLocation().getY() % 1.0 == 0 || p.getLocation().getY() % 0.5 == 0)
-					&& p.getLocation().clone().subtract(0, 1.0, 0).getBlock().getType().isSolid()) {
-				e.setCancelled(true);
+		Player player = (Player) event.getDamager();
+		if (isCritical(player)) {
+			if ((player.getLocation().getY() % 1.0 == 0 || player.getLocation().getY() % 0.5 == 0)
+					&& player.getLocation().clone().subtract(0, 1.0, 0).getBlock().getType().isSolid()) {
+				event.setCancelled(true);
 				EventListener.log(new CheckResult(CheckResult.Result.FAILED, "tried to do a critical without needed conditions")
 								.getMessage(),
-						p, CheckType.CRITICALS);
+						player, CheckType.CRITICALS);
 			}
 		}
 	}

@@ -42,10 +42,10 @@ import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
 import com.rammelkast.anticheatreloaded.check.movement.AimbotCheck;
 import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
-import com.rammelkast.anticheatreloaded.check.movement.GlideCheck;
 import com.rammelkast.anticheatreloaded.check.movement.WaterWalkCheck;
 import com.rammelkast.anticheatreloaded.check.packet.MorePacketsCheck;
 import com.rammelkast.anticheatreloaded.config.Configuration;
+import com.rammelkast.anticheatreloaded.config.providers.Checks;
 import com.rammelkast.anticheatreloaded.config.providers.Lang;
 import com.rammelkast.anticheatreloaded.config.providers.Magic;
 import com.rammelkast.anticheatreloaded.manage.AntiCheatManager;
@@ -91,12 +91,14 @@ public class Backend {
 	private Map<UUID, Long> lastSneak = new HashMap<UUID, Long>();
 
 	private Magic magic;
+	private Checks checksConfig;
 	private AntiCheatManager manager = null;
 	private Lang lang = null;
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
 	public Backend(AntiCheatManager instance) {
 		magic = instance.getConfiguration().getMagic();
+		checksConfig = instance.getConfiguration().getChecks();
 		manager = instance;
 		lang = manager.getConfiguration().getLang();
 		transparent.add((byte) -1);
@@ -162,9 +164,6 @@ public class Backend {
 		MorePacketsCheck.LAST_PACKET_TIME.remove(uuid);
 		MorePacketsCheck.PACKET_BALANCE.remove(uuid);
 		MorePacketsCheck.EXEMPT_TIMINGS.remove(uuid);
-		GlideCheck.LAST_MOTION_Y.remove(uuid);
-		GlideCheck.LAST_FALL_DISTANCE.remove(uuid);
-		GlideCheck.VIOLATIONS.remove(uuid);
 		ElytraCheck.JUMP_Y_VALUE.remove(uuid);
 		KillAuraCheck.ANGLE_FLAGS.remove(uuid);
 		FlightCheck.MOVING_EXEMPT.remove(uuid);
@@ -225,25 +224,7 @@ public class Backend {
 		}
 		return PASS;
 	}
-
-	public CheckResult checkLongReachBlock(Player player, double x, double y, double z) {
-		if (isInstantBreakExempt(player)) {
-			return new CheckResult(CheckResult.Result.PASSED);
-		} else {
-			String string = "reached too far for a block";
-			double distance = player.getGameMode() == GameMode.CREATIVE ? magic.BLOCK_MAX_DISTANCE_CREATIVE()
-					: player.getLocation().getDirection().getY() > 0.9 ? magic.BLOCK_MAX_DISTANCE_CREATIVE()
-							: magic.BLOCK_MAX_DISTANCE();
-			double i = x >= distance ? x : y > distance ? y : z > distance ? z : -1;
-			if (i != -1) {
-				return new CheckResult(CheckResult.Result.FAILED,
-						string + " (distance=" + i + ", max=" + magic.BLOCK_MAX_DISTANCE() + ")");
-			} else {
-				return PASS;
-			}
-		}
-	}
-
+	
 	public CheckResult checkSpider(Player player, double y) {
 		if (y <= magic.LADDER_Y_MAX() && y >= magic.LADDER_Y_MIN()
 				&& !Utilities.isClimbableBlock(player.getLocation().getBlock())
@@ -270,10 +251,11 @@ public class Backend {
 				}
 
 				int i = nofallViolation.get(uuid);
-				if (i >= magic.NOFALL_LIMIT()) {
+				int vlBeforeFlag = checksConfig.getInteger(CheckType.NOFALL, "vlBeforeFlag");
+				if (i >= vlBeforeFlag) {
 					nofallViolation.put(player.getUniqueId(), 1);
 					return new CheckResult(CheckResult.Result.FAILED, "tried to avoid fall damage (fall distance = 0 "
-							+ i + " times in a row, max=" + magic.NOFALL_LIMIT() + ")");
+							+ i + " times in a row, max=" + vlBeforeFlag + ")");
 				} else {
 					return PASS;
 				}
@@ -287,15 +269,17 @@ public class Backend {
 
 	public CheckResult checkSneak(Player player, Location location, double x, double z) {
 		if (player.isSneaking() && !VersionUtil.isFlying(player) && !isMovingExempt(player) && !player.isInsideVehicle()
-				&& !Utilities.cantStandAtExp(location) && !Utilities.isSlab(location.getBlock().getRelative(BlockFace.DOWN))) {
-			double i = x > magic.XZ_SPEED_MAX_SNEAK() ? x : z > magic.XZ_SPEED_MAX_SNEAK() ? z : -1;
+				&& !Utilities.cantStandAtExp(location)
+				&& !Utilities.isSlab(location.getBlock().getRelative(BlockFace.DOWN))) {
+			double xzMaxSneaking = checksConfig.getDouble(CheckType.SNEAK, "xzMaxSneaking");
+			double i = x > xzMaxSneaking ? x : z > xzMaxSneaking ? z : -1;
 			if (i != -1) {
 				if (this.fastSneakViolations.containsKey(player.getUniqueId())) {
 					int flags = this.fastSneakViolations.get(player.getUniqueId());
-					if (flags >= 3) { // TODO possible config
+					if (flags >= checksConfig.getInteger(CheckType.SNEAK, "vlBeforeFlag")) {
 						this.fastSneakViolations.put(player.getUniqueId(), flags - 1);
 						return new CheckResult(CheckResult.Result.FAILED,
-								"was sneaking too fast (speed=" + i + ", max=" + magic.XZ_SPEED_MAX_SNEAK() + ")");
+								"was sneaking too fast (speed=" + i + ", max=" + xzMaxSneaking + ")");
 					}
 					this.fastSneakViolations.put(player.getUniqueId(), flags + 1);
 					return PASS;
@@ -317,8 +301,8 @@ public class Backend {
 		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
 		final long lastSneak = this.lastSneak.getOrDefault(player.getUniqueId(), (long) 0);
 		this.lastSneak.put(player.getUniqueId(), System.currentTimeMillis());
-		if (System.currentTimeMillis() - lastSneak < 75 && (AntiCheatReloaded.getPlugin().getTPS() > 12
-				&& !user.isLagging())) {
+		if (System.currentTimeMillis() - lastSneak < 75
+				&& (AntiCheatReloaded.getPlugin().getTPS() > 12 && !user.isLagging())) {
 			if (!this.silentMode()) {
 				player.teleport(user.getGoodLocation(player.getLocation()));
 			}
@@ -475,13 +459,14 @@ public class Backend {
 			long last = lastBlockPlaced.get(uuid);
 			long lastTime = lastBlockPlaceTime.get(uuid);
 			long thisTime = time - last;
+			int minimumTime = checksConfig.getInteger(CheckType.FAST_PLACE, "minimumTime");
 
-			if (lastTime != 0 && thisTime < magic.FASTPLACE_TIMEMIN()) {
+			if (lastTime != 0 && thisTime < minimumTime) {
 				lastBlockPlaceTime.put(uuid, (time - last));
 				lastBlockPlaced.put(uuid, time);
 				fastPlaceViolation.put(uuid, fastPlaceViolation.get(uuid) + 1);
-				return new CheckResult(CheckResult.Result.FAILED, "tried to place a block " + thisTime
-						+ " ms after the last one (min=" + magic.FASTPLACE_TIMEMIN() + " ms)");
+				return new CheckResult(CheckResult.Result.FAILED,
+						"tried to place a block " + thisTime + " ms after the last one (min=" + minimumTime + " ms)");
 			}
 			lastBlockPlaceTime.put(uuid, (time - last));
 		}
@@ -630,16 +615,19 @@ public class Backend {
 		if (lastHeal.containsKey(player.getUniqueId())) // Otherwise it was modified by a plugin, don't worry about it.
 		{
 			double tps = AntiCheatReloaded.getPlugin().getTPS();
-			if (tps < 17.5
-					|| user.isLagging()) {
+			if (tps < checksConfig.getDouble(CheckType.FAST_HEAL, "minimumTps")
+					|| (user.isLagging() && checksConfig.getBoolean(CheckType.FAST_HEAL, "disableForLagging"))) {
 				return PASS;
 			}
-			long healTime = magic.MIN_HEAL_TIME() - (tps >= 18.5 ? 0 : 50);
-			long l = lastHeal.get(player.getUniqueId());
+			long minHealTime = checksConfig.getInteger(CheckType.FAST_HEAL, "minHealTime");
+			long lastHealTime = lastHeal.get(player.getUniqueId());
+			int ping = user.getPing();
+			double pingCompensation = checksConfig.getInteger(CheckType.FAST_HEAL, "pingCompensation");
+			long allowedHealTime = (long) (minHealTime - (ping * pingCompensation));
 			lastHeal.remove(player.getUniqueId());
-			if ((System.currentTimeMillis() - l) < healTime) {
+			if ((System.currentTimeMillis() - lastHealTime) < allowedHealTime) {
 				return new CheckResult(CheckResult.Result.FAILED, "healed too quickly (time="
-						+ (System.currentTimeMillis() - l) + " ms, min=" + healTime + " ms)");
+						+ (System.currentTimeMillis() - lastHealTime) + " ms, min=" + allowedHealTime + " ms)");
 			}
 		}
 		return PASS;
@@ -649,8 +637,7 @@ public class Backend {
 		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
 		if (startEat.containsKey(player.getUniqueId())) // Otherwise it was modified by a plugin, don't worry about it.
 		{
-			if (AntiCheatReloaded.getPlugin().getTPS() < 17.5
-					|| user.isLagging()) {
+			if (AntiCheatReloaded.getPlugin().getTPS() < 17.5 || user.isLagging()) {
 				return PASS;
 			}
 			long l = startEat.get(player.getUniqueId());
@@ -690,13 +677,13 @@ public class Backend {
 	public void logLevitating(final Player player, final int duration) {
 		levitatingEnd.put(player.getUniqueId(), System.currentTimeMillis() + (duration * 1000L));
 	}
-	
+
 	public boolean justVelocity(Player player) {
 		return (velocitized.containsKey(player.getUniqueId())
 				? (System.currentTimeMillis() - velocitized.get(player.getUniqueId())) < magic.VELOCITY_CHECKTIME()
 				: false);
 	}
-	
+
 	public boolean justLevitated(Player player) {
 		return (levitatingEnd.containsKey(player.getUniqueId())
 				? (System.currentTimeMillis() - levitatingEnd.get(player.getUniqueId())) < magic.VELOCITY_CHECKTIME()
@@ -758,19 +745,17 @@ public class Backend {
 	}
 
 	public void logTeleport(final Player player) {
-		manager.getUserManager().getUser(player.getUniqueId()).getMovementManager().lastTeleport = System.currentTimeMillis();
+		manager.getUserManager().getUser(player.getUniqueId()).getMovementManager().lastTeleport = System
+				.currentTimeMillis();
 		/* Data for fly/speed should be reset */
 		nofallViolation.remove(player.getUniqueId());
-		GlideCheck.LAST_FALL_DISTANCE.remove(player.getUniqueId());
-		GlideCheck.LAST_MOTION_Y.remove(player.getUniqueId());
-		GlideCheck.VIOLATIONS.remove(player.getUniqueId());
 		ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId());
 	}
 
 	public void logExitFly(final Player player) {
 		FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + magic.EXIT_FLY_TIME());
 	}
-	
+
 	public void logBoatCollision(final Player player) {
 		// TODO config
 		FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + 100 /* 2 ticks */);
