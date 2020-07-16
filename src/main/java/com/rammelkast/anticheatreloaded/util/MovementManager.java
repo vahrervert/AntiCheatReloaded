@@ -63,6 +63,8 @@ public class MovementManager {
 	public long lastTeleport;
 	// Elytra effect ticks
 	public int elytraEffectTicks;
+	// Used by Velocity check, represents the currently expected Y motion
+	public double velocityExpectedMotionY;
 
 	@SuppressWarnings("deprecation")
 	public void handle(Player player, Location from, Location to, Distance distance) {

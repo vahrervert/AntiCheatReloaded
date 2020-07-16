@@ -16,106 +16,59 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.rammelkast.anticheatreloaded.check.movement;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
-import com.rammelkast.anticheatreloaded.check.Backend;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
+import com.rammelkast.anticheatreloaded.check.CheckResult.Result;
+import com.rammelkast.anticheatreloaded.check.CheckType;
+import com.rammelkast.anticheatreloaded.config.providers.Checks;
+import com.rammelkast.anticheatreloaded.util.MovementManager;
+import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.Utilities;
-import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
-/**
- * TODO recode
- */
 public class WaterWalkCheck {
 
-	public static final List<UUID> IS_IN_WATER = new ArrayList<UUID>();
-	public static final List<UUID> IS_IN_WATER_CACHE = new ArrayList<UUID>();
-	public static final Map<UUID, Integer> WATER_SPEED_VIOLATIONS = new HashMap<UUID, Integer>();
-	public static final Map<UUID, Integer> WATER_ASCENSION_VIOLATIONS = new HashMap<UUID, Integer>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
 	public static CheckResult runCheck(Player player, double x, double y, double z) {
-		Backend backend = AntiCheatReloaded.getManager().getBackend();
-		Block block = player.getLocation().getBlock();
 		UUID uuid = player.getUniqueId();
+		User user = AntiCheatReloaded.getManager().getUserManager().getUser(uuid);
+		MovementManager movementManager = user.getMovementManager();
 
-		if (player.getVehicle() == null && !player.isFlying() && !VersionUtil.isFrostWalk(player)) {
-			if (block.isLiquid()) {
-				if (IS_IN_WATER.contains(uuid)) {
-					if (IS_IN_WATER_CACHE.contains(uuid)) {
-						if (player.getNearbyEntities(1, 1, 1).isEmpty()) {
-							boolean violation;
-							/*if (!Utilities.sprintFly(player)) {
-								violation = x > backend.getMagic().XZ_SPEED_MAX_WATER()
-										|| z > backend.getMagic().XZ_SPEED_MAX_WATER();
-							} else {
-								violation = x > backend.getMagic().XZ_SPEED_MAX_WATER_SPRINT()
-										|| z > backend.getMagic().XZ_SPEED_MAX_WATER_SPRINT();
-							}*/
-							violation = false;
-							if (!violation && !Utilities.isFullyInWater(player.getLocation())
-									&& Utilities.isHoveringOverWater(player.getLocation(), 1) && y == 0D
-									&& !block.getType().equals(Utilities.LILY_PAD)) {
-								violation = true;
-							}
-							if (violation) {
-								if (WATER_SPEED_VIOLATIONS.containsKey(uuid)) {
-									int v = WATER_SPEED_VIOLATIONS.get(uuid);
-									if (v >= 8) {
-										WATER_SPEED_VIOLATIONS.put(uuid, 0);
-										return new CheckResult(CheckResult.Result.FAILED,
-												"stood on water " + v + " times (can't stand on " + block.getType()
-														+ " or " + block.getRelative(BlockFace.DOWN).getType() + ")");
-									} else {
-										WATER_SPEED_VIOLATIONS.put(uuid, v + 1);
-									}
-								} else {
-									WATER_SPEED_VIOLATIONS.put(uuid, 1);
-								}
-							}
-						}
-					} else {
-						IS_IN_WATER_CACHE.add(uuid);
-						return PASS;
-					}
-				} else {
-					IS_IN_WATER.add(uuid);
-					return PASS;
-				}
-			} else if (block.getRelative(BlockFace.DOWN).isLiquid() && !backend.isAscending(player)
-					&& Utilities.cantStandAt(block) && Utilities.cantStandAt(block.getRelative(BlockFace.DOWN))
-					&& (y < 0.025 || y == 0.09999999999999964 || y == 0.14999999999999947
-							|| y == 0.04999999999999982)) {
-				if (WATER_ASCENSION_VIOLATIONS.containsKey(uuid)) {
-					int v = WATER_ASCENSION_VIOLATIONS.get(uuid);
-					if (v >= 8) {
-						WATER_ASCENSION_VIOLATIONS.put(uuid, 0);
-						return new CheckResult(CheckResult.Result.FAILED,
-								"stood on water " + v + " times (can't stand on " + block.getType() + " or "
-										+ block.getRelative(BlockFace.DOWN).getType() + ")");
-					} else {
-						WATER_ASCENSION_VIOLATIONS.put(uuid, v + 1);
-					}
-				} else {
-					WATER_ASCENSION_VIOLATIONS.put(uuid, 1);
-				}
-			} else {
-				IS_IN_WATER.remove(uuid);
-				IS_IN_WATER_CACHE.remove(uuid);
-			}
-		}
+		if (movementManager.distanceXZ <= 0)
+			return PASS;
+
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+		Block blockBeneath = player.getLocation().clone().subtract(0, 0.1, 0).getBlock();
+
+		if (checksConfig.isSubcheckEnabled(CheckType.WATER_WALK, "walk") && blockBeneath.isLiquid()
+				&& Utilities.isSurroundedByWater(player)
+				&& (movementManager.motionY == 0 || movementManager.motionY == Utilities.JUMP_MOTION_Y)
+				&& movementManager.distanceXZ > checksConfig.getDouble(CheckType.WATER_WALK, "lunge", "minimumDistXZ"))
+			return new CheckResult(Result.FAILED,
+					"tried to walk on water (xz=" + Utilities.roundDouble(movementManager.distanceXZ, 5) + ")");
+
+		if (checksConfig.isSubcheckEnabled(CheckType.WATER_WALK, "hop") && blockBeneath.isLiquid()
+				&& Utilities.isSurroundedByWater(player) && movementManager.onGround
+				&& Math.abs(movementManager.motionY) < checksConfig.getDouble(CheckType.WATER_WALK, "lunge", "maxMotionY"))
+			return new CheckResult(Result.FAILED,
+					"tried to hop on water (mY=" + Utilities.roundDouble(movementManager.motionY, 5) + ")");
+
+		// TODO fix speed effect falses
+		if (checksConfig.isSubcheckEnabled(CheckType.WATER_WALK, "lunge") && blockBeneath.isLiquid()
+				&& Utilities.isSurroundedByWater(player)
+				&& Math.abs(movementManager.lastMotionY - movementManager.motionY) > 0.08
+				&& movementManager.distanceXZ > checksConfig.getDouble(CheckType.WATER_WALK, "lunge", "minimumDistXZ")
+				&& movementManager.lastMotionY > -0.25)
+			return new CheckResult(Result.FAILED,
+					"tried to lunge in water (xz=" + Utilities.roundDouble(movementManager.distanceXZ, 5) + ")");
+
 		return PASS;
 	}
 

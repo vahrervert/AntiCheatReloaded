@@ -51,7 +51,6 @@ public class BadPacketsCheck {
 			return;
 		}
 		
-		// TODO more precise checking for this
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		double tps = AntiCheatReloaded.getPlugin().getTPS();
 		if (user.isLagging() || tps < checksConfig.getDouble(CheckType.MOREPACKETS, "minimumTps")) {

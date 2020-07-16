@@ -35,6 +35,7 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
  * @author Rammelkast
+ * TODO web speed, soulsand speed
  */
 public class SpeedCheck {
 

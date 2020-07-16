@@ -16,63 +16,53 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.rammelkast.anticheatreloaded.check.combat;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
+import com.rammelkast.anticheatreloaded.check.CheckResult.Result;
 import com.rammelkast.anticheatreloaded.config.providers.Checks;
-import com.rammelkast.anticheatreloaded.event.EventListener;
+import com.rammelkast.anticheatreloaded.util.Distance;
+import com.rammelkast.anticheatreloaded.util.MovementManager;
+import com.rammelkast.anticheatreloaded.util.User;
+import com.rammelkast.anticheatreloaded.util.Utilities;
 
-/*
- * TODO recode
- */
 public class VelocityCheck {
 
 	public static final Map<UUID, Integer> VIOLATIONS = new HashMap<UUID, Integer>();
+	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
-	public static void runCheck(EntityDamageByEntityEvent e, final Player player) {
-		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.VELOCITY))
-			return;
+	public static CheckResult runCheck(Player player, Distance distance) {
+		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
+		MovementManager movementManager = user.getMovementManager();
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
-		final double minVelocitizedDistance = checksConfig.getDouble(CheckType.VELOCITY, "minVelocitizedDistance");
+		final int minimumPercentage = checksConfig.getInteger(CheckType.VELOCITY, "minimumPercentage");
 		final int vlBeforeFlag = checksConfig.getInteger(CheckType.VELOCITY, "vlBeforeFlag");
-		final Location then = player.getLocation();
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				if (!player.isOnline())
-					return;
-				if (then.distance(player.getLocation()) < minVelocitizedDistance) {
-					if (!VIOLATIONS.containsKey(player.getUniqueId()))
-						VIOLATIONS.put(player.getUniqueId(), 1);
-					else {
-						VIOLATIONS.put(player.getUniqueId(), VIOLATIONS.get(player.getUniqueId()) + 1);
-						if (VIOLATIONS.get(player.getUniqueId()) > vlBeforeFlag) {
-							EventListener.log(
-									new CheckResult(CheckResult.Result.FAILED,
-											"had zero/low velocity " + VIOLATIONS.get(player.getUniqueId())
-													+ " times (max=" + vlBeforeFlag + ", dist="
-													+ then.distance(player.getLocation()) + ")").getMessage(),
-									player, CheckType.VELOCITY);
-							VIOLATIONS.remove(player.getUniqueId());
-						}
-					}
-				} else {
-					VIOLATIONS.remove(player.getUniqueId());
-				}
+		
+		if (movementManager.velocityExpectedMotionY > 0 && !movementManager.onGround) {
+			double percentage = (movementManager.motionY / movementManager.velocityExpectedMotionY) * 100;
+			if (percentage < 0)
+				percentage = 0;
+			// Reset expected Y motion
+			movementManager.velocityExpectedMotionY = 0;
+			if (percentage < minimumPercentage) {
+				int vl = VIOLATIONS.getOrDefault(player.getUniqueId(), 0) + 1;
+				VIOLATIONS.put(player.getUniqueId(), vl);
+				if (vl >= vlBeforeFlag)
+					return new CheckResult(Result.FAILED, "ignored server velocity (pct=" + Utilities.roundDouble(percentage, 2) + ")");
+			} else {
+				VIOLATIONS.remove(player.getUniqueId());
 			}
-		}.runTaskLater(AntiCheatReloaded.getPlugin(), 4);
+		} else if (movementManager.airTicks > 5 && movementManager.velocityExpectedMotionY > 0)
+			movementManager.velocityExpectedMotionY = 0;
+		return PASS;
 	}
 
 }

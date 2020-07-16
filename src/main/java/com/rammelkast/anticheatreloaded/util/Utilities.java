@@ -48,6 +48,8 @@ public final class Utilities {
 	public static final Material LILY_PAD;
 	public static final Material COB_WEB;
 	public static final Material IRON_BARS;
+	
+	public static final double JUMP_MOTION_Y = 0.41999998688697815;
 
 	/**
 	 * Check if only the block beneath them is standable (includes water + lava)
@@ -443,6 +445,25 @@ public final class Utilities {
 				|| player.getLocation().getBlock().getRelative(BlockFace.NORTH_WEST).isLiquid()
 				|| player.getLocation().getBlock().getRelative(BlockFace.SOUTH_EAST).isLiquid()
 				|| player.getLocation().getBlock().getRelative(BlockFace.SOUTH_WEST).isLiquid();
+	}
+	
+	/**
+	 * Determine whether a player is surrounded by liquid blocks
+	 *
+	 * @param player player to check
+	 * @return true if surrounded by liquid blocks
+	 */
+	public static boolean isSurroundedByWater(Player player) {
+		Location location = player.getLocation().clone().subtract(0, 0.1, 0);
+		return location.getBlock().isLiquid()
+				&& location.getBlock().getRelative(BlockFace.NORTH).isLiquid()
+				&& location.getBlock().getRelative(BlockFace.SOUTH).isLiquid()
+				&& location.getBlock().getRelative(BlockFace.EAST).isLiquid()
+				&& location.getBlock().getRelative(BlockFace.WEST).isLiquid()
+				&& location.getBlock().getRelative(BlockFace.NORTH_EAST).isLiquid()
+				&& location.getBlock().getRelative(BlockFace.NORTH_WEST).isLiquid()
+				&& location.getBlock().getRelative(BlockFace.SOUTH_EAST).isLiquid()
+				&& location.getBlock().getRelative(BlockFace.SOUTH_WEST).isLiquid();
 	}
 
 	/**

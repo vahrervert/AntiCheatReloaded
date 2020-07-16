@@ -38,7 +38,6 @@ import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.check.combat.CriticalsCheck;
 import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
-import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class EntityListener extends EventListener {
@@ -122,7 +121,6 @@ public class EntityListener extends EventListener {
             }
             if (event.getEntity() instanceof Player) {
                 Player player = (Player) event.getEntity();
-                VelocityCheck.runCheck(e, player);
                 if (e.getDamager() instanceof Player) {
                     Player p = (Player) e.getDamager();
                     getBackend().logDamage(p, 1);

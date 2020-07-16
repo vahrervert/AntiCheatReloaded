@@ -98,6 +98,29 @@ speed:
 waterwalk:
   # Should this check be enabled?
   enabled: true
+  # Checks for vanilla water walking/jumping
+  # Debugs as 'tried to walk on water'
+  walk:
+    # Should this part of the check be enabled?
+    enabled: true
+    # Minimum xz distance before flagging
+    # This combats false positives, while giving hackers not much leniency
+    minimumDistXZ: 0.092
+  # Checks for small hops on top of water
+  # Debugs as 'tried to lunge on water'
+  hop:
+    # Should this part of the check be enabled?
+    enabled: true
+    # Maximum lunge Y motion to flag
+    maxMotionY: 0.10
+  # Checks for small lunges in water
+  # Debugs as 'tried to walk on water'
+  lunge:
+    # Should this part of the check be enabled?
+    enabled: true
+    # Minimum xz distance before flagging
+    # This combats false positives, while giving hackers not much leniency
+    minimumDistXZ: 0.0642
 
 # FastLadder check settings
 # Checks if a player moves too fast on a ladder
@@ -158,13 +181,14 @@ criticals:
   enabled: true
 
 # Velocity check settings
+# Checks if the player ignores knockback
 velocity:
   # Should this check be enabled?
   enabled: true
-  # Minimum distance a player has to move after taking velocity
-  minVelocitizedDistance: 0.125
-  # Amount of zero-velocity moments before flagging
-  vlBeforeFlag: 3
+  # Minimum percentage of the given knockback a player has to meet
+  minimumPercentage: 98
+  # Amount of low-velocity moments before flagging
+  vlBeforeFlag: 2
 
 # FastBreak check settings
 fastbreak:

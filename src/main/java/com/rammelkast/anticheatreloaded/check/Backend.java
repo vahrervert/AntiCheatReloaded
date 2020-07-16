@@ -42,7 +42,6 @@ import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
 import com.rammelkast.anticheatreloaded.check.movement.AimbotCheck;
 import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
-import com.rammelkast.anticheatreloaded.check.movement.WaterWalkCheck;
 import com.rammelkast.anticheatreloaded.check.packet.MorePacketsCheck;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.providers.Checks;
@@ -167,10 +166,6 @@ public class Backend {
 		ElytraCheck.JUMP_Y_VALUE.remove(uuid);
 		KillAuraCheck.ANGLE_FLAGS.remove(uuid);
 		FlightCheck.MOVING_EXEMPT.remove(uuid);
-		WaterWalkCheck.IS_IN_WATER.remove(uuid);
-		WaterWalkCheck.IS_IN_WATER_CACHE.remove(uuid);
-		WaterWalkCheck.WATER_ASCENSION_VIOLATIONS.remove(uuid);
-		WaterWalkCheck.WATER_SPEED_VIOLATIONS.remove(uuid);
 	}
 
 	public CheckResult checkFastBow(Player player, float force) {
