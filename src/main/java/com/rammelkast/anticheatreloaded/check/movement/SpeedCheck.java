@@ -35,7 +35,7 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
  * @author Rammelkast
- * TODO web speed, soulsand speed
+ * TODO soulsand speed
  */
 public class SpeedCheck {
 
@@ -196,14 +196,26 @@ public class SpeedCheck {
 			// Increased speed when stepping on/off boat
 			if (Utilities.couldBeOnBoat(player))
 				limit += 0.2D;
+			// Adjust for custom walk speed
+			limit += (player.getWalkSpeed() - 0.2) * 2.0D;
 			// Prevent NoSlow
 			if (player.isBlocking() && movementManager.groundTicks > 2)
 				limit *= 0.45D;
+			// Prevent NoWeb
+			// TODO config
+			if (Utilities.isInWeb(player))
+				limit *= 0.65D;
+			// Sneak speed check
+			// TODO config
+			if (player.isSneaking())
+				limit *= 0.68D;
+			
 			if (distanceXZ - limit > 0) {
 				return new CheckResult(CheckResult.Result.FAILED,
 						"moved too fast on ground (speed=" + distanceXZ + ", limit=" + limit + ", blocking=" + player.isBlocking() + ")");
 			}
 		}
+		
 		return PASS;
 	}
 
@@ -232,6 +244,8 @@ public class SpeedCheck {
 	}
 	
 	private static double getMaxAcceptableMotionY(Player player, boolean nearBed, boolean couldBeOnBoat, boolean fromClimbable, boolean halfMovement, Checks checksConfig) { 
+		// TODO config for these values
+		// TODO something funky vanilla stuff going on with 0.42, like 0.445.., check this..
 		double base = couldBeOnBoat ? 0.600000025 : (nearBed ? 0.5625 : (halfMovement ? 0.6 : 0.42));
 		if (fromClimbable)
 			base += checksConfig.getDouble(CheckType.SPEED, "verticalSpeed", "climbableCompensation"); // Default 0.04

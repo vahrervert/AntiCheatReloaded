@@ -39,8 +39,6 @@ public enum CheckType {
     FLIGHT(Permission.CHECK_FLIGHT, "Flight"),
     ELYTRAFLY(Permission.CHECK_FLIGHT, "ElytraFly"),
     WATER_WALK(Permission.CHECK_WATERWALK, "WaterWalk"),
-    NO_SWING(Permission.CHECK_NOSWING, "NoSwing"),
-    FAST_BREAK(Permission.CHECK_FASTBREAK, "FastBreak"),
     FAST_PLACE(Permission.CHECK_FASTPLACE, "FastPlace"),
     CHAT_SPAM(Permission.CHECK_CHATSPAM, "ChatSpam"),
     COMMAND_SPAM(Permission.CHECK_COMMANDSPAM, "CommandSpam"),

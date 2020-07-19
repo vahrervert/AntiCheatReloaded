@@ -114,6 +114,7 @@ public class KillAuraCheck {
 				ANGLE_FLAGS.put(uuid, flags + 1);
 			}
 		}
+		
 		return PASS;
 	}
 

@@ -39,6 +39,7 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
  * @author Rammelkast
+ * TODO fix cobweb false positives
  */
 public class FlightCheck {
 
@@ -98,7 +99,7 @@ public class FlightCheck {
 					&& !Utilities.couldBeOnBoat(player)
 					&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
 							.getInteger(CheckType.FLIGHT, "airFlight", "accountForTeleports"))
-					&& !VersionUtil.isSlowFalling(player))
+					&& !VersionUtil.isSlowFalling(player) && !Utilities.isInWeb(player))
 				return new CheckResult(CheckResult.Result.FAILED, "had too little Y dropoff (diff="
 						+ Math.abs(movementManager.motionY - movementManager.lastMotionY) + ")");
 		}
@@ -142,7 +143,8 @@ public class FlightCheck {
 		if (checksConfig.isSubcheckEnabled(CheckType.FLIGHT, "gravity") && !movementManager.onGround
 				&& movementManager.motionY < 0 && !backend.justVelocity(player)
 				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
-						.getInteger(CheckType.FLIGHT, "gravity", "accountForTeleports"))) {
+						.getInteger(CheckType.FLIGHT, "gravity", "accountForTeleports"))
+				&& !Utilities.isInWeb(player)) {
 			double gravitatedY = (movementManager.lastMotionY - 0.08) * GRAVITY_FRICTION;
 			double offset = Math.abs(gravitatedY - movementManager.motionY);
 			double maxOffset = checksConfig.getDouble(CheckType.FLIGHT, "gravity", "maxOffset");
@@ -151,7 +153,8 @@ public class FlightCheck {
 				GRAVITY_VIOLATIONS.put(player.getUniqueId(), vl);
 				int vlBeforeFlag = checksConfig.getInteger(CheckType.FLIGHT, "gravity", "vlBeforeFlag");
 				if (vl >= vlBeforeFlag)
-					return new CheckResult(CheckResult.Result.FAILED, "ignored gravity (offset=" + offset + ", at=" + movementManager.airTicks + ")");
+					return new CheckResult(CheckResult.Result.FAILED,
+							"ignored gravity (offset=" + offset + ", at=" + movementManager.airTicks + ")");
 			} else {
 				GRAVITY_VIOLATIONS.remove(player.getUniqueId());
 			}

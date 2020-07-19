@@ -146,14 +146,6 @@ public class EntityListener extends EventListener {
                     }
                 }
                 if (getCheckManager().willCheck(player, CheckType.KILLAURA)) {
-                    CheckResult result = getBackend().checkSprintDamage(player);
-                    if (result.failed()) {
-                        event.setCancelled(!silentMode());
-                        log(result.getMessage(), player, CheckType.KILLAURA);
-                        noHack = false;
-                    }
-                }
-                if (getCheckManager().willCheck(player, CheckType.KILLAURA)) {
                     CheckResult result = KillAuraCheck.checkAngle(player, event);
                     if (result.failed()) {
                         event.setCancelled(!silentMode());

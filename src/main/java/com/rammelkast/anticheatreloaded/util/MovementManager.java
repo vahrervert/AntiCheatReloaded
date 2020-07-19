@@ -43,6 +43,8 @@ public class MovementManager {
 	public double lastMotionY;
 	// Horizontal distance of movement
 	public double distanceXZ;
+	// Previous horizontal distance of movement
+	public double lastDistanceXZ;
 	// If the player touched the ground again this tick
 	public boolean touchedGroundThisTick = false;
 	// Last recorded distance
@@ -75,6 +77,7 @@ public class MovementManager {
 		
 		double x = distance.getXDifference();
         double z = distance.getZDifference();
+        this.lastDistanceXZ = this.distanceXZ;
 		this.distanceXZ = Math.sqrt(x * x + z * z);
 		
 		// Account for standing on boat

@@ -237,7 +237,8 @@ public class User {
 	 */
 	public boolean setGoodLocation(Location location) {
 		if (Utilities.cantStandAtExp(location)
-				|| (location.getBlock().isLiquid() && !Utilities.isFullyInWater(location))) {
+				|| (location.getBlock().isLiquid() && !Utilities.isFullyInWater(location))
+				|| !location.getBlock().getType().isSolid()) {
 			return false;
 		}
 

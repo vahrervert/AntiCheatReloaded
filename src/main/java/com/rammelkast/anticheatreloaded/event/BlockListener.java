@@ -16,10 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.rammelkast.anticheatreloaded.event;
 
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,17 +29,12 @@ import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.check.player.IllegalInteract;
-import com.rammelkast.anticheatreloaded.util.Distance;
-import com.rammelkast.anticheatreloaded.util.Utilities;
 
 public class BlockListener extends EventListener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockDamage(BlockDamageEvent event) {
         Player player = event.getPlayer();
-        if (event.getInstaBreak() || Utilities.isInstantBreak(event.getBlock().getType())) {
-            getBackend().logInstantBreak(player);
-        }
         if (getCheckManager().willCheck(player, CheckType.AUTOTOOL)) {
             CheckResult result = getBackend().checkAutoTool(player);
             if (result.failed()) {
@@ -84,25 +77,8 @@ public class BlockListener extends EventListener {
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         final Player player = event.getPlayer();
-        final Block block = event.getBlock();
         boolean noHack = true;
         CheckResult result;
-        if (getCheckManager().willCheck(player, CheckType.FAST_BREAK)) {
-            result = getBackend().checkFastBreak(player, block);
-            if (result.failed()) {
-                event.setCancelled(!silentMode());
-                log(result.getMessage(), player, CheckType.FAST_BREAK);
-                noHack = false;
-            }
-        }
-        if (getCheckManager().willCheck(player, CheckType.NO_SWING)) {
-            result = getBackend().checkSwing(player, block);
-            if (result.failed()) {
-                event.setCancelled(!silentMode());
-                log(result.getMessage(), player, CheckType.NO_SWING);
-                noHack = false;
-            }
-        }
         if (getCheckManager().willCheck(player, CheckType.ILLEGAL_INTERACT)) {
             result = IllegalInteract.performCheck(player, event);
             if (result.failed()) {

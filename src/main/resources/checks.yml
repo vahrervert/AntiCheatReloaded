@@ -190,17 +190,18 @@ velocity:
   # Amount of low-velocity moments before flagging
   vlBeforeFlag: 2
 
-# FastBreak check settings
-fastbreak:
-  # Should this check be enabled?
-  enabled: true
-
 # FastPlace check settings
 fastplace:
   # Should this check be enabled?
   enabled: true
   # Minimum time in milliseconds between block places
   minimumTime: 50
+  # Amount of fastplace-moments before flagging a survival player
+  vlBeforeFlagSurvival: 2
+  # Amount of fastplace-moments before flagging a creative player
+  vlBeforeFlagCreative: 3
+  # Amount of time in milliseconds to prevent a player from placing blocks after flagging
+  blockPlacementTime: 1000
 
 # IllegalInteract check settings
 illegalinteract:
@@ -259,14 +260,17 @@ morepackets:
   maxPing: -1
 
 # Sneak check settings
-# Checks if a player moves too fast when sneaking
+# Checks if a player toggles sneak too fast
 sneak:
   # Should this check be enabled?
   enabled: true
-  # Maximum speed a player can travel on the xz-axis while sneaking
-  xzMaxSneaking: 0.15
-  # Amount of illegal movements before flagging
-  vlBeforeFlag: 3
+  # Should MorePackets be disabled for 'lagging' players?
+  # This can easily be spoofed by clients!
+  disableForLagging: false
+  # Minimum server TPS needed for sneak
+  minimumTps: 12
+  # Minimum time in milliseconds between sneak toggles
+  minToggleTime: 75
 
 # Spider check settings
 spider:
@@ -279,11 +283,6 @@ nofall:
   enabled: true
   # Amount of moves with a modified fall distance before flagging
   vlBeforeFlag: 6
-
-# NoSwing check settings
-noswing:
-  # Should this check be enabled?
-  enabled: true
 
 # Sprint check settings
 sprint:

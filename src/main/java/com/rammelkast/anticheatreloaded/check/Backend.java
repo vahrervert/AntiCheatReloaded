@@ -29,8 +29,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.potion.PotionEffectType;
@@ -60,10 +58,7 @@ public class Backend {
 	private Map<UUID, Integer> chatLevel = new HashMap<UUID, Integer>();
 	private Map<UUID, Integer> commandLevel = new HashMap<UUID, Integer>();
 	private Map<UUID, Integer> nofallViolation = new HashMap<UUID, Integer>();
-	private Map<UUID, Integer> fastBreakViolation = new HashMap<UUID, Integer>();
-	private Map<UUID, Integer> fastBreaks = new HashMap<UUID, Integer>();
 	private Map<UUID, Boolean> blockBreakHolder = new HashMap<UUID, Boolean>();
-	private Map<UUID, Long> lastBlockBroken = new HashMap<UUID, Long>();
 	private Map<UUID, Integer> fastPlaceViolation = new HashMap<UUID, Integer>();
 	private Map<UUID, Long> lastBlockPlaced = new HashMap<UUID, Long>();
 	private Map<UUID, Long> lastBlockPlaceTime = new HashMap<UUID, Long>();
@@ -74,7 +69,6 @@ public class Backend {
 	private Map<UUID, Long> lastHeal = new HashMap<UUID, Long>();
 	private Map<UUID, Long> projectileTime = new HashMap<UUID, Long>();
 	private Map<UUID, Long> bowWindUp = new HashMap<UUID, Long>();
-	private Map<UUID, Long> instantBreakExempt = new HashMap<UUID, Long>();
 	private Map<UUID, Long> sprinted = new HashMap<UUID, Long>();
 	private Map<UUID, Long> brokenBlock = new HashMap<UUID, Long>();
 	public Map<UUID, Long> placedBlock = new HashMap<UUID, Long>();
@@ -127,13 +121,9 @@ public class Backend {
 		startEat.remove(uuid);
 		lastHeal.remove(uuid);
 		sprinted.remove(uuid);
-		instantBreakExempt.remove(uuid);
 		isAscending.remove(uuid);
 		nofallViolation.remove(uuid);
-		fastBreakViolation.remove(uuid);
-		fastBreaks.remove(uuid);
 		blockBreakHolder.remove(uuid);
-		lastBlockBroken.remove(uuid);
 		fastPlaceViolation.remove(uuid);
 		lastBlockPlaced.remove(uuid);
 		lastBlockPlaceTime.remove(uuid);
@@ -145,7 +135,6 @@ public class Backend {
 		lastHeal.remove(uuid);
 		projectileTime.remove(uuid);
 		bowWindUp.remove(uuid);
-		instantBreakExempt.remove(uuid);
 		sprinted.remove(uuid);
 		brokenBlock.remove(uuid);
 		placedBlock.remove(uuid);
@@ -219,7 +208,7 @@ public class Backend {
 		}
 		return PASS;
 	}
-	
+
 	public CheckResult checkSpider(Player player, double y) {
 		if (y <= magic.LADDER_Y_MAX() && y >= magic.LADDER_Y_MIN()
 				&& !Utilities.isClimbableBlock(player.getLocation().getBlock())
@@ -262,45 +251,18 @@ public class Backend {
 		return PASS;
 	}
 
-	public CheckResult checkSneak(Player player, Location location, double x, double z) {
-		if (player.isSneaking() && !VersionUtil.isFlying(player) && !isMovingExempt(player) && !player.isInsideVehicle()
-				&& !Utilities.cantStandAtExp(location)
-				&& !Utilities.isSlab(location.getBlock().getRelative(BlockFace.DOWN))) {
-			double xzMaxSneaking = checksConfig.getDouble(CheckType.SNEAK, "xzMaxSneaking");
-			double i = x > xzMaxSneaking ? x : z > xzMaxSneaking ? z : -1;
-			if (i != -1) {
-				if (this.fastSneakViolations.containsKey(player.getUniqueId())) {
-					int flags = this.fastSneakViolations.get(player.getUniqueId());
-					if (flags >= checksConfig.getInteger(CheckType.SNEAK, "vlBeforeFlag")) {
-						this.fastSneakViolations.put(player.getUniqueId(), flags - 1);
-						return new CheckResult(CheckResult.Result.FAILED,
-								"was sneaking too fast (speed=" + i + ", max=" + xzMaxSneaking + ")");
-					}
-					this.fastSneakViolations.put(player.getUniqueId(), flags + 1);
-					return PASS;
-				} else {
-					this.fastSneakViolations.put(player.getUniqueId(), 0);
-					return PASS;
-				}
-			} else {
-				this.fastSneakViolations.remove(player.getUniqueId());
-				return PASS;
-			}
-		} else {
-			this.fastSneakViolations.remove(player.getUniqueId());
-			return PASS;
-		}
-	}
-
 	public CheckResult checkSneakToggle(Player player) {
 		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
 		final long lastSneak = this.lastSneak.getOrDefault(player.getUniqueId(), (long) 0);
 		this.lastSneak.put(player.getUniqueId(), System.currentTimeMillis());
-		if (System.currentTimeMillis() - lastSneak < 75
-				&& (AntiCheatReloaded.getPlugin().getTPS() > 12 && !user.isLagging())) {
-			if (!this.silentMode()) {
+		if (System.currentTimeMillis() - lastSneak < checksConfig.getInteger(CheckType.SNEAK, "minToggleTime")
+				&& (AntiCheatReloaded.getPlugin().getTPS() > checksConfig.getInteger(CheckType.SNEAK, "minimumTps"))) {
+			if (user.isLagging() && checksConfig.getBoolean(CheckType.SNEAK, "disableForLagging"))
+				return PASS;
+
+			if (!this.silentMode())
 				player.teleport(user.getGoodLocation(player.getLocation()));
-			}
+
 			return new CheckResult(Result.FAILED,
 					"toggled sneak too fast (time=" + (System.currentTimeMillis() - lastSneak) + ")");
 		}
@@ -347,93 +309,11 @@ public class Backend {
 		}
 	}
 
-	public CheckResult checkSwing(Player player, Block block) {
-		UUID uuid = player.getUniqueId();
-		if (!isInstantBreakExempt(player)) {
-			if (!VersionUtil.getItemInHand(player).containsEnchantment(Enchantment.DIG_SPEED)
-					&& !(VersionUtil.getItemInHand(player).getType() == Material.SHEARS
-							&& block.getType().name().endsWith("LEAVES"))) {
-				if (blockPunches.get(uuid) != null && player.getGameMode() != GameMode.CREATIVE) {
-					int i = blockPunches.get(uuid);
-					if (i < magic.BLOCK_PUNCH_MIN()) {
-						return new CheckResult(CheckResult.Result.FAILED, "tried to break a block of " + block.getType()
-								+ " after only " + i + " punches (min=" + magic.BLOCK_PUNCH_MIN() + ")");
-					} else {
-						blockPunches.put(uuid, 0); // it should reset after EACH block break.
-					}
-				}
-			}
-		}
-		return PASS;
-	}
-
-	public CheckResult checkFastBreak(Player player, Block block) {
-		int violations = magic.FASTBREAK_MAXVIOLATIONS();
-		long timemax = isInstantBreakExempt(player) ? 0
-				: Utilities.calcSurvivalFastBreak(VersionUtil.getItemInHand(player), block.getType());
-		if (player.getGameMode() == GameMode.CREATIVE) {
-			violations = magic.FASTBREAK_MAXVIOLATIONS_CREATIVE();
-			timemax = magic.FASTBREAK_TIMEMAX_CREATIVE();
-		}
-		UUID uuid = player.getUniqueId();
-		if (!fastBreakViolation.containsKey(uuid)) {
-			fastBreakViolation.put(uuid, 0);
-		} else {
-			Long math = System.currentTimeMillis() - lastBlockBroken.get(uuid);
-			int i = fastBreakViolation.get(uuid);
-			if (i > violations && math < magic.FASTBREAK_MAXVIOLATIONTIME()) {
-				lastBlockBroken.put(uuid, System.currentTimeMillis());
-				return new CheckResult(CheckResult.Result.FAILED,
-						"broke blocks too fast " + i + " times in a row (max=" + violations + ")");
-			} else if (fastBreakViolation.get(uuid) > 0 && math > magic.FASTBREAK_MAXVIOLATIONTIME()) {
-				fastBreakViolation.put(uuid, 0);
-			}
-		}
-		if (!fastBreaks.containsKey(uuid) || !lastBlockBroken.containsKey(uuid)) {
-			if (!lastBlockBroken.containsKey(uuid)) {
-				lastBlockBroken.put(uuid, System.currentTimeMillis());
-			}
-			if (!fastBreaks.containsKey(uuid)) {
-				fastBreaks.put(uuid, 0);
-			}
-		} else {
-			Long math = System.currentTimeMillis() - lastBlockBroken.get(uuid);
-			if ((math != 0L && timemax != 0L)) {
-				if (math < timemax) {
-					if (fastBreakViolation.containsKey(uuid) && fastBreakViolation.get(uuid) > 0) {
-						fastBreakViolation.put(uuid, fastBreakViolation.get(uuid) + 1);
-					} else {
-						fastBreaks.put(uuid, fastBreaks.get(uuid) + 1);
-					}
-					blockBreakHolder.put(uuid, false);
-				}
-				if (fastBreaks.get(uuid) >= magic.FASTBREAK_LIMIT() && math < timemax) {
-					int i = fastBreaks.get(uuid);
-					fastBreaks.put(uuid, 0);
-					fastBreakViolation.put(uuid, fastBreakViolation.get(uuid) + 1);
-					return new CheckResult(CheckResult.Result.FAILED, "tried to break " + i + " blocks in " + math
-							+ " ms (max=" + magic.FASTBREAK_LIMIT() + " in " + timemax + " ms)");
-				} else if (fastBreaks.get(uuid) >= magic.FASTBREAK_LIMIT() || fastBreakViolation.get(uuid) > 0) {
-					if (!blockBreakHolder.containsKey(uuid) || !blockBreakHolder.get(uuid)) {
-						blockBreakHolder.put(uuid, true);
-					} else {
-						fastBreaks.put(uuid, fastBreaks.get(uuid) - 1);
-						if (fastBreakViolation.get(uuid) > 0) {
-							fastBreakViolation.put(uuid, fastBreakViolation.get(uuid) - 1);
-						}
-						blockBreakHolder.put(uuid, false);
-					}
-				}
-			}
-		}
-
-		lastBlockBroken.put(uuid, System.currentTimeMillis()); // always keep a log going.
-		return PASS;
-	}
-
 	public CheckResult checkFastPlace(Player player) {
-		int violations = player.getGameMode() == GameMode.CREATIVE ? magic.FASTPLACE_MAXVIOLATIONS_CREATIVE()
-				: magic.FASTPLACE_MAXVIOLATIONS();
+		int vlBeforeFlagSurvival = checksConfig.getInteger(CheckType.FAST_PLACE, "vlBeforeFlagSurvival");
+		int vlBeforeFlagCreative = checksConfig.getInteger(CheckType.FAST_PLACE, "vlBeforeFlagCreative");
+		int blockPlacementTime = checksConfig.getInteger(CheckType.FAST_PLACE, "blockPlacementTime");
+		int violations = player.getGameMode() == GameMode.CREATIVE ? vlBeforeFlagCreative : vlBeforeFlagSurvival;
 		long time = System.currentTimeMillis();
 		UUID uuid = player.getUniqueId();
 		if (!lastBlockPlaceTime.containsKey(uuid) || !fastPlaceViolation.containsKey(uuid)) {
@@ -443,11 +323,11 @@ public class Backend {
 			}
 		} else if (fastPlaceViolation.containsKey(uuid) && fastPlaceViolation.get(uuid) > violations) {
 			Long math = System.currentTimeMillis() - lastBlockPlaced.get(uuid);
-			if (lastBlockPlaced.get(uuid) > 0 && math < magic.FASTPLACE_MAXVIOLATIONTIME()) {
+			if (lastBlockPlaced.get(uuid) > 0 && math < blockPlacementTime) {
 				lastBlockPlaced.put(uuid, time);
 				return new CheckResult(CheckResult.Result.FAILED, "placed blocks too fast "
 						+ fastPlaceViolation.get(uuid) + " times in a row (max=" + violations + ")");
-			} else if (lastBlockPlaced.get(uuid) > 0 && math > magic.FASTPLACE_MAXVIOLATIONTIME()) {
+			} else if (lastBlockPlaced.get(uuid) > 0 && math > blockPlacementTime) {
 				fastPlaceViolation.put(uuid, 0);
 			}
 		} else if (lastBlockPlaced.containsKey(uuid)) {
@@ -596,15 +476,6 @@ public class Backend {
 		}
 	}
 
-	public CheckResult checkSprintDamage(Player player) {
-		if (isDoing(player, sprinted, magic.SPRINT_MAX())) {
-			return new CheckResult(CheckResult.Result.FAILED,
-					"sprinted and damaged an entity too fast (min sprint=" + magic.SPRINT_MAX() + " ms)");
-		} else {
-			return PASS;
-		}
-	}
-
 	public CheckResult checkFastHeal(Player player) {
 		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
 		if (lastHeal.containsKey(player.getUniqueId())) // Otherwise it was modified by a plugin, don't worry about it.
@@ -643,14 +514,6 @@ public class Backend {
 			}
 		}
 		return PASS;
-	}
-
-	public void logInstantBreak(final Player player) {
-		instantBreakExempt.put(player.getUniqueId(), System.currentTimeMillis());
-	}
-
-	public boolean isInstantBreakExempt(Player player) {
-		return isDoing(player, instantBreakExempt, magic.INSTANT_BREAK_TIME());
 	}
 
 	public void logSprint(final Player player) {

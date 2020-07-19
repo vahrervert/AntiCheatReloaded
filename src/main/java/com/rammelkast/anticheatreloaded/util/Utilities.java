@@ -545,54 +545,6 @@ public final class Utilities {
 	}
 
 	/**
-	 * Calculate the time in milliseconds that it should take to break the given
-	 * block with the given tool
-	 *
-	 * @param tool  tool to check
-	 * @param block block to check
-	 * @return time in milliseconds to break
-	 */
-	public static long calcSurvivalFastBreak(ItemStack tool, Material block) {
-		if (isInstantBreak(block) || (tool.getType() == XMaterial.SHEARS.parseMaterial() && block.name().endsWith("LEAVES"))) {
-			return 0;
-		}
-		double bhardness = BlockHardness.getBlockHardness(block);
-		double thardness = ToolHardness.getToolHardness(tool.getType());
-		long enchantlvl = (long) tool.getEnchantmentLevel(Enchantment.DIG_SPEED);
-
-		long result = Math.round((bhardness * thardness) * 0.10 * 10000);
-
-		if (enchantlvl > 0) {
-			result /= enchantlvl * enchantlvl + 1L;
-		}
-
-		result = result > 25000 ? 25000 : result < 0 ? 0 : result;
-
-		if (isQuickCombo(tool, block)) {
-			result = result / 2;
-		}
-
-		return result;
-	}
-
-	/**
-	 * Determine whether the given tool is a combination that makes the breaking of
-	 * this block faster
-	 *
-	 * @param tool  tool to check
-	 * @param block block to check
-	 * @return true if quick combo
-	 */
-	private static boolean isQuickCombo(ItemStack tool, Material block) {
-		for (Material t : COMBO.keySet()) {
-			if (tool.getType() == t && COMBO.get(t) == block) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * Determine if a block ISN'T one of the specified types
 	 *
 	 * @param block     block to check

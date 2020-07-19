@@ -55,10 +55,6 @@ public interface Magic {
      */
     public int JOIN_TIME();
     /**
-     * Time to exempt a player from fastbreak check because of using instant break; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int INSTANT_BREAK_TIME();
-    /**
      * Time to exempt a player from moving because of taking damage; Type=SYSTEM, Leniency=INCREASE.
      */
     public int DAMAGE_TIME();
@@ -86,42 +82,6 @@ public interface Magic {
      * Number of item drops to wait for before checking how long they took to drop; Type=INTEGER.
      */
     public int DROP_CHECK();
-    /**
-     * Max number of blocks that can be broken in a given time; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int FASTBREAK_LIMIT();
-    /**
-     * Time to wait before checking block breaks; Type=SYSTEM, Leniency=INCREASE.
-     */
-    public int FASTBREAK_TIMEMAX();
-    /**
-     * Time to wait before checking block breaks in creative mode; Type=SYSTEM, Leniency=INCREASE.
-     */
-    public int FASTBREAK_TIMEMAX_CREATIVE();
-    /**
-     * Number of times fastbreak can be observed before taking action; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int FASTBREAK_MAXVIOLATIONS();
-    /**
-     * Number of times fastbreak can be observed before taking action in creative mode; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int FASTBREAK_MAXVIOLATIONS_CREATIVE();
-    /**
-     * Time a player is forced to wait after fastbreak has been detected; Type=SYSTEM, Leniency=DECREASE.
-     */
-    public int FASTBREAK_MAXVIOLATIONTIME();
-    /**
-     * Number of times fastplace can be observed before taking action; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int FASTPLACE_MAXVIOLATIONS();
-    /**
-     * Number of times fastplace can be observed before taking action in creative mode; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int FASTPLACE_MAXVIOLATIONS_CREATIVE();
-    /**
-     * Time a player is forced to wait after fastplace has been detected; Type=SYSTEM, Leniency=DECREASE.
-     */
-    public int FASTPLACE_MAXVIOLATIONTIME();
     /**
      * Number of times required to punch a block before it breaks; Type=INTEGER, Leniency=DECREASE.
      */
@@ -167,10 +127,6 @@ public interface Magic {
      */
     public int ANIMATION_INTERACT_MAX();
     /**
-     * Minimum time between animations; Type=SYSTEM, Leniency=INCREASE.
-     */
-    public int ANIMATION_MIN();
-    /**
      * Minimum time between commands; Type=SYSTEM, Leniency=DECREASE.
      */
     public int COMMAND_MIN();
@@ -186,10 +142,6 @@ public interface Magic {
      * Time before repeating yourself in chat is ignored; Type=SYSTEM, Leniency=INCREASE.
      */
     public int CHAT_REPEAT_MIN();
-    /**
-     * Maximum speed you can travel while sprinting; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double SPRINT_MAX();
     /**
      * Minimum time in between block breaks; Type=INTEGER, Leniency=DECREASE.
      */
@@ -214,14 +166,6 @@ public interface Magic {
      * Minimum distance a player can break a block from in creative mode; Type=DOUBLE, Leniency=INCREASE.
      */
     public double BLOCK_MAX_DISTANCE_CREATIVE();
-    /**
-     * Maximum distance a player can damage an entity from; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double ENTITY_MAX_DISTANCE();
-    /**
-     * Maximum distance a player can damage an entity from in creative mode; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double ENTITY_MAX_DISTANCE_CREATIVE();
     /**
      * Maximum speed a player on a ladder can travel; Type=DOUBLE, Leniency=INCREASE.
      */

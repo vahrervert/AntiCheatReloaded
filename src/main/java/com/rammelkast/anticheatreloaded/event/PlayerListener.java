@@ -472,17 +472,6 @@ public class PlayerListener extends EventListener {
 						changed = true;
 					}
 				}
-				if (getCheckManager().willCheckQuick(player, CheckType.SNEAK)) {
-					CheckResult result = getBackend().checkSneak(player, event.getTo(), x, z);
-					if (result.failed()) {
-						if (!silentMode()) {
-							event.setTo(user.getGoodLocation(from.clone()));
-							player.setSneaking(false);
-						}
-						log(result.getMessage(), player, CheckType.SNEAK);
-						changed = true;
-					}
-				}
 				if (getCheckManager().willCheckQuick(player, CheckType.SPIDER)) {
 					CheckResult result = getBackend().checkSpider(player, y);
 					if (result.failed()) {
