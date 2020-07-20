@@ -44,7 +44,6 @@ Hacks blocked
 * FastProjectile
 * ItemSpam
 * FastInventory
-* AutoTool
 * MorePackets/Timer
 * BadPackets
 * Velocity/Anti-Knockback

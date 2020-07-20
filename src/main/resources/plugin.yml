@@ -55,12 +55,6 @@ permissions:
   anticheat.check.waterwalk:
     description: Allow players to walk on water
     default: false
-  anticheat.check.noswing:
-    description: Allow players to not ever swing their arm
-    default: false
-  anticheat.check.fastbreak:
-    description: Allow players to quickly break blocks
-    default: false
   anticheat.check.fastplace:
     description: Allow players to use build hacks and fastplace
     default: false
@@ -112,9 +106,6 @@ permissions:
   anticheat.check.fastinventory:
     description: Allow players to use fastloot and similar inventory hacks
     default: false
-  anticheat.check.autotool:
-    description: Allow players to use autotool to switch tools quickly
-    default: false
   anticheat.check.morepackets:
     description: Allow players to send lots of movement packets or modify their timer
     default: false
@@ -143,8 +134,6 @@ permissions:
       anticheat.check.flight: true
       anticheat.check.elytrafly: true
       anticheat.check.waterwalk: true
-      anticheat.check.noswing: true
-      anticheat.check.fastbreak: true
       anticheat.check.fastplace: true
       anticheat.check.chatspam: true
       anticheat.check.commandspam: true
@@ -158,15 +147,14 @@ permissions:
       anticheat.check.fasteat: true
       anticheat.check.fastheal: true
       anticheat.check.killaura: true
-      anticheat.check.unicode: true
       anticheat.check.fastprojectile: true
       anticheat.check.itemspam: true
       anticheat.check.fastinventory: true
-      anticheat.check.autotool: true
       anticheat.check.morepackets: true
       anticheat.check.badpackets: true
       anticheat.check.velocity: true
       anticheat.check.criticals: true
+      anticheat.check.unicode: true
       anticheat.check.illegalinteract: true
       anticheat.check.fastladder: true
       anticheat.check.aimbot: true

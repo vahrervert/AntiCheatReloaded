@@ -19,8 +19,14 @@
 
 package com.rammelkast.anticheatreloaded.util;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -29,11 +35,6 @@ import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.util.rule.Rule;
-
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class User {
 	private final UUID uuid;
@@ -48,14 +49,14 @@ public class User {
 	private Long[] messageTimes = new Long[2];
 	private String[] commands = new String[2];
 	private Long[] commandTimes = new Long[2];
-	
+
 	private boolean isWaitingOnLevelSync;
 	private Timestamp levelSyncTimestamp;
 
 	private long lastServerPing, lastClientPong;
 	private int ping = -1;
 	private int lastPing = -1;
-	
+
 	private MovementManager movementManager;
 
 	/**
@@ -238,7 +239,7 @@ public class User {
 	public boolean setGoodLocation(Location location) {
 		if (Utilities.cantStandAtExp(location)
 				|| (location.getBlock().isLiquid() && !Utilities.isFullyInWater(location))
-				|| !location.getBlock().getType().isSolid()) {
+				|| (!location.getBlock().getType().isSolid() && location.getBlock().getType() != Material.AIR)) {
 			return false;
 		}
 
@@ -461,7 +462,7 @@ public class User {
 	public boolean isLagging() {
 		return Math.abs(this.ping - this.lastPing) > config.getMagic().LAG_DETERMINATION();
 	}
-	
+
 	public MovementManager getMovementManager() {
 		return this.movementManager;
 	}

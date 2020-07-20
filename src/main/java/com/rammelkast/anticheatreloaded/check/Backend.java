@@ -77,7 +77,6 @@ public class Backend {
 	private Map<UUID, Long> lastInventoryTime = new HashMap<UUID, Long>();
 	private Map<UUID, Long> inventoryTime = new HashMap<UUID, Long>();
 	private Map<UUID, Integer> inventoryClicks = new HashMap<UUID, Integer>();
-	private Map<UUID, Material> itemInHand = new HashMap<UUID, Material>();
 	private HashSet<Byte> transparent = new HashSet<Byte>();
 	private Map<UUID, Long> lastFallPacket = new HashMap<UUID, Long>();
 	private Map<UUID, Integer> fastSneakViolations = new HashMap<UUID, Integer>();
@@ -167,7 +166,8 @@ public class Backend {
 		float f = (float) ticks / 20.0F;
 		f = (f * f + f * 2.0F) / 3.0F;
 		f = f > 1.0F ? 1.0F : f;
-		if (Math.abs(force - f) > magic.BOW_ERROR()) {
+		double bowError = checksConfig.getDouble(CheckType.FAST_BOW, "bowError");
+		if (Math.abs(force - f) > bowError) {
 			return new CheckResult(CheckResult.Result.FAILED,
 					"fired their bow too fast (actual force=" + force + ", calculated force=" + f + ")");
 		} else {
@@ -177,16 +177,18 @@ public class Backend {
 
 	public CheckResult checkProjectile(Player player) {
 		incrementOld(player, projectilesShot, 10);
+		int projectilesToWait = checksConfig.getInteger(CheckType.FAST_PROJECTILE, "projectilesToWait");
 		if (!projectileTime.containsKey(player.getUniqueId())) {
 			projectileTime.put(player.getUniqueId(), System.currentTimeMillis());
 			return new CheckResult(CheckResult.Result.PASSED);
-		} else if (projectilesShot.get(player.getUniqueId()) == magic.PROJECTILE_CHECK()) {
+		} else if (projectilesShot.get(player.getUniqueId()) == projectilesToWait) {
 			long time = System.currentTimeMillis() - projectileTime.get(player.getUniqueId());
+			int minimumTime = checksConfig.getInteger(CheckType.FAST_PROJECTILE, "minimumTime");
 			projectileTime.remove(player.getUniqueId());
 			projectilesShot.remove(player.getUniqueId());
-			if (time < magic.PROJECTILE_TIME_MIN()) {
-				return new CheckResult(CheckResult.Result.FAILED, "wound up a bow too fast (actual time=" + time
-						+ ", min time=" + magic.PROJECTILE_TIME_MIN() + ")");
+			if (time < minimumTime) {
+				return new CheckResult(CheckResult.Result.FAILED,
+						"wound up a bow too fast (actual time=" + time + ", min time=" + minimumTime + ")");
 			}
 		}
 		return PASS;
@@ -194,24 +196,25 @@ public class Backend {
 
 	public CheckResult checkFastDrop(Player player) {
 		incrementOld(player, blocksDropped, 10);
+		int dropsToWait = checksConfig.getInteger(CheckType.ITEM_SPAM, "dropsToWait");
 		if (!blockTime.containsKey(player.getUniqueId())) {
 			blockTime.put(player.getUniqueId(), System.currentTimeMillis());
 			return new CheckResult(CheckResult.Result.PASSED);
-		} else if (blocksDropped.get(player.getUniqueId()) == magic.DROP_CHECK()) {
+		} else if (blocksDropped.get(player.getUniqueId()) == dropsToWait) {
 			long time = System.currentTimeMillis() - blockTime.get(player.getUniqueId());
+			int minimumTime = checksConfig.getInteger(CheckType.ITEM_SPAM, "minimumTime");
 			blockTime.remove(player.getUniqueId());
 			blocksDropped.remove(player.getUniqueId());
-			if (time < magic.DROP_TIME_MIN()) {
+			if (time < minimumTime) {
 				return new CheckResult(CheckResult.Result.FAILED,
-						"dropped an item too fast (actual time=" + time + ", min time=" + magic.DROP_TIME_MIN() + ")");
+						"dropped an item too fast (actual time=" + time + ", min time=" + minimumTime + ")");
 			}
 		}
 		return PASS;
 	}
 
 	public CheckResult checkSpider(Player player, double y) {
-		if (y <= magic.LADDER_Y_MAX() && y >= magic.LADDER_Y_MIN()
-				&& !Utilities.isClimbableBlock(player.getLocation().getBlock())
+		if (y <= 0.11761 && y >= 0.11759 && !Utilities.isClimbableBlock(player.getLocation().getBlock())
 				&& !Utilities.isClimbableBlock(player.getEyeLocation().getBlock())
 				&& !Utilities.isClimbableBlock(player.getLocation().clone().add(0, -0.98, 0).getBlock())) {
 			return new CheckResult(CheckResult.Result.FAILED,
@@ -271,10 +274,11 @@ public class Backend {
 
 	public CheckResult checkSprintHungry(PlayerToggleSprintEvent event) {
 		Player player = event.getPlayer();
+		int sprintFoodMin = checksConfig.getInteger(CheckType.SPRINT, "sprintFoodMin");
 		if (event.isSprinting() && player.getGameMode() != GameMode.CREATIVE
-				&& player.getFoodLevel() <= magic.SPRINT_FOOD_MIN()) {
+				&& player.getFoodLevel() <= sprintFoodMin) {
 			return new CheckResult(CheckResult.Result.FAILED,
-					"sprinted while hungry (food=" + player.getFoodLevel() + ", min=" + magic.SPRINT_FOOD_MIN() + ")");
+					"sprinted while hungry (food=" + player.getFoodLevel() + ", min=" + sprintFoodMin + ")");
 		} else {
 			return PASS;
 		}
@@ -358,7 +362,8 @@ public class Backend {
 	}
 
 	public boolean isEating(Player player) {
-		return startEat.containsKey(player.getUniqueId()) && startEat.get(player.getUniqueId()) < magic.EAT_TIME_MIN();
+		return startEat.containsKey(player.getUniqueId())
+				&& startEat.get(player.getUniqueId()) < checksConfig.getInteger(CheckType.FAST_EAT, "eatTimeMin");
 	}
 
 	public void logHeal(Player player) {
@@ -376,16 +381,18 @@ public class Backend {
 				}
 				Long l = user.getMessageTime(i);
 
-				if (System.currentTimeMillis() - l > magic.CHAT_REPEAT_MIN()) {
+				int repeatIgnore = checksConfig.getInteger(CheckType.CHAT_SPAM, "repeatIgnore");
+				if (System.currentTimeMillis() - l > repeatIgnore) {
 					user.clearMessages();
 					break;
 				} else {
+					int timeMin = checksConfig.getInteger(CheckType.CHAT_SPAM, "timeMin");
 					if (manager.getConfiguration().getConfig().blockChatSpamRepetition.getValue()
 							&& m.equalsIgnoreCase(msg) && i == 1) {
 						manager.getLoggingManager().logFineInfo(player.getName() + " spam-repeated \"" + msg + "\"");
 						return new CheckResult(CheckResult.Result.FAILED, lang.SPAM_WARNING());
 					} else if (manager.getConfiguration().getConfig().blockChatSpamSpeed.getValue()
-							&& System.currentTimeMillis() - user.getLastCommandTime() < magic.CHAT_MIN()) {
+							&& System.currentTimeMillis() - user.getLastCommandTime() < timeMin) {
 						manager.getLoggingManager().logFineInfo(player.getName() + " spammed quickly \"" + msg + "\"");
 						return new CheckResult(CheckResult.Result.FAILED, lang.SPAM_WARNING());
 					}
@@ -424,15 +431,17 @@ public class Backend {
 				}
 				Long l = user.getCommandTime(i);
 
-				if (System.currentTimeMillis() - l > magic.COMMAND_REPEAT_MIN()) {
+				int repeatIgnore = checksConfig.getInteger(CheckType.COMMAND_SPAM, "repeatIgnore");
+				if (System.currentTimeMillis() - l > repeatIgnore) {
 					user.clearCommands();
 					break;
 				} else {
+					int timeMin = checksConfig.getInteger(CheckType.COMMAND_SPAM, "timeMin");
 					if (manager.getConfiguration().getConfig().blockCommandSpamRepetition.getValue()
 							&& m.equalsIgnoreCase(cmd) && i == 1) {
 						return new CheckResult(CheckResult.Result.FAILED, lang.SPAM_WARNING());
 					} else if (manager.getConfiguration().getConfig().blockCommandSpamSpeed.getValue()
-							&& System.currentTimeMillis() - user.getLastCommandTime() < magic.COMMAND_MIN()) {
+							&& System.currentTimeMillis() - user.getLastCommandTime() < timeMin) {
 						return new CheckResult(CheckResult.Result.FAILED, lang.SPAM_WARNING());
 					}
 				}
@@ -452,28 +461,19 @@ public class Backend {
 			clicks = inventoryClicks.get(uuid) + 1;
 		}
 		inventoryClicks.put(uuid, clicks);
+		int clicksToWait = checksConfig.getInteger(CheckType.FAST_INVENTORY, "clicksToWait");
 		if (clicks == 1) {
 			inventoryTime.put(uuid, System.currentTimeMillis());
-		} else if (clicks == magic.INVENTORY_CHECK()) {
+		} else if (clicks == clicksToWait) {
+			int minimumTime = checksConfig.getInteger(CheckType.FAST_INVENTORY, "clicksToWait");
 			long time = System.currentTimeMillis() - inventoryTime.get(uuid);
 			inventoryClicks.put(uuid, 0);
-			if (time < magic.INVENTORY_TIMEMIN()) {
+			if (time < minimumTime) {
 				return new CheckResult(CheckResult.Result.FAILED, "clicked inventory slots " + clicks + " times in "
-						+ time + " ms (max=" + magic.INVENTORY_CHECK() + " in " + magic.INVENTORY_TIMEMIN() + " ms)");
+						+ time + " ms (max=" + clicksToWait + " in " + minimumTime + " ms)");
 			}
 		}
 		return PASS;
-	}
-
-	public CheckResult checkAutoTool(Player player) {
-		if (itemInHand.containsKey(player.getUniqueId())
-				&& itemInHand.get(player.getUniqueId()) != VersionUtil.getItemInHand(player).getType()) {
-			return new CheckResult(CheckResult.Result.FAILED,
-					"switched tools too fast (had " + itemInHand.get(player.getUniqueId()) + ", has "
-							+ VersionUtil.getItemInHand(player).getType() + ")");
-		} else {
-			return PASS;
-		}
 	}
 
 	public CheckResult checkFastHeal(Player player) {
@@ -508,9 +508,10 @@ public class Backend {
 			}
 			long l = startEat.get(player.getUniqueId());
 			startEat.remove(player.getUniqueId());
-			if ((System.currentTimeMillis() - l) < magic.EAT_TIME_MIN()) {
+			int eatTimeMin = checksConfig.getInteger(CheckType.FAST_EAT, "eatTimeMin");
+			if ((System.currentTimeMillis() - l) < eatTimeMin) {
 				return new CheckResult(CheckResult.Result.FAILED, "ate too quickly (time="
-						+ (System.currentTimeMillis() - l) + " ms, min=" + magic.EAT_TIME_MIN() + " ms)");
+						+ (System.currentTimeMillis() - l) + " ms, min=" + eatTimeMin + " ms)");
 			}
 		}
 		return PASS;
@@ -525,7 +526,8 @@ public class Backend {
 	}
 
 	public boolean justBroke(Player player) {
-		return isDoing(player, brokenBlock, magic.BLOCK_BREAK_MIN());
+		// TODO config??
+		return isDoing(player, brokenBlock, 0.1);
 	}
 
 	public void logVelocity(final Player player) {
@@ -538,13 +540,13 @@ public class Backend {
 
 	public boolean justVelocity(Player player) {
 		return (velocitized.containsKey(player.getUniqueId())
-				? (System.currentTimeMillis() - velocitized.get(player.getUniqueId())) < magic.VELOCITY_CHECKTIME()
+				? (System.currentTimeMillis() - velocitized.get(player.getUniqueId())) < magic.VELOCITY_TIME()
 				: false);
 	}
 
 	public boolean justLevitated(Player player) {
 		return (levitatingEnd.containsKey(player.getUniqueId())
-				? (System.currentTimeMillis() - levitatingEnd.get(player.getUniqueId())) < magic.VELOCITY_CHECKTIME()
+				? (System.currentTimeMillis() - levitatingEnd.get(player.getUniqueId())) < magic.VELOCITY_TIME()
 				: false);
 	}
 
@@ -559,7 +561,7 @@ public class Backend {
 							public void run() {
 								velocitytrack.put(player.getUniqueId(), 0);
 							}
-						}, magic.VELOCITY_SCHETIME() * 20L);
+						}, magic.VELOCITY_EXTENSION() * 20L);
 				return true;
 			}
 		} else {
@@ -574,7 +576,8 @@ public class Backend {
 	}
 
 	public boolean justPlaced(Player player) {
-		return isDoing(player, placedBlock, magic.BLOCK_PLACE_MIN());
+		// TODO config??
+		return isDoing(player, placedBlock, 0.1);
 	}
 
 	public void logDamage(final Player player, int type) {
@@ -615,7 +618,7 @@ public class Backend {
 	}
 
 	public void logBoatCollision(final Player player) {
-		// TODO config
+		// TODO config??
 		FlightCheck.MOVING_EXEMPT.put(player.getUniqueId(), System.currentTimeMillis() + 100 /* 2 ticks */);
 	}
 
@@ -666,9 +669,10 @@ public class Backend {
 	public void processChatSpammer(Player player) {
 		User user = manager.getUserManager().getUser(player.getUniqueId());
 		int level = chatLevel.containsKey(user.getUUID()) ? chatLevel.get(user.getUUID()) : 0;
-		if (player != null && player.isOnline() && level >= magic.CHAT_ACTION_ONE_LEVEL()) {
-			String event = level >= magic.CHAT_ACTION_TWO_LEVEL()
-					? manager.getConfiguration().getConfig().chatSpamActionTwo.getValue()
+		int levelActionOne = checksConfig.getInteger(CheckType.CHAT_SPAM, "levelActionOne");
+		int levelActionTwo = checksConfig.getInteger(CheckType.CHAT_SPAM, "levelActionTwo");
+		if (player != null && player.isOnline() && level >= levelActionOne) {
+			String event = level >= levelActionTwo ? manager.getConfiguration().getConfig().chatSpamActionTwo.getValue()
 					: manager.getConfiguration().getConfig().chatSpamActionOne.getValue();
 			manager.getUserManager().execute(manager.getUserManager().getUser(player.getUniqueId()),
 					Utilities.stringToList(event), CheckType.CHAT_SPAM, lang.SPAM_KICK_REASON(),
@@ -680,8 +684,10 @@ public class Backend {
 	public void processCommandSpammer(Player player) {
 		User user = manager.getUserManager().getUser(player.getUniqueId());
 		int level = commandLevel.containsKey(user.getUUID()) ? commandLevel.get(user.getUUID()) : 0;
-		if (player != null && player.isOnline() && level >= magic.COMMAND_ACTION_ONE_LEVEL()) {
-			String event = level >= magic.COMMAND_ACTION_TWO_LEVEL()
+		int levelActionOne = checksConfig.getInteger(CheckType.COMMAND_SPAM, "levelActionOne");
+		int levelActionTwo = checksConfig.getInteger(CheckType.COMMAND_SPAM, "levelActionTwo");
+		if (player != null && player.isOnline() && level >= levelActionOne) {
+			String event = level >= levelActionTwo
 					? manager.getConfiguration().getConfig().commandSpamActionTwo.getValue()
 					: manager.getConfiguration().getConfig().commandSpamActionOne.getValue();
 			manager.getUserManager().execute(manager.getUserManager().getUser(player.getUniqueId()),

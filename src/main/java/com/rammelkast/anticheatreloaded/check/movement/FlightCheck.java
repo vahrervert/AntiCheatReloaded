@@ -39,7 +39,6 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
  * @author Rammelkast
- * TODO fix cobweb false positives
  */
 public class FlightCheck {
 

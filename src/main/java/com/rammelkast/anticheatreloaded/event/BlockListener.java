@@ -20,9 +20,7 @@ package com.rammelkast.anticheatreloaded.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
@@ -31,20 +29,6 @@ import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.check.player.IllegalInteract;
 
 public class BlockListener extends EventListener {
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onBlockDamage(BlockDamageEvent event) {
-        Player player = event.getPlayer();
-        if (getCheckManager().willCheck(player, CheckType.AUTOTOOL)) {
-            CheckResult result = getBackend().checkAutoTool(player);
-            if (result.failed()) {
-                event.setCancelled(!silentMode());
-                log(result.getMessage(), player, CheckType.AUTOTOOL);
-            }
-        }
-
-        AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
-    }
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {

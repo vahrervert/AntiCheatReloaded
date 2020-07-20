@@ -32,7 +32,6 @@ import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.check.combat.KillAuraCheck;
 import com.rammelkast.anticheatreloaded.config.providers.Checks;
-import com.rammelkast.anticheatreloaded.config.providers.Magic;
 import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
@@ -88,11 +87,10 @@ public class IllegalInteract {
 	}
 
 	private static boolean isValidTarget(Player player, Block block) {
-		Magic magic = AntiCheatReloaded.getManager().getConfiguration().getMagic();
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
-		double distance = player.getGameMode() == GameMode.CREATIVE ? magic.BLOCK_MAX_DISTANCE_CREATIVE()
-				: player.getLocation().getDirection().getY() > 0.9 ? magic.BLOCK_MAX_DISTANCE_CREATIVE()
-						: magic.BLOCK_MAX_DISTANCE();
+		double distance = player.getGameMode() == GameMode.CREATIVE ? 6.0
+				: player.getLocation().getDirection().getY() > 0.9 ? 6.0
+						: 5.5;
 		Block targetBlock = VersionUtil.getTargetBlock(player, ((int) Math.ceil(distance)));
 		if (targetBlock == null) {
 			// TODO better check here

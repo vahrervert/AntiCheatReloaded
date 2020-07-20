@@ -67,121 +67,21 @@ public interface Magic {
      */
     public int EXPLOSION_DAMAGE_TIME();
     /**
-     * Minimum time it takes to fire X projectiles; Type=SYSTEM, Leniency=DECREASE.
-     */
-    public int PROJECTILE_TIME_MIN();
-    /**
-     * Number of projectiles to wait for before checking how long they took to fire off; Type=INTEGER.
-     */
-    public int PROJECTILE_CHECK();
-    /**
-     * Minimum time it takes to drop X items; Type=SYSTEM, Leniency=DECREASE.
-     */
-    public int DROP_TIME_MIN();
-    /**
-     * Number of item drops to wait for before checking how long they took to drop; Type=INTEGER.
-     */
-    public int DROP_CHECK();
-    /**
-     * Number of times required to punch a block before it breaks; Type=INTEGER, Leniency=DECREASE.
-     */
-    public int BLOCK_PUNCH_MIN();
-    /**
-     * Number of command spam violations before action one is executed; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int COMMAND_ACTION_ONE_LEVEL();
-    /**
-     * Number of command spam violations before action two is executed; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int COMMAND_ACTION_TWO_LEVEL();
-    /**
-     * Number of chat spam violations before action one is executed; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int CHAT_ACTION_ONE_LEVEL();
-    /**
-     * Number of chat spam violations before action two is executed; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int CHAT_ACTION_TWO_LEVEL();
-    /**
      * Time used to schedule increasing a players velocity count - probably not touching this would be good; Type=INTEGER.
      */
-    public int VELOCITY_SCHETIME();
+    public int VELOCITY_EXTENSION();
     /**
-     * Maximum time a player is considered to have a change in velocity; Type=SYSTEM, Leniency=INCREASE.
+     * Time a player is considered to have a change in velocity; Type=SYSTEM, Leniency=INCREASE.
      */
-    public int VELOCITY_CHECKTIME();
+    public int VELOCITY_TIME();
     /**
      * Time to extend a player's velocity count by; Type=SYSTEM, Leniency=INCREASE.
      */
     public int VELOCITY_PREVENT();
     /**
-     * Number of times a player can fail the velocity check before action is taken; Type=INTEGER, Leniency=INCREASE.
+     * Maximum amount of velocity tracks; Type=INTEGER, Leniency=INCREASE.
      */
     public int VELOCITY_MAXTIMES();
-    /**
-     * Number of times a player can sprint without proper food level before action is taken; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int SPRINT_FOOD_MIN();
-    /**
-     * Maximum times a player can interact between animations; Type=INTEGER, Leniency=INCREASE.
-     */
-    public int ANIMATION_INTERACT_MAX();
-    /**
-     * Minimum time between commands; Type=SYSTEM, Leniency=DECREASE.
-     */
-    public int COMMAND_MIN();
-    /**
-     * Minimum time before repeating a command is ignored; Type=SYSTEM, Leniency=DECREASE.
-     */
-    public int COMMAND_REPEAT_MIN();
-    /**
-     * Minimum time between chats; Type=SYSTEM, Leniency=DECREASE.
-     */
-    public int CHAT_MIN();
-    /**
-     * Time before repeating yourself in chat is ignored; Type=SYSTEM, Leniency=INCREASE.
-     */
-    public int CHAT_REPEAT_MIN();
-    /**
-     * Minimum time in between block breaks; Type=INTEGER, Leniency=DECREASE.
-     */
-    public double BLOCK_BREAK_MIN();
-    /**
-     * Minimum time in between block placing; Type=INTEGER, Leniency=DECREASE.
-     */
-    public double BLOCK_PLACE_MIN();
-    /**
-     * Minimum time in between eating; Type=SYSTEM, Leniency=DECREASE.
-     */
-    public int EAT_TIME_MIN();
-    /**
-     * Maximum percent error between predicted bow force and actual bow force; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double BOW_ERROR();
-    /**
-     * Maximum distance a player can break a block from; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double BLOCK_MAX_DISTANCE();
-    /**
-     * Minimum distance a player can break a block from in creative mode; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double BLOCK_MAX_DISTANCE_CREATIVE();
-    /**
-     * Maximum speed a player on a ladder can travel; Type=DOUBLE, Leniency=INCREASE.
-     */
-    public double LADDER_Y_MAX();
-    /**
-     * Minimum speed a player on a ladder can travel; Type=DOUBLE, Leniency=DECREASE.
-     */
-    public double LADDER_Y_MIN();
-    /**
-     * The number of clicks we should wait before checking if the player has used fast inventory; Type=INTEGER; Leniency=INCREASE.
-     */
-    public int INVENTORY_CHECK();
-    /**
-     * The minimum time it should have taken for the player to click X times; Type=INTEGER; Leniency=INCREASE.
-     */
-    public int INVENTORY_TIMEMIN();
     /**
      * Minimum travel distance for move to be considered a teleport and subsequently be ignored; Type=INTEGER, Leniency=INCREASE.
      */

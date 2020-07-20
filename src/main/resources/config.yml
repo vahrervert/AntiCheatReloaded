@@ -35,9 +35,9 @@ system:
   # Do NOT enable this in a production environment!
   debug-mode: false
   # To prevent spamming, staff and the console will only be notified every x violations
-  # Minimum value is 1, default is 5
+  # Minimum value is 1, default is 10
   # Example with 5: notifications after 5 vl, 10vl, 15vl, etc.
-  notify-every-vl: 5
+  notify-every-vl: 10
 # Use /AntiCheatReloaded checks for a list of valid checks
 disable-in:
 - example-world

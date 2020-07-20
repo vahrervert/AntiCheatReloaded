@@ -55,7 +55,6 @@ public enum CheckType {
     FAST_PROJECTILE(Permission.CHECK_FASTPROJECTILE, "FastProjectile"),
     ITEM_SPAM(Permission.CHECK_ITEMSPAM, "ItemSpam"),
     FAST_INVENTORY(Permission.CHECK_FASTINVENTORY, "FastInventory"),
-    AUTOTOOL(Permission.CHECK_AUTOTOOL, "AutoTool"),
     MOREPACKETS(Permission.CHECK_MOREPACKETS, "MorePackets"),
     BADPACKETS(Permission.CHECK_BADPACKETS, "BadPackets"),
 	VELOCITY(Permission.CHECK_VELOCITY, "Velocity"),

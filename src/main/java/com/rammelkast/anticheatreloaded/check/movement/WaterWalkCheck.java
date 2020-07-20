@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
@@ -60,14 +61,17 @@ public class WaterWalkCheck {
 			return new CheckResult(Result.FAILED,
 					"tried to hop on water (mY=" + Utilities.roundDouble(movementManager.motionY, 5) + ")");
 
-		// TODO fix speed effect falses
+		double minAbsMotionY = 0.08D;
+		if (player.hasPotionEffect(PotionEffectType.SPEED))
+			minAbsMotionY += (player.getPotionEffect(PotionEffectType.SPEED).getAmplifier() + 1) * 0.05D;
 		if (checksConfig.isSubcheckEnabled(CheckType.WATER_WALK, "lunge") && blockBeneath.isLiquid()
 				&& Utilities.isSurroundedByWater(player)
-				&& Math.abs(movementManager.lastMotionY - movementManager.motionY) > 0.08
+				&& Math.abs(movementManager.lastMotionY - movementManager.motionY) > minAbsMotionY
 				&& movementManager.distanceXZ > checksConfig.getDouble(CheckType.WATER_WALK, "lunge", "minimumDistXZ")
 				&& movementManager.lastMotionY > -0.25)
-			return new CheckResult(Result.FAILED,
-					"tried to lunge in water (xz=" + Utilities.roundDouble(movementManager.distanceXZ, 5) + ")");
+			return new CheckResult(Result.FAILED, "tried to lunge in water (xz="
+					+ Utilities.roundDouble(movementManager.distanceXZ, 5) + ", absMotionY="
+					+ Utilities.roundDouble(Math.abs(movementManager.lastMotionY - movementManager.motionY), 5) + ")");
 
 		return PASS;
 	}

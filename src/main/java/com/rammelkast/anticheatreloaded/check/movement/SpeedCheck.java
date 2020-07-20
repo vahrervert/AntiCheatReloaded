@@ -228,7 +228,7 @@ public class SpeedCheck {
 			return PASS;
 		
 		if (player.isInsideVehicle() || player.isSleeping()
-				|| backend.isDoing(player, backend.velocitized, backend.getMagic().VELOCITY_SCHETIME()) || VersionUtil.isFlying(player)
+				|| backend.isDoing(player, backend.velocitized, backend.getMagic().VELOCITY_EXTENSION()) || VersionUtil.isFlying(player)
 				|| VersionUtil.isRiptiding(player)) {
 			return PASS;
 		}
