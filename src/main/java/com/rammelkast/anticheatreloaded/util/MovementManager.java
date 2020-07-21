@@ -67,6 +67,10 @@ public class MovementManager {
 	public int elytraEffectTicks;
 	// Used by Velocity check, represents the currently expected Y motion
 	public double velocityExpectedMotionY;
+	// Amount of ticks a player is sneaking
+	public int sneakingTicks;
+	// Ticks counter after being near a liquid
+	public int nearLiquidTicks;
 
 	@SuppressWarnings("deprecation")
 	public void handle(Player player, Location from, Location to, Distance distance) {
@@ -120,6 +124,20 @@ public class MovementManager {
 		} else {
 			if (this.elytraEffectTicks > 0)
 				this.elytraEffectTicks--;
+		}
+	
+		if (player.isSneaking())
+			this.sneakingTicks++;
+		else
+			this.sneakingTicks = 0;
+		
+		if (Utilities.isNearWater(player))
+			this.nearLiquidTicks = 8;
+		else {
+			if (this.nearLiquidTicks > 0)
+				this.nearLiquidTicks--;
+			else
+				this.nearLiquidTicks = 0;
 		}
 		
 		double lastDistanceSq = Math.sqrt(this.lastDistance.getXDifference() * this.lastDistance.getXDifference()

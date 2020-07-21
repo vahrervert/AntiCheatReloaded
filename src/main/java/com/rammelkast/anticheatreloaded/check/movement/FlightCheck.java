@@ -60,7 +60,7 @@ public class FlightCheck {
 		Backend backend = AntiCheatReloaded.getManager().getBackend();
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 
-		if (Utilities.isNearWater(player) || movementManager.halfMovement
+		if (movementManager.nearLiquidTicks > 0 || movementManager.halfMovement
 				|| Utilities.isClimbableBlock(distance.getFrom().getBlock())
 				|| Utilities.isClimbableBlock(distance.getFrom().getBlock().getRelative(BlockFace.DOWN))
 				|| Utilities.isClimbableBlock(distance.getFrom().getBlock().getRelative(BlockFace.UP)))
@@ -115,7 +115,9 @@ public class FlightCheck {
 				&& !AntiCheatReloaded.getManager().getBackend().justVelocity(player)
 				&& !player.hasPotionEffect(PotionEffectType.JUMP)
 				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
-						.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports")))
+						.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports"))
+				&& (!Utilities.isNearBed(distance.getTo())
+						|| (Utilities.isNearBed(distance.getTo()) && movementManager.motionY > 0.12675)))
 			return new CheckResult(CheckResult.Result.FAILED,
 					"tried to climb air (mY=" + movementManager.motionY + ")");
 

@@ -424,9 +424,16 @@ public final class Utilities {
 	public static boolean isInWater(Player player) {
 		return player.getLocation().getBlock().isLiquid()
 				|| player.getLocation().getBlock().getRelative(BlockFace.DOWN).isLiquid()
-				|| player.getLocation().getBlock().getRelative(BlockFace.UP).isLiquid();
+				|| player.getLocation().getBlock().getRelative(BlockFace.UP).isLiquid()
+				|| (!VersionUtil.isBountifulUpdate()
+						&& (player.getLocation().getBlock().getType() == XMaterial.KELP_PLANT.parseMaterial()
+								|| player.getLocation().getBlock().getRelative(BlockFace.UP)
+										.getType() == XMaterial.KELP_PLANT.parseMaterial()
+								|| player.getLocation().getBlock().getRelative(BlockFace.DOWN)
+										.getType() == XMaterial.KELP_PLANT.parseMaterial())
+						&& isNearWater(player));
 	}
-	
+
 	/**
 	 * Determine whether a player is near a liquid block
 	 *

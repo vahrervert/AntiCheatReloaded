@@ -122,7 +122,7 @@ waterwalk:
     enabled: true
     # Minimum xz distance before flagging
     # This combats false positives, while giving hackers not much leniency
-    minimumDistXZ: 0.0642
+    minimumDistXZ: 0.098
 
 # FastLadder check settings
 # Checks if a player moves too fast on a ladder

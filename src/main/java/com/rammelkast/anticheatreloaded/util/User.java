@@ -26,7 +26,6 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -237,9 +236,7 @@ public class User {
 	 * @return true if the location was valid and set properly
 	 */
 	public boolean setGoodLocation(Location location) {
-		if (Utilities.cantStandAtExp(location)
-				|| (location.getBlock().isLiquid() && !Utilities.isFullyInWater(location))
-				|| (!location.getBlock().getType().isSolid() && location.getBlock().getType() != Material.AIR)) {
+		if (Utilities.cantStandAtExp(location)) {
 			return false;
 		}
 

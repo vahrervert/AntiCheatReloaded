@@ -36,6 +36,7 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 /**
  * @author Rammelkast
  * TODO soulsand speed
+ * TODO fix false positive with water weeds
  */
 public class SpeedCheck {
 
@@ -207,7 +208,7 @@ public class SpeedCheck {
 				limit *= 0.65D;
 			// Sneak speed check
 			// TODO config
-			if (player.isSneaking())
+			if (movementManager.sneakingTicks > 1)
 				limit *= 0.68D;
 			
 			if (distanceXZ - limit > 0) {
@@ -229,13 +230,16 @@ public class SpeedCheck {
 		
 		if (player.isInsideVehicle() || player.isSleeping()
 				|| backend.isDoing(player, backend.velocitized, backend.getMagic().VELOCITY_EXTENSION()) || VersionUtil.isFlying(player)
-				|| VersionUtil.isRiptiding(player)) {
+				|| VersionUtil.isRiptiding(player) || Utilities.isNearWater(player)) {
 			return PASS;
 		}
 		
 		double maxMotionY = getMaxAcceptableMotionY(player, Utilities.isNearBed(distance.getTo()),
 				Utilities.couldBeOnBoat(player), Utilities.isClimbableBlock(distance.getFrom().getBlock())
 						|| Utilities.isClimbableBlock(distance.getFrom().getBlock().getRelative(BlockFace.DOWN)), movementManager.halfMovement, checksConfig);
+		// Fix false positive with soulsand boost
+		if (movementManager.nearLiquidTicks > 6)
+			maxMotionY *= 1.0525D;
 		if (movementManager.motionY > maxMotionY && movementManager.slimeInfluenceTicks <= 0) {
 			return new CheckResult(CheckResult.Result.FAILED,
 					"exceeded vertical speed limit (mY=" + movementManager.motionY + ", max=" + maxMotionY + ")");

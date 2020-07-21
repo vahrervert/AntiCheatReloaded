@@ -61,7 +61,7 @@ public class WaterWalkCheck {
 			return new CheckResult(Result.FAILED,
 					"tried to hop on water (mY=" + Utilities.roundDouble(movementManager.motionY, 5) + ")");
 
-		double minAbsMotionY = 0.08D;
+		double minAbsMotionY = 0.12D;
 		if (player.hasPotionEffect(PotionEffectType.SPEED))
 			minAbsMotionY += (player.getPotionEffect(PotionEffectType.SPEED).getAmplifier() + 1) * 0.05D;
 		if (checksConfig.isSubcheckEnabled(CheckType.WATER_WALK, "lunge") && blockBeneath.isLiquid()
