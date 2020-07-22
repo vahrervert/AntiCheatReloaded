@@ -151,12 +151,15 @@ public class Configuration {
             file.load();
             checkReload(file);
         }
-        for (ConfigurationTable table : dbfiles) {
+        
+        for (ConfigurationTable table : dbfiles)
             table.load();
-        }
-        if (manager.getBackend() != null) {
+        
+        if (manager.getBackend() != null)
             manager.getBackend().updateConfig(this);
-        }
+        
+        if (manager.getCheckManager() != null)
+        	manager.getCheckManager().loadCheckIgnoreList(this);
     }
 
     private void checkReload(ConfigurationFile file) {

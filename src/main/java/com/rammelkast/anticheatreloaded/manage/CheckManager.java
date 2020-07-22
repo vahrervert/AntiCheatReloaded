@@ -47,9 +47,13 @@ public class CheckManager {
     public CheckManager(AntiCheatManager manager) {
         this.manager = manager;
         this.config = manager.getConfiguration();
+        this.loadCheckIgnoreList(this.config);
+    }
 
+    public void loadCheckIgnoreList(Configuration configuration) {
+    	checkIgnoreList.clear();
         for (CheckType type : CheckType.values()) {
-            if (!config.getChecks().isEnabled(type)) {
+            if (!configuration.getChecks().isEnabled(type)) {
                 checkIgnoreList.add(type);
                 break;
             }
@@ -60,7 +64,7 @@ public class CheckManager {
 					+ checkIgnoreList.size() + " check(s) have been disabled");
         }
     }
-
+    
     /**
      * Turn a check on
      *

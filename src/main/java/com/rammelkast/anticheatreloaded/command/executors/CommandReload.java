@@ -19,6 +19,7 @@
 
 package com.rammelkast.anticheatreloaded.command.executors;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import com.rammelkast.anticheatreloaded.command.CommandBase;
@@ -41,6 +42,6 @@ public class CommandReload extends CommandBase {
     @Override
     protected void execute(CommandSender cs, String[] args) {
         CONFIG.load();
-        cs.sendMessage(GREEN + "AntiCheat configuration reloaded.");
+        cs.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.DARK_GRAY + "> " + ChatColor.GRAY + "The configuration was reloaded");
     }
 }

@@ -172,6 +172,9 @@ public class SpeedCheck {
 			// Slab leniency
 			if (movementManager.halfMovementHistoryCounter > 8)
 				limit += 0.2D;
+			// LivingEntities can give players a small push boost
+			if (!movingTowards.getWorld().getNearbyEntities(movingTowards, 0.3, 0.3, 0.3).isEmpty())
+				limit += 0.2D;
 			// Leniency when boxed in
 			if (boxedIn)
 				limit *= 1.1D;
