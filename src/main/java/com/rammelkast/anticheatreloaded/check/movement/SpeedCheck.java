@@ -114,6 +114,10 @@ public class SpeedCheck {
 			// TODO better way for this
 			if (player.isBlocking() && movementManager.airTicks > 2)
 				predict *= 0.8D;
+			// Fixes false positive when coming out of water
+			if (movementManager.nearLiquidTicks >= 7 && movementManager.airTicks >= 14
+					&& movementManager.motionY < -0.18 && movementManager.motionY > -0.182)
+				predict += Math.abs(movementManager.motionY);
 			
 			if (distanceXZ - predict > limit) {
 				return new CheckResult(CheckResult.Result.FAILED, "moved too fast in air (speed=" + distanceXZ
