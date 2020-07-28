@@ -55,7 +55,6 @@ public class CheckManager {
         for (CheckType type : CheckType.values()) {
             if (!configuration.getChecks().isEnabled(type)) {
                 checkIgnoreList.add(type);
-                break;
             }
         }
         

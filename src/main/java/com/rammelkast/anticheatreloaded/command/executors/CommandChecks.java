@@ -19,39 +19,44 @@
 
 package com.rammelkast.anticheatreloaded.command.executors;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.command.CommandBase;
+import com.rammelkast.anticheatreloaded.manage.CheckManager;
 import com.rammelkast.anticheatreloaded.util.Permission;
 
 public class CommandChecks extends CommandBase {
 
-    private static final String NAME = "AntiCheatReloaded Checks Management";
-    private static final String COMMAND = "checks";
-    private static final String USAGE = "anticheat checks";
-    private static final Permission PERMISSION = Permission.SYSTEM_CHECK;
-    private static final String[] HELP = new String[2];
+	private static final String NAME = "AntiCheatReloaded Checks Management";
+	private static final String COMMAND = "checks";
+	private static final String USAGE = "anticheat checks";
+	private static final Permission PERMISSION = Permission.SYSTEM_CHECK;
+	private static final String[] HELP = new String[2];
 
-    static {
-        HELP[0] = GRAY + "Use: " + AQUA + "/anticheat checks" + GRAY + " for a list of checks";
-        StringBuilder builder = new StringBuilder();
-        builder.append(GRAY + "Checks: ");
-        for (int i=0;i<CheckType.values().length;i++) {
-            builder.append(CheckType.values()[i]);
-            if (i<CheckType.values().length-1) {
-                builder.append(", ");
-            }
-        }
-        HELP[1] = builder.toString();
-    }
+	static {
+		HELP[0] = GRAY + "Use: " + AQUA + "/anticheat checks" + GRAY + " for a list of checks";
+		StringBuilder builder = new StringBuilder();
+		CheckManager checkManager = AntiCheatReloaded.getManager().getCheckManager();
+		builder.append(GRAY + "Checks: ");
+		for (int i = 0; i < CheckType.values().length; i++) {
+			CheckType type = CheckType.values()[i];
+			builder.append((checkManager.isActive(type) ? ChatColor.GREEN : ChatColor.RED) + type.getName());
+			if (i < CheckType.values().length - 1) {
+				builder.append(", ");
+			}
+		}
+		HELP[1] = builder.toString();
+	}
 
-    public CommandChecks() {
-        super(NAME, COMMAND, USAGE, HELP, PERMISSION);
-    }
+	public CommandChecks() {
+		super(NAME, COMMAND, USAGE, HELP, PERMISSION);
+	}
 
-    @Override
-    protected void execute(CommandSender cs, String[] args) {
-        sendHelp(cs);
-    }
+	@Override
+	protected void execute(CommandSender cs, String[] args) {
+		sendHelp(cs);
+	}
 }

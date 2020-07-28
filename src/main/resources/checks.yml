@@ -98,8 +98,6 @@ speed:
 # WaterWalk check settings
 # Checks if a player is walking on water
 waterwalk:
-  # Should this check be enabled?
-  enabled: true
   # Checks for vanilla water walking/jumping
   # Debugs as 'tried to walk on water'
   walk:
@@ -109,14 +107,14 @@ waterwalk:
     # This combats false positives, while giving hackers not much leniency
     minimumDistXZ: 0.092
   # Checks for small hops on top of water
-  # Debugs as 'tried to lunge on water'
+  # Debugs as 'tried to hop on water'
   hop:
     # Should this part of the check be enabled?
     enabled: true
     # Maximum lunge Y motion to flag
     maxMotionY: 0.10
   # Checks for small lunges in water
-  # Debugs as 'tried to walk on water'
+  # Debugs as 'tried to lunge in water'
   lunge:
     # Should this part of the check be enabled?
     enabled: true
