@@ -1,9 +1,9 @@
 # Time to exempt a player from moving because of entering/exiting a vehicle
 # Increase in case of false positives
-ENTERED_EXITED_TIME: 1000
+ENTERED_EXITED_TIME: 250
 # Time to exempt a player from moving because of teleporting
 # Increase in case of false positives
-TELEPORT_TIME: 1000
+TELEPORT_TIME: 1500
 # Time to exempt a player from moving because of exiting fly mode
 # Changing this value is almost never required
 EXIT_FLY_TIME: 2000

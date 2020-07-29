@@ -21,6 +21,8 @@ package com.rammelkast.anticheatreloaded.util;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
+
 public class MovementManager {
 
 	// Ticks in air
@@ -161,5 +163,8 @@ public class MovementManager {
 			if (this.halfMovementHistoryCounter > 0)
 				this.halfMovementHistoryCounter--;
 		}
+		
+		// Update "good location"
+		AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId()).setGoodLocation(from);
 	}
 }

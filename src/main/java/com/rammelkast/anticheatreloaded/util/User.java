@@ -217,7 +217,8 @@ public class User {
 	 * @return last known valid location
 	 */
 	public Location getGoodLocation(Location location) {
-		if (goodLocation == null) {
+		if (goodLocation == null || !location.getWorld().equals(goodLocation.getWorld())
+				|| location.distance(goodLocation) > config.getConfig().maxSetbackDistance.getValue()) {
 			return location;
 		}
 

@@ -229,17 +229,14 @@ public class SpeedCheck {
 
 	public static CheckResult checkVerticalSpeed(Player player, Distance distance) {
 		Backend backend = AntiCheatReloaded.getManager().getBackend();
+		if (isSpeedExempt(player, backend) || player.getVehicle() != null || player.isSleeping()
+				|| VersionUtil.isRiptiding(player) || Utilities.isNearWater(player))
+			return PASS;
 		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
 				.getMovementManager();
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		if (!checksConfig.isSubcheckEnabled(CheckType.SPEED, "verticalSpeed"))
 			return PASS;
-		
-		if (player.isInsideVehicle() || player.isSleeping()
-				|| backend.isDoing(player, backend.velocitized, backend.getMagic().VELOCITY_EXTENSION()) || VersionUtil.isFlying(player)
-				|| VersionUtil.isRiptiding(player) || Utilities.isNearWater(player)) {
-			return PASS;
-		}
 		
 		double maxMotionY = getMaxAcceptableMotionY(player, Utilities.isNearBed(distance.getTo()),
 				Utilities.couldBeOnBoat(player), Utilities.isClimbableBlock(distance.getFrom().getBlock())
@@ -260,9 +257,9 @@ public class SpeedCheck {
 		double base = couldBeOnBoat ? 0.600000025 : (nearBed ? 0.5625 : (halfMovement ? 0.6 : 0.42));
 		if (fromClimbable)
 			base += checksConfig.getDouble(CheckType.SPEED, "verticalSpeed", "climbableCompensation"); // Default 0.04
-		if (player.hasPotionEffect(PotionEffectType.JUMP)) {
-			base += player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() * 0.2D;
-		}
+		
+		if (player.hasPotionEffect(PotionEffectType.JUMP))
+			base += (player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() + 1) * 0.2D;
 		return base;
 	}
 

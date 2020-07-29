@@ -49,8 +49,10 @@ public class FlightCheck {
 
 	public static CheckResult runCheck(Player player, Distance distance) {
 		if (distance.getYDifference() >= AntiCheatReloaded.getManager().getBackend().getMagic().TELEPORT_MIN()
-				|| VersionUtil.isFlying(player)) {
-			// This was a teleport or user is flying/using elytra, so we don't care
+				|| VersionUtil.isFlying(player) || player.getVehicle() != null
+				|| AntiCheatReloaded.getManager().getBackend().isMovingExempt(player)) {
+			// This was a teleport or user is flying/using elytra/in a vehicle, so we don't
+			// care
 			// about it.
 			return PASS;
 		}

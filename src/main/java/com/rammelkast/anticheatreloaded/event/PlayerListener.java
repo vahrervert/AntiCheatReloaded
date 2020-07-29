@@ -52,6 +52,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
+import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -256,9 +257,6 @@ public class PlayerListener extends EventListener {
 	@EventHandler
 	public void onPlayerToggleSprint(PlayerToggleSprintEvent event) {
 		Player player = event.getPlayer();
-		if (!event.isSprinting()) {
-			getBackend().logEnterExit(player);
-		}
 		if (getCheckManager().willCheck(player, CheckType.SPRINT)) {
 			CheckResult result = getBackend().checkSprintHungry(event);
 			if (result.failed()) {
@@ -436,7 +434,6 @@ public class PlayerListener extends EventListener {
 				}
 			}
 
-			boolean changed = false;
 			if (event.getTo() != event.getFrom()) {
 				double x = distance.getXDifference();
 				double z = distance.getZDifference();
@@ -449,7 +446,6 @@ public class PlayerListener extends EventListener {
 								event.setTo(user.getGoodLocation(from.clone()));
 							}
 							log(result.getMessage(), player, CheckType.SPEED);
-							changed = true;
 						}
 					}
 					CheckResult result = SpeedCheck.checkXZSpeed(player, x, z, event.getTo());
@@ -458,7 +454,6 @@ public class PlayerListener extends EventListener {
 							event.setTo(user.getGoodLocation(from.clone()));
 						}
 						log(result.getMessage(), player, CheckType.SPEED);
-						changed = true;
 					}
 				}
 				if (getCheckManager().willCheckQuick(player, CheckType.WATER_WALK)) {
@@ -469,7 +464,6 @@ public class PlayerListener extends EventListener {
 							player.teleport(player.getLocation().clone().subtract(0, 0.52, 0));
 						}
 						log(result.getMessage(), player, CheckType.WATER_WALK);
-						changed = true;
 					}
 				}
 				if (getCheckManager().willCheckQuick(player, CheckType.SPIDER)) {
@@ -479,7 +473,6 @@ public class PlayerListener extends EventListener {
 							event.setTo(user.getGoodLocation(from.clone()));
 						}
 						log(result.getMessage(), player, CheckType.SPIDER);
-						changed = true;
 					}
 				}
 				if (getCheckManager().willCheckQuick(player, CheckType.FASTLADDER)) {
@@ -491,11 +484,7 @@ public class PlayerListener extends EventListener {
 							event.setTo(user.getGoodLocation(from.clone()));
 						}
 						log(result.getMessage(), player, CheckType.FASTLADDER);
-						changed = true;
 					}
-				}
-				if (!changed) {
-					user.setGoodLocation(event.getFrom());
 				}
 			}
 			if (getCheckManager().willCheckQuick(player, CheckType.AIMBOT)) {
