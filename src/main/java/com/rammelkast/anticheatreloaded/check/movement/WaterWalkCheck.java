@@ -50,14 +50,17 @@ public class WaterWalkCheck {
 
 		if (checksConfig.isSubcheckEnabled(CheckType.WATER_WALK, "walk") && blockBeneath.isLiquid()
 				&& Utilities.isSurroundedByWater(player)
-				&& ((movementManager.motionY == 0 && movementManager.lastMotionY == 0) || movementManager.motionY == Utilities.JUMP_MOTION_Y)
-				&& movementManager.distanceXZ > checksConfig.getDouble(CheckType.WATER_WALK, "walk", "minimumDistXZ"))
+				&& ((movementManager.motionY == 0 && movementManager.lastMotionY == 0)
+						|| movementManager.motionY == Utilities.JUMP_MOTION_Y)
+				&& movementManager.distanceXZ > checksConfig.getDouble(CheckType.WATER_WALK, "walk", "minimumDistXZ")
+				&& !movementManager.topSolid && !Utilities.couldBeOnBoat(player, 3, false))
 			return new CheckResult(Result.FAILED,
 					"tried to walk on water (xz=" + Utilities.roundDouble(movementManager.distanceXZ, 5) + ")");
 
 		if (checksConfig.isSubcheckEnabled(CheckType.WATER_WALK, "hop") && blockBeneath.isLiquid()
 				&& Utilities.isSurroundedByWater(player) && movementManager.onGround
-				&& Math.abs(movementManager.motionY) < checksConfig.getDouble(CheckType.WATER_WALK, "hop", "maxMotionY"))
+				&& Math.abs(movementManager.motionY) < checksConfig.getDouble(CheckType.WATER_WALK, "hop", "maxMotionY")
+				&& !Utilities.couldBeOnBoat(player, 0.3, false))
 			return new CheckResult(Result.FAILED,
 					"tried to hop on water (mY=" + Utilities.roundDouble(movementManager.motionY, 5) + ")");
 

@@ -124,17 +124,22 @@ public final class Utilities {
 	}
 	
 	public static boolean couldBeOnBoat(Player player) {
-		return couldBeOnBoat(player, 0.35);
+		return couldBeOnBoat(player, 0.35, false);
 	}
 	
-	public static boolean couldBeOnBoat(Player player, double range) {
+	public static boolean couldBeOnBoat(Player player, double range, boolean checkY) {
 		for (Entity entity : player.getNearbyEntities(range, range, range)) {
-			if (entity instanceof Boat)
-				return true;
+			if (entity instanceof Boat) {
+				if (((Boat) entity).getLocation().getY() < player.getLocation().getY() + 0.25) {
+					return true;
+				} else if (!checkY) {
+					return true;
+				}
+			}
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Determine whether a player could be standing on ice
 	 *

@@ -87,7 +87,7 @@ public class MovementManager {
 		this.distanceXZ = Math.sqrt(x * x + z * z);
 		
 		// Account for standing on boat
-		if (Utilities.couldBeOnBoat(player, 0.25))
+		if (Utilities.couldBeOnBoat(player, 0.25, true) && !Utilities.isSubmersed(player))
 			this.onGround = true;
 		
 		this.touchedGroundThisTick = false;

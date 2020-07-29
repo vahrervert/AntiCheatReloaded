@@ -100,7 +100,7 @@ public class SpeedCheck {
 			if (Utilities.couldBeOnHalfblock(movingTowards) && movementManager.halfMovementHistoryCounter == 0)
 				predict *= 1.25D;
 			// Boats sometimes give a false positive
-			if (Utilities.couldBeOnBoat(player, 0.5))
+			if (Utilities.couldBeOnBoat(player, 0.5, true))
 				predict *= 1.25D;
 			// Strafing in air when nearing terminal velocity gives false positives
 			// This fixes the issue but gives hackers some leniency which means we need another check for this
