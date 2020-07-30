@@ -192,7 +192,7 @@ velocity:
   # Should this check be enabled?
   enabled: true
   # Minimum percentage of the given knockback a player has to meet
-  minimumPercentage: 98
+  minimumPercentage: 75
   # Amount of low-velocity moments before flagging
   vlBeforeFlag: 2
 
