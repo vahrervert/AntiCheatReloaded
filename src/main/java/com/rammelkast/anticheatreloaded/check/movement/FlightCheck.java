@@ -92,6 +92,10 @@ public class FlightCheck {
 							? AntiCheatReloaded.getManager().getBackend().placedBlock.get(player.getUniqueId())
 							: (blockPlaceAccountingTime + 1);
 			double maxMotionY = System.currentTimeMillis() - lastPlacedBlock > blockPlaceAccountingTime ? 0 : 0.42;
+			// Fixes snow false positive
+			if (movementManager.motionY < 0.004 && Utilities
+					.isNearHalfblock(distance.getFrom().getBlock().getRelative(BlockFace.DOWN).getLocation()))
+				maxMotionY = 0.004D;
 			if (movementManager.motionY > maxMotionY && movementManager.slimeInfluenceTicks <= 0)
 				return new CheckResult(CheckResult.Result.FAILED,
 						"tried to fly on the Y-axis (mY=" + movementManager.motionY + ", max=" + maxMotionY + ")");
@@ -123,9 +127,11 @@ public class FlightCheck {
 			return new CheckResult(CheckResult.Result.FAILED,
 					"tried to climb air (mY=" + movementManager.motionY + ")");
 
+		// TODO hardcoded value against false again..
 		if (checksConfig.isSubcheckEnabled(CheckType.FLIGHT, "airClimb") && movementManager.motionY > 0.42
 				&& movementManager.airTicks > 2 && !AntiCheatReloaded.getManager().getBackend().justVelocity(player)
 				&& !player.hasPotionEffect(PotionEffectType.JUMP)
+				&& !(Math.round(movementManager.motionY * 1000) == 425 && movementManager.airTicks == 11)
 				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
 						.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports")))
 			return new CheckResult(CheckResult.Result.FAILED,

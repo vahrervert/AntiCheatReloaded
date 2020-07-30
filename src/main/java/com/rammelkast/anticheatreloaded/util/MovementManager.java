@@ -80,16 +80,16 @@ public class MovementManager {
 		// This is checked for spoofing by "GroundFlight"
 		// Also seems to make NoFall cheats flag for speed lmao
 		this.onGround = player.isOnGround();
-		
+
 		double x = distance.getXDifference();
-        double z = distance.getZDifference();
-        this.lastDistanceXZ = this.distanceXZ;
+		double z = distance.getZDifference();
+		this.lastDistanceXZ = this.distanceXZ;
 		this.distanceXZ = Math.sqrt(x * x + z * z);
-		
+
 		// Account for standing on boat
 		if (Utilities.couldBeOnBoat(player, 0.25, true) && !Utilities.isSubmersed(player))
 			this.onGround = true;
-		
+
 		this.touchedGroundThisTick = false;
 		this.halfMovement = false;
 		if (!this.onGround) {
@@ -102,7 +102,7 @@ public class MovementManager {
 			this.airTicks = 0;
 			this.groundTicks++;
 		}
-		
+
 		if (Utilities.couldBeOnIce(to)) {
 			this.iceTicks++;
 			this.iceInfluenceTicks = 60;
@@ -111,7 +111,7 @@ public class MovementManager {
 			if (this.iceInfluenceTicks > 0)
 				this.iceInfluenceTicks--;
 		}
-		
+
 		if (Utilities.couldBeOnSlime(to)) {
 			this.slimeTicks++;
 			this.slimeInfluenceTicks = 40;
@@ -120,19 +120,19 @@ public class MovementManager {
 			if (this.slimeInfluenceTicks > 0)
 				this.slimeInfluenceTicks--;
 		}
-		
+
 		if (VersionUtil.isGliding(player)) {
 			this.elytraEffectTicks = 30;
 		} else {
 			if (this.elytraEffectTicks > 0)
 				this.elytraEffectTicks--;
 		}
-	
+
 		if (player.isSneaking())
 			this.sneakingTicks++;
 		else
 			this.sneakingTicks = 0;
-		
+
 		if (Utilities.isNearWater(player))
 			this.nearLiquidTicks = 8;
 		else {
@@ -141,29 +141,30 @@ public class MovementManager {
 			else
 				this.nearLiquidTicks = 0;
 		}
-		
+
 		double lastDistanceSq = Math.sqrt(this.lastDistance.getXDifference() * this.lastDistance.getXDifference()
 				+ this.lastDistance.getZDifference() * this.lastDistance.getZDifference());
 		double currentDistanceSq = Math.sqrt(distance.getXDifference() * distance.getXDifference()
 				+ distance.getZDifference() * distance.getZDifference());
 		this.acceleration = currentDistanceSq - lastDistanceSq;
-		
+
 		this.lastMotionY = this.motionY;
 		this.motionY = to.getY() - from.getY();
-		
+
 		Location top = to.clone().add(0, 2, 0);
 		this.topSolid = top.getBlock().getType().isSolid();
 		Location bottom = to.clone().add(0, -1, 0);
 		this.bottomSolid = bottom.getBlock().getType().isSolid();
-		
-		if ((this.motionY > 0.464D && this.motionY <= 0.5625D) && (Utilities.couldBeOnHalfblock(to) || Utilities.isNearBed(to))) {
+
+		if ((this.motionY > 0.42D && this.motionY <= 0.5625D)
+				&& (Utilities.couldBeOnHalfblock(to) || Utilities.isNearBed(to))) {
 			this.halfMovement = true;
 			this.halfMovementHistoryCounter = 30;
 		} else {
 			if (this.halfMovementHistoryCounter > 0)
 				this.halfMovementHistoryCounter--;
 		}
-		
+
 		// Update "good location"
 		AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId()).setGoodLocation(from);
 	}

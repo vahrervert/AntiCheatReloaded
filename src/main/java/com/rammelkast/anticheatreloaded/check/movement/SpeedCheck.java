@@ -36,7 +36,6 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 /**
  * @author Rammelkast
  * TODO soulsand speed
- * TODO fix false positive with water weeds
  */
 public class SpeedCheck {
 

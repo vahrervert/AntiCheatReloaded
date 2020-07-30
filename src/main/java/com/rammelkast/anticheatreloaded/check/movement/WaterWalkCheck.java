@@ -42,7 +42,7 @@ public class WaterWalkCheck {
 		User user = AntiCheatReloaded.getManager().getUserManager().getUser(uuid);
 		MovementManager movementManager = user.getMovementManager();
 
-		if (movementManager.distanceXZ <= 0)
+		if (movementManager.distanceXZ <= 0 || player.getVehicle() != null)
 			return PASS;
 
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();

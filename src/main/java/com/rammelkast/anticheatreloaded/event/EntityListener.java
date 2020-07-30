@@ -32,6 +32,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
@@ -134,29 +135,28 @@ public class EntityListener extends EventListener {
                     }
                 }
             }
-            if (e.getDamager() instanceof Player) {
-                Player player = (Player) e.getDamager();
-                getBackend().logDamage(player, 1);
-                if (getCheckManager().willCheck(player, CheckType.KILLAURA)) {
-                    CheckResult result = KillAuraCheck.checkAngle(player, event);
-                    if (result.failed()) {
-                        event.setCancelled(!silentMode());
-                        log(result.getMessage(), player, CheckType.KILLAURA);
-                        noHack = false;
-                    }
-                }
-                if (getCheckManager().willCheck(player, CheckType.KILLAURA)) {
-                    CheckResult result = KillAuraCheck.checkReach(player, event.getEntity());
-                    if (result.failed()) {
-                        event.setCancelled(!silentMode());
-                        log(result.getMessage(), player, CheckType.KILLAURA);
-                        noHack = false;
-                    }
-                }
-                if (noHack) {
-                    decrease(player);
-                }
-            }
+			if (e.getDamager() instanceof Player && event.getCause() == DamageCause.ENTITY_ATTACK) {
+				Player player = (Player) e.getDamager();
+				if (getCheckManager().willCheck(player, CheckType.KILLAURA)) {
+					CheckResult result = KillAuraCheck.checkAngle(player, event);
+					if (result.failed()) {
+						event.setCancelled(!silentMode());
+						log(result.getMessage(), player, CheckType.KILLAURA);
+						noHack = false;
+					}
+				}
+				if (getCheckManager().willCheck(player, CheckType.KILLAURA)) {
+					CheckResult result = KillAuraCheck.checkReach(player, event.getEntity());
+					if (result.failed()) {
+						event.setCancelled(!silentMode());
+						log(result.getMessage(), player, CheckType.KILLAURA);
+						noHack = false;
+					}
+				}
+				if (noHack) {
+					decrease(player);
+				}
+			}
         }
 
         AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());

@@ -177,6 +177,31 @@ public final class Utilities {
 	}
 	
 	/**
+	 * Determine whether a block is a shulker box
+	 *
+	 * @param block block to check
+	 * @return true if block is a shulker box
+	 */
+	public static boolean isShulkerBox(Block block) {
+		Material type = block.getType();
+		return type.name().endsWith("SHULKER_BOX");
+	}
+	
+	public static boolean isNearShulkerBox(Location location) {
+		if (VersionUtil.isBountifulUpdate())
+			return false;
+		return isShulkerBox(location.getBlock())
+				|| isShulkerBox(location.getBlock().getRelative(BlockFace.NORTH))
+				|| isShulkerBox(location.getBlock().getRelative(BlockFace.SOUTH))
+				|| isShulkerBox(location.getBlock().getRelative(BlockFace.EAST))
+				|| isShulkerBox(location.getBlock().getRelative(BlockFace.WEST))
+				|| isShulkerBox(location.getBlock().getRelative(BlockFace.NORTH_EAST))
+				|| isShulkerBox(location.getBlock().getRelative(BlockFace.NORTH_WEST))
+				|| isShulkerBox(location.getBlock().getRelative(BlockFace.SOUTH_EAST))
+				|| isShulkerBox(location.getBlock().getRelative(BlockFace.SOUTH_WEST));
+	}
+	
+	/**
 	 * Determine whether a player could be standing on a halfblock
 	 *
 	 * @param location the location to check
@@ -201,7 +226,7 @@ public final class Utilities {
 	}
 	
 	public static boolean isHalfblock(Block block) {
-		return isSlab(block) || isStair(block) || isWall(block);
+		return isSlab(block) || isStair(block) || isWall(block) || block.getType() == Material.SNOW;
 	}
 	
 	

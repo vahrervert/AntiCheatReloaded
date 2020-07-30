@@ -29,6 +29,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.potion.PotionEffectType;
@@ -229,7 +230,8 @@ public class Backend {
 		if (player.getGameMode() != GameMode.CREATIVE && !player.isInsideVehicle() && !player.isSleeping()
 				&& !isMovingExempt(player) && !justPlaced(player) && !Utilities.isNearWater(player)
 				&& !Utilities.isInWeb(player) && !player.getLocation().getBlock().getType().name().endsWith("TRAPDOOR")
-				&& !VersionUtil.isSlowFalling(player)) {
+				&& !VersionUtil.isSlowFalling(player) && !Utilities
+						.isNearShulkerBox(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getLocation())) {
 			if (player.getFallDistance() == 0) {
 				if (nofallViolation.get(uuid) == null) {
 					nofallViolation.put(uuid, 1);
