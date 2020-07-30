@@ -111,11 +111,12 @@ public class FlightCheck {
 		// End AirFlight
 
 		// Start AirClimb
-		// TODO two hardcoded values here shouldn't be there, temp against false
+		// TODO three hardcoded values here shouldn't be there, temp against false
 		// positive
 		if (checksConfig.isSubcheckEnabled(CheckType.FLIGHT, "airClimb") && movementManager.lastMotionY > 0
 				&& movementManager.motionY > 0 && movementManager.airTicks == 2
 				&& Math.round(movementManager.lastMotionY * 1000) != 420
+				&& Math.round(movementManager.motionY * 1000) != 248
 				&& !(Math.round(movementManager.motionY * 1000) == 333
 						&& Math.round(movementManager.lastMotionY * 1000) != 333)
 				&& !AntiCheatReloaded.getManager().getBackend().justVelocity(player)
