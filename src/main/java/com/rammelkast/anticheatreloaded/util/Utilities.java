@@ -37,6 +37,7 @@ import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.BoundingBox;
 import org.bukkit.util.NumberConversions;
 
 public final class Utilities {
@@ -226,6 +227,10 @@ public final class Utilities {
 	}
 	
 	public static boolean isHalfblock(Block block) {
+		BoundingBox box = block.getBoundingBox();
+		double height = box.getMaxY() - box.getMinY();
+		if (height > 0.42 && height <= 0.6 && block.getType().isSolid())
+			return true;
 		return isSlab(block) || isStair(block) || isWall(block) || block.getType() == Material.SNOW;
 	}
 	

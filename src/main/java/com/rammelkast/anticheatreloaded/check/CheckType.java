@@ -62,7 +62,8 @@ public enum CheckType {
 	CHAT_UNICODE(Permission.CHECK_UNICODE, "ChatUnicode"),
 	ILLEGAL_INTERACT(Permission.CHECK_ILLEGALINTERACT, "IllegalInteract"),
 	FASTLADDER(Permission.CHECK_FASTLADDER, "FastLadder"),
-	AIMBOT(Permission.CHECK_AIMBOT, "Aimbot");
+	AIMBOT(Permission.CHECK_AIMBOT, "Aimbot"),
+	STRAFE(Permission.CHECK_STRAFE, "Strafe");
 	
     private final Permission permission;
     private final String displayName;

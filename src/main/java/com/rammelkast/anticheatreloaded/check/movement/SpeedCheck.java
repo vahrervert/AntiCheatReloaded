@@ -57,7 +57,7 @@ public class SpeedCheck {
 		boolean boxedIn = movementManager.topSolid && movementManager.bottomSolid;
 		
 		// AirSpeed
-		if (checksConfig.isSubcheckEnabled(CheckType.SPEED, "airSpeed") && movementManager.airTicks > 1 && movementManager.elytraEffectTicks <= 0) {
+		if (checksConfig.isSubcheckEnabled(CheckType.SPEED, "airSpeed") && movementManager.airTicks > 1 && movementManager.elytraEffectTicks <= 0 && !Utilities.isNearClimbable(player)) {
 			double multiplier = 0.985D;
 			double predict = 0.36 * Math.pow(multiplier, movementManager.airTicks + 1);
 			double limit = checksConfig.getDouble(CheckType.SPEED, "airSpeed", "baseLimit"); // Default 0.03125

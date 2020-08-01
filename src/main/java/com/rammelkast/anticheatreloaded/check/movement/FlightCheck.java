@@ -63,9 +63,7 @@ public class FlightCheck {
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 
 		if (movementManager.nearLiquidTicks > 0 || movementManager.halfMovement
-				|| Utilities.isClimbableBlock(distance.getFrom().getBlock())
-				|| Utilities.isClimbableBlock(distance.getFrom().getBlock().getRelative(BlockFace.DOWN))
-				|| Utilities.isClimbableBlock(distance.getFrom().getBlock().getRelative(BlockFace.UP)))
+				|| Utilities.isNearClimbable(player))
 			return PASS;
 
 		int minAirTicks = 13;
@@ -124,7 +122,8 @@ public class FlightCheck {
 				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
 						.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports"))
 				&& (!Utilities.isNearBed(distance.getTo())
-						|| (Utilities.isNearBed(distance.getTo()) && movementManager.motionY > 0.12675)))
+						|| (Utilities.isNearBed(distance.getTo()) && movementManager.motionY > 0.12675))
+				&& movementManager.slimeInfluenceTicks == 0)
 			return new CheckResult(CheckResult.Result.FAILED,
 					"tried to climb air (mY=" + movementManager.motionY + ")");
 
@@ -134,7 +133,8 @@ public class FlightCheck {
 				&& !player.hasPotionEffect(PotionEffectType.JUMP)
 				&& !(Math.round(movementManager.motionY * 1000) == 425 && movementManager.airTicks == 11)
 				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
-						.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports")))
+						.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports"))
+				&& movementManager.slimeInfluenceTicks == 0)
 			return new CheckResult(CheckResult.Result.FAILED,
 					"tried to climb air (mY=" + movementManager.motionY + ", at=" + movementManager.airTicks + ")");
 		// End AirClimb
@@ -143,6 +143,7 @@ public class FlightCheck {
 		if (checksConfig.isSubcheckEnabled(CheckType.FLIGHT, "groundFlight") && movementManager.onGround
 				&& Utilities.cantStandAt(distance.getTo().getBlock().getRelative(BlockFace.DOWN))
 				&& Utilities.cantStandAt(distance.getFrom().getBlock().getRelative(BlockFace.DOWN))
+				&& Utilities.cantStandAt(distance.getTo().getBlock())
 				&& movementManager.groundTicks > 2) {
 			return new CheckResult(CheckResult.Result.FAILED,
 					"faked ground to fly (mY=" + movementManager.motionY + ", gt=" + movementManager.groundTicks + ")");

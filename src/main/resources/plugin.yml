@@ -127,6 +127,9 @@ permissions:
   anticheat.check.aimbot:
     description: Allow players to use aimbot
     default: false
+  anticheat.check.aimbot:
+    description: Allow players to use strafe hacks
+    default: false
   anticheat.check.exempt:
     description: Total exemption from checks
     default: false
@@ -158,3 +161,4 @@ permissions:
       anticheat.check.illegalinteract: true
       anticheat.check.fastladder: true
       anticheat.check.aimbot: true
+      anticheat.check.strafe: true

@@ -52,7 +52,6 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
-import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -66,6 +65,7 @@ import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FastLadderCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
 import com.rammelkast.anticheatreloaded.check.movement.SpeedCheck;
+import com.rammelkast.anticheatreloaded.check.movement.StrafeCheck;
 import com.rammelkast.anticheatreloaded.check.movement.WaterWalkCheck;
 import com.rammelkast.anticheatreloaded.check.player.IllegalInteract;
 import com.rammelkast.anticheatreloaded.util.Distance;
@@ -484,6 +484,15 @@ public class PlayerListener extends EventListener {
 							event.setTo(user.getGoodLocation(from.clone()));
 						}
 						log(result.getMessage(), player, CheckType.FASTLADDER);
+					}
+				}
+				if (getCheckManager().willCheckQuick(player, CheckType.STRAFE)) {
+					CheckResult result = StrafeCheck.runCheck(player, x, z, event.getFrom(), event.getTo());
+					if (result.failed()) {
+						if (!silentMode()) {
+							event.setTo(user.getGoodLocation(from.clone()));
+						}
+						log(result.getMessage(), player, CheckType.STRAFE);
 					}
 				}
 			}
