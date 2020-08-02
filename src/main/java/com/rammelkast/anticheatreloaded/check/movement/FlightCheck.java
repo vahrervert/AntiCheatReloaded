@@ -102,7 +102,8 @@ public class FlightCheck {
 					&& !Utilities.couldBeOnBoat(player)
 					&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
 							.getInteger(CheckType.FLIGHT, "airFlight", "accountForTeleports"))
-					&& !VersionUtil.isSlowFalling(player) && !Utilities.isInWeb(player))
+					&& !VersionUtil.isSlowFalling(player) && !Utilities.isInWeb(player)
+					&& movementManager.elytraEffectTicks <= 25)
 				return new CheckResult(CheckResult.Result.FAILED, "had too little Y dropoff (diff="
 						+ Math.abs(movementManager.motionY - movementManager.lastMotionY) + ")");
 		}
@@ -123,7 +124,7 @@ public class FlightCheck {
 						.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports"))
 				&& (!Utilities.isNearBed(distance.getTo())
 						|| (Utilities.isNearBed(distance.getTo()) && movementManager.motionY > 0.12675))
-				&& movementManager.slimeInfluenceTicks == 0)
+				&& movementManager.slimeInfluenceTicks == 0 && movementManager.elytraEffectTicks <= 25)
 			return new CheckResult(CheckResult.Result.FAILED,
 					"tried to climb air (mY=" + movementManager.motionY + ")");
 
@@ -134,7 +135,7 @@ public class FlightCheck {
 				&& !(Math.round(movementManager.motionY * 1000) == 425 && movementManager.airTicks == 11)
 				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
 						.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports"))
-				&& movementManager.slimeInfluenceTicks == 0)
+				&& movementManager.slimeInfluenceTicks == 0 && movementManager.elytraEffectTicks <= 25)
 			return new CheckResult(CheckResult.Result.FAILED,
 					"tried to climb air (mY=" + movementManager.motionY + ", at=" + movementManager.airTicks + ")");
 		// End AirClimb
