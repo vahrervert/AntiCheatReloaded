@@ -81,6 +81,8 @@ public class MovementManager {
 	public int sneakingTicks;
 	// Ticks counter after being near a liquid
 	public int nearLiquidTicks;
+	// Time of last update
+	public long lastUpdate;
 
 	@SuppressWarnings("deprecation")
 	public void handle(Player player, Location from, Location to, Distance distance) {
@@ -177,6 +179,7 @@ public class MovementManager {
 				this.halfMovementHistoryCounter--;
 		}
 
+		this.lastUpdate = System.currentTimeMillis();
 		// Update "good location"
 		AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId()).setGoodLocation(from);
 	}

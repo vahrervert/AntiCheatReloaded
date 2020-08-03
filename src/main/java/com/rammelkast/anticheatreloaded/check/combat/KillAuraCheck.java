@@ -32,7 +32,9 @@ import org.bukkit.util.Vector;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
+import com.rammelkast.anticheatreloaded.check.CheckResult.Result;
 import com.rammelkast.anticheatreloaded.config.providers.Checks;
+import com.rammelkast.anticheatreloaded.util.MovementManager;
 import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 
@@ -40,6 +42,8 @@ public class KillAuraCheck {
 
 	// Angle check
 	public static final Map<UUID, Integer> ANGLE_FLAGS = new HashMap<UUID, Integer>();
+	// PacketOrder check
+	public static final Map<UUID, Integer> PACKETORDER_FLAGS = new HashMap<UUID, Integer>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
 	public static CheckResult checkReach(Player player, Entity target) {
@@ -118,6 +122,39 @@ public class KillAuraCheck {
 		return PASS;
 	}
 
+	public static CheckResult checkPacketOrder(Player player, Entity entity) {
+		UUID uuid = player.getUniqueId();
+		User user = AntiCheatReloaded.getManager().getUserManager().getUser(uuid);
+		MovementManager movementManager = user.getMovementManager();
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+
+		// Check if enabled
+		if (!checksConfig.isSubcheckEnabled(CheckType.KILLAURA, "packetOrder"))
+			return PASS;
+		
+		if (user.isLagging() || (System.currentTimeMillis() - movementManager.lastTeleport) <= 100
+				|| AntiCheatReloaded.getPlugin().getTPS() < checksConfig.getDouble(CheckType.KILLAURA, "packetOrder", "minimumTps"))
+			return PASS;
+
+		long elapsed = System.currentTimeMillis() - movementManager.lastUpdate;
+		if (elapsed < checksConfig.getInteger(CheckType.KILLAURA, "packetOrder", "minElapsedTime")) {
+			if (!PACKETORDER_FLAGS.containsKey(uuid)) {
+				PACKETORDER_FLAGS.put(uuid, 1);
+				return PASS;
+			}
+
+			int flags = PACKETORDER_FLAGS.get(uuid);
+			int vlBeforeFlag = checksConfig.getInteger(CheckType.KILLAURA, "packetOrder", "vlBeforeFlag");
+			if (flags >= vlBeforeFlag) {
+				PACKETORDER_FLAGS.remove(uuid);
+				return new CheckResult(Result.FAILED, "suspicious packet order (elapsed=" + elapsed + ")");
+			}
+
+			PACKETORDER_FLAGS.put(uuid, flags + 1);
+		}
+		return PASS;
+	}
+	
 	public static double calculateYawDifference(Location from, Location to) {
 		Location clonedFrom = from.clone();
 		Vector startVector = clonedFrom.toVector();

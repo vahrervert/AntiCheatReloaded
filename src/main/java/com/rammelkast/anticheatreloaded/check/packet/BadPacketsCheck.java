@@ -32,6 +32,7 @@ import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.config.providers.Checks;
 import com.rammelkast.anticheatreloaded.event.EventListener;
+import com.rammelkast.anticheatreloaded.util.MovementManager;
 import com.rammelkast.anticheatreloaded.util.User;
 
 public class BadPacketsCheck {
@@ -39,9 +40,10 @@ public class BadPacketsCheck {
 	public static void runCheck(Player player, PacketEvent event) {
 		Backend backend = AntiCheatReloaded.getManager().getBackend();
 		// Confirm if we should even check for BadPackets
-		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.BADPACKETS) || backend.isMovingExempt(player)) {
+		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.BADPACKETS)
+				|| backend.isMovingExempt(player) || player.isDead())
 			return;
-		}
+
 		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
 		PacketContainer packet = event.getPacket();
 		float pitch = packet.getFloat().read(1);
@@ -50,13 +52,15 @@ public class BadPacketsCheck {
 			flag(player, event, "had an illegal pitch");
 			return;
 		}
-		
+
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		double tps = AntiCheatReloaded.getPlugin().getTPS();
-		if (user.isLagging() || tps < checksConfig.getDouble(CheckType.MOREPACKETS, "minimumTps")) {
+		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
+				.getMovementManager();
+		if (user.isLagging() || tps < checksConfig.getDouble(CheckType.MOREPACKETS, "minimumTps")
+				|| (System.currentTimeMillis() - movementManager.lastTeleport <= 100))
 			return;
-		}
-		
+
 		double x = packet.getDoubles().read(0);
 		double y = packet.getDoubles().read(1);
 		double z = packet.getDoubles().read(2);
@@ -68,12 +72,13 @@ public class BadPacketsCheck {
 		double maxDistance = checksConfig.getDouble(CheckType.BADPACKETS, "maxDistance");
 		boolean hasNewLocation = packet.getBooleans().read(0);
 		if (distance > maxDistance) {
-			flag(player, event, "moved too far between packets (distance=" + new BigDecimal(distance).setScale(1, RoundingMode.HALF_UP) + ", max=" + maxDistance + ")");
+			flag(player, event, "moved too far between packets (distance="
+					+ new BigDecimal(distance).setScale(1, RoundingMode.HALF_UP) + ", max=" + maxDistance + ")");
 			return;
 		} else if (distance < 1E-10 && !hasNewLocation) {
 			// TODO this gives false positives when teleporting
 			// Only found this in 1.8.8 though
-			//flag(player, event, "sent the same packet twice");
+			// flag(player, event, "sent the same packet twice");
 			return;
 		}
 	}

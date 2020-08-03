@@ -62,8 +62,7 @@ public class FlightCheck {
 		Backend backend = AntiCheatReloaded.getManager().getBackend();
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 
-		if (movementManager.nearLiquidTicks > 0 || movementManager.halfMovement
-				|| Utilities.isNearClimbable(player))
+		if (movementManager.nearLiquidTicks > 0 || movementManager.halfMovement || Utilities.isNearClimbable(player))
 			return PASS;
 
 		int minAirTicks = 13;
@@ -76,7 +75,7 @@ public class FlightCheck {
 
 		// Start AirFlight
 		if (checksConfig.isSubcheckEnabled(CheckType.FLIGHT, "airFlight") && movementManager.airTicks > minAirTicks
-				&& !backend.justVelocity(player)) {
+				&& !backend.justVelocity(player) && movementManager.elytraEffectTicks <= 25) {
 			// Config default base is 1200ms
 			// Ping clamped to max. 1000 to prevent spoofing for an advantage
 			int blockPlaceAccountingTime = (int) (checksConfig.getInteger(CheckType.FLIGHT, "airFlight",
@@ -144,8 +143,7 @@ public class FlightCheck {
 		if (checksConfig.isSubcheckEnabled(CheckType.FLIGHT, "groundFlight") && movementManager.onGround
 				&& Utilities.cantStandAt(distance.getTo().getBlock().getRelative(BlockFace.DOWN))
 				&& Utilities.cantStandAt(distance.getFrom().getBlock().getRelative(BlockFace.DOWN))
-				&& Utilities.cantStandAt(distance.getTo().getBlock())
-				&& movementManager.groundTicks > 2) {
+				&& Utilities.cantStandAt(distance.getTo().getBlock()) && movementManager.groundTicks > 2) {
 			return new CheckResult(CheckResult.Result.FAILED,
 					"faked ground to fly (mY=" + movementManager.motionY + ", gt=" + movementManager.groundTicks + ")");
 		}
@@ -156,7 +154,7 @@ public class FlightCheck {
 				&& movementManager.motionY < 0 && !backend.justVelocity(player)
 				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
 						.getInteger(CheckType.FLIGHT, "gravity", "accountForTeleports"))
-				&& !Utilities.isInWeb(player)) {
+				&& !Utilities.isInWeb(player) && movementManager.elytraEffectTicks <= 25) {
 			double gravitatedY = (movementManager.lastMotionY - 0.08) * GRAVITY_FRICTION;
 			double offset = Math.abs(gravitatedY - movementManager.motionY);
 			double maxOffset = checksConfig.getDouble(CheckType.FLIGHT, "gravity", "maxOffset");

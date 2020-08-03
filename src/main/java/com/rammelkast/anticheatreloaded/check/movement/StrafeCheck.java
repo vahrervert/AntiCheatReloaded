@@ -24,7 +24,9 @@ import org.bukkit.util.Vector;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
+import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.check.CheckResult.Result;
+import com.rammelkast.anticheatreloaded.config.providers.Checks;
 import com.rammelkast.anticheatreloaded.util.MovementManager;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 
@@ -38,21 +40,28 @@ public class StrafeCheck {
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
 	public static CheckResult runCheck(Player player, double x, double z, Location from, Location to) {
-		if (!Utilities.cantStandAtExp(from) || !Utilities.cantStandAtExp(to))
+		if (!Utilities.cantStandAtExp(from) || !Utilities.cantStandAtExp(to) || Utilities.isNearWater(player)
+				|| Utilities.isNearClimbable(player))
 			return PASS;
-		
+
 		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
 				.getMovementManager();
-		
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+
+		if (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig.getInteger(CheckType.STRAFE,
+				"accountForTeleports") || movementManager.elytraEffectTicks >= 20)
+			return PASS;
+
 		Vector oldAcceleration = new Vector(movementManager.lastDistanceX, 0, movementManager.lastDistanceZ);
 		Vector newAcceleration = new Vector(x, 0, z);
-		
-		// TODO fix false with bouncing off walls
+
 		float angle = newAcceleration.angle(oldAcceleration);
 		double distance = newAcceleration.lengthSquared();
-		if (angle > 0.25 && distance > 0.025)
+		if (angle > checksConfig
+				.getDouble(CheckType.STRAFE, "maxAngleChange") && distance > checksConfig
+				.getDouble(CheckType.STRAFE, "minActivationDistance") && Utilities.cantStandFar(to.getBlock()))
 			return new CheckResult(Result.FAILED, "switched angle in air (angle=" + angle + ", dist=" + distance + ")");
 		return PASS;
 	}
-	
+
 }

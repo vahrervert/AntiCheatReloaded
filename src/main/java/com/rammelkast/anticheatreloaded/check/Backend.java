@@ -154,6 +154,7 @@ public class Backend {
 		MorePacketsCheck.EXEMPT_TIMINGS.remove(uuid);
 		ElytraCheck.JUMP_Y_VALUE.remove(uuid);
 		KillAuraCheck.ANGLE_FLAGS.remove(uuid);
+		KillAuraCheck.PACKETORDER_FLAGS.remove(uuid);
 		FlightCheck.MOVING_EXEMPT.remove(uuid);
 	}
 

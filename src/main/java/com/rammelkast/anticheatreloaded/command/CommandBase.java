@@ -66,7 +66,7 @@ public class CommandBase {
             execute(cs, args);
         } else {
             if (args == null) {
-            	cs.sendMessage(GOLD + "" + ChatColor.BOLD + "AntiCheatReloaded " + GRAY + "version " + AntiCheatReloaded.getVersion());
+            	cs.sendMessage(GRAY + "Running " + GOLD + "" + "AntiCheatReloaded " + GRAY + "version " + AntiCheatReloaded.getVersion());
             } else {
             	cs.sendMessage(PERMISSIONS_ERROR + " (" + WHITE + permission.toString() + RED + ")");
             }

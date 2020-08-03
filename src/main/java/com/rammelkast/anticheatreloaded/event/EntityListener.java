@@ -153,6 +153,14 @@ public class EntityListener extends EventListener {
 						noHack = false;
 					}
 				}
+				if (getCheckManager().willCheck(player, CheckType.KILLAURA)) {
+					CheckResult result = KillAuraCheck.checkPacketOrder(player, event.getEntity());
+					if (result.failed()) {
+						event.setCancelled(!silentMode());
+						log(result.getMessage(), player, CheckType.KILLAURA);
+						noHack = false;
+					}
+				}
 				if (noHack) {
 					decrease(player);
 				}
