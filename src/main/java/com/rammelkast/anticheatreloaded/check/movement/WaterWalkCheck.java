@@ -32,6 +32,7 @@ import com.rammelkast.anticheatreloaded.config.providers.Checks;
 import com.rammelkast.anticheatreloaded.util.MovementManager;
 import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.Utilities;
+import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class WaterWalkCheck {
 
@@ -42,7 +43,8 @@ public class WaterWalkCheck {
 		User user = AntiCheatReloaded.getManager().getUserManager().getUser(uuid);
 		MovementManager movementManager = user.getMovementManager();
 
-		if (movementManager.distanceXZ <= 0 || player.getVehicle() != null || Utilities.isOnLilyPad(player))
+		if (movementManager.distanceXZ <= 0 || player.getVehicle() != null || Utilities.isOnLilyPad(player)
+				|| VersionUtil.isRiptiding(player))
 			return PASS;
 
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();

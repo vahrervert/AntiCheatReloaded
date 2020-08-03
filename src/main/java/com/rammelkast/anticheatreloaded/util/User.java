@@ -458,7 +458,8 @@ public class User {
 	}
 
 	public boolean isLagging() {
-		return Math.abs(this.ping - this.lastPing) > config.getMagic().LAG_DETERMINATION();
+		return Math.abs(this.ping - this.lastPing) > config.getMagic().LAG_DETERMINATION()
+				&& this.ping > config.getMagic().LAG_DETERMINATION();
 	}
 
 	public MovementManager getMovementManager() {
