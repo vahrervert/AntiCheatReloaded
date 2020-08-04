@@ -38,7 +38,8 @@ Hacks blocked
 * FastBow
 * FastEat
 * FastHeal
-* KillAura (Aimbot)
+* KillAura
+* Aimbot
 * Reach
 * Unicode chat
 * FastProjectile

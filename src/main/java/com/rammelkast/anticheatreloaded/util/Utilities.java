@@ -986,7 +986,8 @@ public final class Utilities {
 			CLIMBABLE.add(Material.LADDER);
 			CLIMBABLE.add(Material.WATER);
 			// Start 1.14 objects
-			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15") || VersionUtil.isOfVersion("v1_16")) {
+			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")
+					|| VersionUtil.isOfVersion("v1_16")) {
 				CLIMBABLE.add(Material.SCAFFOLDING);
 			}
 			// End 1.14 objects
@@ -996,7 +997,7 @@ public final class Utilities {
 				CLIMBABLE.add(XMaterial.TWISTING_VINES.parseMaterial());
 				CLIMBABLE.add(XMaterial.TWISTING_VINES_PLANT.parseMaterial());
 				CLIMBABLE.add(XMaterial.WEEPING_VINES.parseMaterial());
-				CLIMBABLE.add(XMaterial.TWISTING_VINES_PLANT.parseMaterial());
+				CLIMBABLE.add(XMaterial.WEEPING_VINES_PLANT.parseMaterial());
 			}
 			// End 1.16 objects
 			// End climbable
