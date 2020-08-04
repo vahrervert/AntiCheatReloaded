@@ -44,12 +44,11 @@ public class WaterWalkCheck {
 		MovementManager movementManager = user.getMovementManager();
 
 		if (movementManager.distanceXZ <= 0 || player.getVehicle() != null || Utilities.isOnLilyPad(player)
-				|| VersionUtil.isRiptiding(player))
+				|| VersionUtil.isRiptiding(player) || VersionUtil.isSwimming(player))
 			return PASS;
 
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		Block blockBeneath = player.getLocation().clone().subtract(0, 0.1, 0).getBlock();
-
 		if (checksConfig.isSubcheckEnabled(CheckType.WATER_WALK, "walk") && blockBeneath.isLiquid()
 				&& Utilities.isSurroundedByWater(player)
 				&& ((movementManager.motionY == 0 && movementManager.lastMotionY == 0)

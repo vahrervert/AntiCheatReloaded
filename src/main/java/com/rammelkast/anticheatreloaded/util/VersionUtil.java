@@ -147,4 +147,11 @@ public class VersionUtil {
 			return player.getPotionEffect(type).getAmplifier() + 1;
 		return 0;
 	}
+
+	public static boolean isSwimming(Player player) {
+		if (isBountifulUpdate()) {
+			return false;
+		}
+		return player.isSwimming();
+	}
 }
