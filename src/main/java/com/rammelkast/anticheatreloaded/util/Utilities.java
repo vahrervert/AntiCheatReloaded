@@ -48,7 +48,6 @@ public final class Utilities {
 	
 	public static final Material LILY_PAD;
 	public static final Material COB_WEB;
-	public static final Material IRON_BARS;
 	
 	public static final double JUMP_MOTION_Y = 0.41999998688697815;
 
@@ -414,7 +413,7 @@ public final class Utilities {
 	 */
 	public static boolean isWall(Block block) {
 		Material type = block.getType();
-		return type.name().endsWith("WALL");
+		return type.name().endsWith("WALL") || type.name().endsWith("FENCE");
 	}
 
 	/**
@@ -536,6 +535,22 @@ public final class Utilities {
 				|| isClimbableBlock(player.getLocation().getBlock().getRelative(BlockFace.SOUTH))
 				|| isClimbableBlock(player.getLocation().getBlock().getRelative(BlockFace.EAST))
 				|| isClimbableBlock(player.getLocation().getBlock().getRelative(BlockFace.WEST));
+	}
+	
+	/**
+	 * Determine whether a location is near a climbable block
+	 *
+	 * @param location location to check
+	 * @return true if near climbable block
+	 */
+	public static boolean isNearClimbable(Location location) {
+		return isClimbableBlock(location.getBlock())
+				|| isClimbableBlock(location.getBlock().getRelative(BlockFace.DOWN))
+				|| isClimbableBlock(location.getBlock().getRelative(BlockFace.UP))
+				|| isClimbableBlock(location.getBlock().getRelative(BlockFace.NORTH))
+				|| isClimbableBlock(location.getBlock().getRelative(BlockFace.SOUTH))
+				|| isClimbableBlock(location.getBlock().getRelative(BlockFace.EAST))
+				|| isClimbableBlock(location.getBlock().getRelative(BlockFace.WEST));
 	}
 
 	/**
@@ -750,7 +765,6 @@ public final class Utilities {
 		if (VersionUtil.isBountifulUpdate()) {
 			LILY_PAD = XMaterial.LILY_PAD.parseMaterial();
 			COB_WEB = XMaterial.COBWEB.parseMaterial();
-			IRON_BARS = XMaterial.IRON_BARS.parseMaterial();
 
 			// Start instant break materials
 			INSTANT_BREAK.add(XMaterial.COMPARATOR.parseMaterial());
@@ -834,7 +848,6 @@ public final class Utilities {
 		else {
 			LILY_PAD = Material.LILY_PAD;
 			COB_WEB = Material.COBWEB;
-			IRON_BARS = Material.IRON_BARS;
 			
 			// Start instant break materials
 			INSTANT_BREAK.add(Material.COMPARATOR);

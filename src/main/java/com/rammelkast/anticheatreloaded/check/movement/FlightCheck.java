@@ -92,7 +92,8 @@ public class FlightCheck {
 			if (movementManager.motionY < 0.004 && Utilities
 					.isNearHalfblock(distance.getFrom().getBlock().getRelative(BlockFace.DOWN).getLocation()))
 				maxMotionY = 0.004D;
-			if (movementManager.motionY > maxMotionY && movementManager.slimeInfluenceTicks <= 0)
+			if (movementManager.motionY > maxMotionY && movementManager.slimeInfluenceTicks <= 0
+					&& !Utilities.isNearClimbable(distance.getTo().clone().subtract(0, 1.25, 0)))
 				return new CheckResult(CheckResult.Result.FAILED,
 						"tried to fly on the Y-axis (mY=" + movementManager.motionY + ", max=" + maxMotionY + ")");
 
@@ -133,9 +134,10 @@ public class FlightCheck {
 				&& !(Math.round(movementManager.motionY * 1000) == 425 && movementManager.airTicks == 11)
 				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
 						.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports"))
-				&& movementManager.slimeInfluenceTicks == 0 && movementManager.elytraEffectTicks <= 25)
+				&& movementManager.slimeInfluenceTicks == 0 && movementManager.elytraEffectTicks <= 25) {
 			return new CheckResult(CheckResult.Result.FAILED,
 					"tried to climb air (mY=" + movementManager.motionY + ", at=" + movementManager.airTicks + ")");
+		}
 		// End AirClimb
 
 		// Start GroundFlight

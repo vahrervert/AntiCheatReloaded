@@ -253,7 +253,7 @@ public class SpeedCheck {
 	private static double getMaxAcceptableMotionY(Player player, boolean nearBed, boolean couldBeOnBoat, boolean fromClimbable, boolean halfMovement, Checks checksConfig) { 
 		// TODO config for these values
 		// TODO something funky vanilla stuff going on with 0.42, like 0.445.., check this..
-		double base = couldBeOnBoat ? 0.600000025 : (nearBed ? 0.5625 : (halfMovement ? 0.6 : 0.42));
+		double base = couldBeOnBoat ? 0.600000025 : (nearBed ? 0.5625 : ((halfMovement || VersionUtil.isBountifulUpdate()) ? 0.6 : 0.42));
 		if (fromClimbable)
 			base += checksConfig.getDouble(CheckType.SPEED, "verticalSpeed", "climbableCompensation"); // Default 0.04
 		
