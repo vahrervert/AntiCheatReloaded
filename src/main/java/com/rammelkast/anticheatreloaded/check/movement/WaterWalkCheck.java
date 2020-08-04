@@ -68,7 +68,7 @@ public class WaterWalkCheck {
 
 		double minAbsMotionY = 0.12D;
 		if (player.hasPotionEffect(PotionEffectType.SPEED))
-			minAbsMotionY += (player.getPotionEffect(PotionEffectType.SPEED).getAmplifier() + 1) * 0.05D;
+			minAbsMotionY += VersionUtil.getPotionLevel(player, PotionEffectType.SPEED) * 0.05D;
 		if (checksConfig.isSubcheckEnabled(CheckType.WATER_WALK, "lunge") && blockBeneath.isLiquid()
 				&& Utilities.isSurroundedByWater(player)
 				&& Math.abs(movementManager.lastMotionY - movementManager.motionY) > minAbsMotionY

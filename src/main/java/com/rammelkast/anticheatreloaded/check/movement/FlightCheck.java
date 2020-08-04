@@ -66,9 +66,8 @@ public class FlightCheck {
 			return PASS;
 
 		int minAirTicks = 13;
-		if (player.hasPotionEffect(PotionEffectType.JUMP)) {
-			minAirTicks += player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() * 3;
-		}
+		if (player.hasPotionEffect(PotionEffectType.JUMP))
+			minAirTicks += VersionUtil.getPotionLevel(player, PotionEffectType.JUMP) * 3;
 
 		if (movementManager.halfMovementHistoryCounter > 25)
 			minAirTicks += 5;

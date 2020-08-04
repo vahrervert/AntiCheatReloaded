@@ -227,10 +227,12 @@ public final class Utilities {
 	}
 	
 	public static boolean isHalfblock(Block block) {
-		BoundingBox box = block.getBoundingBox();
-		double height = box.getMaxY() - box.getMinY();
-		if (height > 0.42 && height <= 0.6 && block.getType().isSolid())
-			return true;
+		if (!VersionUtil.isBountifulUpdate()) {
+			BoundingBox box = block.getBoundingBox();
+			double height = box.getMaxY() - box.getMinY();
+			if (height > 0.42 && height <= 0.6 && block.getType().isSolid())
+				return true;
+		}
 		return isSlab(block) || isStair(block) || isWall(block) || block.getType() == Material.SNOW;
 	}
 	

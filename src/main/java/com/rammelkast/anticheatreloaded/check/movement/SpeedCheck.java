@@ -86,10 +86,10 @@ public class SpeedCheck {
 			}
 			// Adjust for speed effects
 			if (player.hasPotionEffect(PotionEffectType.SPEED))
-				predict += (player.getPotionEffect(PotionEffectType.SPEED).getAmplifier() + 1) * 0.05D;
+				predict += VersionUtil.getPotionLevel(player, PotionEffectType.SPEED) * 0.05D;
 			// Adjust for jump boost effects
 			if (player.hasPotionEffect(PotionEffectType.JUMP))
-				predict += (player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() + 1) * 0.05D;
+				predict += VersionUtil.getPotionLevel(player, PotionEffectType.JUMP) * 0.05D;
 			// Adjust for custom walking speed
 			double walkSpeedMultiplier = checksConfig.getDouble(CheckType.SPEED, "airSpeed", "walkSpeedMultiplier"); // Default 1.4
 			predict += walkSpeedMultiplier * (Math.pow(1.1, ((player.getWalkSpeed() / 0.20) - 1)) - 1);
@@ -136,7 +136,7 @@ public class SpeedCheck {
 				limit *= 1.05D;
 			// Adjust for speed effects
 			if (player.hasPotionEffect(PotionEffectType.SPEED))
-				limit += (player.getPotionEffect(PotionEffectType.SPEED).getAmplifier() + 1) * 0.0225D;
+				limit += VersionUtil.getPotionLevel(player, PotionEffectType.SPEED) * 0.0225D;
 			// Adjust for slabs
 			if (movementManager.halfMovementHistoryCounter > 15)
 				limit *= 2.0D;
@@ -183,7 +183,7 @@ public class SpeedCheck {
 				limit *= 1.1D;
 			// Adjust for speed effects
 			if (player.hasPotionEffect(PotionEffectType.SPEED))
-				limit += (player.getPotionEffect(PotionEffectType.SPEED).getAmplifier() + 1) * 0.06D;
+				limit += VersionUtil.getPotionLevel(player, PotionEffectType.SPEED) * 0.06D;
 			if (movementManager.iceInfluenceTicks >= 50) {
 				// When moving off ice
 				if (!Utilities.couldBeOnIce(movingTowards))
@@ -258,7 +258,7 @@ public class SpeedCheck {
 			base += checksConfig.getDouble(CheckType.SPEED, "verticalSpeed", "climbableCompensation"); // Default 0.04
 		
 		if (player.hasPotionEffect(PotionEffectType.JUMP))
-			base += (player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() + 1) * 0.2D;
+			base += VersionUtil.getPotionLevel(player, PotionEffectType.JUMP) * 0.2D;
 		return base;
 	}
 

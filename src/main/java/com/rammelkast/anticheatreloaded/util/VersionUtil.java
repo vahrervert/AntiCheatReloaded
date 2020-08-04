@@ -134,4 +134,16 @@ public class VersionUtil {
 		return effect.getType().equals(PotionEffectType.LEVITATION);
 	}
 
+	public static int getPotionLevel(Player player, PotionEffectType type) {
+		if (isBountifulUpdate()) {
+			for (PotionEffect effect : player.getActivePotionEffects())
+				if (effect.getType() == type)
+					return effect.getAmplifier() + 1;
+			return 0;
+		}
+		
+		if (player.hasPotionEffect(PotionEffectType.JUMP))
+			return player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() + 1;
+		return 0;
+	}
 }
