@@ -85,8 +85,10 @@ public class SpeedCheck {
 				predict += slimeIncrement;
 			}
 			// Adjust for speed effects
-			if (player.hasPotionEffect(PotionEffectType.SPEED))
+			if (movementManager.hasSpeedEffect)
 				predict += VersionUtil.getPotionLevel(player, PotionEffectType.SPEED) * 0.05D;
+			if (movementManager.hadSpeedEffect && !movementManager.hasSpeedEffect)
+				limit *= 1.2D;
 			// Adjust for jump boost effects
 			if (player.hasPotionEffect(PotionEffectType.JUMP))
 				predict += VersionUtil.getPotionLevel(player, PotionEffectType.JUMP) * 0.05D;
@@ -104,15 +106,17 @@ public class SpeedCheck {
 			// Strafing in air when nearing terminal velocity gives false positives
 			// This fixes the issue but gives hackers some leniency which means we need another check for this
 			double deltaMotionY = movementManager.motionY - movementManager.lastMotionY;
-			if (deltaMotionY < 0 && deltaMotionY >= -0.06)
-				predict *= 1.5D;
+			if ((deltaMotionY < 0 && deltaMotionY >= -0.08) || movementManager.airTicks >= 40
+					&& (movingTowards.getBlockY() - player.getWorld().getHighestBlockYAt(movingTowards)) <= 1.5)
+				predict *= (movementManager.airTicks > 60 ? 4.0D : (movementManager.airTicks > 30 ? 3.0D : 2.0D));
 			// Players can move faster in air with slow falling
 			if (VersionUtil.isSlowFalling(player))
 				predict *= 1.25D;
 			// Prevent NoSlow
-			// TODO better way for this
-			if (player.isBlocking() && movementManager.airTicks > 2)
+			if (movementManager.blockingTicks > 2 && movementManager.airTicks > 2)
 				predict *= 0.8D;
+			if (movementManager.blockingTicks > 10 && movementManager.airTicks > 2)
+				predict *= 0.5D;
 			// Fixes false positive when coming out of water
 			if (movementManager.nearLiquidTicks >= 7 && movementManager.airTicks >= 14
 					&& movementManager.motionY < -0.18 && movementManager.motionY > -0.182)
@@ -120,7 +124,7 @@ public class SpeedCheck {
 			
 			if (distanceXZ - predict > limit) {
 				return new CheckResult(CheckResult.Result.FAILED, "moved too fast in air (speed=" + distanceXZ
-						+ ", limit=" + predict + ", block=" + player.isBlocking() + ", box=" + boxedIn + ", at=" + movementManager.airTicks + ")");
+						+ ", limit=" + predict + ", block=" + movementManager.blockingTicks + ", box=" + boxedIn + ", at=" + movementManager.airTicks + ")");
 			}
 		}
 
@@ -182,8 +186,12 @@ public class SpeedCheck {
 			if (boxedIn)
 				limit *= 1.1D;
 			// Adjust for speed effects
-			if (player.hasPotionEffect(PotionEffectType.SPEED))
+			if (movementManager.hasSpeedEffect)
 				limit += VersionUtil.getPotionLevel(player, PotionEffectType.SPEED) * 0.06D;
+			if (movementManager.hasSpeedEffect && movementManager.groundTicks > 3)
+				limit *= 1.4D;
+			if (movementManager.hadSpeedEffect && !movementManager.hasSpeedEffect)
+				limit *= 1.2D;
 			if (movementManager.iceInfluenceTicks >= 50) {
 				// When moving off ice
 				if (!Utilities.couldBeOnIce(movingTowards))
@@ -219,7 +227,7 @@ public class SpeedCheck {
 			
 			if (distanceXZ - limit > 0) {
 				return new CheckResult(CheckResult.Result.FAILED,
-						"moved too fast on ground (speed=" + distanceXZ + ", limit=" + limit + ", blocking=" + player.isBlocking() + ")");
+						"moved too fast on ground (speed=" + distanceXZ + ", limit=" + limit + ", blocking=" + player.isBlocking() + ", gt=" + movementManager.groundTicks + ")");
 			}
 		}
 		

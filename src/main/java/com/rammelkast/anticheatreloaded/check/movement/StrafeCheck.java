@@ -29,6 +29,7 @@ import com.rammelkast.anticheatreloaded.check.CheckResult.Result;
 import com.rammelkast.anticheatreloaded.config.providers.Checks;
 import com.rammelkast.anticheatreloaded.util.MovementManager;
 import com.rammelkast.anticheatreloaded.util.Utilities;
+import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
  * 
@@ -41,14 +42,14 @@ public class StrafeCheck {
 
 	public static CheckResult runCheck(Player player, double x, double z, Location from, Location to) {
 		if (!Utilities.cantStandAtExp(from) || !Utilities.cantStandAtExp(to) || Utilities.isNearWater(player)
-				|| Utilities.isNearClimbable(player))
+				|| Utilities.isNearClimbable(player) || VersionUtil.isFlying(player) || player.isDead())
 			return PASS;
 
 		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
 				.getMovementManager();
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 
-		if (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig.getInteger(CheckType.STRAFE,
+		if (System.currentTimeMillis() - movementManager.lastTeleport <= checksConfig.getInteger(CheckType.STRAFE,
 				"accountForTeleports") || movementManager.elytraEffectTicks >= 20)
 			return PASS;
 

@@ -24,7 +24,6 @@ Hacks blocked
 * Flight/Glide
 * ElytraFly
 * WaterWalk/Jesus
-* NoSwing
 * FastBreak
 * FastPlace
 * Chat spam
@@ -50,3 +49,5 @@ Hacks blocked
 * Velocity/Anti-Knockback
 * IllegalInteract (Scaffold)
 * FastLadder
+* Strafe
+* NoSlow

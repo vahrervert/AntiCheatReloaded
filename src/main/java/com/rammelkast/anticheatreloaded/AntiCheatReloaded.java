@@ -105,8 +105,9 @@ public class AntiCheatReloaded extends JavaPlugin {
 								: (ChatColor.RED + "(NOT SUPPORTED!)")));
 
 		getLogger().info("Enabling packet listeners");
-		PacketListener.listenKeepAlivePackets();
 		PacketListener.listenMovementPackets();
+		PacketListener.listenKeepAlivePackets();
+		PacketListener.listenUseItemPackets();
 		
 		updateManager = new UpdateManager();
 		

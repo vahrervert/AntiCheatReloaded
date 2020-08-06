@@ -20,6 +20,7 @@ package com.rammelkast.anticheatreloaded.util;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 
@@ -81,6 +82,12 @@ public class MovementManager {
 	public int sneakingTicks;
 	// Ticks counter after being near a liquid
 	public int nearLiquidTicks;
+	// Ticks of player blocking
+	public int blockingTicks;
+	// If the player has a speed effect
+	public boolean hasSpeedEffect = false;
+	// If the player had speed effect previous tick
+	public boolean hadSpeedEffect = false;
 	// Time of last update
 	public long lastUpdate;
 
@@ -146,6 +153,11 @@ public class MovementManager {
 			this.sneakingTicks++;
 		else
 			this.sneakingTicks = 0;
+		
+		if (player.isBlocking())
+			this.blockingTicks++;
+		else
+			this.blockingTicks = 0;
 
 		if (Utilities.isNearWater(player))
 			this.nearLiquidTicks = 8;
@@ -155,6 +167,9 @@ public class MovementManager {
 			else
 				this.nearLiquidTicks = 0;
 		}
+		
+		this.hadSpeedEffect = this.hasSpeedEffect;
+		this.hasSpeedEffect = player.hasPotionEffect(PotionEffectType.SPEED);
 
 		double lastDistanceSq = Math.sqrt(this.lastDistance.getXDifference() * this.lastDistance.getXDifference()
 				+ this.lastDistance.getZDifference() * this.lastDistance.getZDifference());

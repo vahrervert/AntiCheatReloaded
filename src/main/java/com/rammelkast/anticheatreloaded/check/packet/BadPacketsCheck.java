@@ -58,7 +58,7 @@ public class BadPacketsCheck {
 		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
 				.getMovementManager();
 		if (user.isLagging() || tps < checksConfig.getDouble(CheckType.MOREPACKETS, "minimumTps")
-				|| (System.currentTimeMillis() - movementManager.lastTeleport <= 100))
+				|| (System.currentTimeMillis() - movementManager.lastTeleport <= 150))
 			return;
 
 		double x = packet.getDoubles().read(0);
@@ -70,10 +70,13 @@ public class BadPacketsCheck {
 		Location current = new Location(previous.getWorld(), x, y, z, yaw, pitch);
 		double distance = previous.distanceSquared(current);
 		double maxDistance = checksConfig.getDouble(CheckType.BADPACKETS, "maxDistance");
+		// Fix falling false
+		if (movementManager.airTicks >= 40 && movementManager.motionY < 0 && movementManager.lastMotionY < 0)
+			maxDistance *= 1.5D;
 		boolean hasNewLocation = packet.getBooleans().read(0);
 		if (distance > maxDistance) {
 			flag(player, event, "moved too far between packets (distance="
-					+ new BigDecimal(distance).setScale(1, RoundingMode.HALF_UP) + ", max=" + maxDistance + ")");
+					+ new BigDecimal(distance).setScale(1, RoundingMode.HALF_UP) + ", max=" + maxDistance + ", at=" + movementManager.airTicks + ")");
 			return;
 		} else if (distance < 1E-10 && !hasNewLocation) {
 			// TODO this gives false positives when teleporting

@@ -24,7 +24,9 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.EnumWrappers.PlayerDigType;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
+import com.rammelkast.anticheatreloaded.check.movement.NoSlowCheck;
 import com.rammelkast.anticheatreloaded.check.packet.BadPacketsCheck;
 import com.rammelkast.anticheatreloaded.check.packet.MorePacketsCheck;
 
@@ -38,6 +40,8 @@ public class PacketListener {
 					@Override
 					public void onPacketReceiving(PacketEvent event) {
 						Player player = event.getPlayer();
+						if (player == null || !player.isOnline())
+							return;
 
 						// Run MorePackets check
 						MorePacketsCheck.runCheck(player, event);
@@ -76,5 +80,16 @@ public class PacketListener {
 					}
 				});
 	}
-	
+
+	public static void listenUseItemPackets() {
+		AntiCheatReloaded.getProtocolManager().addPacketListener(new PacketAdapter(AntiCheatReloaded.getPlugin(),
+				ListenerPriority.LOWEST, new PacketType[] { PacketType.Play.Client.BLOCK_DIG }) {
+			@Override
+			public void onPacketReceiving(PacketEvent event) {
+				if (event.getPacket().getPlayerDigTypes().read(0) == PlayerDigType.RELEASE_USE_ITEM)
+					NoSlowCheck.runCheck(event.getPlayer(), event);
+			}
+		});
+	}
+
 }

@@ -41,6 +41,7 @@ import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
 import com.rammelkast.anticheatreloaded.check.movement.AimbotCheck;
 import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
+import com.rammelkast.anticheatreloaded.check.movement.NoSlowCheck;
 import com.rammelkast.anticheatreloaded.check.packet.MorePacketsCheck;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.config.providers.Checks;
@@ -156,6 +157,8 @@ public class Backend {
 		KillAuraCheck.ANGLE_FLAGS.remove(uuid);
 		KillAuraCheck.PACKETORDER_FLAGS.remove(uuid);
 		FlightCheck.MOVING_EXEMPT.remove(uuid);
+		NoSlowCheck.LAST_RELEASE.remove(uuid);
+		NoSlowCheck.VIOLATIONS.remove(uuid);
 	}
 
 	public CheckResult checkFastBow(Player player, float force) {

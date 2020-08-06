@@ -135,10 +135,7 @@ public class PlayerListener extends EventListener {
 
 	@EventHandler
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
-		if (event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == TeleportCause.PLUGIN) {
-			getBackend().logTeleport(event.getPlayer());
-		}
-
+		getBackend().logTeleport(event.getPlayer());
 		AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
 	}
 

@@ -18,7 +18,7 @@ flight:
     accountForTpsDrops: 250
     # How many milliseconds to account for teleports
     # Increase this is you debug 'had too little Y dropoff' after teleports
-    accountForTeleports: 100
+    accountForTeleports: 150
   # Checks for climbing behaviour in air
   # Debugs as 'tried to climb air'
   airClimb:
@@ -305,6 +305,18 @@ sneak:
   minimumTps: 12
   # Minimum time in milliseconds between sneak toggles
   minToggleTime: 75
+
+# NoSlow check settings
+# Checks if the player moves too fast while blocking
+noslow:
+  # Should this check be enabled?
+  enabled: true
+  # Minimum time difference in milliseconds between toggling use item state
+  minimumDifference: 75
+  # Minimum movement distance needed to flag
+  minimumDistXZ: 0.15
+  # Amount of no slowdown moments before flagging
+  vlBeforeFlag: 3
 
 # Spider check settings
 # Checks if the player tries to climb a non-climbable block

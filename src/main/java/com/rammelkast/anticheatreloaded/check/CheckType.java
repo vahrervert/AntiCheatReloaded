@@ -63,7 +63,8 @@ public enum CheckType {
 	ILLEGAL_INTERACT(Permission.CHECK_ILLEGALINTERACT, "IllegalInteract"),
 	FASTLADDER(Permission.CHECK_FASTLADDER, "FastLadder"),
 	AIMBOT(Permission.CHECK_AIMBOT, "Aimbot"),
-	STRAFE(Permission.CHECK_STRAFE, "Strafe");
+	STRAFE(Permission.CHECK_STRAFE, "Strafe"),
+	NOSLOW(Permission.CHECK_NOSLOW, "NoSlow");
 	
     private final Permission permission;
     private final String displayName;
