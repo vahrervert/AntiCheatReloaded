@@ -144,7 +144,7 @@ public class FlightCheck {
 		if (checksConfig.isSubcheckEnabled(CheckType.FLIGHT, "groundFlight") && movementManager.onGround
 				&& Utilities.cantStandAt(distance.getTo().getBlock().getRelative(BlockFace.DOWN))
 				&& Utilities.cantStandAt(distance.getFrom().getBlock().getRelative(BlockFace.DOWN))
-				&& Utilities.cantStandAt(distance.getTo().getBlock()) && movementManager.groundTicks > 2) {
+				&& Utilities.cantStandAt(distance.getTo().getBlock())) {
 			return new CheckResult(CheckResult.Result.FAILED,
 					"faked ground to fly (mY=" + movementManager.motionY + ", gt=" + movementManager.groundTicks + ")");
 		}

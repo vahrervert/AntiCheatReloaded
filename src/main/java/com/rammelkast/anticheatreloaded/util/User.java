@@ -68,6 +68,7 @@ public class User {
 		this.name = getPlayer() != null && getPlayer().isOnline() ? getPlayer().getName() : "";
 		this.id = getPlayer() != null && getPlayer().isOnline() ? getPlayer().getEntityId() : -1;
 		this.movementManager = new MovementManager();
+		this.ping = getPlayer() != null && getPlayer().isOnline() ? VersionUtil.getPlayerPing(getPlayer()) : -1;
 	}
 
 	/**
