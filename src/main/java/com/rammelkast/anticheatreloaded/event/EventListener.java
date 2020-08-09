@@ -48,7 +48,7 @@ public class EventListener implements Listener {
 	private static final Configuration CONFIG = AntiCheatReloaded.getManager().getConfiguration();
 	private static final DecimalFormat TPS_FORMAT = new DecimalFormat("##.##");
 	
-	public static void log(String message, Player player, CheckType type) {
+	public static void log(String message, Player player, CheckType type, String subcheck) {
 		User user = getUserManager().getUser(player.getUniqueId());
 		if (user == null)
 			return;
@@ -71,8 +71,10 @@ public class EventListener implements Listener {
 						+ ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + "ping: " + user.getPing() + "ms"
 						+ ", tps: " + TPS_FORMAT.format(AntiCheatReloaded.getPlugin().getTPS());
 			} else {
-				message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.DARK_GRAY + "> "  + ChatColor.GRAY + player.getName() + " failed "
-						+ type.getName() + ChatColor.GOLD + " (x" + vlForType + ")" + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + "ping: " + user.getPing() + "ms"
+				message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.DARK_GRAY + "> " + ChatColor.GRAY
+						+ player.getName() + " failed " + type.getName() + ChatColor.GOLD + " (x" + vlForType + ")"
+						+ ChatColor.DARK_GRAY + " | " + ChatColor.GRAY
+						+ (subcheck != null ? ("type: " + subcheck.toLowerCase() + ", ") : "") + "ping: " + user.getPing() + "ms"
 						+ ", tps: " + TPS_FORMAT.format(AntiCheatReloaded.getPlugin().getTPS());
 			}
 		}

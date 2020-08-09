@@ -50,7 +50,7 @@ public class EntityListener extends EventListener {
                 CheckResult result = getBackend().checkFastBow(player, event.getForce());
                 if (result.failed()) {
                     event.setCancelled(!silentMode());
-                    log(result.getMessage(), player, CheckType.FAST_BOW);
+                    log(result.getMessage(), player, CheckType.FAST_BOW, result.getSubCheck());
                 } else {
                     decrease(player);
                 }
@@ -68,7 +68,7 @@ public class EntityListener extends EventListener {
                 CheckResult result = getBackend().checkFastHeal(player);
                 if (result.failed()) {
                     event.setCancelled(!silentMode());
-                    log(result.getMessage(), player, CheckType.FAST_HEAL);
+                    log(result.getMessage(), player, CheckType.FAST_HEAL, result.getSubCheck());
                 } else {
                     decrease(player);
                     getBackend().logHeal(player);
@@ -88,7 +88,7 @@ public class EntityListener extends EventListener {
                 CheckResult result = getBackend().checkFastEat(player);
                 if (result.failed()) {
                     event.setCancelled(!silentMode());
-                    log(result.getMessage(), player, CheckType.FAST_EAT);
+                    log(result.getMessage(), player, CheckType.FAST_EAT, result.getSubCheck());
                 } else {
                     decrease(player);
                 }
@@ -129,7 +129,7 @@ public class EntityListener extends EventListener {
 					CheckResult result = KillAuraCheck.checkAngle(player, event);
 					if (result.failed()) {
 						event.setCancelled(!silentMode());
-						log(result.getMessage(), player, CheckType.KILLAURA);
+						log(result.getMessage(), player, CheckType.KILLAURA, result.getSubCheck());
 						noHack = false;
 					}
 				}
@@ -137,7 +137,7 @@ public class EntityListener extends EventListener {
 					CheckResult result = KillAuraCheck.checkReach(player, event.getEntity());
 					if (result.failed()) {
 						event.setCancelled(!silentMode());
-						log(result.getMessage(), player, CheckType.KILLAURA);
+						log(result.getMessage(), player, CheckType.KILLAURA, result.getSubCheck());
 						noHack = false;
 					}
 				}
@@ -145,7 +145,7 @@ public class EntityListener extends EventListener {
 					CheckResult result = KillAuraCheck.checkPacketOrder(player, event.getEntity());
 					if (result.failed()) {
 						event.setCancelled(!silentMode());
-						log(result.getMessage(), player, CheckType.KILLAURA);
+						log(result.getMessage(), player, CheckType.KILLAURA, result.getSubCheck());
 						noHack = false;
 					}
 				}

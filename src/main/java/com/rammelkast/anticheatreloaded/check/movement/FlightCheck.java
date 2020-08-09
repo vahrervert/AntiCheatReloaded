@@ -94,7 +94,7 @@ public class FlightCheck {
 				maxMotionY = 0.004D;
 			if (movementManager.motionY > maxMotionY && movementManager.slimeInfluenceTicks <= 0
 					&& !Utilities.isNearClimbable(distance.getTo().clone().subtract(0, 1.25, 0)))
-				return new CheckResult(CheckResult.Result.FAILED,
+				return new CheckResult(CheckResult.Result.FAILED, "AirFlight",
 						"tried to fly on the Y-axis (mY=" + movementManager.motionY + ", max=" + maxMotionY + ")");
 
 			if (Math.abs(movementManager.motionY - movementManager.lastMotionY) < 0.01
@@ -103,7 +103,7 @@ public class FlightCheck {
 							.getInteger(CheckType.FLIGHT, "airFlight", "accountForTeleports"))
 					&& !VersionUtil.isSlowFalling(player) && !Utilities.isInWeb(player)
 					&& movementManager.elytraEffectTicks <= 25)
-				return new CheckResult(CheckResult.Result.FAILED, "had too little Y dropoff (diff="
+				return new CheckResult(CheckResult.Result.FAILED, "AirFlight", "had too little Y dropoff (diff="
 						+ Math.abs(movementManager.motionY - movementManager.lastMotionY) + ")");
 		}
 		// End AirFlight
@@ -124,7 +124,7 @@ public class FlightCheck {
 				&& (!Utilities.isNearBed(distance.getTo())
 						|| (Utilities.isNearBed(distance.getTo()) && movementManager.motionY > 0.12675))
 				&& movementManager.slimeInfluenceTicks == 0 && movementManager.elytraEffectTicks <= 25)
-			return new CheckResult(CheckResult.Result.FAILED,
+			return new CheckResult(CheckResult.Result.FAILED, "AirClimb",
 					"tried to climb air (mY=" + movementManager.motionY + ")");
 
 		// TODO hardcoded value against false again..
@@ -135,7 +135,7 @@ public class FlightCheck {
 				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
 						.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports"))
 				&& movementManager.slimeInfluenceTicks == 0 && movementManager.elytraEffectTicks <= 25) {
-			return new CheckResult(CheckResult.Result.FAILED,
+			return new CheckResult(CheckResult.Result.FAILED, "AirClimb",
 					"tried to climb air (mY=" + movementManager.motionY + ", at=" + movementManager.airTicks + ")");
 		}
 		// End AirClimb
@@ -145,7 +145,7 @@ public class FlightCheck {
 				&& Utilities.cantStandAt(distance.getTo().getBlock().getRelative(BlockFace.DOWN))
 				&& Utilities.cantStandAt(distance.getFrom().getBlock().getRelative(BlockFace.DOWN))
 				&& Utilities.cantStandAt(distance.getTo().getBlock())) {
-			return new CheckResult(CheckResult.Result.FAILED,
+			return new CheckResult(CheckResult.Result.FAILED, "GroundFlight",
 					"faked ground to fly (mY=" + movementManager.motionY + ", gt=" + movementManager.groundTicks + ")");
 		}
 		// End GroundFlight
@@ -155,7 +155,8 @@ public class FlightCheck {
 				&& movementManager.motionY < 0 && !backend.justVelocity(player)
 				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
 						.getInteger(CheckType.FLIGHT, "gravity", "accountForTeleports"))
-				&& !Utilities.isInWeb(player) && movementManager.elytraEffectTicks <= 25) {
+				&& !Utilities.isInWeb(player) && movementManager.elytraEffectTicks <= 25
+				&& !VersionUtil.isSlowFalling(player)) {
 			double gravitatedY = (movementManager.lastMotionY - 0.08) * GRAVITY_FRICTION;
 			double offset = Math.abs(gravitatedY - movementManager.motionY);
 			double maxOffset = checksConfig.getDouble(CheckType.FLIGHT, "gravity", "maxOffset");
@@ -164,7 +165,7 @@ public class FlightCheck {
 				GRAVITY_VIOLATIONS.put(player.getUniqueId(), vl);
 				int vlBeforeFlag = checksConfig.getInteger(CheckType.FLIGHT, "gravity", "vlBeforeFlag");
 				if (vl >= vlBeforeFlag)
-					return new CheckResult(CheckResult.Result.FAILED,
+					return new CheckResult(CheckResult.Result.FAILED, "Gravity",
 							"ignored gravity (offset=" + offset + ", at=" + movementManager.airTicks + ")");
 			} else {
 				GRAVITY_VIOLATIONS.remove(player.getUniqueId());

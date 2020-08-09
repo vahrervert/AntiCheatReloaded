@@ -93,7 +93,7 @@ public class BadPacketsCheck {
 			@Override
 			public void run() {
 				EventListener.log(new CheckResult(CheckResult.Result.FAILED, message).getMessage(), player,
-						CheckType.BADPACKETS);
+						CheckType.BADPACKETS, null);
 				player.teleport(player.getLocation());
 			}
 		});

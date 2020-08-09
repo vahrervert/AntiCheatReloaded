@@ -33,11 +33,15 @@ public class UpdateManager {
 	public static final String SPIGOT_VERSION_URL = "https://api.spigotmc.org/legacy/update.php?resource="
 			+ RESOURCE_ID;
 
-	private final String latestVersion;
-	private final boolean isLatest;
-	private final boolean isAhead;
+	private String latestVersion;
+	private boolean isLatest;
+	private boolean isAhead;
 
 	public UpdateManager() {
+		this.update();
+	}
+	
+	public void update() {
 		this.latestVersion = this.getOnlineData(SPIGOT_VERSION_URL);
 		if (this.latestVersion == null) {
 			this.isLatest = true;

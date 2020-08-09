@@ -47,7 +47,8 @@ public class IllegalInteract {
 		} else if (event instanceof BlockBreakEvent
 				&& checksConfig.isSubcheckEnabled(CheckType.ILLEGAL_INTERACT, "break")) {
 			return checkBlockBreak(player, (BlockBreakEvent) event);
-		} else if (event instanceof PlayerInteractEvent && checksConfig.isSubcheckEnabled(CheckType.ILLEGAL_INTERACT, "interact")) {
+		} else if (event instanceof PlayerInteractEvent
+				&& checksConfig.isSubcheckEnabled(CheckType.ILLEGAL_INTERACT, "interact")) {
 			return checkInteract(player, (PlayerInteractEvent) event);
 		}
 		return PASS;
@@ -67,21 +68,22 @@ public class IllegalInteract {
 		maxDistance += player.getVelocity().length()
 				* checksConfig.getDouble(CheckType.ILLEGAL_INTERACT, "interact", "velocityMultiplier");
 		if (distance > maxDistance) {
-			return new CheckResult(CheckResult.Result.FAILED, "tried to interact out of range (dist=" + distance + ", max=" + maxDistance + ")");
+			return new CheckResult(CheckResult.Result.FAILED, "Interact",
+					"tried to interact out of range (dist=" + distance + ", max=" + maxDistance + ")");
 		}
 		return PASS;
 	}
 
 	private static CheckResult checkBlockBreak(Player player, BlockBreakEvent event) {
 		if (!isValidTarget(player, event.getBlock())) {
-			return new CheckResult(CheckResult.Result.FAILED, "tried to break a block which was out of view");
+			return new CheckResult(CheckResult.Result.FAILED, "Break", "tried to break a block which was out of view");
 		}
 		return PASS;
 	}
 
 	private static CheckResult checkBlockPlace(Player player, BlockPlaceEvent event) {
 		if (!isValidTarget(player, event.getBlock())) {
-			return new CheckResult(CheckResult.Result.FAILED, "tried to place a block out of their view");
+			return new CheckResult(CheckResult.Result.FAILED, "Place", "tried to place a block out of their view");
 		}
 		return PASS;
 	}
@@ -89,8 +91,7 @@ public class IllegalInteract {
 	private static boolean isValidTarget(Player player, Block block) {
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		double distance = player.getGameMode() == GameMode.CREATIVE ? 6.0
-				: player.getLocation().getDirection().getY() > 0.9 ? 6.0
-						: 5.5;
+				: player.getLocation().getDirection().getY() > 0.9 ? 6.0 : 5.5;
 		Block targetBlock = VersionUtil.getTargetBlock(player, ((int) Math.ceil(distance)));
 		if (targetBlock == null) {
 			// TODO better check here

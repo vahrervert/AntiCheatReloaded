@@ -88,7 +88,7 @@ public class MorePacketsCheck {
 			@Override
 			public void run() {
 				EventListener.log(new CheckResult(CheckResult.Result.FAILED, message).getMessage(), player,
-						CheckType.MOREPACKETS);
+						CheckType.MOREPACKETS, null);
 				player.teleport(player.getLocation());
 			}
 		});

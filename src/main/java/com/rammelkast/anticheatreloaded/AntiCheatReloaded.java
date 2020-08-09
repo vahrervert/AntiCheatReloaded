@@ -169,6 +169,10 @@ public class AntiCheatReloaded extends JavaPlugin {
                     tps = (tps == 0.0D ? ticks : (tps + ticks) / 2.0D);
                     ticks = 1;
                 }
+                
+                // Check for updates every 12 hours
+                if (ticks % 864000 == 0)
+                	updateManager.update();
             }
         }.runTaskTimer(this, 40L, 1L);
 	}

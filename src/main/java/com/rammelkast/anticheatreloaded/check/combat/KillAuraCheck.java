@@ -78,7 +78,7 @@ public class KillAuraCheck {
 		double reachedDistance = ((LivingEntity) target).getLocation().toVector()
 				.distance(player.getLocation().toVector());
 		if (reachedDistance > allowedReach)
-			return new CheckResult(CheckResult.Result.FAILED,
+			return new CheckResult(CheckResult.Result.FAILED, "Reach",
 					"reached too far (distance=" + Utilities.roundDouble(reachedDistance, 6) + ", max=" + Utilities.roundDouble(allowedReach, 6) + ")");
 		return PASS;
 	}
@@ -111,7 +111,7 @@ public class KillAuraCheck {
 				int vlBeforeFlag = checksConfig.getInteger(CheckType.KILLAURA, "angle", "vlBeforeFlag");
 				if (flags >= vlBeforeFlag) {
 					ANGLE_FLAGS.remove(uuid);
-					return new CheckResult(CheckResult.Result.FAILED,
+					return new CheckResult(CheckResult.Result.FAILED, "Angle",
 							"tried to attack from an illegal angle (angle=" + Math.round(angleDifference) + ")");
 				}
 
@@ -147,7 +147,7 @@ public class KillAuraCheck {
 			int vlBeforeFlag = checksConfig.getInteger(CheckType.KILLAURA, "packetOrder", "vlBeforeFlag");
 			if (flags >= vlBeforeFlag) {
 				PACKETORDER_FLAGS.remove(uuid);
-				return new CheckResult(Result.FAILED, "suspicious packet order (elapsed=" + elapsed + ")");
+				return new CheckResult(Result.FAILED, "PacketOrder", "suspicious packet order (elapsed=" + elapsed + ")");
 			}
 
 			PACKETORDER_FLAGS.put(uuid, flags + 1);

@@ -45,7 +45,7 @@ public class InventoryListener extends EventListener {
                         player.getInventory().clear();
                         event.setCancelled(true);
                     }
-                    log(result.getMessage(), player, CheckType.FAST_INVENTORY);
+                    log(result.getMessage(), player, CheckType.FAST_INVENTORY, result.getSubCheck());
                 } else {
                     decrease(player);
                 }

@@ -72,7 +72,7 @@ public class NoSlowCheck {
 			@Override
 			public void run() {
 				EventListener.log(new CheckResult(CheckResult.Result.FAILED, message).getMessage(), player,
-						CheckType.NOSLOW);
+						CheckType.NOSLOW, null);
 				player.teleport(player.getLocation());
 			}
 		});

@@ -26,12 +26,19 @@ public class CheckResult {
     }
 
     private Result result;
+    private String subCheck;
     private String message;
     private int data;
 
     public CheckResult(Result result, String message, int data) {
         this(result, message);
         this.data = data;
+    }
+
+    public CheckResult(Result result, String subcheck, String message) {
+        this(result);
+        this.subCheck = subcheck;
+        this.message = message;
     }
 
     public CheckResult(Result result, String message) {
@@ -46,11 +53,15 @@ public class CheckResult {
     public boolean failed() {
         return result == Result.FAILED;
     }
+    
+    public String getSubCheck() {
+    	return subCheck;
+    }
 
     public String getMessage() {
         return message;
     }
-
+    
     public Result getResult() {
         return result;
     }

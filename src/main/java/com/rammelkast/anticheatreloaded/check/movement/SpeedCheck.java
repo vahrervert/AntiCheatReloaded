@@ -34,8 +34,7 @@ import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
- * @author Rammelkast
- * TODO soulsand speed
+ * @author Rammelkast TODO soulsand speed
  */
 public class SpeedCheck {
 
@@ -55,9 +54,10 @@ public class SpeedCheck {
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		double distanceXZ = movementManager.distanceXZ;
 		boolean boxedIn = movementManager.topSolid && movementManager.bottomSolid;
-		
+
 		// AirSpeed
-		if (checksConfig.isSubcheckEnabled(CheckType.SPEED, "airSpeed") && movementManager.airTicks > 1 && movementManager.elytraEffectTicks <= 0 && !Utilities.isNearClimbable(player)) {
+		if (checksConfig.isSubcheckEnabled(CheckType.SPEED, "airSpeed") && movementManager.airTicks > 1
+				&& movementManager.elytraEffectTicks <= 0 && !Utilities.isNearClimbable(player)) {
 			double multiplier = 0.985D;
 			double predict = 0.36 * Math.pow(multiplier, movementManager.airTicks + 1);
 			double limit = checksConfig.getDouble(CheckType.SPEED, "airSpeed", "baseLimit"); // Default 0.03125
@@ -70,7 +70,7 @@ public class SpeedCheck {
 				if (boxedIn)
 					iceIncrement += 0.45D;
 				if (!Utilities.couldBeOnIce(movingTowards))
-					 iceIncrement *= 2.5D;
+					iceIncrement *= 2.5D;
 				predict += iceIncrement;
 			}
 			// Leniency when boxed in
@@ -93,7 +93,8 @@ public class SpeedCheck {
 			if (player.hasPotionEffect(PotionEffectType.JUMP))
 				predict += VersionUtil.getPotionLevel(player, PotionEffectType.JUMP) * 0.05D;
 			// Adjust for custom walking speed
-			double walkSpeedMultiplier = checksConfig.getDouble(CheckType.SPEED, "airSpeed", "walkSpeedMultiplier"); // Default 1.4
+			double walkSpeedMultiplier = checksConfig.getDouble(CheckType.SPEED, "airSpeed", "walkSpeedMultiplier"); // Default
+																														// 1.4
 			predict += walkSpeedMultiplier * (Math.pow(1.1, ((player.getWalkSpeed() / 0.20) - 1)) - 1);
 			// Slabs sometimes allow for a slight boost after jump
 			if (movementManager.halfMovementHistoryCounter > 0)
@@ -104,7 +105,8 @@ public class SpeedCheck {
 			if (Utilities.couldBeOnBoat(player, 0.5, true))
 				predict *= 1.25D;
 			// Strafing in air when nearing terminal velocity gives false positives
-			// This fixes the issue but gives hackers some leniency which means we need another check for this
+			// This fixes the issue but gives hackers some leniency which means we need
+			// another check for this
 			double deltaMotionY = movementManager.motionY - movementManager.lastMotionY;
 			if ((deltaMotionY < 0 && deltaMotionY >= -0.08) || movementManager.airTicks >= 40
 					&& (movingTowards.getBlockY() - player.getWorld().getHighestBlockYAt(movingTowards)) <= 1.5)
@@ -121,10 +123,12 @@ public class SpeedCheck {
 			if (movementManager.nearLiquidTicks >= 7 && movementManager.airTicks >= 14
 					&& movementManager.motionY < -0.18 && movementManager.motionY > -0.182)
 				predict += Math.abs(movementManager.motionY);
-			
+
 			if (distanceXZ - predict > limit) {
-				return new CheckResult(CheckResult.Result.FAILED, "moved too fast in air (speed=" + distanceXZ
-						+ ", limit=" + predict + ", block=" + movementManager.blockingTicks + ", box=" + boxedIn + ", at=" + movementManager.airTicks + ")");
+				return new CheckResult(CheckResult.Result.FAILED, "AirSpeed",
+						"moved too fast in air (speed=" + distanceXZ + ", limit=" + predict + ", block="
+								+ movementManager.blockingTicks + ", box=" + boxedIn + ", at="
+								+ movementManager.airTicks + ")");
 			}
 		}
 
@@ -145,13 +149,14 @@ public class SpeedCheck {
 			if (movementManager.halfMovementHistoryCounter > 15)
 				limit *= 2.0D;
 			// Adjust for custom walking speed
-			double walkSpeedMultiplier = checksConfig.getDouble(CheckType.SPEED, "airAcceleration", "walkSpeedMultiplier"); // Default 1.4
+			double walkSpeedMultiplier = checksConfig.getDouble(CheckType.SPEED, "airAcceleration",
+					"walkSpeedMultiplier"); // Default 1.4
 			limit += walkSpeedMultiplier * (Math.pow(1.1, ((player.getWalkSpeed() / 0.20) - 1)) - 1);
 			// Boats sometimes give a false positive
 			if (Utilities.couldBeOnBoat(player))
 				limit *= 1.25D;
 			if (initialAcceleration > limit) {
-				return new CheckResult(CheckResult.Result.FAILED,
+				return new CheckResult(CheckResult.Result.FAILED, "AirAcceleration",
 						"exceeded acceleration limits (acceleration=" + initialAcceleration + ", max=" + limit + ")");
 			}
 		}
@@ -162,16 +167,19 @@ public class SpeedCheck {
 				&& !boxedIn && movementManager.slimeInfluenceTicks <= 10) {
 			// This happens naturally
 			if (movementManager.airTicksBeforeGrounded == movementManager.groundTicks) {
-				double minimumDistXZ = checksConfig.getDouble(CheckType.SPEED, "jumpBehaviour", "minimumDistXZ"); // Default 0.42
+				double minimumDistXZ = checksConfig.getDouble(CheckType.SPEED, "jumpBehaviour", "minimumDistXZ"); // Default
+																													// 0.42
 				if (distanceXZ >= minimumDistXZ) {
-					return new CheckResult(CheckResult.Result.FAILED, "had unexpected jumping behaviour");
+					return new CheckResult(CheckResult.Result.FAILED, "JumpBehaviour",
+							"had unexpected jumping behaviour");
 				}
 			}
 		}
-		
+
 		// GroundSpeed
 		if (checksConfig.isSubcheckEnabled(CheckType.SPEED, "groundSpeed") && movementManager.groundTicks > 1) {
-			double initialLimit = checksConfig.getDouble(CheckType.SPEED, "groundSpeed", "initialLimit"); // Default 0.34
+			double initialLimit = checksConfig.getDouble(CheckType.SPEED, "groundSpeed", "initialLimit"); // Default
+																											// 0.34
 			double limit = initialLimit - 0.0055 * Math.min(9, movementManager.groundTicks);
 			// Leniency when moving back on ground
 			if (movementManager.groundTicks < 5)
@@ -224,13 +232,14 @@ public class SpeedCheck {
 			// TODO config
 			if (movementManager.sneakingTicks > 1)
 				limit *= 0.68D;
-			
+
 			if (distanceXZ - limit > 0) {
-				return new CheckResult(CheckResult.Result.FAILED,
-						"moved too fast on ground (speed=" + distanceXZ + ", limit=" + limit + ", blocking=" + player.isBlocking() + ", gt=" + movementManager.groundTicks + ")");
+				return new CheckResult(CheckResult.Result.FAILED, "GroundSpeed",
+						"moved too fast on ground (speed=" + distanceXZ + ", limit=" + limit + ", blocking="
+								+ player.isBlocking() + ", gt=" + movementManager.groundTicks + ")");
 			}
 		}
-		
+
 		return PASS;
 	}
 
@@ -244,27 +253,32 @@ public class SpeedCheck {
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		if (!checksConfig.isSubcheckEnabled(CheckType.SPEED, "verticalSpeed"))
 			return PASS;
-		
+
 		double maxMotionY = getMaxAcceptableMotionY(player, Utilities.isNearBed(distance.getTo()),
-				Utilities.couldBeOnBoat(player), Utilities.isClimbableBlock(distance.getFrom().getBlock())
-						|| Utilities.isClimbableBlock(distance.getFrom().getBlock().getRelative(BlockFace.DOWN)), movementManager.halfMovement, checksConfig);
+				Utilities.couldBeOnBoat(player),
+				Utilities.isClimbableBlock(distance.getFrom().getBlock())
+						|| Utilities.isClimbableBlock(distance.getFrom().getBlock().getRelative(BlockFace.DOWN)),
+				movementManager.halfMovement, checksConfig);
 		// Fix false positive with soulsand boost
 		if (movementManager.nearLiquidTicks > 6)
 			maxMotionY *= 1.0525D;
 		if (movementManager.motionY > maxMotionY && movementManager.slimeInfluenceTicks <= 0) {
-			return new CheckResult(CheckResult.Result.FAILED,
+			return new CheckResult(CheckResult.Result.FAILED, "VerticalSpeed",
 					"exceeded vertical speed limit (mY=" + movementManager.motionY + ", max=" + maxMotionY + ")");
 		}
 		return PASS;
 	}
-	
-	private static double getMaxAcceptableMotionY(Player player, boolean nearBed, boolean couldBeOnBoat, boolean fromClimbable, boolean halfMovement, Checks checksConfig) { 
+
+	private static double getMaxAcceptableMotionY(Player player, boolean nearBed, boolean couldBeOnBoat,
+			boolean fromClimbable, boolean halfMovement, Checks checksConfig) {
 		// TODO config for these values
-		// TODO something funky vanilla stuff going on with 0.42, like 0.445.., check this..
-		double base = couldBeOnBoat ? 0.600000025 : (nearBed ? 0.5625 : ((halfMovement || VersionUtil.isBountifulUpdate()) ? 0.6 : 0.42));
+		// TODO something funky vanilla stuff going on with 0.42, like 0.445.., check
+		// this..
+		double base = couldBeOnBoat ? 0.600000025
+				: (nearBed ? 0.5625 : ((halfMovement || VersionUtil.isBountifulUpdate()) ? 0.6 : 0.42));
 		if (fromClimbable)
 			base += checksConfig.getDouble(CheckType.SPEED, "verticalSpeed", "climbableCompensation"); // Default 0.04
-		
+
 		if (player.hasPotionEffect(PotionEffectType.JUMP))
 			base += VersionUtil.getPotionLevel(player, PotionEffectType.JUMP) * 0.2D;
 		return base;

@@ -38,7 +38,7 @@ public class BlockListener extends EventListener {
             CheckResult result = getBackend().checkFastPlace(player);
             if (result.failed()) {
                 event.setCancelled(!silentMode());
-                log(result.getMessage(), player, CheckType.FAST_PLACE);
+                log(result.getMessage(), player, CheckType.FAST_PLACE, result.getSubCheck());
                 noHack = false;
             } 
         }
@@ -47,7 +47,7 @@ public class BlockListener extends EventListener {
             CheckResult result = IllegalInteract.performCheck(player, event);
             if (result.failed()) {
                 event.setCancelled(!silentMode());
-                log(result.getMessage(), player, CheckType.ILLEGAL_INTERACT);
+                log(result.getMessage(), player, CheckType.ILLEGAL_INTERACT, result.getSubCheck());
                 noHack = false;
             } 
         }
@@ -67,7 +67,7 @@ public class BlockListener extends EventListener {
             result = IllegalInteract.performCheck(player, event);
             if (result.failed()) {
                 event.setCancelled(!silentMode());
-                log(result.getMessage(), player, CheckType.ILLEGAL_INTERACT);
+                log(result.getMessage(), player, CheckType.ILLEGAL_INTERACT, result.getSubCheck());
                 noHack = false;
             }
         }

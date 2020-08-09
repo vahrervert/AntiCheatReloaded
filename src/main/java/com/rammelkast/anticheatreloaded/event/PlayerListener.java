@@ -87,7 +87,7 @@ public class PlayerListener extends EventListener {
 				if (!silentMode())
 					player.sendMessage(ChatColor.translateAlternateColorCodes('&', result.getMessage()));
 				getBackend().processCommandSpammer(player);
-				log(null, player, CheckType.COMMAND_SPAM);
+				log(null, player, CheckType.COMMAND_SPAM, result.getSubCheck());
 			}
 		}
 
@@ -125,7 +125,7 @@ public class PlayerListener extends EventListener {
 				CheckResult result = getBackend().checkProjectile(player);
 				if (result.failed()) {
 					event.setCancelled(!silentMode());
-					log(result.getMessage(), player, CheckType.FAST_PROJECTILE);
+					log(result.getMessage(), player, CheckType.FAST_PROJECTILE, result.getSubCheck());
 				}
 			}
 		}
@@ -154,7 +154,7 @@ public class PlayerListener extends EventListener {
 				CheckResult result = getBackend().checkSneakToggle(player);
 				if (result.failed()) {
 					event.setCancelled(!silentMode());
-					log(result.getMessage(), player, CheckType.SNEAK);
+					log(result.getMessage(), player, CheckType.SNEAK, result.getSubCheck());
 				}
 			}
 			// getBackend().logToggleSneak(event.getPlayer());
@@ -201,7 +201,7 @@ public class PlayerListener extends EventListener {
 				AntiCheatReloaded.sendToMainThread(new Runnable() {
 					@Override
 					public void run() {
-						log(null, player, CheckType.CHAT_SPAM);
+						log(null, player, CheckType.CHAT_SPAM, result.getSubCheck());
 					}
 				});
 			}
@@ -215,7 +215,7 @@ public class PlayerListener extends EventListener {
 				AntiCheatReloaded.sendToMainThread(new Runnable() {
 					@Override
 					public void run() {
-						log(null, player, CheckType.CHAT_UNICODE);
+						log(null, player, CheckType.CHAT_UNICODE, result.getSubCheck());
 					}
 				});
 			}
@@ -258,7 +258,7 @@ public class PlayerListener extends EventListener {
 			CheckResult result = getBackend().checkSprintHungry(event);
 			if (result.failed()) {
 				event.setCancelled(!silentMode());
-				log(result.getMessage(), player, CheckType.SPRINT);
+				log(result.getMessage(), player, CheckType.SPRINT, result.getSubCheck());
 			} else {
 				decrease(player);
 			}
@@ -304,7 +304,7 @@ public class PlayerListener extends EventListener {
 				CheckResult result = IllegalInteract.performCheck(player, event);
 				if (result.failed()) {
 					event.setCancelled(!silentMode());
-					log(result.getMessage(), player, CheckType.ILLEGAL_INTERACT);
+					log(result.getMessage(), player, CheckType.ILLEGAL_INTERACT, result.getSubCheck());
 				}
 			}
 		}
@@ -319,7 +319,7 @@ public class PlayerListener extends EventListener {
 			CheckResult result = getBackend().checkFastDrop(player);
 			if (result.failed()) {
 				event.setCancelled(!silentMode());
-				log(result.getMessage(), player, CheckType.ITEM_SPAM);
+				log(result.getMessage(), player, CheckType.ITEM_SPAM, result.getSubCheck());
 			}
 		}
 
@@ -390,13 +390,13 @@ public class PlayerListener extends EventListener {
 					if (!silentMode()) {
 						event.setTo(user.getGoodLocation(from.clone()));
 					}
-					log(result.getMessage(), player, CheckType.FLIGHT);
+					log(result.getMessage(), player, CheckType.FLIGHT, result.getSubCheck());
 				}
 			}
 			if (getCheckManager().willCheckQuick(player, CheckType.ELYTRAFLY)) {
 				CheckResult result = ElytraCheck.runCheck(player, distance);
 				if (result.failed()) {
-					log(result.getMessage(), player, CheckType.ELYTRAFLY);
+					log(result.getMessage(), player, CheckType.ELYTRAFLY, result.getSubCheck());
 				}
 			}
 			if (getCheckManager().willCheckQuick(player, CheckType.VCLIP)
@@ -414,7 +414,7 @@ public class PlayerListener extends EventListener {
 						}
 						player.damage(3);
 					}
-					log(result.getMessage(), player, CheckType.VCLIP);
+					log(result.getMessage(), player, CheckType.VCLIP, result.getSubCheck());
 				}
 			}
 			if (getCheckManager().willCheckQuick(player, CheckType.NOFALL)
@@ -427,7 +427,7 @@ public class PlayerListener extends EventListener {
 						event.setTo(user.getGoodLocation(from.clone()));
 						// TODO better handling of this
 					}
-					log(result.getMessage(), player, CheckType.NOFALL);
+					log(result.getMessage(), player, CheckType.NOFALL, result.getSubCheck());
 				}
 			}
 
@@ -442,7 +442,7 @@ public class PlayerListener extends EventListener {
 							if (!silentMode()) {
 								event.setTo(user.getGoodLocation(from.clone()));
 							}
-							log(result.getMessage(), player, CheckType.SPEED);
+							log(result.getMessage(), player, CheckType.SPEED, result.getSubCheck());
 						}
 					}
 					CheckResult result = SpeedCheck.checkXZSpeed(player, x, z, event.getTo());
@@ -450,7 +450,7 @@ public class PlayerListener extends EventListener {
 						if (!silentMode()) {
 							event.setTo(user.getGoodLocation(from.clone()));
 						}
-						log(result.getMessage(), player, CheckType.SPEED);
+						log(result.getMessage(), player, CheckType.SPEED, result.getSubCheck());
 					}
 				}
 				if (getCheckManager().willCheckQuick(player, CheckType.WATER_WALK)) {
@@ -460,7 +460,7 @@ public class PlayerListener extends EventListener {
 							// TODO check this
 							player.teleport(player.getLocation().clone().subtract(0, 0.52, 0));
 						}
-						log(result.getMessage(), player, CheckType.WATER_WALK);
+						log(result.getMessage(), player, CheckType.WATER_WALK, result.getSubCheck());
 					}
 				}
 				if (getCheckManager().willCheckQuick(player, CheckType.SPIDER)) {
@@ -469,7 +469,7 @@ public class PlayerListener extends EventListener {
 						if (!silentMode()) {
 							event.setTo(user.getGoodLocation(from.clone()));
 						}
-						log(result.getMessage(), player, CheckType.SPIDER);
+						log(result.getMessage(), player, CheckType.SPIDER, result.getSubCheck());
 					}
 				}
 				if (getCheckManager().willCheckQuick(player, CheckType.FASTLADDER)) {
@@ -480,7 +480,7 @@ public class PlayerListener extends EventListener {
 						if (!silentMode()) {
 							event.setTo(user.getGoodLocation(from.clone()));
 						}
-						log(result.getMessage(), player, CheckType.FASTLADDER);
+						log(result.getMessage(), player, CheckType.FASTLADDER, result.getSubCheck());
 					}
 				}
 				if (getCheckManager().willCheckQuick(player, CheckType.STRAFE)) {
@@ -489,20 +489,20 @@ public class PlayerListener extends EventListener {
 						if (!silentMode()) {
 							event.setTo(user.getGoodLocation(from.clone()));
 						}
-						log(result.getMessage(), player, CheckType.STRAFE);
+						log(result.getMessage(), player, CheckType.STRAFE, result.getSubCheck());
 					}
 				}
 			}
 			if (getCheckManager().willCheckQuick(player, CheckType.AIMBOT)) {
 				CheckResult result = AimbotCheck.runCheck(player, event);
 				if (result.failed()) {
-					log(result.getMessage(), player, CheckType.AIMBOT);
+					log(result.getMessage(), player, CheckType.AIMBOT, result.getSubCheck());
 				}
 			}
 			if (getCheckManager().willCheckQuick(player, CheckType.VELOCITY)) {
 				CheckResult result = VelocityCheck.runCheck(player, distance);
 				if (result.failed()) {
-					log(result.getMessage(), player, CheckType.VELOCITY);
+					log(result.getMessage(), player, CheckType.VELOCITY, result.getSubCheck());
 				}
 			}
 		}

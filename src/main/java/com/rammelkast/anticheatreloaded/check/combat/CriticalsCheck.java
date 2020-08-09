@@ -41,7 +41,7 @@ public class CriticalsCheck {
 				event.setCancelled(true);
 				EventListener.log(new CheckResult(CheckResult.Result.FAILED, "tried to do a critical without needed conditions")
 								.getMessage(),
-						player, CheckType.CRITICALS);
+						player, CheckType.CRITICALS, null);
 			}
 		}
 	}
