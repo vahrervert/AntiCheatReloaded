@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -59,6 +60,8 @@ public class KillAuraCheck {
 		double allowedReach = target.getVelocity().length() < 0.08
 				? checksConfig.getDouble(CheckType.KILLAURA, "reach", "baseMaxValue.normal")
 				: checksConfig.getDouble(CheckType.KILLAURA, "reach", "baseMaxValue.velocitized");
+		if (player.getGameMode() == GameMode.CREATIVE)
+			allowedReach += 1.5D;
 		// Lag compensation
 		double lagExtraReach = checksConfig.getDouble(CheckType.KILLAURA, "reach", "lagCompensation.lagExtraReach");
 		double pingCompensation = checksConfig.getDouble(CheckType.KILLAURA, "reach",

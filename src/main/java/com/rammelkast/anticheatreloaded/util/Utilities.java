@@ -48,7 +48,7 @@ public final class Utilities {
 	
 	public static final Material LILY_PAD;
 	public static final Material COB_WEB;
-	
+
 	public static final double JUMP_MOTION_Y = 0.41999998688697815;
 
 	/**
@@ -117,16 +117,17 @@ public final class Utilities {
 	public static boolean canStand(Block block) {
 		return !(block.isLiquid() || block.getType() == Material.AIR);
 	}
-	
+
 	public static boolean isNotNearSlime(Block block) {
 		return !isSlime(block.getRelative(BlockFace.NORTH)) && !isSlime(block.getRelative(BlockFace.EAST))
-				&& !isSlime(block.getRelative(BlockFace.SOUTH)) && !isSlime(block.getRelative(BlockFace.WEST)) && !isSlime(block.getRelative(BlockFace.DOWN));
+				&& !isSlime(block.getRelative(BlockFace.SOUTH)) && !isSlime(block.getRelative(BlockFace.WEST))
+				&& !isSlime(block.getRelative(BlockFace.DOWN));
 	}
-	
+
 	public static boolean couldBeOnBoat(Player player) {
 		return couldBeOnBoat(player, 0.35, false);
 	}
-	
+
 	public static boolean couldBeOnBoat(Player player, double range, boolean checkY) {
 		for (Entity entity : player.getNearbyEntities(range, range, range)) {
 			if (entity instanceof Boat) {
@@ -148,11 +149,11 @@ public final class Utilities {
 	 */
 	public static boolean couldBeOnIce(Location location) {
 		return isNearIce(new Location(location.getWorld(), fixXAxis(location.getX()), location.getY() - 0.01D,
-				location.getBlockZ())) || isNearIce(new Location(location.getWorld(), fixXAxis(location.getX()), location.getY() - 0.26D,
+				location.getBlockZ()))
+				|| isNearIce(new Location(location.getWorld(), fixXAxis(location.getX()), location.getY() - 0.26D,
 						location.getBlockZ()));
 	}
-	
-	
+
 	/**
 	 * Determine whether a block is a type of ice
 	 *
@@ -163,10 +164,9 @@ public final class Utilities {
 		Material type = block.getType();
 		return type.name().endsWith("ICE");
 	}
-	
+
 	public static boolean isNearIce(Location location) {
-		return isIce(location.getBlock())
-				|| isIce(location.getBlock().getRelative(BlockFace.NORTH))
+		return isIce(location.getBlock()) || isIce(location.getBlock().getRelative(BlockFace.NORTH))
 				|| isIce(location.getBlock().getRelative(BlockFace.SOUTH))
 				|| isIce(location.getBlock().getRelative(BlockFace.EAST))
 				|| isIce(location.getBlock().getRelative(BlockFace.WEST))
@@ -175,7 +175,7 @@ public final class Utilities {
 				|| isIce(location.getBlock().getRelative(BlockFace.SOUTH_EAST))
 				|| isIce(location.getBlock().getRelative(BlockFace.SOUTH_WEST));
 	}
-	
+
 	/**
 	 * Determine whether a block is a shulker box
 	 *
@@ -186,12 +186,11 @@ public final class Utilities {
 		Material type = block.getType();
 		return type.name().endsWith("SHULKER_BOX");
 	}
-	
+
 	public static boolean isNearShulkerBox(Location location) {
 		if (VersionUtil.isBountifulUpdate())
 			return false;
-		return isShulkerBox(location.getBlock())
-				|| isShulkerBox(location.getBlock().getRelative(BlockFace.NORTH))
+		return isShulkerBox(location.getBlock()) || isShulkerBox(location.getBlock().getRelative(BlockFace.NORTH))
 				|| isShulkerBox(location.getBlock().getRelative(BlockFace.SOUTH))
 				|| isShulkerBox(location.getBlock().getRelative(BlockFace.EAST))
 				|| isShulkerBox(location.getBlock().getRelative(BlockFace.WEST))
@@ -200,7 +199,7 @@ public final class Utilities {
 				|| isShulkerBox(location.getBlock().getRelative(BlockFace.SOUTH_EAST))
 				|| isShulkerBox(location.getBlock().getRelative(BlockFace.SOUTH_WEST));
 	}
-	
+
 	/**
 	 * Determine whether a player could be standing on a halfblock
 	 *
@@ -208,14 +207,14 @@ public final class Utilities {
 	 * @return true if the player could be standing on a halfblock
 	 */
 	public static boolean couldBeOnHalfblock(Location location) {
-		return isNearHalfblock(new Location(location.getWorld(), location.getX(), location.getY() - 0.01D,
-				location.getBlockZ())) || isNearHalfblock(new Location(location.getWorld(), location.getX(), location.getY() - 0.51D,
+		return isNearHalfblock(
+				new Location(location.getWorld(), location.getX(), location.getY() - 0.01D, location.getBlockZ()))
+				|| isNearHalfblock(new Location(location.getWorld(), location.getX(), location.getY() - 0.51D,
 						location.getBlockZ()));
 	}
-	
+
 	public static boolean isNearHalfblock(Location location) {
-		return isHalfblock(location.getBlock())
-				|| isHalfblock(location.getBlock().getRelative(BlockFace.NORTH))
+		return isHalfblock(location.getBlock()) || isHalfblock(location.getBlock().getRelative(BlockFace.NORTH))
 				|| isHalfblock(location.getBlock().getRelative(BlockFace.SOUTH))
 				|| isHalfblock(location.getBlock().getRelative(BlockFace.EAST))
 				|| isHalfblock(location.getBlock().getRelative(BlockFace.WEST))
@@ -224,7 +223,7 @@ public final class Utilities {
 				|| isHalfblock(location.getBlock().getRelative(BlockFace.SOUTH_EAST))
 				|| isHalfblock(location.getBlock().getRelative(BlockFace.SOUTH_WEST));
 	}
-	
+
 	public static boolean isHalfblock(Block block) {
 		if (!VersionUtil.isBountifulUpdate()) {
 			BoundingBox box = block.getBoundingBox();
@@ -232,10 +231,10 @@ public final class Utilities {
 			if (height > 0.42 && height <= 0.6 && block.getType().isSolid())
 				return true;
 		}
-		return isSlab(block) || isStair(block) || isWall(block) || block.getType() == Material.SNOW;
+		return isSlab(block) || isStair(block) || isWall(block) || block.getType() == Material.SNOW
+				|| block.getType().name().endsWith("HEAD");
 	}
-	
-	
+
 	/**
 	 * Determine whether a player could be standing on slime
 	 *
@@ -244,11 +243,11 @@ public final class Utilities {
 	 */
 	public static boolean couldBeOnSlime(Location location) {
 		return isNearSlime(new Location(location.getWorld(), fixXAxis(location.getX()), location.getY() - 0.01D,
-				location.getBlockZ())) || isNearSlime(new Location(location.getWorld(), fixXAxis(location.getX()), location.getY() - 0.51D,
+				location.getBlockZ()))
+				|| isNearSlime(new Location(location.getWorld(), fixXAxis(location.getX()), location.getY() - 0.51D,
 						location.getBlockZ()));
 	}
-	
-	
+
 	/**
 	 * Determine whether a block is a type of slime
 	 *
@@ -259,10 +258,9 @@ public final class Utilities {
 		Material type = block.getType();
 		return type.equals(XMaterial.SLIME_BLOCK.parseMaterial());
 	}
-	
+
 	public static boolean isNearSlime(Location location) {
-		return isSlime(location.getBlock())
-				|| isSlime(location.getBlock().getRelative(BlockFace.NORTH))
+		return isSlime(location.getBlock()) || isSlime(location.getBlock().getRelative(BlockFace.NORTH))
 				|| isSlime(location.getBlock().getRelative(BlockFace.SOUTH))
 				|| isSlime(location.getBlock().getRelative(BlockFace.EAST))
 				|| isSlime(location.getBlock().getRelative(BlockFace.WEST))
@@ -271,7 +269,7 @@ public final class Utilities {
 				|| isSlime(location.getBlock().getRelative(BlockFace.SOUTH_EAST))
 				|| isSlime(location.getBlock().getRelative(BlockFace.SOUTH_WEST));
 	}
-	
+
 	/**
 	 * Determine whether a player is fully submerged in water
 	 *
@@ -370,7 +368,7 @@ public final class Utilities {
 		Material type = block.getType();
 		return type.name().endsWith("SLAB");
 	}
-	
+
 	/**
 	 * Determine whether a block is a bed
 	 *
@@ -381,10 +379,9 @@ public final class Utilities {
 		Material type = block.getType();
 		return type.name().endsWith("BED");
 	}
-	
+
 	public static boolean isNearBed(Location location) {
-		return isBed(location.getBlock())
-				|| isBed(location.getBlock().getRelative(BlockFace.NORTH))
+		return isBed(location.getBlock()) || isBed(location.getBlock().getRelative(BlockFace.NORTH))
 				|| isBed(location.getBlock().getRelative(BlockFace.SOUTH))
 				|| isBed(location.getBlock().getRelative(BlockFace.EAST))
 				|| isBed(location.getBlock().getRelative(BlockFace.WEST))
@@ -404,7 +401,7 @@ public final class Utilities {
 		Material type = block.getType();
 		return type.name().endsWith("STAIRS");
 	}
-	
+
 	/**
 	 * Determine whether a block is a wall
 	 *
@@ -489,7 +486,7 @@ public final class Utilities {
 				|| player.getLocation().getBlock().getRelative(BlockFace.SOUTH_EAST).isLiquid()
 				|| player.getLocation().getBlock().getRelative(BlockFace.SOUTH_WEST).isLiquid();
 	}
-	
+
 	/**
 	 * Determine whether a player is surrounded by liquid blocks
 	 *
@@ -498,8 +495,7 @@ public final class Utilities {
 	 */
 	public static boolean isSurroundedByWater(Player player) {
 		Location location = player.getLocation().clone().subtract(0, 0.1, 0);
-		return location.getBlock().isLiquid()
-				&& location.getBlock().getRelative(BlockFace.NORTH).isLiquid()
+		return location.getBlock().isLiquid() && location.getBlock().getRelative(BlockFace.NORTH).isLiquid()
 				&& location.getBlock().getRelative(BlockFace.SOUTH).isLiquid()
 				&& location.getBlock().getRelative(BlockFace.EAST).isLiquid()
 				&& location.getBlock().getRelative(BlockFace.WEST).isLiquid()
@@ -520,7 +516,7 @@ public final class Utilities {
 				|| player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == COB_WEB
 				|| player.getLocation().getBlock().getRelative(BlockFace.UP).getType() == COB_WEB;
 	}
-	
+
 	/**
 	 * Determine whether a player is near a climbable block
 	 *
@@ -536,7 +532,7 @@ public final class Utilities {
 				|| isClimbableBlock(player.getLocation().getBlock().getRelative(BlockFace.EAST))
 				|| isClimbableBlock(player.getLocation().getBlock().getRelative(BlockFace.WEST));
 	}
-	
+
 	/**
 	 * Determine whether a location is near a climbable block
 	 *
@@ -730,6 +726,7 @@ public final class Utilities {
 
 	/**
 	 * Rounds a float value to a scale
+	 * 
 	 * @param value Value to round
 	 * @param scale Scale
 	 * @return rounded value
@@ -737,9 +734,10 @@ public final class Utilities {
 	public static float roundFloat(float value, int scale) {
 		return new BigDecimal(value).setScale(scale, RoundingMode.HALF_UP).floatValue();
 	}
-	
+
 	/**
 	 * Rounds a double value to a scale
+	 * 
 	 * @param value Value to round
 	 * @param scale Scale
 	 * @return rounded value
@@ -747,12 +745,12 @@ public final class Utilities {
 	public static double roundDouble(double value, int scale) {
 		return new BigDecimal(value).setScale(scale, RoundingMode.HALF_UP).doubleValue();
 	}
-	
+
 	public static int floor(double value) {
-        int rounded = (int) value;
-        return value < rounded ? rounded - 1 : rounded;
-    }
-	
+		int rounded = (int) value;
+		return value < rounded ? rounded - 1 : rounded;
+	}
+
 	public static boolean isHoneyBlock(Block block) {
 		if (!VersionUtil.isOfVersion("v1_15")) {
 			return false;
@@ -836,7 +834,7 @@ public final class Utilities {
 			COMBO.put(Material.STONE_SWORD, COB_WEB);
 			COMBO.put(XMaterial.WOODEN_SWORD.parseMaterial(), COB_WEB);
 			// End combos
-			
+
 			// Start climbable
 			CLIMBABLE.add(Material.VINE);
 			CLIMBABLE.add(Material.LADDER);
@@ -848,7 +846,7 @@ public final class Utilities {
 		else {
 			LILY_PAD = Material.LILY_PAD;
 			COB_WEB = Material.COBWEB;
-			
+
 			// Start instant break materials
 			INSTANT_BREAK.add(Material.COMPARATOR);
 			INSTANT_BREAK.add(Material.REPEATER);
@@ -893,7 +891,8 @@ public final class Utilities {
 			INSTANT_BREAK.add(Material.TALL_SEAGRASS);
 			INSTANT_BREAK.add(Material.WHEAT);
 			// Start 1.14 objects
-			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15") || VersionUtil.isOfVersion("v1_16")) {
+			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")
+					|| VersionUtil.isOfVersion("v1_16")) {
 				INSTANT_BREAK.add(Material.BAMBOO_SAPLING);
 				INSTANT_BREAK.add(Material.CORNFLOWER);
 			}
@@ -944,7 +943,8 @@ public final class Utilities {
 			FOOD.add(Material.SPIDER_EYE);
 			FOOD.add(Material.TROPICAL_FISH);
 			// Start 1.14 objects
-			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15") || VersionUtil.isOfVersion("v1_16")) {
+			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")
+					|| VersionUtil.isOfVersion("v1_16")) {
 				FOOD.add(Material.SUSPICIOUS_STEW);
 				FOOD.add(Material.SWEET_BERRIES);
 			}
@@ -980,7 +980,7 @@ public final class Utilities {
 			COMBO.put(Material.STONE_SWORD, Material.COBWEB);
 			COMBO.put(Material.WOODEN_SWORD, Material.COBWEB);
 			// End combos
-			
+
 			// Start climbable
 			CLIMBABLE.add(Material.VINE);
 			CLIMBABLE.add(Material.LADDER);
@@ -991,7 +991,7 @@ public final class Utilities {
 				CLIMBABLE.add(Material.SCAFFOLDING);
 			}
 			// End 1.14 objects
-			
+
 			// Start 1.16 objects
 			if (VersionUtil.isOfVersion("v1_16")) {
 				CLIMBABLE.add(XMaterial.TWISTING_VINES.parseMaterial());

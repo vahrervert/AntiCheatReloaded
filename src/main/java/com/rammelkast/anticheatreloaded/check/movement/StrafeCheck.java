@@ -19,6 +19,7 @@
 package com.rammelkast.anticheatreloaded.check.movement;
 
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -42,7 +43,8 @@ public class StrafeCheck {
 
 	public static CheckResult runCheck(Player player, double x, double z, Location from, Location to) {
 		if (!Utilities.cantStandAtExp(from) || !Utilities.cantStandAtExp(to) || Utilities.isNearWater(player)
-				|| Utilities.isNearClimbable(player) || VersionUtil.isFlying(player) || player.isDead())
+				|| Utilities.isNearClimbable(player) || VersionUtil.isFlying(player) || player.isDead()
+				|| Utilities.isHalfblock(to.getBlock().getRelative(BlockFace.DOWN)))
 			return PASS;
 
 		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
@@ -50,7 +52,8 @@ public class StrafeCheck {
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 
 		if (System.currentTimeMillis() - movementManager.lastTeleport <= checksConfig.getInteger(CheckType.STRAFE,
-				"accountForTeleports") || movementManager.elytraEffectTicks >= 20)
+				"accountForTeleports") || movementManager.elytraEffectTicks >= 20
+				|| movementManager.halfMovementHistoryCounter >= 20)
 			return PASS;
 
 		Vector oldAcceleration = new Vector(movementManager.lastDistanceX, 0, movementManager.lastDistanceZ);
@@ -58,9 +61,9 @@ public class StrafeCheck {
 
 		float angle = newAcceleration.angle(oldAcceleration);
 		double distance = newAcceleration.lengthSquared();
-		if (angle > checksConfig
-				.getDouble(CheckType.STRAFE, "maxAngleChange") && distance > checksConfig
-				.getDouble(CheckType.STRAFE, "minActivationDistance") && Utilities.cantStandFar(to.getBlock()))
+		if (angle > checksConfig.getDouble(CheckType.STRAFE, "maxAngleChange")
+				&& distance > checksConfig.getDouble(CheckType.STRAFE, "minActivationDistance")
+				&& Utilities.cantStandFar(to.getBlock()))
 			return new CheckResult(Result.FAILED, "switched angle in air (angle=" + angle + ", dist=" + distance + ")");
 		return PASS;
 	}

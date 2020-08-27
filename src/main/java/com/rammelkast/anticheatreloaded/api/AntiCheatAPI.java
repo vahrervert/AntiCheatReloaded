@@ -152,5 +152,4 @@ public class AntiCheatAPI {
         return AntiCheatReloaded.getManager();
     }
 
-
 }

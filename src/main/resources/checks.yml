@@ -106,7 +106,7 @@ strafe:
   # How many milliseconds to account for teleports
   accountForTeleports: 100
   # Maximum angle change when moving in air
-  maxAngleChange: 0.25
+  maxAngleChange: 0.50
   # Minimum movement distance for the strafe check to be active
   minActivationDistance: 0.025
 

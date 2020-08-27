@@ -44,7 +44,7 @@ public class WaterWalkCheck {
 		MovementManager movementManager = user.getMovementManager();
 
 		if (movementManager.distanceXZ <= 0 || player.getVehicle() != null || Utilities.isOnLilyPad(player)
-				|| VersionUtil.isRiptiding(player) || VersionUtil.isSwimming(player))
+				|| VersionUtil.isRiptiding(player) || VersionUtil.isSwimming(player) || VersionUtil.isFlying(player))
 			return PASS;
 
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();

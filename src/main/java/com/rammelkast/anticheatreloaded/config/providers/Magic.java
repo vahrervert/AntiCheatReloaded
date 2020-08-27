@@ -47,10 +47,6 @@ public interface Magic {
      */
     public int TELEPORT_TIME();
     /**
-     * Time to exempt a player from moving because of exiting fly mode; Type=SYSTEM, Leniency=INCREASE.
-     */
-    public int EXIT_FLY_TIME();
-    /**
      * Time to exempt a player from moving because of joining the server; Type=SYSTEM, Leniency=INCREASE.
      */
     public int JOIN_TIME();
