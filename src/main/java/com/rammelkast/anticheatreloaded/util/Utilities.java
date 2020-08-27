@@ -504,6 +504,33 @@ public final class Utilities {
 				&& location.getBlock().getRelative(BlockFace.SOUTH_EAST).isLiquid()
 				&& location.getBlock().getRelative(BlockFace.SOUTH_WEST).isLiquid();
 	}
+	
+	/**
+	 * Determine whether a player is near a web
+	 *
+	 * @param player player to check
+	 * @return true if near a web
+	 */
+	public static boolean isNearWeb(Player player) {
+		return isWeb(player.getLocation().getBlock())
+				|| isWeb(player.getLocation().getBlock().getRelative(BlockFace.DOWN))
+				|| isWeb(player.getLocation().getBlock().getRelative(BlockFace.UP))
+				|| isWeb(player.getLocation().getBlock().getRelative(BlockFace.NORTH))
+				|| isWeb(player.getLocation().getBlock().getRelative(BlockFace.SOUTH))
+				|| isWeb(player.getLocation().getBlock().getRelative(BlockFace.EAST))
+				|| isWeb(player.getLocation().getBlock().getRelative(BlockFace.WEST));
+	}
+	
+
+	/**
+	 * Determine whether a block is a web
+	 *
+	 * @param block block to check
+	 * @return true if web
+	 */
+	public static boolean isWeb(Block block) {
+		return block.getType() == XMaterial.COBWEB.parseMaterial();
+	}
 
 	/**
 	 * Determine whether a player is in a web

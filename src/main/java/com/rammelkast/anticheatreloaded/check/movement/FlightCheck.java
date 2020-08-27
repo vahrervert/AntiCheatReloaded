@@ -101,7 +101,7 @@ public class FlightCheck {
 					&& !Utilities.couldBeOnBoat(player)
 					&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
 							.getInteger(CheckType.FLIGHT, "airFlight", "accountForTeleports"))
-					&& !VersionUtil.isSlowFalling(player) && !Utilities.isInWeb(player)
+					&& !VersionUtil.isSlowFalling(player) && !Utilities.isNearWeb(player)
 					&& movementManager.elytraEffectTicks <= 25)
 				return new CheckResult(CheckResult.Result.FAILED, "AirFlight", "had too little Y dropoff (diff="
 						+ Math.abs(movementManager.motionY - movementManager.lastMotionY) + ")");
@@ -155,7 +155,7 @@ public class FlightCheck {
 				&& movementManager.motionY < 0 && !backend.justVelocity(player)
 				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
 						.getInteger(CheckType.FLIGHT, "gravity", "accountForTeleports"))
-				&& !Utilities.isInWeb(player) && movementManager.elytraEffectTicks <= 25
+				&& !Utilities.isNearWeb(player) && movementManager.elytraEffectTicks <= 25
 				&& !VersionUtil.isSlowFalling(player)) {
 			double gravitatedY = (movementManager.lastMotionY - 0.08) * GRAVITY_FRICTION;
 			double offset = Math.abs(gravitatedY - movementManager.motionY);
