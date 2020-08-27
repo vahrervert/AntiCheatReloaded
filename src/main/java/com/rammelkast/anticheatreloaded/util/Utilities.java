@@ -529,7 +529,7 @@ public final class Utilities {
 	 * @return true if web
 	 */
 	public static boolean isWeb(Block block) {
-		return block.getType() == XMaterial.COBWEB.parseMaterial();
+		return block.getType() == COB_WEB;
 	}
 
 	/**
@@ -1016,6 +1016,7 @@ public final class Utilities {
 			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")
 					|| VersionUtil.isOfVersion("v1_16")) {
 				CLIMBABLE.add(Material.SCAFFOLDING);
+				CLIMBABLE.add(Material.SWEET_BERRY_BUSH);
 			}
 			// End 1.14 objects
 

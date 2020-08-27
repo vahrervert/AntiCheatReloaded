@@ -221,7 +221,8 @@ public class Backend {
 	public CheckResult checkSpider(Player player, double y) {
 		if (y <= 0.11761 && y >= 0.11759 && !Utilities.isClimbableBlock(player.getLocation().getBlock())
 				&& !Utilities.isClimbableBlock(player.getEyeLocation().getBlock())
-				&& !Utilities.isClimbableBlock(player.getLocation().clone().add(0, -0.98, 0).getBlock())) {
+				&& !Utilities.isClimbableBlock(player.getLocation().clone().add(0, -0.98, 0).getBlock())
+				&& !Utilities.isNearClimbable(player)) {
 			return new CheckResult(CheckResult.Result.FAILED,
 					"tried to climb a non-climbable block (" + player.getLocation().getBlock().getType() + ")");
 		} else {
@@ -235,7 +236,7 @@ public class Backend {
 				&& !isMovingExempt(player) && !justPlaced(player) && !Utilities.isNearWater(player)
 				&& !Utilities.isInWeb(player) && !player.getLocation().getBlock().getType().name().endsWith("TRAPDOOR")
 				&& !VersionUtil.isSlowFalling(player) && !Utilities
-						.isNearShulkerBox(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getLocation())) {
+						.isNearShulkerBox(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getLocation()) && !Utilities.isNearClimbable(player)) {
 			if (player.getFallDistance() == 0) {
 				if (nofallViolation.get(uuid) == null) {
 					nofallViolation.put(uuid, 1);
