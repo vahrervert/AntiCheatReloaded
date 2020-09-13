@@ -133,6 +133,9 @@ permissions:
   anticheat.check.noslow:
     description: Allow players to use NoSlow hacks
     default: false
+  anticheat.check.boatfly:
+    description: Allow players to use boat fly hacks
+    default: false
   anticheat.check.exempt:
     description: Total exemption from checks
     default: false
@@ -166,3 +169,4 @@ permissions:
       anticheat.check.aimbot: true
       anticheat.check.strafe: true
       anticheat.check.noslow: true
+      anticheat.check.boatfly: true

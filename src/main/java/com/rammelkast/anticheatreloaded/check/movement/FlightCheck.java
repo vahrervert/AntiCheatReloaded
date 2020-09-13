@@ -176,31 +176,4 @@ public class FlightCheck {
 		return PASS;
 	}
 
-	public static boolean isMovingExempt(Player player) {
-		return isDoing(player, MOVING_EXEMPT, -1) || player.isInsideVehicle();
-	}
-
-	private static boolean isDoing(Player player, Map<UUID, Long> map, double max) {
-		if (map.containsKey(player.getUniqueId())) {
-			if (max != -1) {
-				if (((System.currentTimeMillis() - map.get(player.getUniqueId())) / 1000) > max) {
-					map.remove(player.getUniqueId());
-					return false;
-				} else {
-					return true;
-				}
-			} else {
-				// Termination time has already been calculated
-				if (map.get(player.getUniqueId()) < System.currentTimeMillis()) {
-					map.remove(player.getUniqueId());
-					return false;
-				} else {
-					return true;
-				}
-			}
-		} else {
-			return false;
-		}
-	}
-
 }

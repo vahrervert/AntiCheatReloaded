@@ -149,6 +149,12 @@ fastladder:
   # Amount of illegal ladder moves before flagging
   vlBeforeFlag: 3
 
+# BoatFly check settings
+# Checks if the player is flying in a boat
+boatfly:
+  # Should this check be enabled?
+  enabled: true
+
 # KillAura check settings
 # Checks if the player uses a form of kill aura
 killaura:

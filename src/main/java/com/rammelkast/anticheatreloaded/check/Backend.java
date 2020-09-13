@@ -18,10 +18,8 @@
  */
 package com.rammelkast.anticheatreloaded.check;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -56,7 +54,6 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 public class Backend {
 	public Map<UUID, Long> velocitized = new HashMap<UUID, Long>();
 	private Map<UUID, Long> levitatingEnd = new HashMap<UUID, Long>();
-	private List<UUID> isAscending = new ArrayList<UUID>();
 	private Map<UUID, Integer> chatLevel = new HashMap<UUID, Integer>();
 	private Map<UUID, Integer> commandLevel = new HashMap<UUID, Integer>();
 	private Map<UUID, Integer> nofallViolation = new HashMap<UUID, Integer>();
@@ -122,7 +119,6 @@ public class Backend {
 		startEat.remove(uuid);
 		lastHeal.remove(uuid);
 		sprinted.remove(uuid);
-		isAscending.remove(uuid);
 		nofallViolation.remove(uuid);
 		blockBreakHolder.remove(uuid);
 		fastPlaceViolation.remove(uuid);
@@ -309,15 +305,6 @@ public class Backend {
 		}
 
 		return PASS;
-	}
-
-	public void logAscension(Player player, double y1, double y2) {
-		UUID name = player.getUniqueId();
-		if (y1 < y2 && !isAscending.contains(name)) {
-			isAscending.add(name);
-		} else {
-			isAscending.remove(name);
-		}
 	}
 
 	public CheckResult checkFastPlace(Player player) {
@@ -632,10 +619,6 @@ public class Backend {
 
 	public boolean isMovingExempt(Player player) {
 		return isDoing(player, FlightCheck.MOVING_EXEMPT, -1);
-	}
-
-	public boolean isAscending(Player player) {
-		return isAscending.contains(player.getUniqueId());
 	}
 
 	public boolean isDoing(Player player, Map<UUID, Long> map, double max) {

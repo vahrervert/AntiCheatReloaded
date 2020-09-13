@@ -64,7 +64,8 @@ public enum CheckType {
 	FASTLADDER(Permission.CHECK_FASTLADDER, "FastLadder"),
 	AIMBOT(Permission.CHECK_AIMBOT, "Aimbot"),
 	STRAFE(Permission.CHECK_STRAFE, "Strafe"),
-	NOSLOW(Permission.CHECK_NOSLOW, "NoSlow");
+	NOSLOW(Permission.CHECK_NOSLOW, "NoSlow"),
+	BOATFLY(Permission.CHECK_BOATFLY, "BoatFly");
 	
     private final Permission permission;
     private final String displayName;

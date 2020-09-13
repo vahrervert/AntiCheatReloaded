@@ -24,6 +24,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.injector.server.TemporaryPlayer;
 import com.comphenix.protocol.wrappers.EnumWrappers.PlayerDigType;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.movement.NoSlowCheck;
@@ -55,6 +56,9 @@ public class PacketListener {
 					@Override
 					public void onPacketSending(PacketEvent event) {
 						Player player = event.getPlayer();
+						// Check if we have an actual player object
+						if (player instanceof TemporaryPlayer)
+							return;
 						// Compensate for teleport
 						MorePacketsCheck.compensate(player);
 					}

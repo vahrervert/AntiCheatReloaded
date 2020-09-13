@@ -60,6 +60,7 @@ import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.check.combat.VelocityCheck;
 import com.rammelkast.anticheatreloaded.check.movement.AimbotCheck;
+import com.rammelkast.anticheatreloaded.check.movement.BoatFlyCheck;
 import com.rammelkast.anticheatreloaded.check.movement.ElytraCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FastLadderCheck;
 import com.rammelkast.anticheatreloaded.check.movement.FlightCheck;
@@ -377,7 +378,6 @@ public class PlayerListener extends EventListener {
 
 			final Distance distance = new Distance(from, to);
 			final double y = distance.getYDifference();
-			getBackend().logAscension(player, from.getY(), to.getY());
 
 			final User user = getUserManager().getUser(player.getUniqueId());
 			user.setTo(to.getX(), to.getY(), to.getZ());
