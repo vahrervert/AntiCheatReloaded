@@ -89,7 +89,7 @@ public class LoggingManager {
     }
 
     public void logToPlayers(String message) {
-    	if(!config.getConfig().disableBroadcast.getValue()) return;
+    	if(config.getConfig().disableBroadcast.getValue()) return;
         for(Player player : Bukkit.getOnlinePlayers()) {
             if (Permission.SYSTEM_NOTICE.get(player)) {
                 player.sendMessage(message);
