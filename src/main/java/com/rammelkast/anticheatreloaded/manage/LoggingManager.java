@@ -89,6 +89,7 @@ public class LoggingManager {
     }
 
     public void logToPlayers(String message) {
+    	if(!config.getConfig().disableBroadcast.getValue()) return;
         for(Player player : Bukkit.getOnlinePlayers()) {
             if (Permission.SYSTEM_NOTICE.get(player)) {
                 player.sendMessage(message);
@@ -96,7 +97,7 @@ public class LoggingManager {
         }
     }
 
-    private void logToLogs(String message) { // Yo dawg
+    private void logToLogs(String message) { // Yo dawg, you like logs?
         logs.add(ChatColor.stripColor(message));
     }
 

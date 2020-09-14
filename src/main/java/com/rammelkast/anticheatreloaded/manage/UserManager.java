@@ -210,7 +210,7 @@ public class UserManager {
                         user.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&', kickReason));
                         AntiCheatReloaded.getPlugin().onPlayerKicked();
                         String msg = ChatColor.translateAlternateColorCodes('&', config.getLang().KICK_BROADCAST().replaceAll("%player%", name) + " (" + type.getName() + ")");
-                        if (!msg.equals("")) {
+                        if (!msg.equals("") && config.getConfig().disableBroadcast.getValue()) {
                             manager.log(msg);
                             manager.playerLog(msg);
                         }

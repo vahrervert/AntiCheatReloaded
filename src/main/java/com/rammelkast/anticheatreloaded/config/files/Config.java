@@ -36,6 +36,7 @@ public class Config extends ConfigurationFile {
     public ConfigValue<Boolean> eventChains;
     public ConfigValue<Boolean> enterprise;
     public ConfigValue<Boolean> debugMode;
+    public ConfigValue<Boolean> disableBroadcast;
 
     public ConfigValue<Boolean> blockChatSpamSpeed;
     public ConfigValue<Boolean> blockCommandSpamSpeed;
@@ -67,6 +68,7 @@ public class Config extends ConfigurationFile {
         eventChains = new ConfigValue<Boolean>("system.event-chains");
         enterprise = new ConfigValue<Boolean>("system.enterprise");
         debugMode = new ConfigValue<Boolean>("system.debug-mode");
+        disableBroadcast = new ConfigValue<Boolean>("system.disable-broadcast");
 
         blockChatSpamSpeed = new ConfigValue<Boolean>("spam.chat.block-speed");
         blockChatSpamRepetition = new ConfigValue<Boolean>("spam.chat.block-repetition");
@@ -86,7 +88,6 @@ public class Config extends ConfigurationFile {
         if (notifyEveryVl.getValue() < 1) {
         	notifyEveryVl.setValue(5);
         }
-        
         maxSetbackDistance = new ConfigValue<Integer>("system.max-setback-distance");
         if (maxSetbackDistance.getValue() < 5) {
         	maxSetbackDistance.setValue(50);
