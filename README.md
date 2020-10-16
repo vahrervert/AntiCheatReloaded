@@ -1,4 +1,4 @@
-AntiCheatReloaded
+AntiCheatReloaded ![Latest Release](https://img.shields.io/github/v/release/Rammelkast/AntiCheatReloaded) ![Downloads](https://img.shields.io/github/downloads/Rammelkast/AntiCheatReloaded/total) ![Last Commit](https://img.shields.io/github/last-commit/Rammelkast/AntiCheatReloaded)
 =============
 AntiCheatReloaded helps server admins combat the use of hacked clients and spambots. It analyses the behavior of players and can prevent malicious gameplay. The plugin offers a lot of customizability and can be connected across multiple servers in case it is used in a server network context. AntiCheatReloaded is based on gravitylow's AntiCheat and has been around since 2012.
 
@@ -14,7 +14,7 @@ Issues should be filed by hitting the [issues](https://github.com/Rammelkast/Ant
 
 Please include the following information with your issue, this allows me to fix it quicker;
 * Your AntiCheatReloaded version
-* Your server software (Bukkit/Spigot/Other) and it's version
+* Your server implementation (Craftbukkit/Spigot/Other) and it's version
 * Your ProtocolLib version
 * Whether or not you are using protocol hacks (ViaVersion etc.)
 * Any logs relating to the issue
@@ -44,10 +44,10 @@ Hacks blocked
 * FastProjectile
 * ItemSpam
 * FastInventory
-* MorePackets/Timer
-* BadPackets
-* Velocity/Anti-Knockback
-* IllegalInteract (Scaffold)
+* Timer
+* Blink
+* Anti-Knockback
+* Scaffold
 * FastLadder
 * Strafe
 * NoSlow
