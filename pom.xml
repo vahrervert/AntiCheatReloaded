@@ -3,7 +3,7 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>com.rammelkast.anticheatreloaded</groupId>
    <artifactId>AntiCheatReloaded</artifactId>
-   <version>1.9.4</version>
+   <version>1.9.4-PRE</version>
    <name>AntiCheatReloaded</name>
    <url>https://www.spigotmc.org/resources/anticheatreloaded.23799/</url>
    <properties>
@@ -22,7 +22,7 @@
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.5</version>
+            <version>3.8.1</version>
             <configuration>
                <source>1.8</source>
                <target>1.8</target>
@@ -31,7 +31,7 @@
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
-            <version>3.1.1</version>
+            <version>3.2.4</version>
             <executions>
                <execution>
                   <phase>package</phase>
@@ -44,7 +44,6 @@
                <artifactSet>
                   <includes>
                      <include>com.rammelkast.*</include>
-                     <include>com.cryptomorin.*</include>
                   </includes>
                </artifactSet>
             </configuration>
@@ -55,7 +54,7 @@
          <extension>
             <groupId>org.apache.maven.wagon</groupId>
             <artifactId>wagon-file</artifactId>
-            <version>2.2</version>
+            <version>3.4.1</version>
          </extension>
       </extensions>
       <resources>
@@ -80,7 +79,7 @@
       <dependency>
       	<groupId>org.spigotmc</groupId>
       	<artifactId>spigot</artifactId>
-      	<version>1.16.2-R0.1-SNAPSHOT</version>
+      	<version>1.16.3-R0.1-SNAPSHOT</version>
       	<scope>provided</scope>
       </dependency>
    </dependencies>
