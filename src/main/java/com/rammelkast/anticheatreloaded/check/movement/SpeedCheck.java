@@ -75,7 +75,7 @@ public class SpeedCheck {
 			}
 			// Leniency when boxed in
 			if (boxedIn && movementManager.airTicks < 3)
-				limit *= 1.2D;
+				predict *= 1.2D;
 			// Adjust for slime
 			if (movementManager.slimeInfluenceTicks > 0) {
 				double slimeIncrement = 0.022 * Math.pow(1.0375, movementManager.slimeInfluenceTicks);
