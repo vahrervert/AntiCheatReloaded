@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.rammelkast.anticheatreloaded.event;
 
 import java.text.DecimalFormat;
@@ -56,22 +55,23 @@ public class EventListener implements Listener {
 		boolean debugMode = CONFIG.getConfig().debugMode.getValue();
 		int vlForType = type.getUses(player.getUniqueId()) + 1;
 		int notifyEveryVl = CONFIG.getConfig().notifyEveryVl.getValue();
+		String prefix = ChatColor.translateAlternateColorCodes('&', CONFIG.getLang().ALERT_PREFIX());
 		if (message == null || message.equals("")) {
 			if (debugMode) {
-				message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.DARK_GRAY + "> "  + ChatColor.GRAY + player.getName() + " failed "
+				message = prefix + player.getName() + " failed "
 						+ type.getName();
 			} else {
-				message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.DARK_GRAY + "> "  + ChatColor.GRAY + player.getName() + " failed "
+				message = prefix + player.getName() + " failed "
 						+ type.getName() + ChatColor.GOLD + " (x" + vlForType + ")";
 			}
 		} else {
 			if (debugMode) {
-				message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.DARK_GRAY + "> "  + ChatColor.GRAY + player.getName() + " failed "
+				message = prefix + player.getName() + " failed "
 						+ type.getName() + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + message
 						+ ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + "ping: " + user.getPing() + "ms"
 						+ ", tps: " + TPS_FORMAT.format(AntiCheatReloaded.getPlugin().getTPS());
 			} else {
-				message = ChatColor.GOLD + "" + ChatColor.BOLD + "ACR " + ChatColor.DARK_GRAY + "> " + ChatColor.GRAY
+				message = prefix
 						+ player.getName() + " failed " + type.getName() + ChatColor.GOLD + " (x" + vlForType + ")"
 						+ ChatColor.DARK_GRAY + " | " + ChatColor.GRAY
 						+ (subcheck != null ? ("type: " + subcheck.toLowerCase() + ", ") : "") + "ping: " + user.getPing() + "ms"

@@ -99,4 +99,12 @@ public interface Lang {
      * @return Kicking broadcast.
      */
     public String KICK_BROADCAST();
+    
+
+    /**
+     * Get the alert prefix for staff and debug.
+     *
+     * @return Alert prefix.
+     */
+    public String ALERT_PREFIX();
 }
