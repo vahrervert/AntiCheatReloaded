@@ -154,6 +154,8 @@ fastladder:
 boatfly:
   # Should this check be enabled?
   enabled: true
+  # Amount of in-boat airborne moments before flagging
+  vlBeforeFlag: 2
 
 # KillAura check settings
 # Checks if the player uses a form of kill aura

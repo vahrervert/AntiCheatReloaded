@@ -72,7 +72,8 @@ public class WaterWalkCheck {
 				&& Utilities.isSurroundedByWater(player)
 				&& Math.abs(movementManager.lastMotionY - movementManager.motionY) > minAbsMotionY
 				&& movementManager.distanceXZ > checksConfig.getDouble(CheckType.WATER_WALK, "lunge", "minimumDistXZ")
-				&& movementManager.lastMotionY > -0.25)
+				&& movementManager.lastMotionY > -0.25
+				&& !Utilities.couldBeOnBoat(player, 0.3, false))
 			return new CheckResult(Result.FAILED, "Lunge", "tried to lunge in water (xz="
 					+ Utilities.roundDouble(movementManager.distanceXZ, 5) + ", absMotionY="
 					+ Utilities.roundDouble(Math.abs(movementManager.lastMotionY - movementManager.motionY), 5) + ")");

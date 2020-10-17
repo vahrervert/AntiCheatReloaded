@@ -398,6 +398,16 @@ public class PlayerListener extends EventListener {
 					log(result.getMessage(), player, CheckType.ELYTRAFLY, result.getSubCheck());
 				}
 			}
+			if (getCheckManager().willCheckQuick(player, CheckType.BOATFLY)) {
+				CheckResult result = BoatFlyCheck.runCheck(player, user.getMovementManager(), to);
+				if (result.failed()) {
+					if (!silentMode()) {
+						player.eject();
+						event.setTo(user.getGoodLocation(from.clone()));
+					}
+					log(result.getMessage(), player, CheckType.BOATFLY, result.getSubCheck());
+				}
+			}
 			if (getCheckManager().willCheckQuick(player, CheckType.VCLIP)
 					&& event.getFrom().getY() > event.getTo().getY()) {
 				CheckResult result = getBackend().checkVClip(player, new Distance(event.getFrom(), event.getTo()));

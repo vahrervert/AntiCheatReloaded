@@ -18,10 +18,50 @@
  */
 package com.rammelkast.anticheatreloaded.check.movement;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+
+import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
+import com.rammelkast.anticheatreloaded.check.CheckType;
+import com.rammelkast.anticheatreloaded.check.CheckResult.Result;
+import com.rammelkast.anticheatreloaded.config.providers.Checks;
+import com.rammelkast.anticheatreloaded.util.MovementManager;
+import com.rammelkast.anticheatreloaded.util.Utilities;
+import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class BoatFlyCheck {
 
+	public static final Map<UUID, Integer> VIOLATIONS = new HashMap<UUID, Integer>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
-	
+
+	public static CheckResult runCheck(Player player, MovementManager movementManager, Location to) {
+		if (movementManager.distanceXZ <= 0 || movementManager.motionY <= 1E-3
+				|| (System.currentTimeMillis() - movementManager.lastTeleport <= 50) || VersionUtil.isFlying(player)
+				|| !player.isInsideVehicle())
+			return PASS;
+
+		UUID uuid = player.getUniqueId();
+		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+		if (player.getVehicle().getType() == EntityType.BOAT) {
+			Block bottom = player.getWorld().getBlockAt(to.getBlockX(), to.getBlockY() - 1, to.getBlockZ());
+			if (!Utilities.cantStandAt(bottom))
+				return PASS;
+			int violations = VIOLATIONS.getOrDefault(uuid, 1);
+			if (violations++ >= checksConfig.getInteger(CheckType.BOATFLY, "vlBeforeFlag")) {
+				violations = 0;
+				return new CheckResult(Result.FAILED, "tried to fly in a boat (mY=" + movementManager.motionY
+						+ ", bottom=" + bottom.getType().name().toLowerCase() + ")");
+			}
+			VIOLATIONS.put(uuid, violations);
+		}
+		return PASS;
+	}
+
 }
