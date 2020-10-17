@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.rammelkast.anticheatreloaded.util;
 
 import java.util.Arrays;
@@ -142,7 +141,7 @@ public class VersionUtil {
 			}
 			return 0;
 		}
-		
+
 		if (player.hasPotionEffect(type))
 			return player.getPotionEffect(type).getAmplifier() + 1;
 		return 0;

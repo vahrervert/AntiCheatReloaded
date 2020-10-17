@@ -40,14 +40,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.NumberConversions;
 
+import com.comphenix.protocol.utility.MinecraftVersion;
+
 public final class Utilities {
 	private static final List<Material> INSTANT_BREAK = new ArrayList<Material>();
 	private static final List<Material> FOOD = new ArrayList<Material>();
 	private static final List<Material> CLIMBABLE = new ArrayList<Material>();
 	private static final Map<Material, Material> COMBO = new HashMap<Material, Material>();
-	
-	public static final Material LILY_PAD;
-	public static final Material COB_WEB;
 
 	public static final double JUMP_MOTION_Y = 0.41999998688697815;
 
@@ -431,10 +430,11 @@ public final class Utilities {
 	 */
 	public static boolean isOnLilyPad(Player player) {
 		Block block = player.getLocation().getBlock();
-		return block.getType() == LILY_PAD || block.getRelative(BlockFace.NORTH).getType() == LILY_PAD
-				|| block.getRelative(BlockFace.SOUTH).getType() == LILY_PAD
-				|| block.getRelative(BlockFace.EAST).getType() == LILY_PAD
-				|| block.getRelative(BlockFace.WEST).getType() == LILY_PAD;
+		return block.getType() == XMaterial.LILY_PAD.parseMaterial()
+				|| block.getRelative(BlockFace.NORTH).getType() == XMaterial.LILY_PAD.parseMaterial()
+				|| block.getRelative(BlockFace.SOUTH).getType() == XMaterial.LILY_PAD.parseMaterial()
+				|| block.getRelative(BlockFace.EAST).getType() == XMaterial.LILY_PAD.parseMaterial()
+				|| block.getRelative(BlockFace.WEST).getType() == XMaterial.LILY_PAD.parseMaterial();
 	}
 
 	/**
@@ -504,7 +504,7 @@ public final class Utilities {
 				&& location.getBlock().getRelative(BlockFace.SOUTH_EAST).isLiquid()
 				&& location.getBlock().getRelative(BlockFace.SOUTH_WEST).isLiquid();
 	}
-	
+
 	/**
 	 * Determine whether a player is near a web
 	 *
@@ -520,7 +520,6 @@ public final class Utilities {
 				|| isWeb(player.getLocation().getBlock().getRelative(BlockFace.EAST))
 				|| isWeb(player.getLocation().getBlock().getRelative(BlockFace.WEST));
 	}
-	
 
 	/**
 	 * Determine whether a block is a web
@@ -529,7 +528,7 @@ public final class Utilities {
 	 * @return true if web
 	 */
 	public static boolean isWeb(Block block) {
-		return block.getType() == COB_WEB;
+		return block.getType() == XMaterial.COBWEB.parseMaterial();
 	}
 
 	/**
@@ -539,9 +538,11 @@ public final class Utilities {
 	 * @return true if in web
 	 */
 	public static boolean isInWeb(Player player) {
-		return player.getLocation().getBlock().getType() == COB_WEB
-				|| player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == COB_WEB
-				|| player.getLocation().getBlock().getRelative(BlockFace.UP).getType() == COB_WEB;
+		return player.getLocation().getBlock().getType() == XMaterial.COBWEB.parseMaterial()
+				|| player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == XMaterial.COBWEB
+						.parseMaterial()
+				|| player.getLocation().getBlock().getRelative(BlockFace.UP).getType() == XMaterial.COBWEB
+						.parseMaterial();
 	}
 
 	/**
@@ -779,7 +780,7 @@ public final class Utilities {
 	}
 
 	public static boolean isHoneyBlock(Block block) {
-		if (!VersionUtil.isOfVersion("v1_15")) {
+		if (MinecraftVersion.getCurrentVersion().isAtLeast(MinecraftVersion.BEE_UPDATE)) {
 			return false;
 		}
 		return block.getType() == XMaterial.HONEY_BLOCK.parseMaterial();
@@ -788,9 +789,6 @@ public final class Utilities {
 	static {
 		// Start 1.8.8
 		if (VersionUtil.isBountifulUpdate()) {
-			LILY_PAD = XMaterial.LILY_PAD.parseMaterial();
-			COB_WEB = XMaterial.COBWEB.parseMaterial();
-
 			// Start instant break materials
 			INSTANT_BREAK.add(XMaterial.COMPARATOR.parseMaterial());
 			INSTANT_BREAK.add(XMaterial.REPEATER.parseMaterial());
@@ -807,7 +805,7 @@ public final class Utilities {
 			INSTANT_BREAK.add(Material.DEAD_BUSH);
 			INSTANT_BREAK.add(Material.GRASS);
 			INSTANT_BREAK.add(XMaterial.TALL_GRASS.parseMaterial());
-			INSTANT_BREAK.add(LILY_PAD);
+			INSTANT_BREAK.add(XMaterial.LILY_PAD.parseMaterial());
 			INSTANT_BREAK.add(Material.MELON_STEM);
 			INSTANT_BREAK.add(Material.MELON_STEM);
 			INSTANT_BREAK.add(Material.BROWN_MUSHROOM);
@@ -856,10 +854,10 @@ public final class Utilities {
 			// Start combos
 			COMBO.put(Material.SHEARS, XMaterial.WHITE_WOOL.parseMaterial());
 
-			COMBO.put(Material.IRON_SWORD, COB_WEB);
-			COMBO.put(Material.DIAMOND_SWORD, COB_WEB);
-			COMBO.put(Material.STONE_SWORD, COB_WEB);
-			COMBO.put(XMaterial.WOODEN_SWORD.parseMaterial(), COB_WEB);
+			COMBO.put(Material.IRON_SWORD, XMaterial.COBWEB.parseMaterial());
+			COMBO.put(Material.DIAMOND_SWORD, XMaterial.COBWEB.parseMaterial());
+			COMBO.put(Material.STONE_SWORD, XMaterial.COBWEB.parseMaterial());
+			COMBO.put(XMaterial.WOODEN_SWORD.parseMaterial(), XMaterial.COBWEB.parseMaterial());
 			// End combos
 
 			// Start climbable
@@ -871,8 +869,7 @@ public final class Utilities {
 		// End 1.8.8
 		// Start other version
 		else {
-			LILY_PAD = Material.LILY_PAD;
-			COB_WEB = Material.COBWEB;
+			MinecraftVersion currentVersion = MinecraftVersion.getCurrentVersion();
 
 			// Start instant break materials
 			INSTANT_BREAK.add(Material.COMPARATOR);
@@ -918,14 +915,13 @@ public final class Utilities {
 			INSTANT_BREAK.add(Material.TALL_SEAGRASS);
 			INSTANT_BREAK.add(Material.WHEAT);
 			// Start 1.14 objects
-			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")
-					|| VersionUtil.isOfVersion("v1_16")) {
+			if (currentVersion.isAtLeast(MinecraftVersion.VILLAGE_UPDATE)) {
 				INSTANT_BREAK.add(Material.BAMBOO_SAPLING);
 				INSTANT_BREAK.add(Material.CORNFLOWER);
 			}
 			// End 1.14 objects
 			// Start 1.15 objects
-			if (VersionUtil.isOfVersion("v1_15") || VersionUtil.isOfVersion("v1_16")) {
+			if (currentVersion.isAtLeast(MinecraftVersion.BEE_UPDATE)) {
 				INSTANT_BREAK.add(Material.HONEY_BLOCK);
 			}
 			// End 1.15 objects
@@ -970,14 +966,13 @@ public final class Utilities {
 			FOOD.add(Material.SPIDER_EYE);
 			FOOD.add(Material.TROPICAL_FISH);
 			// Start 1.14 objects
-			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")
-					|| VersionUtil.isOfVersion("v1_16")) {
+			if (currentVersion.isAtLeast(MinecraftVersion.VILLAGE_UPDATE)) {
 				FOOD.add(Material.SUSPICIOUS_STEW);
 				FOOD.add(Material.SWEET_BERRIES);
 			}
 			// End 1.14 objects
 			// Start 1.15 objects
-			if (VersionUtil.isOfVersion("v1_15") || VersionUtil.isOfVersion("v1_16")) {
+			if (currentVersion.isAtLeast(MinecraftVersion.BEE_UPDATE)) {
 				FOOD.add(Material.HONEY_BOTTLE);
 			}
 			// End 1.15 objects
@@ -1013,15 +1008,14 @@ public final class Utilities {
 			CLIMBABLE.add(Material.LADDER);
 			CLIMBABLE.add(Material.WATER);
 			// Start 1.14 objects
-			if (VersionUtil.isOfVersion("v1_14") || VersionUtil.isOfVersion("v1_15")
-					|| VersionUtil.isOfVersion("v1_16")) {
+			if (currentVersion.isAtLeast(MinecraftVersion.VILLAGE_UPDATE)) {
 				CLIMBABLE.add(Material.SCAFFOLDING);
 				CLIMBABLE.add(Material.SWEET_BERRY_BUSH);
 			}
 			// End 1.14 objects
 
 			// Start 1.16 objects
-			if (VersionUtil.isOfVersion("v1_16")) {
+			if (currentVersion.isAtLeast(MinecraftVersion.NETHER_UPDATE)) {
 				CLIMBABLE.add(XMaterial.TWISTING_VINES.parseMaterial());
 				CLIMBABLE.add(XMaterial.TWISTING_VINES_PLANT.parseMaterial());
 				CLIMBABLE.add(XMaterial.WEEPING_VINES.parseMaterial());
