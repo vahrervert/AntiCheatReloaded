@@ -78,8 +78,9 @@ public class AntiCheatReloaded extends JavaPlugin {
 		eventList.add(new VehicleListener());
 		eventList.add(new InventoryListener());
 		// Handles 1.9+ potion effects
-		if (!VersionUtil.isBountifulUpdate())
+		if (!VersionUtil.isBountifulUpdate()) {
 			eventList.add(new PotionEffectListener());
+		}
 		// Order is important in some cases, don't screw with these unless
 		// needed, especially config
 		this.setupConfig();

@@ -187,8 +187,10 @@ public final class Utilities {
 	}
 
 	public static boolean isNearShulkerBox(Location location) {
-		if (VersionUtil.isBountifulUpdate())
+		// Shulkers are 1.12+
+		if (MinecraftVersion.getCurrentVersion().isAtLeast(MinecraftVersion.COLOR_UPDATE)) {
 			return false;
+		}
 		return isShulkerBox(location.getBlock()) || isShulkerBox(location.getBlock().getRelative(BlockFace.NORTH))
 				|| isShulkerBox(location.getBlock().getRelative(BlockFace.SOUTH))
 				|| isShulkerBox(location.getBlock().getRelative(BlockFace.EAST))
@@ -224,7 +226,8 @@ public final class Utilities {
 	}
 
 	public static boolean isHalfblock(Block block) {
-		if (!VersionUtil.isBountifulUpdate()) {
+		// getBoundingBox() is only available on 1.14+
+		if (MinecraftVersion.getCurrentVersion().isAtLeast(MinecraftVersion.VILLAGE_UPDATE)) {
 			BoundingBox box = block.getBoundingBox();
 			double height = box.getMaxY() - box.getMinY();
 			if (height > 0.42 && height <= 0.6 && block.getType().isSolid())
@@ -458,7 +461,7 @@ public final class Utilities {
 		return player.getLocation().getBlock().isLiquid()
 				|| player.getLocation().getBlock().getRelative(BlockFace.DOWN).isLiquid()
 				|| player.getLocation().getBlock().getRelative(BlockFace.UP).isLiquid()
-				|| (!VersionUtil.isBountifulUpdate()
+				|| (MinecraftVersion.getCurrentVersion().isAtLeast(MinecraftVersion.AQUATIC_UPDATE)
 						&& (player.getLocation().getBlock().getType() == XMaterial.KELP_PLANT.parseMaterial()
 								|| player.getLocation().getBlock().getRelative(BlockFace.UP)
 										.getType() == XMaterial.KELP_PLANT.parseMaterial()

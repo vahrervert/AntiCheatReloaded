@@ -36,7 +36,7 @@ import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 public class VersionUtil {
 
 	private static final List<String> SUPPORTED_VERSIONS = Arrays
-			.asList(new String[] { "v1_16", "v1_15", "v1_14", "v1_13", "v1_8_R3" });
+			.asList(new String[] { "v1_16", "v1_15", "v1_14", "v1_13", "v1_12", "v1_8_R3" });
 
 	public static String getVersion() {
 		return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
