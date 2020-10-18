@@ -31,12 +31,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.comphenix.protocol.utility.MinecraftVersion;
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 
 public class VersionUtil {
 
-	private static final List<String> SUPPORTED_VERSIONS = Arrays
-			.asList(new String[] { "v1_16", "v1_15", "v1_14", "v1_13", "v1_12", "v1_8_R3" });
+	private static final List<String> SUPPORTED_VERSIONS;
+	private static final MinecraftVersion CURRENT_VERSION;
 
 	public static String getVersion() {
 		return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
@@ -74,14 +75,14 @@ public class VersionUtil {
 	}
 
 	public static boolean isRiptiding(Player player) {
-		if (isBountifulUpdate()) {
+		if (!CURRENT_VERSION.isAtLeast(MinecraftVersion.AQUATIC_UPDATE)) {
 			return false;
 		}
 		return player.isRiptiding();
 	}
 
 	public static boolean isSlowFalling(Player player) {
-		if (isBountifulUpdate()) {
+		if (!CURRENT_VERSION.isAtLeast(MinecraftVersion.AQUATIC_UPDATE)) {
 			return false;
 		}
 		return player.hasPotionEffect(PotionEffectType.SLOW_FALLING);
@@ -148,9 +149,14 @@ public class VersionUtil {
 	}
 
 	public static boolean isSwimming(Player player) {
-		if (isBountifulUpdate()) {
+		if (!CURRENT_VERSION.isAtLeast(MinecraftVersion.AQUATIC_UPDATE)) {
 			return false;
 		}
 		return player.isSwimming();
+	}
+
+	static {
+		SUPPORTED_VERSIONS = Arrays.asList(new String[] { "v1_16", "v1_15", "v1_14", "v1_13", "v1_12", "v1_8_R3" });
+		CURRENT_VERSION = MinecraftVersion.getCurrentVersion();
 	}
 }
