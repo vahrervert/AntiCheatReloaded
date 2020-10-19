@@ -141,7 +141,7 @@ public class SpeedCheck {
 			double limit = checksConfig.getDouble(CheckType.SPEED, "airAcceleration", "baseLimit"); // Default 0.3725
 			// Slight increase when boxed in
 			if (boxedIn)
-				limit *= 1.05D;
+				limit *= 1.08D;
 			// Adjust for speed effects
 			if (player.hasPotionEffect(PotionEffectType.SPEED))
 				limit += VersionUtil.getPotionLevel(player, PotionEffectType.SPEED) * 0.0225D;
