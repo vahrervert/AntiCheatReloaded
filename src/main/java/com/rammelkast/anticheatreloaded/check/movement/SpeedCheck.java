@@ -115,7 +115,7 @@ public class SpeedCheck {
 			if (VersionUtil.isSlowFalling(player))
 				predict *= 1.25D;
 			// Prevent NoSlow
-			if (movementManager.blockingTicks > 2 && movementManager.airTicks > 2)
+			if (movementManager.blockingTicks > 3 && movementManager.airTicks > 2)
 				predict *= 0.8D;
 			if (movementManager.blockingTicks > 10 && movementManager.airTicks > 2)
 				predict *= 0.5D;
@@ -168,10 +168,10 @@ public class SpeedCheck {
 			// This happens naturally
 			if (movementManager.airTicksBeforeGrounded == movementManager.groundTicks) {
 				double minimumDistXZ = checksConfig.getDouble(CheckType.SPEED, "jumpBehaviour", "minimumDistXZ"); // Default
-																													// 0.42
-				if (distanceXZ >= minimumDistXZ) {
+
+				if (distanceXZ >= minimumDistXZ || movementManager.lastDistanceXZ >= minimumDistXZ) {
 					return new CheckResult(CheckResult.Result.FAILED, "JumpBehaviour",
-							"had unexpected jumping behaviour");
+							"had unexpected jumping behaviour (dXZ=" + Utilities.roundDouble(distanceXZ, 4) + ", lXZ=" + Utilities.roundDouble(movementManager.lastDistanceXZ, 4) + ")");
 				}
 			}
 		}
@@ -239,7 +239,7 @@ public class SpeedCheck {
 								+ player.isBlocking() + ", gt=" + movementManager.groundTicks + ")");
 			}
 		}
-
+	
 		return PASS;
 	}
 
