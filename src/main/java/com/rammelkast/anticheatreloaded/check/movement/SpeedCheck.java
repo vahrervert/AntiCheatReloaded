@@ -171,7 +171,8 @@ public class SpeedCheck {
 
 				if (distanceXZ >= minimumDistXZ || movementManager.lastDistanceXZ >= minimumDistXZ) {
 					return new CheckResult(CheckResult.Result.FAILED, "JumpBehaviour",
-							"had unexpected jumping behaviour (dXZ=" + Utilities.roundDouble(distanceXZ, 4) + ", lXZ=" + Utilities.roundDouble(movementManager.lastDistanceXZ, 4) + ")");
+							"had unexpected jumping behaviour (dXZ=" + Utilities.roundDouble(distanceXZ, 4) + ", lXZ="
+									+ Utilities.roundDouble(movementManager.lastDistanceXZ, 4) + ")");
 				}
 			}
 		}
@@ -239,7 +240,7 @@ public class SpeedCheck {
 								+ player.isBlocking() + ", gt=" + movementManager.groundTicks + ")");
 			}
 		}
-	
+
 		return PASS;
 	}
 
