@@ -795,78 +795,78 @@ public final class Utilities {
 			// Start instant break materials
 			INSTANT_BREAK.add(XMaterial.COMPARATOR.parseMaterial());
 			INSTANT_BREAK.add(XMaterial.REPEATER.parseMaterial());
-			INSTANT_BREAK.add(Material.TORCH);
+			INSTANT_BREAK.add(XMaterial.TORCH.parseMaterial());
 			INSTANT_BREAK.add(XMaterial.REDSTONE_TORCH.parseMaterial());
-			INSTANT_BREAK.add(Material.REDSTONE_WIRE);
-			INSTANT_BREAK.add(Material.TRIPWIRE);
-			INSTANT_BREAK.add(Material.TRIPWIRE_HOOK);
-			INSTANT_BREAK.add(Material.FIRE);
-			INSTANT_BREAK.add(Material.FLOWER_POT);
-			INSTANT_BREAK.add(Material.TNT);
-			INSTANT_BREAK.add(Material.SLIME_BLOCK);
-			INSTANT_BREAK.add(Material.CARROT);
-			INSTANT_BREAK.add(Material.DEAD_BUSH);
-			INSTANT_BREAK.add(Material.GRASS);
+			INSTANT_BREAK.add(XMaterial.REDSTONE_WIRE.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.TRIPWIRE.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.TRIPWIRE_HOOK.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.FIRE.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.FLOWER_POT.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.TNT.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.SLIME_BLOCK.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.CARROT.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.DEAD_BUSH.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.GRASS.parseMaterial());
 			INSTANT_BREAK.add(XMaterial.TALL_GRASS.parseMaterial());
 			INSTANT_BREAK.add(XMaterial.LILY_PAD.parseMaterial());
-			INSTANT_BREAK.add(Material.MELON_STEM);
-			INSTANT_BREAK.add(Material.MELON_STEM);
-			INSTANT_BREAK.add(Material.BROWN_MUSHROOM);
-			INSTANT_BREAK.add(Material.RED_MUSHROOM);
+			INSTANT_BREAK.add(XMaterial.MELON_STEM.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.MELON_STEM.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.BROWN_MUSHROOM.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.RED_MUSHROOM.parseMaterial());
 			INSTANT_BREAK.add(XMaterial.NETHER_WART.parseMaterial());
-			INSTANT_BREAK.add(Material.POTATO);
-			INSTANT_BREAK.add(Material.PUMPKIN_STEM);
-			INSTANT_BREAK.add(Material.PUMPKIN_STEM);
+			INSTANT_BREAK.add(XMaterial.POTATO.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.PUMPKIN_STEM.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.PUMPKIN_STEM.parseMaterial());
 			INSTANT_BREAK.add(XMaterial.OAK_SAPLING.parseMaterial());
-			INSTANT_BREAK.add(Material.SUGAR_CANE);
-			INSTANT_BREAK.add(Material.WHEAT);
+			INSTANT_BREAK.add(XMaterial.SUGAR_CANE.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.WHEAT.parseMaterial());
 			// End instant break materials
 
 			// Start food
-			FOOD.add(Material.APPLE);
-			FOOD.add(Material.BAKED_POTATO);
-			FOOD.add(Material.BREAD);
-			FOOD.add(Material.CAKE);
-			FOOD.add(Material.CARROT);
-			FOOD.add(Material.COOKED_CHICKEN);
+			FOOD.add(XMaterial.APPLE.parseMaterial());
+			FOOD.add(XMaterial.BAKED_POTATO.parseMaterial());
+			FOOD.add(XMaterial.BREAD.parseMaterial());
+			FOOD.add(XMaterial.CAKE.parseMaterial());
+			FOOD.add(XMaterial.CARROT.parseMaterial());
+			FOOD.add(XMaterial.COOKED_CHICKEN.parseMaterial());
 			FOOD.add(XMaterial.COOKED_COD.parseMaterial());
 			FOOD.add(XMaterial.COD.parseMaterial());
-			FOOD.add(Material.COOKED_MUTTON);
+			FOOD.add(XMaterial.COOKED_MUTTON.parseMaterial());
 			FOOD.add(XMaterial.COOKED_PORKCHOP.parseMaterial());
-			FOOD.add(Material.COOKED_RABBIT);
-			FOOD.add(Material.COOKIE);
-			FOOD.add(Material.GOLDEN_APPLE);
-			FOOD.add(Material.GOLDEN_CARROT);
+			FOOD.add(XMaterial.COOKED_RABBIT.parseMaterial());
+			FOOD.add(XMaterial.COOKIE.parseMaterial());
+			FOOD.add(XMaterial.GOLDEN_APPLE.parseMaterial());
+			FOOD.add(XMaterial.GOLDEN_CARROT.parseMaterial());
 			FOOD.add(XMaterial.GLISTERING_MELON_SLICE.parseMaterial());
 			FOOD.add(XMaterial.MUSHROOM_STEM.parseMaterial());
-			FOOD.add(Material.POISONOUS_POTATO);
-			FOOD.add(Material.POTATO);
-			FOOD.add(Material.PUMPKIN_PIE);
-			FOOD.add(Material.RABBIT_STEW);
-			FOOD.add(Material.COOKED_BEEF);
+			FOOD.add(XMaterial.POISONOUS_POTATO.parseMaterial());
+			FOOD.add(XMaterial.POTATO.parseMaterial());
+			FOOD.add(XMaterial.PUMPKIN_PIE.parseMaterial());
+			FOOD.add(XMaterial.RABBIT_STEW.parseMaterial());
+			FOOD.add(XMaterial.COOKED_BEEF.parseMaterial());
 			FOOD.add(XMaterial.BEEF.parseMaterial());
-			FOOD.add(Material.COOKED_CHICKEN);
+			FOOD.add(XMaterial.COOKED_CHICKEN.parseMaterial());
 			FOOD.add(XMaterial.CHICKEN.parseMaterial());
-			FOOD.add(Material.MUTTON);
+			FOOD.add(XMaterial.MUTTON.parseMaterial());
 			FOOD.add(XMaterial.PORKCHOP.parseMaterial());
-			FOOD.add(Material.RABBIT);
-			FOOD.add(Material.COOKED_RABBIT);
-			FOOD.add(Material.ROTTEN_FLESH);
-			FOOD.add(Material.SPIDER_EYE);
+			FOOD.add(XMaterial.RABBIT.parseMaterial());
+			FOOD.add(XMaterial.COOKED_RABBIT.parseMaterial());
+			FOOD.add(XMaterial.ROTTEN_FLESH.parseMaterial());
+			FOOD.add(XMaterial.SPIDER_EYE.parseMaterial());
 
 			// Start combos
-			COMBO.put(Material.SHEARS, XMaterial.WHITE_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.WHITE_WOOL.parseMaterial());
 
-			COMBO.put(Material.IRON_SWORD, XMaterial.COBWEB.parseMaterial());
-			COMBO.put(Material.DIAMOND_SWORD, XMaterial.COBWEB.parseMaterial());
-			COMBO.put(Material.STONE_SWORD, XMaterial.COBWEB.parseMaterial());
+			COMBO.put(XMaterial.IRON_SWORD.parseMaterial(), XMaterial.COBWEB.parseMaterial());
+			COMBO.put(XMaterial.DIAMOND_SWORD.parseMaterial(), XMaterial.COBWEB.parseMaterial());
+			COMBO.put(XMaterial.STONE_SWORD.parseMaterial(), XMaterial.COBWEB.parseMaterial());
 			COMBO.put(XMaterial.WOODEN_SWORD.parseMaterial(), XMaterial.COBWEB.parseMaterial());
 			// End combos
 
 			// Start climbable
-			CLIMBABLE.add(Material.VINE);
-			CLIMBABLE.add(Material.LADDER);
-			CLIMBABLE.add(Material.WATER);
+			CLIMBABLE.add(XMaterial.VINE.parseMaterial());
+			CLIMBABLE.add(XMaterial.LADDER.parseMaterial());
+			CLIMBABLE.add(XMaterial.WATER.parseMaterial());
 			// End climbable
 		}
 		// End 1.8.8
@@ -875,145 +875,145 @@ public final class Utilities {
 			MinecraftVersion currentVersion = MinecraftVersion.getCurrentVersion();
 
 			// Start instant break materials
-			INSTANT_BREAK.add(Material.COMPARATOR);
-			INSTANT_BREAK.add(Material.REPEATER);
-			INSTANT_BREAK.add(Material.TORCH);
-			INSTANT_BREAK.add(Material.REDSTONE_TORCH);
-			INSTANT_BREAK.add(Material.REDSTONE_WIRE);
-			INSTANT_BREAK.add(Material.TRIPWIRE);
-			INSTANT_BREAK.add(Material.TRIPWIRE_HOOK);
-			INSTANT_BREAK.add(Material.FIRE);
-			INSTANT_BREAK.add(Material.FLOWER_POT);
-			INSTANT_BREAK.add(Material.INFESTED_CHISELED_STONE_BRICKS);
-			INSTANT_BREAK.add(Material.INFESTED_COBBLESTONE);
-			INSTANT_BREAK.add(Material.INFESTED_CRACKED_STONE_BRICKS);
-			INSTANT_BREAK.add(Material.INFESTED_MOSSY_STONE_BRICKS);
-			INSTANT_BREAK.add(Material.INFESTED_STONE);
-			INSTANT_BREAK.add(Material.INFESTED_STONE_BRICKS);
-			INSTANT_BREAK.add(Material.TNT);
-			INSTANT_BREAK.add(Material.SLIME_BLOCK);
-			INSTANT_BREAK.add(Material.CARROTS);
-			INSTANT_BREAK.add(Material.DEAD_BUSH);
-			INSTANT_BREAK.add(Material.FERN);
-			INSTANT_BREAK.add(Material.LARGE_FERN);
-			INSTANT_BREAK.add(Material.CHORUS_FLOWER);
-			INSTANT_BREAK.add(Material.SUNFLOWER);
-			INSTANT_BREAK.add(Material.LILY_PAD);
-			INSTANT_BREAK.add(Material.MELON_STEM);
-			INSTANT_BREAK.add(Material.ATTACHED_MELON_STEM);
-			INSTANT_BREAK.add(Material.BROWN_MUSHROOM);
-			INSTANT_BREAK.add(Material.RED_MUSHROOM);
-			INSTANT_BREAK.add(Material.NETHER_WART);
-			INSTANT_BREAK.add(Material.POTATOES);
-			INSTANT_BREAK.add(Material.PUMPKIN_STEM);
-			INSTANT_BREAK.add(Material.ATTACHED_PUMPKIN_STEM);
-			INSTANT_BREAK.add(Material.ACACIA_SAPLING);
-			INSTANT_BREAK.add(Material.BIRCH_SAPLING);
-			INSTANT_BREAK.add(Material.DARK_OAK_SAPLING);
-			INSTANT_BREAK.add(Material.JUNGLE_SAPLING);
-			INSTANT_BREAK.add(Material.OAK_SAPLING);
-			INSTANT_BREAK.add(Material.SPRUCE_SAPLING);
-			INSTANT_BREAK.add(Material.SUGAR_CANE);
-			INSTANT_BREAK.add(Material.TALL_GRASS);
-			INSTANT_BREAK.add(Material.TALL_SEAGRASS);
-			INSTANT_BREAK.add(Material.WHEAT);
+			INSTANT_BREAK.add(XMaterial.COMPARATOR.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.REPEATER.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.TORCH.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.REDSTONE_TORCH.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.REDSTONE_WIRE.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.TRIPWIRE.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.TRIPWIRE_HOOK.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.FIRE.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.FLOWER_POT.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.INFESTED_CHISELED_STONE_BRICKS.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.INFESTED_COBBLESTONE.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.INFESTED_CRACKED_STONE_BRICKS.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.INFESTED_MOSSY_STONE_BRICKS.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.INFESTED_STONE.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.INFESTED_STONE_BRICKS.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.TNT.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.SLIME_BLOCK.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.CARROTS.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.DEAD_BUSH.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.FERN.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.LARGE_FERN.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.CHORUS_FLOWER.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.SUNFLOWER.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.LILY_PAD.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.MELON_STEM.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.ATTACHED_MELON_STEM.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.BROWN_MUSHROOM.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.RED_MUSHROOM.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.NETHER_WART.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.POTATOES.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.PUMPKIN_STEM.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.ATTACHED_PUMPKIN_STEM.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.ACACIA_SAPLING.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.BIRCH_SAPLING.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.DARK_OAK_SAPLING.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.JUNGLE_SAPLING.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.OAK_SAPLING.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.SPRUCE_SAPLING.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.SUGAR_CANE.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.TALL_GRASS.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.TALL_SEAGRASS.parseMaterial());
+			INSTANT_BREAK.add(XMaterial.WHEAT.parseMaterial());
 			// Start 1.14 objects
 			if (currentVersion.isAtLeast(MinecraftVersion.VILLAGE_UPDATE)) {
-				INSTANT_BREAK.add(Material.BAMBOO_SAPLING);
-				INSTANT_BREAK.add(Material.CORNFLOWER);
+				INSTANT_BREAK.add(XMaterial.BAMBOO_SAPLING.parseMaterial());
+				INSTANT_BREAK.add(XMaterial.CORNFLOWER.parseMaterial());
 			}
 			// End 1.14 objects
 			// Start 1.15 objects
 			if (currentVersion.isAtLeast(MinecraftVersion.BEE_UPDATE)) {
-				INSTANT_BREAK.add(Material.HONEY_BLOCK);
+				INSTANT_BREAK.add(XMaterial.HONEY_BLOCK.parseMaterial());
 			}
 			// End 1.15 objects
 			// End instant break materials
 
 			// Start food
-			FOOD.add(Material.APPLE);
-			FOOD.add(Material.BAKED_POTATO);
-			FOOD.add(Material.BEETROOT);
-			FOOD.add(Material.BEETROOT_SOUP);
-			FOOD.add(Material.BREAD);
-			FOOD.add(Material.CAKE);
-			FOOD.add(Material.CARROT);
-			FOOD.add(Material.CHORUS_FRUIT);
-			FOOD.add(Material.COOKED_BEEF);
-			FOOD.add(Material.COOKED_CHICKEN);
-			FOOD.add(Material.COOKED_COD);
-			FOOD.add(Material.COOKED_MUTTON);
-			FOOD.add(Material.COOKED_PORKCHOP);
-			FOOD.add(Material.COOKED_RABBIT);
-			FOOD.add(Material.COOKED_SALMON);
-			FOOD.add(Material.COOKIE);
-			FOOD.add(Material.DRIED_KELP);
-			FOOD.add(Material.ENCHANTED_GOLDEN_APPLE);
-			FOOD.add(Material.GOLDEN_APPLE);
-			FOOD.add(Material.GOLDEN_CARROT);
-			FOOD.add(Material.MELON_SLICE);
-			FOOD.add(Material.MUSHROOM_STEW);
-			FOOD.add(Material.POISONOUS_POTATO);
-			FOOD.add(Material.POTATO);
-			FOOD.add(Material.PUFFERFISH);
-			FOOD.add(Material.PUMPKIN_PIE);
-			FOOD.add(Material.RABBIT_STEW);
-			FOOD.add(Material.BEEF);
-			FOOD.add(Material.CHICKEN);
-			FOOD.add(Material.COD);
-			FOOD.add(Material.MUTTON);
-			FOOD.add(Material.PORKCHOP);
-			FOOD.add(Material.RABBIT);
-			FOOD.add(Material.SALMON);
-			FOOD.add(Material.ROTTEN_FLESH);
-			FOOD.add(Material.SPIDER_EYE);
-			FOOD.add(Material.TROPICAL_FISH);
+			FOOD.add(XMaterial.APPLE.parseMaterial());
+			FOOD.add(XMaterial.BAKED_POTATO.parseMaterial());
+			FOOD.add(XMaterial.BEETROOT.parseMaterial());
+			FOOD.add(XMaterial.BEETROOT_SOUP.parseMaterial());
+			FOOD.add(XMaterial.BREAD.parseMaterial());
+			FOOD.add(XMaterial.CAKE.parseMaterial());
+			FOOD.add(XMaterial.CARROT.parseMaterial());
+			FOOD.add(XMaterial.CHORUS_FRUIT.parseMaterial());
+			FOOD.add(XMaterial.COOKED_BEEF.parseMaterial());
+			FOOD.add(XMaterial.COOKED_CHICKEN.parseMaterial());
+			FOOD.add(XMaterial.COOKED_COD.parseMaterial());
+			FOOD.add(XMaterial.COOKED_MUTTON.parseMaterial());
+			FOOD.add(XMaterial.COOKED_PORKCHOP.parseMaterial());
+			FOOD.add(XMaterial.COOKED_RABBIT.parseMaterial());
+			FOOD.add(XMaterial.COOKED_SALMON.parseMaterial());
+			FOOD.add(XMaterial.COOKIE.parseMaterial());
+			FOOD.add(XMaterial.DRIED_KELP.parseMaterial());
+			FOOD.add(XMaterial.ENCHANTED_GOLDEN_APPLE.parseMaterial());
+			FOOD.add(XMaterial.GOLDEN_APPLE.parseMaterial());
+			FOOD.add(XMaterial.GOLDEN_CARROT.parseMaterial());
+			FOOD.add(XMaterial.MELON_SLICE.parseMaterial());
+			FOOD.add(XMaterial.MUSHROOM_STEW.parseMaterial());
+			FOOD.add(XMaterial.POISONOUS_POTATO.parseMaterial());
+			FOOD.add(XMaterial.POTATO.parseMaterial());
+			FOOD.add(XMaterial.PUFFERFISH.parseMaterial());
+			FOOD.add(XMaterial.PUMPKIN_PIE.parseMaterial());
+			FOOD.add(XMaterial.RABBIT_STEW.parseMaterial());
+			FOOD.add(XMaterial.BEEF.parseMaterial());
+			FOOD.add(XMaterial.CHICKEN.parseMaterial());
+			FOOD.add(XMaterial.COD.parseMaterial());
+			FOOD.add(XMaterial.MUTTON.parseMaterial());
+			FOOD.add(XMaterial.PORKCHOP.parseMaterial());
+			FOOD.add(XMaterial.RABBIT.parseMaterial());
+			FOOD.add(XMaterial.SALMON.parseMaterial());
+			FOOD.add(XMaterial.ROTTEN_FLESH.parseMaterial());
+			FOOD.add(XMaterial.SPIDER_EYE.parseMaterial());
+			FOOD.add(XMaterial.TROPICAL_FISH.parseMaterial());
 			// Start 1.14 objects
 			if (currentVersion.isAtLeast(MinecraftVersion.VILLAGE_UPDATE)) {
-				FOOD.add(Material.SUSPICIOUS_STEW);
-				FOOD.add(Material.SWEET_BERRIES);
+				FOOD.add(XMaterial.SUSPICIOUS_STEW.parseMaterial());
+				FOOD.add(XMaterial.SWEET_BERRIES.parseMaterial());
 			}
 			// End 1.14 objects
 			// Start 1.15 objects
 			if (currentVersion.isAtLeast(MinecraftVersion.BEE_UPDATE)) {
-				FOOD.add(Material.HONEY_BOTTLE);
+				FOOD.add(XMaterial.HONEY_BOTTLE.parseMaterial());
 			}
 			// End 1.15 objects
 			// End food
 
 			// Start combos
-			COMBO.put(Material.SHEARS, Material.BLACK_WOOL);
-			COMBO.put(Material.SHEARS, Material.BLUE_WOOL);
-			COMBO.put(Material.SHEARS, Material.BROWN_WOOL);
-			COMBO.put(Material.SHEARS, Material.CYAN_WOOL);
-			COMBO.put(Material.SHEARS, Material.GRAY_WOOL);
-			COMBO.put(Material.SHEARS, Material.GREEN_WOOL);
-			COMBO.put(Material.SHEARS, Material.LIGHT_BLUE_WOOL);
-			COMBO.put(Material.SHEARS, Material.LIGHT_GRAY_WOOL);
-			COMBO.put(Material.SHEARS, Material.LIME_WOOL);
-			COMBO.put(Material.SHEARS, Material.MAGENTA_WOOL);
-			COMBO.put(Material.SHEARS, Material.MAGENTA_WOOL);
-			COMBO.put(Material.SHEARS, Material.ORANGE_WOOL);
-			COMBO.put(Material.SHEARS, Material.PINK_WOOL);
-			COMBO.put(Material.SHEARS, Material.PURPLE_WOOL);
-			COMBO.put(Material.SHEARS, Material.RED_WOOL);
-			COMBO.put(Material.SHEARS, Material.WHITE_WOOL);
-			COMBO.put(Material.SHEARS, Material.YELLOW_WOOL);
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.BLACK_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.BLUE_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.BROWN_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.CYAN_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.GRAY_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.GREEN_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.LIGHT_BLUE_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.LIGHT_GRAY_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.LIME_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.MAGENTA_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.MAGENTA_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.ORANGE_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.PINK_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.PURPLE_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.RED_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.WHITE_WOOL.parseMaterial());
+			COMBO.put(XMaterial.SHEARS.parseMaterial(), XMaterial.YELLOW_WOOL.parseMaterial());
 
-			COMBO.put(Material.IRON_SWORD, Material.COBWEB);
-			COMBO.put(Material.DIAMOND_SWORD, Material.COBWEB);
-			COMBO.put(Material.STONE_SWORD, Material.COBWEB);
-			COMBO.put(Material.WOODEN_SWORD, Material.COBWEB);
+			COMBO.put(XMaterial.IRON_SWORD.parseMaterial(), XMaterial.COBWEB.parseMaterial());
+			COMBO.put(XMaterial.DIAMOND_SWORD.parseMaterial(), XMaterial.COBWEB.parseMaterial());
+			COMBO.put(XMaterial.STONE_SWORD.parseMaterial(), XMaterial.COBWEB.parseMaterial());
+			COMBO.put(XMaterial.WOODEN_SWORD.parseMaterial(), XMaterial.COBWEB.parseMaterial());
 			// End combos
 
 			// Start climbable
-			CLIMBABLE.add(Material.VINE);
-			CLIMBABLE.add(Material.LADDER);
-			CLIMBABLE.add(Material.WATER);
+			CLIMBABLE.add(XMaterial.VINE.parseMaterial());
+			CLIMBABLE.add(XMaterial.LADDER.parseMaterial());
+			CLIMBABLE.add(XMaterial.WATER.parseMaterial());
 			// Start 1.14 objects
 			if (currentVersion.isAtLeast(MinecraftVersion.VILLAGE_UPDATE)) {
-				CLIMBABLE.add(Material.SCAFFOLDING);
-				CLIMBABLE.add(Material.SWEET_BERRY_BUSH);
+				CLIMBABLE.add(XMaterial.SCAFFOLDING.parseMaterial());
+				CLIMBABLE.add(XMaterial.SWEET_BERRY_BUSH.parseMaterial());
 			}
 			// End 1.14 objects
 
