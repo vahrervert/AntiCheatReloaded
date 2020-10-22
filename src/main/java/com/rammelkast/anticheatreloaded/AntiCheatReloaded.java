@@ -40,7 +40,6 @@ import com.rammelkast.anticheatreloaded.event.BlockListener;
 import com.rammelkast.anticheatreloaded.event.EntityListener;
 import com.rammelkast.anticheatreloaded.event.InventoryListener;
 import com.rammelkast.anticheatreloaded.event.PlayerListener;
-import com.rammelkast.anticheatreloaded.event.PotionEffectListener;
 import com.rammelkast.anticheatreloaded.event.VehicleListener;
 import com.rammelkast.anticheatreloaded.manage.AntiCheatManager;
 import com.rammelkast.anticheatreloaded.metrics.Metrics;
@@ -77,10 +76,6 @@ public class AntiCheatReloaded extends JavaPlugin {
 		eventList.add(new EntityListener());
 		eventList.add(new VehicleListener());
 		eventList.add(new InventoryListener());
-		// Handles 1.9+ potion effects
-		if (!VersionUtil.isBountifulUpdate()) {
-			eventList.add(new PotionEffectListener());
-		}
 		// Order is important in some cases, don't screw with these unless
 		// needed, especially config
 		this.setupConfig();

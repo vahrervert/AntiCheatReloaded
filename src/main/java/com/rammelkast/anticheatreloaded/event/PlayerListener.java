@@ -73,6 +73,7 @@ import com.rammelkast.anticheatreloaded.util.Permission;
 import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
+import com.rammelkast.anticheatreloaded.util.XMaterial;
 
 public class PlayerListener extends EventListener {
 
@@ -287,7 +288,7 @@ public class PlayerListener extends EventListener {
 			}
 
 			if (!VersionUtil.isBountifulUpdate()) {
-				if (itemInHand.getType() == Material.FIREWORK_ROCKET) {
+				if (itemInHand.getType() == XMaterial.FIREWORK_ROCKET.parseMaterial()) {
 					ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId());
 					if (player.isGliding()) {
 						// TODO config max elytra height?

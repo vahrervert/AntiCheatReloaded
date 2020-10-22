@@ -20,6 +20,7 @@ package com.rammelkast.anticheatreloaded.util;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
@@ -110,6 +111,15 @@ public class MovementManager {
 		// Account for standing on boat
 		if (Utilities.couldBeOnBoat(player, 0.25, true) && !Utilities.isSubmersed(player))
 			this.onGround = true;
+
+		// Handle 1.9+ potion effects
+		if (MinecraftVersion.atOrAbove(MinecraftVersion.COMBAT_UPDATE)) {
+			for (PotionEffect effect : player.getActivePotionEffects()) {
+				if (!VersionUtil.isLevitationEffect(effect))
+					return;
+				AntiCheatReloaded.getManager().getBackend().logLevitating(player, 1);
+			}
+		}
 
 		this.touchedGroundThisTick = false;
 		this.halfMovement = false;

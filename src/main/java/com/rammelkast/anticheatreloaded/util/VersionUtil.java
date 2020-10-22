@@ -113,7 +113,7 @@ public class VersionUtil {
 	}
 
 	public static Block getTargetBlock(Player player, int distance) {
-		if (isBountifulUpdate()) {
+		if (!CURRENT_VERSION.isAtLeast(MinecraftVersion.AQUATIC_UPDATE)) {
 			return player.getTargetBlock((Set<Material>) null, distance);
 		}
 		return player.getTargetBlockExact(distance);
