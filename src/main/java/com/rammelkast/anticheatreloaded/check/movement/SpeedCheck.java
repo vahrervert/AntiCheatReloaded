@@ -34,7 +34,7 @@ import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 /**
- * @author Rammelkast TODO soulsand speed
+ * @author Rammelkast TODO soulsand speed TODO buffer system
  */
 public class SpeedCheck {
 
@@ -46,7 +46,8 @@ public class SpeedCheck {
 
 	public static CheckResult checkXZSpeed(Player player, double x, double z, Location movingTowards) {
 		Backend backend = AntiCheatReloaded.getManager().getBackend();
-		if (isSpeedExempt(player, backend) || player.getVehicle() != null || Utilities.isInWater(player))
+		if (isSpeedExempt(player, backend) || player.getVehicle() != null || Utilities.isInWater(player)
+				|| VersionUtil.isRiptiding(player))
 			return PASS;
 
 		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
@@ -200,6 +201,10 @@ public class SpeedCheck {
 			if (movementManager.hasSpeedEffect && movementManager.groundTicks > 3)
 				limit *= 1.4D;
 			if (movementManager.hadSpeedEffect && !movementManager.hasSpeedEffect)
+				limit *= 1.2D;
+			// Adjust for other effects
+			if ((movementManager.hasFireResistanceEffect || movementManager.hasBadOmenEffect)
+					&& movementManager.groundTicks > 3)
 				limit *= 1.2D;
 			if (movementManager.iceInfluenceTicks >= 50) {
 				// When moving off ice

@@ -487,6 +487,26 @@ public final class Utilities {
 				|| player.getLocation().getBlock().getRelative(BlockFace.SOUTH_EAST).isLiquid()
 				|| player.getLocation().getBlock().getRelative(BlockFace.SOUTH_WEST).isLiquid();
 	}
+	
+	/**
+	 * Determine whether a location is near a liquid block
+	 *
+	 * @param location Location to check
+	 * @return true if near liquid block
+	 */
+	public static boolean isNearWater(Location location) {
+		return location.getBlock().isLiquid()
+				|| location.getBlock().getRelative(BlockFace.UP).isLiquid()
+				|| location.getBlock().getRelative(BlockFace.DOWN).isLiquid()
+				|| location.getBlock().getRelative(BlockFace.NORTH).isLiquid()
+				|| location.getBlock().getRelative(BlockFace.SOUTH).isLiquid()
+				|| location.getBlock().getRelative(BlockFace.EAST).isLiquid()
+				|| location.getBlock().getRelative(BlockFace.WEST).isLiquid()
+				|| location.getBlock().getRelative(BlockFace.NORTH_EAST).isLiquid()
+				|| location.getBlock().getRelative(BlockFace.NORTH_WEST).isLiquid()
+				|| location.getBlock().getRelative(BlockFace.SOUTH_EAST).isLiquid()
+				|| location.getBlock().getRelative(BlockFace.SOUTH_WEST).isLiquid();
+	}
 
 	/**
 	 * Determine whether a player is surrounded by liquid blocks

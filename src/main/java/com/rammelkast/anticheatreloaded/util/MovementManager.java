@@ -89,6 +89,14 @@ public class MovementManager {
 	public boolean hasSpeedEffect = false;
 	// If the player had speed effect previous tick
 	public boolean hadSpeedEffect = false;
+	// If the player has a fire resistance effect
+	public boolean hasFireResistanceEffect = false;
+	// If the player had fire resistance effect previous tick
+	public boolean hadFireResistanceEffect = false;
+	// If the player has a bad omen effect
+	public boolean hasBadOmenEffect = false;
+	// If the player had bad omen effect previous tick
+	public boolean hadBadOmenEffect = false;
 	// Time of last update
 	public long lastUpdate;
 
@@ -180,6 +188,12 @@ public class MovementManager {
 		
 		this.hadSpeedEffect = this.hasSpeedEffect;
 		this.hasSpeedEffect = player.hasPotionEffect(PotionEffectType.SPEED);
+		
+		this.hadFireResistanceEffect = this.hasFireResistanceEffect;
+		this.hasFireResistanceEffect = player.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE);
+		
+		this.hadBadOmenEffect = this.hasBadOmenEffect;
+		this.hasBadOmenEffect = player.hasPotionEffect(PotionEffectType.BAD_OMEN);
 
 		double lastDistanceSq = Math.sqrt(this.lastDistance.getXDifference() * this.lastDistance.getXDifference()
 				+ this.lastDistance.getZDifference() * this.lastDistance.getZDifference());

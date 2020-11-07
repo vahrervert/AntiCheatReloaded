@@ -18,7 +18,7 @@ flight:
     accountForTpsDrops: 250
     # How many milliseconds to account for teleports
     # Increase this is you debug 'had too little Y dropoff' after teleports
-    accountForTeleports: 150
+    accountForTeleports: 400
   # Checks for climbing behaviour in air
   # Debugs as 'tried to climb air'
   airClimb:
@@ -26,7 +26,7 @@ flight:
     enabled: true
     # How many milliseconds to account for teleports
     # Increase this is you debug 'tried to climb air' after teleports
-    accountForTeleports: 50
+    accountForTeleports: 150
   # Checks if a player is faking it's ground status to fly
   # Debugs as 'faked ground to fly'
   groundFlight:
@@ -41,7 +41,7 @@ flight:
     maxOffset: 0.005
     # How many milliseconds to account for teleports
     # Increase this is you debug 'ignored gravity' after teleports
-    accountForTeleports: 100
+    accountForTeleports: 150
     # Amount of illegal moves before flagging
     vlBeforeFlag: 5
 
@@ -108,7 +108,7 @@ strafe:
   # Maximum angle change when moving in air
   maxAngleChange: 0.50
   # Minimum movement distance for the strafe check to be active
-  minActivationDistance: 0.025
+  minActivationDistance: 0.04
 
 # WaterWalk check settings
 # Checks if a player is walking on water

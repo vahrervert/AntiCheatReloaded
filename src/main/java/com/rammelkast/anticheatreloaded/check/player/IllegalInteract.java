@@ -82,7 +82,7 @@ public class IllegalInteract {
 	}
 
 	private static CheckResult checkBlockPlace(Player player, BlockPlaceEvent event) {
-		if (!isValidTarget(player, event.getBlock())) {
+		if (event.getBlock().getType().isSolid() && !isValidTarget(player, event.getBlock())) {
 			return new CheckResult(CheckResult.Result.FAILED, "Place", "tried to place a block out of their view");
 		}
 		return PASS;

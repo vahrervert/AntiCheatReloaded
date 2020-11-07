@@ -231,8 +231,11 @@ public class Backend {
 		if (player.getGameMode() != GameMode.CREATIVE && !player.isInsideVehicle() && !player.isSleeping()
 				&& !isMovingExempt(player) && !justPlaced(player) && !Utilities.isNearWater(player)
 				&& !Utilities.isInWeb(player) && !player.getLocation().getBlock().getType().name().endsWith("TRAPDOOR")
-				&& !VersionUtil.isSlowFalling(player) && !Utilities
-						.isNearShulkerBox(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getLocation()) && !Utilities.isNearClimbable(player)) {
+				&& !VersionUtil.isSlowFalling(player)
+				&& !Utilities
+						.isNearShulkerBox(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getLocation())
+				&& !Utilities.isNearClimbable(player)
+				&& !Utilities.isNearWater(player.getLocation().clone().subtract(0, 1.5, 0))) {
 			if (player.getFallDistance() == 0) {
 				if (nofallViolation.get(uuid) == null) {
 					nofallViolation.put(uuid, 1);
@@ -244,8 +247,8 @@ public class Backend {
 				int vlBeforeFlag = checksConfig.getInteger(CheckType.NOFALL, "vlBeforeFlag");
 				if (i >= vlBeforeFlag) {
 					nofallViolation.put(player.getUniqueId(), 1);
-					return new CheckResult(CheckResult.Result.FAILED, "tried to avoid fall damage (fall distance = 0 "
-							+ i + " times in a row, max=" + vlBeforeFlag + ")");
+					return new CheckResult(CheckResult.Result.FAILED,
+							"tried to avoid fall damage (" + i + " times in a row, max=" + vlBeforeFlag + ")");
 				} else {
 					return PASS;
 				}

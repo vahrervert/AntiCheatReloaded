@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
@@ -50,7 +51,8 @@ public class FlightCheck {
 	public static CheckResult runCheck(Player player, Distance distance) {
 		if (distance.getYDifference() >= AntiCheatReloaded.getManager().getBackend().getMagic().TELEPORT_MIN()
 				|| VersionUtil.isFlying(player) || player.getVehicle() != null
-				|| AntiCheatReloaded.getManager().getBackend().isMovingExempt(player)) {
+				|| AntiCheatReloaded.getManager().getBackend().isMovingExempt(player)
+				|| VersionUtil.isRiptiding(player)) {
 			// This was a teleport or user is flying/using elytra/in a vehicle, so we don't
 			// care
 			// about it.
@@ -91,18 +93,26 @@ public class FlightCheck {
 			// Fixes snow false positive
 			if (movementManager.motionY < 0.004 && Utilities
 					.isNearHalfblock(distance.getFrom().getBlock().getRelative(BlockFace.DOWN).getLocation()))
-				maxMotionY = 0.004D;
+				maxMotionY += 0.004D;
+			if (Utilities.isNearWater(player) || Utilities.isNearWater(distance.getFrom().clone().subtract(0, 0.51, 0)))
+				maxMotionY += 0.05;
 			if (movementManager.motionY > maxMotionY && movementManager.slimeInfluenceTicks <= 0
-					&& !Utilities.isNearClimbable(distance.getTo().clone().subtract(0, 1.25, 0)))
+					&& !Utilities.isNearClimbable(distance.getTo().clone().subtract(0, 1.25, 0))
+					&& !Utilities.isNearClimbable(distance.getTo().clone().subtract(0, 0.75, 0))
+					&& (!Utilities.isNearWater(distance.getTo().clone().subtract(0, 1.5, 0))
+							&& distance.getTo().clone().subtract(0, 0.5, 0).getBlock().getType() != Material.AIR))
 				return new CheckResult(CheckResult.Result.FAILED, "AirFlight",
 						"tried to fly on the Y-axis (mY=" + movementManager.motionY + ", max=" + maxMotionY + ")");
 
-			if (Math.abs(movementManager.motionY - movementManager.lastMotionY) < 0.01
+			if (Math.abs(movementManager.motionY - movementManager.lastMotionY) < 5E-3
 					&& !Utilities.couldBeOnBoat(player)
 					&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
 							.getInteger(CheckType.FLIGHT, "airFlight", "accountForTeleports"))
 					&& !VersionUtil.isSlowFalling(player) && !Utilities.isNearWeb(player)
-					&& movementManager.elytraEffectTicks <= 25)
+					&& movementManager.elytraEffectTicks <= 25
+					&& !Utilities.isNearClimbable(distance.getFrom().clone().subtract(0, 0.51D, 0))
+					&& !Utilities.isNearWater(player)
+					&& !Utilities.isNearWater(distance.getFrom().clone().subtract(0, 0.51, 0)))
 				return new CheckResult(CheckResult.Result.FAILED, "AirFlight", "had too little Y dropoff (diff="
 						+ Math.abs(movementManager.motionY - movementManager.lastMotionY) + ")");
 		}
@@ -121,8 +131,9 @@ public class FlightCheck {
 				&& !player.hasPotionEffect(PotionEffectType.JUMP)
 				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
 						.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports"))
-				&& (!Utilities.isNearBed(distance.getTo())
-						|| (Utilities.isNearBed(distance.getTo()) && movementManager.motionY > 0.12675))
+				&& (!Utilities.isNearBed(distance.getTo()) || ((Utilities.isNearBed(distance.getTo())
+						|| Utilities.isNearBed(distance.getTo().clone().add(0, -0.51, 0)))
+						&& movementManager.motionY > 0.15))
 				&& movementManager.slimeInfluenceTicks == 0 && movementManager.elytraEffectTicks <= 25)
 			return new CheckResult(CheckResult.Result.FAILED, "AirClimb",
 					"tried to climb air (mY=" + movementManager.motionY + ")");
@@ -160,13 +171,20 @@ public class FlightCheck {
 			double gravitatedY = (movementManager.lastMotionY - 0.08) * GRAVITY_FRICTION;
 			double offset = Math.abs(gravitatedY - movementManager.motionY);
 			double maxOffset = checksConfig.getDouble(CheckType.FLIGHT, "gravity", "maxOffset");
+			if (Utilities.isNearClimbable(distance.getFrom().clone().subtract(0, 0.51D, 0))
+					|| Utilities.isNearClimbable(distance.getFrom()) || Utilities.isNearWater(player)
+					|| (!Utilities.isNearWater(distance.getTo().clone().subtract(0, 1.5, 0))
+							&& distance.getTo().clone().subtract(0, 0.5, 0).getBlock().getType() != Material.AIR))
+				maxOffset += 0.15D;
 			if (offset > maxOffset && movementManager.airTicks > 2) {
 				int vl = GRAVITY_VIOLATIONS.getOrDefault(player.getUniqueId(), 0) + 1;
 				GRAVITY_VIOLATIONS.put(player.getUniqueId(), vl);
 				int vlBeforeFlag = checksConfig.getInteger(CheckType.FLIGHT, "gravity", "vlBeforeFlag");
-				if (vl >= vlBeforeFlag)
+				if (vl >= vlBeforeFlag) {
+					GRAVITY_VIOLATIONS.put(player.getUniqueId(), Math.max(0, vl - 2));
 					return new CheckResult(CheckResult.Result.FAILED, "Gravity",
 							"ignored gravity (offset=" + offset + ", at=" + movementManager.airTicks + ")");
+				}
 			} else {
 				GRAVITY_VIOLATIONS.remove(player.getUniqueId());
 			}
