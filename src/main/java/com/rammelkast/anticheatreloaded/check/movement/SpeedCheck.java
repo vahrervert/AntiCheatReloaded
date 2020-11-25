@@ -46,12 +46,14 @@ public class SpeedCheck {
 
 	public static CheckResult checkXZSpeed(Player player, double x, double z, Location movingTowards) {
 		Backend backend = AntiCheatReloaded.getManager().getBackend();
-		if (isSpeedExempt(player, backend) || player.getVehicle() != null || Utilities.isInWater(player)
-				|| VersionUtil.isRiptiding(player))
+		if (isSpeedExempt(player, backend) || player.getVehicle() != null || Utilities.isInWater(player))
 			return PASS;
 
 		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
 				.getMovementManager();
+		// Riptiding exemption
+		if (movementManager.riptideTicks > 0)
+			return PASS;
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		double distanceXZ = movementManager.distanceXZ;
 		boolean boxedIn = movementManager.topSolid && movementManager.bottomSolid;
@@ -257,10 +259,13 @@ public class SpeedCheck {
 	public static CheckResult checkVerticalSpeed(Player player, Distance distance) {
 		Backend backend = AntiCheatReloaded.getManager().getBackend();
 		if (isSpeedExempt(player, backend) || player.getVehicle() != null || player.isSleeping()
-				|| VersionUtil.isRiptiding(player) || Utilities.isNearWater(player))
+				|| Utilities.isNearWater(player))
 			return PASS;
 		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
 				.getMovementManager();
+		// Riptiding exemption
+		if (movementManager.riptideTicks > 0)
+			return PASS;
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		if (!checksConfig.isSubcheckEnabled(CheckType.SPEED, "verticalSpeed"))
 			return PASS;

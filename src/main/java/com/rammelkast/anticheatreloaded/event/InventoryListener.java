@@ -22,14 +22,10 @@ package com.rammelkast.anticheatreloaded.event;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
-import com.rammelkast.anticheatreloaded.util.User;
 
 public class InventoryListener extends EventListener {
 
@@ -55,18 +51,4 @@ public class InventoryListener extends EventListener {
         AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
     }
 
-    @EventHandler
-    public void onInventoryOpen(InventoryOpenEvent event) {
-        if (event.getInventory().getType() != InventoryType.BEACON) {
-            getUserManager().getUser(event.getPlayer().getUniqueId()).setInventorySnapshot(event.getInventory().getContents());
-        }
-    }
-
-    @EventHandler
-    public void onInventoryClose(InventoryCloseEvent event) {
-        User user = getUserManager().getUser(event.getPlayer().getUniqueId());
-        if (user != null) {
-            user.removeInventorySnapshot();
-        }
-    }
 }

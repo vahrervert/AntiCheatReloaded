@@ -20,15 +20,12 @@
 package com.rammelkast.anticheatreloaded.util;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckType;
@@ -41,7 +38,6 @@ public class User {
 	private final int id;
 	private int level = 0;
 	private Location goodLocation;
-	private List<ItemStack> inventorySnapshot = null;
 	private Configuration config = AntiCheatReloaded.getManager().getConfiguration();
 	private int toX, toY, toZ;
 	private String[] messages = new String[2];
@@ -245,44 +241,7 @@ public class User {
 		goodLocation = location;
 		return true;
 	}
-
-	/**
-	 * Store a copy of the player's inventory, for use in resetting
-	 *
-	 * @param is ItemStack list to store
-	 */
-	public void setInventorySnapshot(ItemStack[] is) {
-		inventorySnapshot = new ArrayList<ItemStack>();
-		for (int i = 0; i < is.length; i++) {
-			if (is[i] != null) {
-				inventorySnapshot.add(is[i].clone());
-			}
-		}
-	}
-
-	/**
-	 * Remove the current inventory snapshot
-	 */
-	public void removeInventorySnapshot() {
-		inventorySnapshot = null;
-	}
-
-	/**
-	 * Restore the player's inventory with the current inventory snapshot
-	 *
-	 * @param inventory Player's inventory
-	 */
-	public void restoreInventory(Inventory inventory) {
-		if (inventorySnapshot != null) {
-			inventory.clear();
-			for (ItemStack is : inventorySnapshot) {
-				if (is != null) {
-					inventory.addItem(is);
-				}
-			}
-		}
-	}
-
+	
 	/**
 	 * Set the player's to location
 	 *

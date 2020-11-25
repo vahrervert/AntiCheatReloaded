@@ -51,8 +51,7 @@ public class FlightCheck {
 	public static CheckResult runCheck(Player player, Distance distance) {
 		if (distance.getYDifference() >= AntiCheatReloaded.getManager().getBackend().getMagic().TELEPORT_MIN()
 				|| VersionUtil.isFlying(player) || player.getVehicle() != null
-				|| AntiCheatReloaded.getManager().getBackend().isMovingExempt(player)
-				|| VersionUtil.isRiptiding(player)) {
+				|| AntiCheatReloaded.getManager().getBackend().isMovingExempt(player)) {
 			// This was a teleport or user is flying/using elytra/in a vehicle, so we don't
 			// care
 			// about it.
@@ -64,7 +63,8 @@ public class FlightCheck {
 		Backend backend = AntiCheatReloaded.getManager().getBackend();
 		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 
-		if (movementManager.nearLiquidTicks > 0 || movementManager.halfMovement || Utilities.isNearClimbable(player))
+		if (movementManager.nearLiquidTicks > 0 || movementManager.halfMovement || Utilities.isNearClimbable(player)
+				|| movementManager.riptideTicks > 0)
 			return PASS;
 
 		int minAirTicks = 13;
@@ -104,7 +104,8 @@ public class FlightCheck {
 				return new CheckResult(CheckResult.Result.FAILED, "AirFlight",
 						"tried to fly on the Y-axis (mY=" + movementManager.motionY + ", max=" + maxMotionY + ")");
 
-			if (Math.abs(movementManager.motionY - movementManager.lastMotionY) < (movementManager.airTicks >= 115 ? 1E-3 : 5E-3)
+			if (Math.abs(movementManager.motionY
+					- movementManager.lastMotionY) < (movementManager.airTicks >= 115 ? 1E-3 : 5E-3)
 					&& !Utilities.couldBeOnBoat(player)
 					&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
 							.getInteger(CheckType.FLIGHT, "airFlight", "accountForTeleports"))

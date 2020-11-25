@@ -93,6 +93,8 @@ public class MovementManager {
 	public boolean hasIncreasingEffect = false;
 	// If the player had a speed increasing effect previous tick
 	public boolean hadIncreasingEffect = false;
+	// Riptiding ticks
+	public int riptideTicks;
 	// Time of last update
 	public long lastUpdate;
 
@@ -180,6 +182,17 @@ public class MovementManager {
 				this.nearLiquidTicks--;
 			else
 				this.nearLiquidTicks = 0;
+		}
+		
+		if (VersionUtil.CURRENT_VERSION.isAtLeast(MinecraftVersion.AQUATIC_UPDATE)) {
+			if (player.isRiptiding()) {
+				this.riptideTicks = 30;
+			} else {
+				if (this.riptideTicks > 0)
+					this.riptideTicks--;
+				else
+					this.riptideTicks = 0;
+			}
 		}
 		
 		this.hadSpeedEffect = this.hasSpeedEffect;

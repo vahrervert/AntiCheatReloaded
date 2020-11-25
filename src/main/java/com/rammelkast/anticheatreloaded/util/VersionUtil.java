@@ -35,8 +35,8 @@ import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 
 public class VersionUtil {
 
+	public static final MinecraftVersion CURRENT_VERSION;
 	private static final List<String> SUPPORTED_VERSIONS;
-	private static final MinecraftVersion CURRENT_VERSION;
 
 	public static String getVersion() {
 		return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
@@ -71,13 +71,6 @@ public class VersionUtil {
 		}
 		return player.isFlying() || player.isGliding() || player.hasPotionEffect(PotionEffectType.LEVITATION)
 				|| AntiCheatReloaded.getManager().getBackend().justLevitated(player);
-	}
-
-	public static boolean isRiptiding(Player player) {
-		if (!CURRENT_VERSION.isAtLeast(MinecraftVersion.AQUATIC_UPDATE)) {
-			return false;
-		}
-		return player.isRiptiding();
 	}
 
 	public static boolean isSlowFalling(Player player) {
