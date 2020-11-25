@@ -104,7 +104,7 @@ public class FlightCheck {
 				return new CheckResult(CheckResult.Result.FAILED, "AirFlight",
 						"tried to fly on the Y-axis (mY=" + movementManager.motionY + ", max=" + maxMotionY + ")");
 
-			if (Math.abs(movementManager.motionY - movementManager.lastMotionY) < 5E-3
+			if (Math.abs(movementManager.motionY - movementManager.lastMotionY) < (movementManager.airTicks >= 115 ? 1E-3 : 5E-3)
 					&& !Utilities.couldBeOnBoat(player)
 					&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
 							.getInteger(CheckType.FLIGHT, "airFlight", "accountForTeleports"))

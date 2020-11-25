@@ -44,7 +44,7 @@ public class StrafeCheck {
 	public static CheckResult runCheck(Player player, double x, double z, Location from, Location to) {
 		if (!Utilities.cantStandAtExp(from) || !Utilities.cantStandAtExp(to) || Utilities.isNearWater(player)
 				|| Utilities.isNearClimbable(player) || VersionUtil.isFlying(player) || player.isDead()
-				|| Utilities.isHalfblock(to.getBlock().getRelative(BlockFace.DOWN)))
+				|| Utilities.isHalfblock(to.getBlock().getRelative(BlockFace.DOWN)) || Utilities.isNearHalfblock(to))
 			return PASS;
 
 		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())

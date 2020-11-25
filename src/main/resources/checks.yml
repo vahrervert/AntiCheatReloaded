@@ -26,7 +26,7 @@ flight:
     enabled: true
     # How many milliseconds to account for teleports
     # Increase this is you debug 'tried to climb air' after teleports
-    accountForTeleports: 150
+    accountForTeleports: 300
   # Checks if a player is faking it's ground status to fly
   # Debugs as 'faked ground to fly'
   groundFlight:
@@ -41,16 +41,14 @@ flight:
     maxOffset: 0.005
     # How many milliseconds to account for teleports
     # Increase this is you debug 'ignored gravity' after teleports
-    accountForTeleports: 150
+    accountForTeleports: 300
     # Amount of illegal moves before flagging
     vlBeforeFlag: 5
-
 # ElytraFly check settings
 # Checks for illegal upward elytra movement
 elytrafly:
   # Should this check be enabled?
   enabled: true
-
 # Speed check settings
 # Checks if a player moves too fast
 speed:
@@ -63,7 +61,6 @@ speed:
     baseLimit: 0.03125
     # Prediction multiplier for custom walk speeds
     walkSpeedMultiplier: 1.4
-
   # Checks movement acceleration in the air
   # Debugs as 'exceeded acceleration limits'
   airAcceleration:
@@ -73,7 +70,6 @@ speed:
     baseLimit: 0.3725
     # Limit multiplier for custom walk speeds
     walkSpeedMultiplier: 1.4
-
   # Checks movement acceleration in the air
   # Debugs as 'had unexpected jumping behaviour'
   jumpBehaviour:
@@ -81,7 +77,6 @@ speed:
     enabled: true
     # Minimum movement distance needed to flag
     minimumDistXZ: 0.42
-
   # Checks movement speed on the ground
   # Debugs as 'moved too fast on ground'
   groundSpeed:
@@ -89,7 +84,6 @@ speed:
     enabled: true
     # Initial speed limit value
     initialLimit: 0.34
-
   # Checks movement acceleration in the air
   # Debugs as 'exceeded vertical speed limit'
   verticalSpeed:
@@ -97,19 +91,17 @@ speed:
     enabled: true
     # Extra compensation when moving off a ladder up a slab
     climbableCompensation: 0.04
-
 # Strafe check settings
 # Checks if a player switches movement angle in air
 strafe:
   # Should this check be enabled?
   enabled: true
   # How many milliseconds to account for teleports
-  accountForTeleports: 100
+  accountForTeleports: 300
   # Maximum angle change when moving in air
-  maxAngleChange: 0.50
+  maxAngleChange: 0.5
   # Minimum movement distance for the strafe check to be active
   minActivationDistance: 0.04
-
 # WaterWalk check settings
 # Checks if a player is walking on water
 waterwalk:
@@ -127,7 +119,7 @@ waterwalk:
     # Should this part of the check be enabled?
     enabled: true
     # Maximum lunge Y motion to flag
-    maxMotionY: 0.10
+    maxMotionY: 0.1
   # Checks for small lunges in water
   # Debugs as 'tried to lunge in water'
   lunge:
@@ -136,7 +128,6 @@ waterwalk:
     # Minimum xz distance before flagging
     # This combats false positives, while giving hackers not much leniency
     minimumDistXZ: 0.098
-
 # FastLadder check settings
 # Checks if a player moves too fast on a ladder
 fastladder:
@@ -148,7 +139,6 @@ fastladder:
   speedDownMax: 0.15
   # Amount of illegal ladder moves before flagging
   vlBeforeFlag: 3
-
 # BoatFly check settings
 # Checks if the player is flying in a boat
 boatfly:
@@ -156,7 +146,6 @@ boatfly:
   enabled: true
   # Amount of in-boat airborne moments before flagging
   vlBeforeFlag: 2
-
 # KillAura check settings
 # Checks if the player uses a form of kill aura
 killaura:
@@ -179,7 +168,6 @@ killaura:
       pingCompensation: 0.0025
     # The multiplier of extra compensation for velocity
     velocityMultiplier: 1.2
-
   # Checks if the target it within a players viewing angle
   # Debugs as 'tried to attack from an illegal angle'
   angle:
@@ -189,7 +177,6 @@ killaura:
     maxDifference: 50
     # Amount of illegally angled hits before flagging
     vlBeforeFlag: 3
-
   # Checks if the player has a suspicious packet order
   # Debugs as 'suspicious packet order'
   packetOrder:
@@ -201,7 +188,6 @@ killaura:
     minElapsedTime: 5
     # Amount of suspicious combat packet situations before flagging
     vlBeforeFlag: 3
-
 # Aimbot check settings
 # Checks if the player is sending aimbot-like movements
 aimbot:
@@ -211,13 +197,11 @@ aimbot:
   minYaw: 30
   # Maximum yaw difference when repeated
   maxYaw: 355
-
 # Criticals check settings
 # Checks if the player tries to do a crit without needed conditions
 criticals:
   # Should this check be enabled?
   enabled: true
-
 # Velocity check settings
 # Checks if the player ignores knockback
 velocity:
@@ -227,7 +211,6 @@ velocity:
   minimumPercentage: 75
   # Amount of low-velocity moments before flagging
   vlBeforeFlag: 2
-
 # FastPlace check settings
 # Checks if the player places blocks too fast
 fastplace:
@@ -236,12 +219,11 @@ fastplace:
   # Minimum time in milliseconds between block places
   minimumTime: 50
   # Amount of fastplace-moments before flagging a survival player
-  vlBeforeFlagSurvival: 2
+  vlBeforeFlagSurvival: 3
   # Amount of fastplace-moments before flagging a creative player
-  vlBeforeFlagCreative: 3
+  vlBeforeFlagCreative: 4
   # Amount of time in milliseconds to prevent a player from placing blocks after flagging
   blockPlacementTime: 1000
-
 # IllegalInteract check settings
 # Checks if the player is using, placing or breaking blocks from illegal angles
 illegalinteract:
@@ -270,7 +252,6 @@ illegalinteract:
     pingCompensation: 0.0045
     # The multiplier of extra compensation for velocity
     velocityMultiplier: 1.5
-
 # BadPackets check settings
 # Checks for illegal packets
 badpackets:
@@ -280,7 +261,6 @@ badpackets:
   minimumTps: 17.5
   # Maximum distance a player can move between packets
   maxDistance: 25.0
-
 # MorePackets check settings
 # Checks for an extra amount of packets and modified game timers
 morepackets:
@@ -289,18 +269,17 @@ morepackets:
   # Minimum server TPS needed for MorePackets to be active
   minimumTps: 17.5
   # Maximum amount of lag compensation a player can acquire (50ms = 1 tick)
-  minimumClamp: 500
+  minimumClamp: 1000
   # The amount of milliseconds offset between packets before flagging (50ms = 1 tick)
   triggerBalance: 100
   # The amount of milliseconds to compensate for a teleport (50ms = 1 tick)
-  teleportCompensation: 150
+  teleportCompensation: 300
   # Should MorePackets be disabled for 'lagging' players?
   # This can easily be spoofed by clients!
   disableForLagging: false
   # Maximum ping value before MorePackets stops checking a player (-1 to disable)
   # This can easily be spoofed by clients!
   maxPing: -1
-
 # Sneak check settings
 # Checks if the player toggles sneak too fast
 sneak:
@@ -310,10 +289,9 @@ sneak:
   # This can easily be spoofed by clients!
   disableForLagging: false
   # Minimum server TPS needed for sneak
-  minimumTps: 12
+  minimumTps: 15
   # Minimum time in milliseconds between sneak toggles
   minToggleTime: 75
-
 # NoSlow check settings
 # Checks if the player moves too fast while blocking
 noslow:
@@ -325,13 +303,11 @@ noslow:
   minimumDistXZ: 0.15
   # Amount of no slowdown moments before flagging
   vlBeforeFlag: 3
-
 # Spider check settings
 # Checks if the player tries to climb a non-climbable block
 spider:
   # Should this check be enabled?
   enabled: true
-
 # NoFall check settings
 # Checks if the player tries to ignore fall damage
 nofall:
@@ -339,7 +315,6 @@ nofall:
   enabled: true
   # Amount of moves with a modified fall distance before flagging
   vlBeforeFlag: 6
-
 # Sprint check settings
 # Checks if the player tries to sprint without the needed conditions
 sprint:
@@ -347,7 +322,6 @@ sprint:
   enabled: true
   # Minimum food level needed to sprint
   sprintFoodMin: 6
-
 # FastBow check settings
 # Checks if the player fires a bow too fast
 fastbow:
@@ -355,7 +329,6 @@ fastbow:
   enabled: true
   # Maximum percent error between predicted bow force and actual bow force
   bowError: 0.25
-
 # FastEat check settings
 # Checks if the player consumes food too fast
 fasteat:
@@ -363,7 +336,6 @@ fasteat:
   enabled: true
   # Minimum time in milliseconds it takes to consume food
   eatTimeMin: 1000
-
 # FastHeal check settings
 # Checks if the player regains health too fast
 fastheal:
@@ -375,10 +347,10 @@ fastheal:
   # This can easily be spoofed by clients!
   disableForLagging: false
   # The minimum time it takes to regenerate health in milliseconds
-  minHealTime: 495
+  # Vanilla is 500, but enforcing this will cause too many false positives
+  minHealTime: 475
   # Amount of milliseconds a player can heal faster per millisecond of ping
-  pingCompensation: 0.15
-
+  pingCompensation: 0.25
 # FastProjectile check settings
 # Checks if the player fires a projectile too fast
 fastprojectile:
@@ -388,7 +360,6 @@ fastprojectile:
   projectilesToWait: 10
   # The minimum time in milliseconds it should have taken for the player fire 'projectilesToWait' projectiles
   minimumTime: 1500
-
 # ItemSpam check settings
 # Checks if the player drops items too fast
 itemspam:
@@ -398,7 +369,6 @@ itemspam:
   dropsToWait: 10
   # The minimum time in milliseconds it should have taken for the player to drop items 'dropsToWait' times
   minimumTime: 800
-
 # FastInventory check settings
 # Checks if the player moves items in the inventory too fast
 fastinventory:
@@ -408,19 +378,16 @@ fastinventory:
   clicksToWait: 10
   # The minimum time in milliseconds it should have taken for the player to click 'clicksToWait' times
   minimumTime: 50
-
 # vClip check settings
 # Checks if the player is clipping
 vclip:
   # Should this check be enabled?
   enabled: true
-
 # ChatUnicode check settings
 # Checks for illegal unicode characters in the chat
 chatunicode:
   # Should this check be enabled?
   enabled: true
-
 # ChatSpam check settings
 # Checks for a spam of chat messages
 chatspam:
@@ -434,14 +401,13 @@ chatspam:
   levelActionOne: 5
   # Number of chat spam violations before action two (see config.yml) is executed
   levelActionTwo: 10
-  
 # CommandSpam check settings
 # Checks for a spam of commands
 commandspam:
   # Should this check be enabled?
   enabled: true
   # Minimum time between commands
-  timeMin: 400
+  timeMin: 250
   # Time in milliseconds after which repeating a command is ignored
   repeatIgnore: 500
   # Number of command spam violations before action one (see config.yml) is executed

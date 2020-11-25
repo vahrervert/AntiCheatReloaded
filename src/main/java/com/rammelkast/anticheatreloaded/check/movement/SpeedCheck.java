@@ -61,6 +61,9 @@ public class SpeedCheck {
 				&& movementManager.elytraEffectTicks <= 0 && !Utilities.isNearClimbable(player)) {
 			double multiplier = 0.985D;
 			double predict = 0.36 * Math.pow(multiplier, movementManager.airTicks + 1);
+			// Prevents false when falling from great heights
+			if (movementManager.airTicks >= 115)
+				predict = Math.max(0.08, predict);
 			double limit = checksConfig.getDouble(CheckType.SPEED, "airSpeed", "baseLimit"); // Default 0.03125
 			// Adjust for ice
 			if (movementManager.iceInfluenceTicks > 0) {
@@ -148,7 +151,7 @@ public class SpeedCheck {
 				limit += VersionUtil.getPotionLevel(player, PotionEffectType.SPEED) * 0.0225D;
 			// Adjust for slabs
 			if (movementManager.halfMovementHistoryCounter > 15)
-				limit *= 2.0D;
+				limit *= 2.05D;
 			// Adjust for custom walking speed
 			double walkSpeedMultiplier = checksConfig.getDouble(CheckType.SPEED, "airAcceleration",
 					"walkSpeedMultiplier"); // Default 1.4
@@ -165,7 +168,8 @@ public class SpeedCheck {
 		// JumpBehaviour
 		// Works against YPorts and mini jumps
 		if (checksConfig.isSubcheckEnabled(CheckType.SPEED, "jumpBehaviour") && movementManager.touchedGroundThisTick
-				&& !boxedIn && movementManager.slimeInfluenceTicks <= 10) {
+				&& !boxedIn && movementManager.slimeInfluenceTicks <= 10 && !Utilities.isNearHalfblock(movingTowards)
+				&& !Utilities.isNearHalfblock(movingTowards.clone().subtract(0, 0.51, 0))) {
 			// This happens naturally
 			if (movementManager.airTicksBeforeGrounded == movementManager.groundTicks) {
 				double minimumDistXZ = checksConfig.getDouble(CheckType.SPEED, "jumpBehaviour", "minimumDistXZ"); // Default
@@ -202,10 +206,11 @@ public class SpeedCheck {
 				limit *= 1.4D;
 			if (movementManager.hadSpeedEffect && !movementManager.hasSpeedEffect)
 				limit *= 1.2D;
-			// Adjust for other effects
-			if ((movementManager.hasFireResistanceEffect || movementManager.hasBadOmenEffect)
-					&& movementManager.groundTicks > 3)
-				limit *= 1.2D;
+			// Other speed increasing effects (idk why, bloody Bukkt..)
+			if (movementManager.hasIncreasingEffect && movementManager.groundTicks > 3)
+				limit *= 1.12D;
+			if (movementManager.hadIncreasingEffect && !movementManager.hasIncreasingEffect)
+				limit *= 1.08D;
 			if (movementManager.iceInfluenceTicks >= 50) {
 				// When moving off ice
 				if (!Utilities.couldBeOnIce(movingTowards))

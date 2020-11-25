@@ -71,9 +71,11 @@ public class ElytraCheck {
 		}
 
 		if (!JUMP_Y_VALUE.containsKey(uuid)) {
-			JUMP_Y_VALUE.put(uuid, distance.toY());
+			// Distance + player height
+			JUMP_Y_VALUE.put(uuid, distance.toY() + 1.8D);
 			return PASS;
 		}
+		
 		double lastY = JUMP_Y_VALUE.get(uuid);
 		if (lastY < distance.toY()) {
 			double diff = distance.toY() - lastY;

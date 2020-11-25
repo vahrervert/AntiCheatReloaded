@@ -19,8 +19,10 @@
 package com.rammelkast.anticheatreloaded.event;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -46,6 +48,11 @@ public class EventListener implements Listener {
 	private static final UserManager USER_MANAGER = AntiCheatReloaded.getManager().getUserManager();
 	private static final Configuration CONFIG = AntiCheatReloaded.getManager().getConfiguration();
 	private static final DecimalFormat TPS_FORMAT = new DecimalFormat("##.##");
+	
+	static {
+		// What the hell, Java..
+		TPS_FORMAT.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ENGLISH));
+	}
 	
 	public static void log(String message, Player player, CheckType type, String subcheck) {
 		User user = getUserManager().getUser(player.getUniqueId());
