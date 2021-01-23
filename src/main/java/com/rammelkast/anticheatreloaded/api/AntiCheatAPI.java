@@ -31,9 +31,10 @@ import com.rammelkast.anticheatreloaded.manage.UserManager;
 import com.rammelkast.anticheatreloaded.util.Group;
 
 /**
- * Developer's interface for all things AntiCheat.
+ * Fired when a player fails an AntiCheatReloaded check
+ * Will be replaced in ACR 2.0.0
  */
-
+@Deprecated
 public class AntiCheatAPI {
     private static CheckManager chk = AntiCheatReloaded.getManager().getCheckManager();
     private static UserManager umr = AntiCheatReloaded.getManager().getUserManager();

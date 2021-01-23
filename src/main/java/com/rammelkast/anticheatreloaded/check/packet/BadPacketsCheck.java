@@ -57,8 +57,8 @@ public class BadPacketsCheck {
 		double tps = AntiCheatReloaded.getPlugin().getTPS();
 		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
 				.getMovementManager();
-		if (user.isLagging() || tps < checksConfig.getDouble(CheckType.MOREPACKETS, "minimumTps")
-				|| (System.currentTimeMillis() - movementManager.lastTeleport <= 150))
+		if (user.isLagging() || tps < checksConfig.getDouble(CheckType.BADPACKETS, "minimumTps")
+				|| (System.currentTimeMillis() - movementManager.lastTeleport <= checksConfig.getInteger(CheckType.BADPACKETS, "teleportCompensation")))
 			return;
 
 		double x = packet.getDoubles().read(0);

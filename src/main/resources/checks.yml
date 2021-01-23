@@ -182,7 +182,7 @@ killaura:
   packetOrder:
     # Should this part of the check be enabled?
     enabled: true
-    # Minimum server TPS needed for BadPackets to be active
+    # Minimum server TPS needed for the packet order subcheck to be active
     minimumTps: 17.5
     # Minimum elapsed time in milliseconds between a movement packet and a combat packet
     minElapsedTime: 5
@@ -261,6 +261,8 @@ badpackets:
   minimumTps: 17.5
   # Maximum distance a player can move between packets
   maxDistance: 25.0
+  # The amount of milliseconds to compensate for a teleport (50ms = 1 tick)
+  teleportCompensation: 300
 # MorePackets check settings
 # Checks for an extra amount of packets and modified game timers
 morepackets:
