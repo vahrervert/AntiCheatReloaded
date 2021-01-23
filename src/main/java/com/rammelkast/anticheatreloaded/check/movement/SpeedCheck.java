@@ -208,11 +208,6 @@ public class SpeedCheck {
 				limit *= 1.4D;
 			if (movementManager.hadSpeedEffect && !movementManager.hasSpeedEffect)
 				limit *= 1.2D;
-			// Other speed increasing effects (idk why, bloody Bukkt..)
-			if (movementManager.hasIncreasingEffect && movementManager.groundTicks > 3)
-				limit *= 1.12D;
-			if (movementManager.hadIncreasingEffect && !movementManager.hasIncreasingEffect)
-				limit *= 1.08D;
 			if (movementManager.iceInfluenceTicks >= 50) {
 				// When moving off ice
 				if (!Utilities.couldBeOnIce(movingTowards))

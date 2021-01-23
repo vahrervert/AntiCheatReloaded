@@ -187,10 +187,10 @@ public class PlayerListener extends EventListener {
 		AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
 	}
 
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		Player player = event.getPlayer();
-
+		
 		if (getCheckManager().willCheck(player, CheckType.CHAT_SPAM)) {
 			CheckResult result = getBackend().checkChatSpam(player, event.getMessage());
 			if (result.failed()) {
@@ -291,7 +291,6 @@ public class PlayerListener extends EventListener {
 				if (itemInHand.getType() == XMaterial.FIREWORK_ROCKET.parseMaterial()) {
 					ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId());
 					if (player.isGliding()) {
-						// TODO config max elytra height?
 						ElytraCheck.JUMP_Y_VALUE.put(player.getUniqueId(), 9999.99D);
 					}
 				}
@@ -435,7 +434,6 @@ public class PlayerListener extends EventListener {
 				if (result.failed()) {
 					if (!silentMode()) {
 						event.setTo(user.getGoodLocation(from.clone()));
-						// TODO better handling of this
 					}
 					log(result.getMessage(), player, CheckType.NOFALL, result.getSubCheck());
 				}
@@ -467,7 +465,6 @@ public class PlayerListener extends EventListener {
 					CheckResult result = WaterWalkCheck.runCheck(player, x, y, z);
 					if (result.failed()) {
 						if (!silentMode()) {
-							// TODO check this
 							player.teleport(player.getLocation().clone().subtract(0, 0.52, 0));
 						}
 						log(result.getMessage(), player, CheckType.WATER_WALK, result.getSubCheck());

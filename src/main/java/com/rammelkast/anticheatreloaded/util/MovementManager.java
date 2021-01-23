@@ -89,10 +89,6 @@ public class MovementManager {
 	public boolean hasSpeedEffect = false;
 	// If the player had speed effect previous tick
 	public boolean hadSpeedEffect = false;
-	// If the player has a speed increasing effect
-	public boolean hasIncreasingEffect = false;
-	// If the player had a speed increasing effect previous tick
-	public boolean hadIncreasingEffect = false;
 	// Riptiding ticks
 	public int riptideTicks;
 	// Time of last update
@@ -121,12 +117,13 @@ public class MovementManager {
 		// Handle 1.9+ potion effects
 		if (MinecraftVersion.atOrAbove(MinecraftVersion.COMBAT_UPDATE)) {
 			for (PotionEffect effect : player.getActivePotionEffects()) {
-				if (!VersionUtil.isLevitationEffect(effect))
-					return;
+				if (!VersionUtil.isLevitationEffect(effect)) {
+					continue;
+				}
 				AntiCheatReloaded.getManager().getBackend().logLevitating(player, 1);
 			}
 		}
-
+		
 		this.touchedGroundThisTick = false;
 		this.halfMovement = false;
 		if (!this.onGround) {
@@ -197,9 +194,6 @@ public class MovementManager {
 		
 		this.hadSpeedEffect = this.hasSpeedEffect;
 		this.hasSpeedEffect = player.hasPotionEffect(PotionEffectType.SPEED);
-		
-		this.hadIncreasingEffect = this.hasIncreasingEffect;
-		this.hasIncreasingEffect = !player.getActivePotionEffects().isEmpty();
 
 		double lastDistanceSq = Math.sqrt(this.lastDistance.getXDifference() * this.lastDistance.getXDifference()
 				+ this.lastDistance.getZDifference() * this.lastDistance.getZDifference());

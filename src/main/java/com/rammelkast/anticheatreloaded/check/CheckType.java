@@ -19,6 +19,10 @@
 
 package com.rammelkast.anticheatreloaded.check;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -26,15 +30,12 @@ import com.rammelkast.anticheatreloaded.api.CheckFailEvent;
 import com.rammelkast.anticheatreloaded.util.Permission;
 import com.rammelkast.anticheatreloaded.util.User;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 /**
  * <p/>
  * All the types of checks and their corresponding permission nodes.
  */
 
+@SuppressWarnings("deprecation")
 public enum CheckType {
     FLIGHT(Permission.CHECK_FLIGHT, "Flight"),
     ELYTRAFLY(Permission.CHECK_FLIGHT, "ElytraFly"),

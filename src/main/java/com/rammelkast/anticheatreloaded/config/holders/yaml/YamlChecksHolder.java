@@ -20,6 +20,7 @@ package com.rammelkast.anticheatreloaded.config.holders.yaml;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckType;
@@ -42,8 +43,12 @@ public class YamlChecksHolder extends ConfigurationFile implements Checks {
 
 	@Override
 	public boolean getBoolean(CheckType checkType, String subcheck, String name) {
-		return this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).getConfigurationSection(subcheck)
-				.getBoolean(name);
+		final ConfigurationSection section = this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).getConfigurationSection(subcheck);
+		if (!section.contains(name)) {
+			AntiCheatReloaded.getPlugin().getLogger().warning("Configuration is missing option '" + section.getCurrentPath() + "." + name + "'");
+			return false;
+		}
+		return section.getBoolean(name);
 	}
 
 	@Override
@@ -53,29 +58,52 @@ public class YamlChecksHolder extends ConfigurationFile implements Checks {
 
 	@Override
 	public double getDouble(CheckType checkType, String subcheck, String name) {
-		return this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).getConfigurationSection(subcheck)
-				.getDouble(name);
+		final ConfigurationSection section = this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).getConfigurationSection(subcheck);
+		if (!section.contains(name)) {
+			AntiCheatReloaded.getPlugin().getLogger().warning("Configuration is missing option '" + section.getCurrentPath() + "." + name + "'");
+			return 0.0D;
+		}
+		return section.getDouble(name);
 	}
 
 	@Override
 	public int getInteger(CheckType checkType, String subcheck, String name) {
-		return this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).getConfigurationSection(subcheck)
-				.getInt(name);
+		final ConfigurationSection section = this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).getConfigurationSection(subcheck);
+		if (!section.contains(name)) {
+			AntiCheatReloaded.getPlugin().getLogger().warning("Configuration is missing option '" + section.getCurrentPath() + "." + name + "'");
+			return 0;
+		}
+		return section.getInt(name);
 	}
 
 	@Override
 	public boolean getBoolean(CheckType checkType, String name) {
-		return this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).getBoolean(name);
+		final ConfigurationSection section =  this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase());
+		if (!section.contains(name)) {
+			AntiCheatReloaded.getPlugin().getLogger().warning("Configuration is missing option '" + section.getCurrentPath() + "." + name + "'");
+			return false;
+		}
+		return section.getBoolean(name);
 	}
 
 	@Override
 	public double getDouble(CheckType checkType, String name) {
-		return this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).getDouble(name);
+		final ConfigurationSection section =  this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase());
+		if (!section.contains(name)) {
+			AntiCheatReloaded.getPlugin().getLogger().warning("Configuration is missing option '" + section.getCurrentPath() + "." + name + "'");
+			return 0.0D;
+		}
+		return section.getDouble(name);
 	}
 
 	@Override
 	public int getInteger(CheckType checkType, String name) {
-		return this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase()).getInt(name);
+		final ConfigurationSection section =  this.getConfigFile().getConfigurationSection(checkType.getName().toLowerCase());
+		if (!section.contains(name)) {
+			AntiCheatReloaded.getPlugin().getLogger().warning("Configuration is missing option '" + section.getCurrentPath() + "." + name + "'");
+			return 0;
+		}
+		return section.getInt(name);
 	}
 
 	@Override

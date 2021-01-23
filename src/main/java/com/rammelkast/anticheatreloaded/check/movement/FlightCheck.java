@@ -44,7 +44,7 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 public class FlightCheck {
 
 	public static final Map<UUID, Long> MOVING_EXEMPT = new HashMap<UUID, Long>();
-	public static final Map<UUID, Integer> GRAVITY_VIOLATIONS = new HashMap<UUID, Integer>();
+	public static final Map<UUID, Float> GRAVITY_VIOLATIONS = new HashMap<UUID, Float>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 	private static final double GRAVITY_FRICTION = 0.9800000190734863D;
 
@@ -135,7 +135,8 @@ public class FlightCheck {
 				&& (!Utilities.isNearBed(distance.getTo()) || ((Utilities.isNearBed(distance.getTo())
 						|| Utilities.isNearBed(distance.getTo().clone().add(0, -0.51, 0)))
 						&& movementManager.motionY > 0.15))
-				&& movementManager.slimeInfluenceTicks == 0 && movementManager.elytraEffectTicks <= 25)
+				&& movementManager.slimeInfluenceTicks == 0 && movementManager.elytraEffectTicks <= 25
+				&& !Utilities.couldBeOnBoat(player))
 			return new CheckResult(CheckResult.Result.FAILED, "AirClimb",
 					"tried to climb air (mY=" + movementManager.motionY + ")");
 
@@ -147,6 +148,16 @@ public class FlightCheck {
 				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
 						.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports"))
 				&& movementManager.slimeInfluenceTicks == 0 && movementManager.elytraEffectTicks <= 25) {
+			return new CheckResult(CheckResult.Result.FAILED, "AirClimb",
+					"tried to climb air (mY=" + movementManager.motionY + ", at=" + movementManager.airTicks + ")");
+		}
+
+		if (checksConfig.isSubcheckEnabled(CheckType.FLIGHT, "airClimb") && movementManager.airTicks >= minAirTicks
+				&& movementManager.lastMotionY < 0 && movementManager.motionY > 0
+				&& !AntiCheatReloaded.getManager().getBackend().justVelocity(player)
+				&& movementManager.elytraEffectTicks <= 25
+				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
+						.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports"))) {
 			return new CheckResult(CheckResult.Result.FAILED, "AirClimb",
 					"tried to climb air (mY=" + movementManager.motionY + ", at=" + movementManager.airTicks + ")");
 		}
@@ -178,7 +189,7 @@ public class FlightCheck {
 							&& distance.getTo().clone().subtract(0, 0.5, 0).getBlock().getType() != Material.AIR))
 				maxOffset += 0.15D;
 			if (offset > maxOffset && movementManager.airTicks > 2) {
-				int vl = GRAVITY_VIOLATIONS.getOrDefault(player.getUniqueId(), 0) + 1;
+				float vl = GRAVITY_VIOLATIONS.getOrDefault(player.getUniqueId(), 0f) + 1;
 				GRAVITY_VIOLATIONS.put(player.getUniqueId(), vl);
 				int vlBeforeFlag = checksConfig.getInteger(CheckType.FLIGHT, "gravity", "vlBeforeFlag");
 				if (vl >= vlBeforeFlag) {
@@ -187,7 +198,10 @@ public class FlightCheck {
 							"ignored gravity (offset=" + offset + ", at=" + movementManager.airTicks + ")");
 				}
 			} else {
-				GRAVITY_VIOLATIONS.remove(player.getUniqueId());
+				if (GRAVITY_VIOLATIONS.containsKey(player.getUniqueId())) {
+					float vl = GRAVITY_VIOLATIONS.getOrDefault(player.getUniqueId(), 0f);
+					GRAVITY_VIOLATIONS.put(player.getUniqueId(), Math.max(0, vl - 0.5f));
+				}
 			}
 		}
 		// End Gravity
