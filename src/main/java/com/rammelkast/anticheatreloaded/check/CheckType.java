@@ -38,7 +38,7 @@ import com.rammelkast.anticheatreloaded.util.User;
 @SuppressWarnings("deprecation")
 public enum CheckType {
     FLIGHT(Permission.CHECK_FLIGHT, "Flight"),
-    ELYTRAFLY(Permission.CHECK_FLIGHT, "ElytraFly"),
+    ELYTRAFLY(Permission.CHECK_ELYTRAFLY, "ElytraFly"),
     WATER_WALK(Permission.CHECK_WATERWALK, "WaterWalk"),
     FAST_PLACE(Permission.CHECK_FASTPLACE, "FastPlace"),
     CHAT_SPAM(Permission.CHECK_CHATSPAM, "ChatSpam"),
