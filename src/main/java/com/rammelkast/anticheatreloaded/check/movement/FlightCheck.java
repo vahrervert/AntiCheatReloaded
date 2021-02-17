@@ -152,12 +152,14 @@ public class FlightCheck {
 					"tried to climb air (mY=" + movementManager.motionY + ", at=" + movementManager.airTicks + ")");
 		}
 
+		// TODO hardcoded value against false
 		if (checksConfig.isSubcheckEnabled(CheckType.FLIGHT, "airClimb") && movementManager.airTicks >= minAirTicks
 				&& movementManager.lastMotionY < 0 && movementManager.motionY > 0
 				&& !AntiCheatReloaded.getManager().getBackend().justVelocity(player)
 				&& movementManager.elytraEffectTicks <= 25
 				&& (System.currentTimeMillis() - movementManager.lastTeleport >= checksConfig
-						.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports"))) {
+						.getInteger(CheckType.FLIGHT, "airClimb", "accountForTeleports"))
+				&& !(Math.round(movementManager.motionY * 1000) == 396) && movementManager.airTicks == 15) {
 			return new CheckResult(CheckResult.Result.FAILED, "AirClimb",
 					"tried to climb air (mY=" + movementManager.motionY + ", at=" + movementManager.airTicks + ")");
 		}
