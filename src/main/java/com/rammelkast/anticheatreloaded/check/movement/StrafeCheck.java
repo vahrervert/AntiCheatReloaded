@@ -53,7 +53,7 @@ public class StrafeCheck {
 
 		if (System.currentTimeMillis() - movementManager.lastTeleport <= checksConfig.getInteger(CheckType.STRAFE,
 				"accountForTeleports") || movementManager.elytraEffectTicks >= 20
-				|| movementManager.halfMovementHistoryCounter >= 20)
+				|| movementManager.halfMovementHistoryCounter >= 20 || Utilities.couldBeOnBoat(player, 0.5d, false))
 			return PASS;
 
 		Vector oldAcceleration = new Vector(movementManager.lastDistanceX, 0, movementManager.lastDistanceZ);

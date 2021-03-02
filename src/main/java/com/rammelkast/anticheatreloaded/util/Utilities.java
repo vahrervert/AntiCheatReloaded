@@ -128,7 +128,7 @@ public final class Utilities {
 	public static boolean couldBeOnBoat(Player player, double range, boolean checkY) {
 		for (Entity entity : player.getNearbyEntities(range, range, range)) {
 			if (entity instanceof Boat) {
-				if (((Boat) entity).getLocation().getY() < player.getLocation().getY() + 0.25) {
+				if (((Boat) entity).getLocation().getY() < player.getLocation().getY() + 0.35) {
 					return true;
 				} else if (!checkY) {
 					return true;
