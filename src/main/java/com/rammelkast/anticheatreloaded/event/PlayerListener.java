@@ -19,6 +19,7 @@
 
 package com.rammelkast.anticheatreloaded.event;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -232,13 +233,17 @@ public class PlayerListener extends EventListener {
 		AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		getBackend().garbageClean(event.getPlayer());
-
-		User user = getUserManager().getUser(event.getPlayer().getUniqueId());
-
-		getConfig().getLevels().saveLevelFromUser(user);
+		// Try move offsync
+		Bukkit.getServer().getScheduler().runTaskAsynchronously(AntiCheatReloaded.getPlugin(), () -> {
+			final Player player = event.getPlayer();
+			synchronized (player) {
+				getBackend().garbageClean(player);
+				User user = getUserManager().getUser(player.getUniqueId());
+				getConfig().getLevels().saveLevelFromUser(user);
+			}
+		});
 
 		AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
 	}
