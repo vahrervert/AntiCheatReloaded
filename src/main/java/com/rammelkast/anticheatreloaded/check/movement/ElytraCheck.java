@@ -23,15 +23,16 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Distance;
+import com.rammelkast.anticheatreloaded.util.MinecraftVersion;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
+import com.rammelkast.anticheatreloaded.util.XMaterial;
 
 public class ElytraCheck {
 
@@ -57,11 +58,14 @@ public class ElytraCheck {
 
 		double changeY = distance.toY() - distance.fromY();
 		boolean upwardMovement = changeY > 0;
-		if (player.getInventory().getItemInMainHand().getType() == Material.TRIDENT) {
-			if (upwardMovement) {
-				// TODO continue check here
-				JUMP_Y_VALUE.remove(uuid);
-				return PASS;
+		if (MinecraftVersion.getCurrentVersion().isAtLeast(MinecraftVersion.AQUATIC_UPDATE)) {
+			// Tident added in 1.13
+			if (player.getInventory().getItemInMainHand().getType() == XMaterial.TRIDENT.parseMaterial()) {
+				if (upwardMovement) {
+					// TODO continue check here
+					JUMP_Y_VALUE.remove(uuid);
+					return PASS;
+				}
 			}
 		}
 
