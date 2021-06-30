@@ -38,21 +38,23 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
  * The manager that AntiCheat will check with to see if it should watch certain checks and certain players.
  */
 
-public class CheckManager {
-    private AntiCheatManager manager = null;
-    private Configuration config;
-    private static List<CheckType> checkIgnoreList = new ArrayList<CheckType>();
-    private static Map<UUID, List<CheckType>> exemptList = new HashMap<UUID, List<CheckType>>();
+public final class CheckManager {
+	
+    private final AntiCheatManager manager;
+    private final Configuration config;
+    
+    private static final List<CheckType> checkIgnoreList = new ArrayList<CheckType>();
+    private static final Map<UUID, List<CheckType>> exemptList = new HashMap<UUID, List<CheckType>>();
 
-    public CheckManager(AntiCheatManager manager) {
+    public CheckManager(final AntiCheatManager manager) {
         this.manager = manager;
         this.config = manager.getConfiguration();
-        this.loadCheckIgnoreList(this.config);
+        loadCheckIgnoreList(this.config);
     }
 
-    public void loadCheckIgnoreList(Configuration configuration) {
+    public void loadCheckIgnoreList(final Configuration configuration) {
     	checkIgnoreList.clear();
-        for (CheckType type : CheckType.values()) {
+        for (final CheckType type : CheckType.values()) {
             if (!configuration.getChecks().isEnabled(type)) {
                 checkIgnoreList.add(type);
             }
@@ -69,7 +71,7 @@ public class CheckManager {
      *
      * @param type The CheckType to enable
      */
-    public void activateCheck(CheckType type, String className) {
+    public void activateCheck(final CheckType type, final String className) {
         if (!isActive(type)) {
             manager.getLoggingManager().logFineInfo("The " + type.toString() + " check was activated by " + className + ".");
             checkIgnoreList.remove(type);
@@ -81,7 +83,7 @@ public class CheckManager {
      *
      * @param type The CheckType to disable
      */
-    public void deactivateCheck(CheckType type, String className) {
+    public void deactivateCheck(final CheckType type, final String className) {
         if (isActive(type)) {
             manager.getLoggingManager().logFineInfo("The " + type.toString() + " check was deactivated by " + className + ".");
             checkIgnoreList.add(type);
@@ -94,7 +96,7 @@ public class CheckManager {
      * @param type The CheckType to check
      * @return true if the check is active
      */
-    public boolean isActive(CheckType type) {
+    public boolean isActive(final CheckType type) {
         return !checkIgnoreList.contains(type);
     }
 
@@ -104,7 +106,7 @@ public class CheckManager {
      * @param player The player
      * @param type   The check
      */
-    public void exemptPlayer(Player player, CheckType type, String className) {
+    public void exemptPlayer(final Player player, final CheckType type, final String className) {
         if (!isExempt(player, type)) {
             if (!exemptList.containsKey(player.getUniqueId())) {
                 exemptList.put(player.getUniqueId(), new ArrayList<CheckType>());
@@ -120,7 +122,7 @@ public class CheckManager {
      * @param player The player
      * @param type   The check
      */
-    public void unexemptPlayer(Player player, CheckType type, String className) {
+    public void unexemptPlayer(final Player player, final CheckType type, final String className) {
         if (isExempt(player, type)) {
             manager.getLoggingManager().logFineInfo(player.getName() + " was unexempted from the " + type.toString() + " check by " + className + ".");
             exemptList.get(player.getUniqueId()).remove(type);
@@ -133,7 +135,7 @@ public class CheckManager {
      * @param player The player
      * @param type   The check
      */
-    public boolean isExempt(Player player, CheckType type) {
+    public boolean isExempt(final Player player, final CheckType type) {
         return exemptList.containsKey(player.getUniqueId()) ? exemptList.get(player.getUniqueId()).contains(type) : false;
     }
 
@@ -142,7 +144,7 @@ public class CheckManager {
      *
      * @param player The player
      */
-    public boolean isOpExempt(Player player) {
+    public boolean isOpExempt(final Player player) {
         return (this.manager.getConfiguration().getConfig().exemptOp.getValue() && player.isOp());
     }
 
@@ -152,7 +154,7 @@ public class CheckManager {
      * @param player The player
      * @return true if the player's world is enabled
      */
-    public boolean checkInWorld(Player player) {
+    public boolean checkInWorld(final Player player) {
         return !config.getConfig().disabledWorlds.getValue().contains(player.getWorld().getName());
     }
 
@@ -163,7 +165,7 @@ public class CheckManager {
      * @param type   The check being run
      * @return true if the check should run
      */
-    public boolean willCheckQuick(Player player, CheckType type) {
+    public boolean willCheckQuick(final Player player, final CheckType type) {
         return
                 isActive(type)
                         && !isExempt(player, type)
@@ -177,14 +179,15 @@ public class CheckManager {
      * @param type   The check being run
      * @return true if the check should run
      */
-    public boolean willCheck(Player player, CheckType type) {
-        boolean check = isActive(type)
+    public boolean willCheck(final Player player, final CheckType type) {
+    	final boolean check = isActive(type)
                 && checkInWorld(player)
                 && !isExempt(player, type)
                 && !type.checkPermission(player)
                 && !isOpExempt(player);
-        if ((type == CheckType.FLIGHT || type == CheckType.SPEED) && VersionUtil.isFlying(player))
+        if ((type == CheckType.FLIGHT || type == CheckType.SPEED) && VersionUtil.isFlying(player)) {
         	return false;
+        }
         return check;
     }
 
@@ -194,10 +197,10 @@ public class CheckManager {
      * @param player Player to check
      * @return true if the player is a real person
      */
-    public boolean isOnline(Player player) {
+    public boolean isOnline(final Player player) {
         // Check if the player is on the user list, e.g. is not an NPC
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.getUniqueId().equals(player.getUniqueId())) {
+        for (final Player iterated : Bukkit.getOnlinePlayers()) {
+            if (iterated.getUniqueId().equals(player.getUniqueId())) {
                 return true;
             }
         }

@@ -25,7 +25,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 
-public class MovementManager {
+public final class MovementManager {
 
 	// Ticks in air
 	public int airTicks = 0;
@@ -95,14 +95,14 @@ public class MovementManager {
 	public long lastUpdate;
 
 	@SuppressWarnings("deprecation")
-	public void handle(Player player, Location from, Location to, Distance distance) {
+	public void handle(final Player player, final Location from, final Location to, final Distance distance) {
 		// TODO as of now, we "trust" the client to send the right thing
 		// This is checked for spoofing by "GroundFlight"
 		// Also seems to make NoFall cheats flag for speed lmao
 		this.onGround = player.isOnGround();
 
-		double x = distance.getXDifference();
-		double z = distance.getZDifference();
+		final double x = distance.getXDifference();
+		final double z = distance.getZDifference();
 		this.lastDistanceXZ = this.distanceXZ;
 		this.lastDistanceX = this.distanceX;
 		this.lastDistanceZ = this.distanceZ;
@@ -111,8 +111,9 @@ public class MovementManager {
 		this.distanceZ = z;
 
 		// Account for standing on boat
-		if (Utilities.couldBeOnBoat(player, 0.25, true) && !Utilities.isSubmersed(player))
+		if (Utilities.couldBeOnBoat(player, 0.25, true) && !Utilities.isSubmersed(player)) {
 			this.onGround = true;
+		}
 
 		// Handle 1.9+ potion effects
 		if (MinecraftVersion.atOrAbove(MinecraftVersion.COMBAT_UPDATE)) {
@@ -123,15 +124,16 @@ public class MovementManager {
 				AntiCheatReloaded.getManager().getBackend().logLevitating(player, 1);
 			}
 		}
-		
+
 		this.touchedGroundThisTick = false;
 		this.halfMovement = false;
 		if (!this.onGround) {
 			this.groundTicks = 0;
 			this.airTicks++;
 		} else {
-			if (this.airTicks > 0)
+			if (this.airTicks > 0) {
 				this.touchedGroundThisTick = true;
+			}
 			this.airTicksBeforeGrounded = this.airTicks;
 			this.airTicks = 0;
 			this.groundTicks++;
@@ -142,8 +144,9 @@ public class MovementManager {
 			this.iceInfluenceTicks = 60;
 		} else {
 			this.iceTicks = 0;
-			if (this.iceInfluenceTicks > 0)
+			if (this.iceInfluenceTicks > 0) {
 				this.iceInfluenceTicks--;
+			}
 		}
 
 		if (Utilities.couldBeOnSlime(to)) {
@@ -151,62 +154,68 @@ public class MovementManager {
 			this.slimeInfluenceTicks = 40;
 		} else {
 			this.slimeTicks = 0;
-			if (this.slimeInfluenceTicks > 0)
+			if (this.slimeInfluenceTicks > 0) {
 				this.slimeInfluenceTicks--;
+			}
 		}
 
 		if (VersionUtil.isGliding(player)) {
 			this.elytraEffectTicks = 30;
 		} else {
-			if (this.elytraEffectTicks > 0)
+			if (this.elytraEffectTicks > 0) {
 				this.elytraEffectTicks--;
+			}
 		}
 
-		if (player.isSneaking())
+		if (player.isSneaking()) {
 			this.sneakingTicks++;
-		else
+		} else {
 			this.sneakingTicks = 0;
-		
-		if (player.isBlocking())
-			this.blockingTicks++;
-		else
-			this.blockingTicks = 0;
-
-		if (Utilities.isNearWater(player))
-			this.nearLiquidTicks = 8;
-		else {
-			if (this.nearLiquidTicks > 0)
-				this.nearLiquidTicks--;
-			else
-				this.nearLiquidTicks = 0;
 		}
-		
+
+		if (player.isBlocking()) {
+			this.blockingTicks++;
+		} else {
+			this.blockingTicks = 0;
+		}
+
+		if (Utilities.isNearWater(player)) {
+			this.nearLiquidTicks = 8;
+		} else {
+			if (this.nearLiquidTicks > 0) {
+				this.nearLiquidTicks--;
+			} else {
+				this.nearLiquidTicks = 0;
+			}
+		}
+
 		if (VersionUtil.CURRENT_VERSION.isAtLeast(MinecraftVersion.AQUATIC_UPDATE)) {
 			if (player.isRiptiding()) {
 				this.riptideTicks = 30;
 			} else {
-				if (this.riptideTicks > 0)
+				if (this.riptideTicks > 0) {
 					this.riptideTicks--;
-				else
+				} else {
 					this.riptideTicks = 0;
+				}
 			}
 		}
-		
+
 		this.hadSpeedEffect = this.hasSpeedEffect;
 		this.hasSpeedEffect = player.hasPotionEffect(PotionEffectType.SPEED);
 
-		double lastDistanceSq = Math.sqrt(this.lastDistance.getXDifference() * this.lastDistance.getXDifference()
+		final double lastDistanceSq = Math.sqrt(this.lastDistance.getXDifference() * this.lastDistance.getXDifference()
 				+ this.lastDistance.getZDifference() * this.lastDistance.getZDifference());
-		double currentDistanceSq = Math.sqrt(distance.getXDifference() * distance.getXDifference()
+		final double currentDistanceSq = Math.sqrt(distance.getXDifference() * distance.getXDifference()
 				+ distance.getZDifference() * distance.getZDifference());
 		this.acceleration = currentDistanceSq - lastDistanceSq;
 
 		this.lastMotionY = this.motionY;
 		this.motionY = to.getY() - from.getY();
 
-		Location top = to.clone().add(0, 2, 0);
+		final Location top = to.clone().add(0, 2, 0);
 		this.topSolid = top.getBlock().getType().isSolid();
-		Location bottom = to.clone().add(0, -1, 0);
+		final Location bottom = to.clone().add(0, -1, 0);
 		this.bottomSolid = bottom.getBlock().getType().isSolid();
 
 		if ((this.motionY > 0.42D && this.motionY <= 0.5625D)
@@ -214,8 +223,9 @@ public class MovementManager {
 			this.halfMovement = true;
 			this.halfMovementHistoryCounter = 30;
 		} else {
-			if (this.halfMovementHistoryCounter > 0)
+			if (this.halfMovementHistoryCounter > 0) {
 				this.halfMovementHistoryCounter--;
+			}
 		}
 
 		this.lastUpdate = System.currentTimeMillis();

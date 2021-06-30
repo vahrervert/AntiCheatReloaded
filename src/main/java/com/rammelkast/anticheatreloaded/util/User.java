@@ -32,7 +32,7 @@ import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.config.Configuration;
 import com.rammelkast.anticheatreloaded.util.rule.Rule;
 
-public class User {
+public final class User {
 	private final UUID uuid;
 	private final String name;
 	private final int id;
@@ -52,19 +52,20 @@ public class User {
 	private int ping = -1;
 	private int lastPing = -1;
 
-	private MovementManager movementManager;
+	private final MovementManager movementManager = new MovementManager();
 
 	/**
 	 * Initialize an AntiCheat user
 	 *
 	 * @param uuid Player's UUID
 	 */
-	public User(UUID uuid) {
+	public User(final UUID uuid) {
 		this.uuid = uuid;
 		this.name = getPlayer() != null && getPlayer().isOnline() ? getPlayer().getName() : "";
 		this.id = getPlayer() != null && getPlayer().isOnline() ? getPlayer().getEntityId() : -1;
-		this.movementManager = new MovementManager();
 		this.ping = getPlayer() != null && getPlayer().isOnline() ? VersionUtil.getPlayerPing(getPlayer()) : -1;
+        setIsWaitingOnLevelSync(true);
+        config.getLevels().loadLevelToUser(this);
 	}
 
 	/**
@@ -118,14 +119,15 @@ public class User {
 	 * @return group
 	 */
 	public Group getGroup() {
-		List<Group> groups = config.getGroups().getGroups();
+		final List<Group> groups = config.getGroups().getGroups();
 		for (int i = 0; i < groups.size(); i++) {
-			if (i == 0 && level < groups.get(i).getLevel())
+			if (i == 0 && level < groups.get(i).getLevel()) {
 				break;
-			else if (i == groups.size() - 1)
+			} else if (i == groups.size() - 1) {
 				return groups.get(i);
-			else if (level >= groups.get(i).getLevel() && level < groups.get(i + 1).getLevel())
+			} else if (level >= groups.get(i).getLevel() && level < groups.get(i + 1).getLevel()) {
 				return groups.get(i);
+			}
 		}
 		return null;
 	}
@@ -136,7 +138,7 @@ public class User {
 	 * @param type The check failed
 	 * @return true if the level was increased
 	 */
-	public boolean increaseLevel(CheckType type) {
+	public boolean increaseLevel(final CheckType type) {
 		if (getPlayer() != null && getPlayer().isOnline()) {
 			if (silentMode() && type.getUses(uuid) % 4 != 0) {
 				// Prevent silent mode from increasing the level way too fast
@@ -146,17 +148,17 @@ public class User {
 					level++;
 
 					// Check levels
-					for (Group l : getLevels()) {
-						if (l.getLevel() == level) {
-							AntiCheatReloaded.getManager().getUserManager().alert(this, l, type);
-							if (l.getLevel() == config.getGroups().getHighestLevel()) {
-								level = l.getLevel() - 10;
+					for (final Group group : getLevels()) {
+						if (group.getLevel() == level) {
+							AntiCheatReloaded.getManager().getUserManager().alert(this, group, type);
+							if (group.getLevel() == config.getGroups().getHighestLevel()) {
+								level = group.getLevel() - 10;
 							}
 						}
 					}
 
 					// Execute rules
-					for (Rule rule : config.getRules().getRules()) {
+					for (final Rule rule : config.getRules().getRules()) {
 						rule.check(this, type);
 					}
 					return true;
@@ -182,7 +184,7 @@ public class User {
 	 * @param level level to set
 	 * @return true if the level was valid and set properly
 	 */
-	public boolean setLevel(int level) {
+	public boolean setLevel(final int level) {
 		isWaitingOnLevelSync = false;
 		if (level >= 0) {
 			if (level <= config.getGroups().getHighestLevel()) {
@@ -202,7 +204,7 @@ public class User {
 	 */
 	public void resetLevel() {
 		level = 0;
-		for (CheckType type : CheckType.values()) {
+		for (final CheckType type : CheckType.values()) {
 			type.clearUse(uuid);
 		}
 	}
@@ -213,13 +215,13 @@ public class User {
 	 * @param location default value to be returned if no known good location exists
 	 * @return last known valid location
 	 */
-	public Location getGoodLocation(Location location) {
+	public Location getGoodLocation(final Location location) {
 		if (goodLocation == null || !location.getWorld().equals(goodLocation.getWorld())
 				|| location.distance(goodLocation) > config.getConfig().maxSetbackDistance.getValue()) {
 			return location;
 		}
 
-		Location moveTo = goodLocation;
+		final Location moveTo = goodLocation;
 		if (location != null) {
 			moveTo.setPitch(location.getPitch());
 			moveTo.setYaw(location.getYaw());
@@ -233,7 +235,7 @@ public class User {
 	 * @param location location to be set
 	 * @return true if the location was valid and set properly
 	 */
-	public boolean setGoodLocation(Location location) {
+	public boolean setGoodLocation(final Location location) {
 		if (Utilities.cantStandAtExp(location)) {
 			return false;
 		}
@@ -241,7 +243,7 @@ public class User {
 		goodLocation = location;
 		return true;
 	}
-	
+
 	/**
 	 * Set the player's to location
 	 *
@@ -402,9 +404,9 @@ public class User {
 	}
 
 	public int getPing() {
-		int ping = this.ping;
+		final int ping = this.ping;
 		if (ping < 0) {
-			return VersionUtil.getPlayerPing(this.getPlayer());
+			return VersionUtil.getPlayerPing(getPlayer());
 		}
 		return ping;
 	}

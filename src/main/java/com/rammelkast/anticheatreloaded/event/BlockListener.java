@@ -74,6 +74,5 @@ public class BlockListener extends EventListener {
         if (noHack) {
             decrease(player);
         }
-        getBackend().logBlockBreak(player);
     }
 }

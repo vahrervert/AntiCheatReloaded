@@ -102,7 +102,7 @@ public class MySQLLevelsHolder extends ConfigurationTable implements Levels {
                         e.printStackTrace();
                     }
                 }
-                AntiCheatReloaded.getManager().getUserManager().remove(user);
+                AntiCheatReloaded.getManager().getUserManager().removeUser(user);
             }
         });
     }

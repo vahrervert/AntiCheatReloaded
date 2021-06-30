@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
 
@@ -42,7 +42,7 @@ public class UpdateManager {
 	}
 	
 	public void update() {
-		this.latestVersion = this.getOnlineData(SPIGOT_VERSION_URL);
+		this.latestVersion = getOnlineData(SPIGOT_VERSION_URL);
 		if (this.latestVersion == null) {
 			this.isLatest = true;
 			this.isAhead = false;
@@ -64,7 +64,7 @@ public class UpdateManager {
 		InputStream stream = null;
 		try {
 			stream = new URL(url).openStream();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, Charset.forName("UTF-8")));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
 			StringBuilder builder = new StringBuilder();
 			int readChar;
 			while ((readChar = reader.read()) != -1) {

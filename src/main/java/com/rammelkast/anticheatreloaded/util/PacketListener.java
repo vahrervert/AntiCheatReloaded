@@ -21,6 +21,7 @@ package com.rammelkast.anticheatreloaded.util;
 import org.bukkit.entity.Player;
 
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
@@ -31,67 +32,67 @@ import com.rammelkast.anticheatreloaded.check.movement.NoSlowCheck;
 import com.rammelkast.anticheatreloaded.check.packet.BadPacketsCheck;
 import com.rammelkast.anticheatreloaded.check.packet.MorePacketsCheck;
 
-public class PacketListener {
+public final class PacketListener {
 
-	public static void listenMovementPackets() {
-		AntiCheatReloaded.getProtocolManager()
-				.addPacketListener(new PacketAdapter(AntiCheatReloaded.getPlugin(), ListenerPriority.LOWEST,
-						new PacketType[] { PacketType.Play.Client.POSITION, PacketType.Play.Client.POSITION_LOOK,
-								PacketType.Play.Server.POSITION }) {
-					@Override
-					public void onPacketReceiving(PacketEvent event) {
-						Player player = event.getPlayer();
-						if (player == null || !player.isOnline())
-							return;
+	public static void load(final ProtocolManager manager) {
+		// Used for MorePackets and BadPackets
+		manager.addPacketListener(new PacketAdapter(AntiCheatReloaded.getPlugin(), ListenerPriority.LOWEST,
+				new PacketType[] { PacketType.Play.Client.POSITION, PacketType.Play.Client.POSITION_LOOK,
+						PacketType.Play.Server.POSITION }) {
+			@Override
+			public void onPacketReceiving(final PacketEvent event) {
+				final Player player = event.getPlayer();
+				if (player == null || !player.isOnline()) {
+					return;
+				}
 
-						// Run MorePackets check
-						MorePacketsCheck.runCheck(player, event);
+				// Run MorePackets check
+				MorePacketsCheck.runCheck(player, event);
 
-						if (!event.isCancelled()) {
-							// Run BadPackets check
-							BadPacketsCheck.runCheck(player, event);
-						}
-					}
+				if (!event.isCancelled()) {
+					// Run BadPackets check
+					BadPacketsCheck.runCheck(player, event);
+				}
+			}
 
-					@Override
-					public void onPacketSending(PacketEvent event) {
-						Player player = event.getPlayer();
-						// Check if we have an actual player object
-						if (player instanceof TemporaryPlayer)
-							return;
-						// Compensate for teleport
-						MorePacketsCheck.compensate(player);
-					}
-				});
-	}
+			@Override
+			public void onPacketSending(final PacketEvent event) {
+				final Player player = event.getPlayer();
+				// Check if we have an actual player object
+				if (player instanceof TemporaryPlayer) {
+					return;
+				}
+				// Compensate for teleport
+				MorePacketsCheck.compensate(player);
+			}
+		});
+		
+		// Used for accurate ping
+		manager.addPacketListener(new PacketAdapter(AntiCheatReloaded.getPlugin(), ListenerPriority.LOWEST,
+				new PacketType[] { PacketType.Play.Client.KEEP_ALIVE, PacketType.Play.Server.KEEP_ALIVE }) {
+			@Override
+			public void onPacketSending(final PacketEvent event) {
+				final User user = AntiCheatReloaded.getManager().getUserManager()
+						.getUser(event.getPlayer().getUniqueId());
+				user.onServerPing();
+			}
 
-	public static void listenKeepAlivePackets() {
-		AntiCheatReloaded.getProtocolManager()
-				.addPacketListener(new PacketAdapter(AntiCheatReloaded.getPlugin(), ListenerPriority.LOWEST,
-						new PacketType[] { PacketType.Play.Client.KEEP_ALIVE, PacketType.Play.Server.KEEP_ALIVE }) {
-					@Override
-					public void onPacketSending(PacketEvent event) {
-						User user = AntiCheatReloaded.getManager().getUserManager()
-								.getUser(event.getPlayer().getUniqueId());
-						user.onServerPing();
-					}
-
-					@Override
-					public void onPacketReceiving(PacketEvent event) {
-						User user = AntiCheatReloaded.getManager().getUserManager()
-								.getUser(event.getPlayer().getUniqueId());
-						user.onClientPong();
-					}
-				});
-	}
-
-	public static void listenUseItemPackets() {
-		AntiCheatReloaded.getProtocolManager().addPacketListener(new PacketAdapter(AntiCheatReloaded.getPlugin(),
+			@Override
+			public void onPacketReceiving(final PacketEvent event) {
+				final User user = AntiCheatReloaded.getManager().getUserManager()
+						.getUser(event.getPlayer().getUniqueId());
+				user.onClientPong();
+			}
+		});
+		
+		// Used for NoSlow
+		manager.addPacketListener(new PacketAdapter(AntiCheatReloaded.getPlugin(),
 				ListenerPriority.LOWEST, new PacketType[] { PacketType.Play.Client.BLOCK_DIG }) {
 			@Override
-			public void onPacketReceiving(PacketEvent event) {
-				if (event.getPacket().getPlayerDigTypes().read(0) == PlayerDigType.RELEASE_USE_ITEM)
+			public void onPacketReceiving(final PacketEvent event) {
+				if (event.getPacket().getPlayerDigTypes().read(0) == PlayerDigType.RELEASE_USE_ITEM) {
 					NoSlowCheck.runCheck(event.getPlayer(), event);
+				}
 			}
 		});
 	}

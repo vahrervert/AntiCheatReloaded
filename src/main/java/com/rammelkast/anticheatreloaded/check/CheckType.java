@@ -34,8 +34,6 @@ import com.rammelkast.anticheatreloaded.util.User;
  * <p/>
  * All the types of checks and their corresponding permission nodes.
  */
-
-@SuppressWarnings("deprecation")
 public enum CheckType {
     FLIGHT(Permission.CHECK_FLIGHT, "Flight"),
     ELYTRAFLY(Permission.CHECK_ELYTRAFLY, "ElytraFly"),

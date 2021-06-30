@@ -27,9 +27,7 @@ import com.rammelkast.anticheatreloaded.util.User;
 
 /**
  * Fired when a player fails an AntiCheatReloaded check
- * Will be replaced in ACR 2.0.0
  */
-@Deprecated
 public class CheckFailEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();

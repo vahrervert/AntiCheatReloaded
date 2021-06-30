@@ -34,207 +34,209 @@ import com.rammelkast.anticheatreloaded.util.Group;
 import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 
-public class UserManager {
-    private List<User> users = new ArrayList<User>();
-    private AntiCheatManager manager;
-    private Configuration config;
-    /**
-     * Initialize the user manager
-     *
-     * @param manager The AntiCheat Manager
-     */
-    public UserManager(AntiCheatManager manager) {
-        this.manager = manager;
-        this.config = manager.getConfiguration();
-    }
+public final class UserManager {
+	private final List<User> users = new ArrayList<User>();
+	private final AntiCheatManager manager;
+	private final Configuration config;
 
-    /**
-     * Get a user with the given UUID
-     *
-     * @param uuid UUID
-     * @return User with UUID
-     */
-    public User getUser(UUID uuid) {
-        for (User user : users) {
-            if (user.getUUID().equals(uuid)) {
-                return user;
-            }
-        }
-        // Otherwise try to load them
-        User user = new User(uuid);
-        user.setIsWaitingOnLevelSync(true);
-        config.getLevels().loadLevelToUser(user);
-        return user;
-    }
+	/**
+	 * Initialize the user manager
+	 *
+	 * @param manager The AntiCheat Manager
+	 */
+	public UserManager(final AntiCheatManager manager) {
+		this.manager = manager;
+		this.config = manager.getConfiguration();
+	}
 
-    /**
-     * Get all users
-     *
-     * @return List of users
-     */
-    public List<User> getUsers() {
-        return users;
-    }
+	/**
+	 * Get a user with the given UUID
+	 *
+	 * @param uuid UUID
+	 * @return User with UUID
+	 */
+	public User getUser(final UUID uuid) {
+		return this.users.parallelStream().filter(user -> user.getUUID().equals(uuid)).findFirst()
+				.orElseGet(() -> new User(uuid));
+	}
 
-    /**
-     * Add a user to the list
-     *
-     * @param user User to add
-     */
-    public void addUser(User user) {
-        users.add(user);
-    }
+	/**
+	 * Get all users
+	 *
+	 * @return List of users
+	 */
+	public List<User> getUsers() {
+		return users;
+	}
 
-    /**
-     * Remove a user from the list
-     *
-     * @param user User to remove
-     */
-    public void remove(User user) {
-        users.remove(user);
-    }
+	/**
+	 * Add a user to the list
+	 *
+	 * @param user User to add
+	 */
+	public void addUser(final User user) {
+		users.add(user);
+	}
 
-    /**
-     * Save a user's level
-     *
-     * @param user User to save
-     */
-    public void saveLevel(User user) {
-        config.getLevels().saveLevelFromUser(user);
-    }
+	/**
+	 * Remove a user from the list
+	 *
+	 * @param user User to remove
+	 */
+	public void removeUser(final User user) {
+		users.remove(user);
+	}
 
-    /**
-     * Get users in group
-     *
-     * @param group Group to find users of
-     */
-    public List<User> getUsersInGroup(Group group) {
-        List<User> list = new ArrayList<User>();
-        for (User u : users) {
-            if (u.getGroup() == group) {
-                list.add(u);
-            }
-        }
-        return list;
-    }
+	/**
+	 * Save a user's level
+	 *
+	 * @param user User to save
+	 */
+	public void saveLevel(final User user) {
+		config.getLevels().saveLevelFromUser(user);
+	}
 
-    /**
-     * Get a user's level, or 0 if the player isn't found
-     *
-     * @param uuid UUID of the player
-     * @return player level
-     */
-    public int safeGetLevel(UUID uuid) {
-        User user = getUser(uuid);
-        if (user == null) {
-            return 0;
-        } else {
-            return user.getLevel();
-        }
-    }
+	/**
+	 * Get users in group
+	 *
+	 * @param group Group to find users of
+	 */
+	public List<User> getUsersInGroup(final Group group) {
+		final List<User> list = new ArrayList<User>();
+		for (final User user : users) {
+			if (user.getGroup() == group) {
+				list.add(user);
+			}
+		}
+		return list;
+	}
 
-    /**
-     * Set a user's level
-     *
-     * @param uuid UUID of the player
-     * @param level Group to set
-     */
-    public void safeSetLevel(UUID uuid, int level) {
-        User user = getUser(uuid);
-        if (user != null) {
-            user.setLevel(level);
-        }
-    }
+	/**
+	 * Get a user's level, or 0 if the player isn't found
+	 *
+	 * @param uuid UUID of the player
+	 * @return player level
+	 */
+	public int safeGetLevel(final UUID uuid) {
+		final User user = getUser(uuid);
+		if (user == null) {
+			return 0;
+		} else {
+			return user.getLevel();
+		}
+	}
 
-    /**
-     * Reset a user
-     *
-     * @param uuid UUID of the user
-     */
-    public void safeReset(UUID uuid) {
-        User user = getUser(uuid);
-        if (user != null) {
-            user.resetLevel();
-        }
-    }
+	/**
+	 * Set a user's level
+	 *
+	 * @param uuid  UUID of the player
+	 * @param level Group to set
+	 */
+	public void safeSetLevel(final UUID uuid, final int level) {
+		final User user = getUser(uuid);
+		if (user != null) {
+			user.setLevel(level);
+		}
+	}
 
-    /**
-     * Fire an alert
-     *
-     * @param user  The user to alert
-     * @param group The user's group
-     * @param type  The CheckType that triggered the alert
-     */
-    public void alert(User user, Group group, CheckType type) {
-        execute(user, group.getActions(), type);
-    }
+	/**
+	 * Reset a user
+	 *
+	 * @param uuid UUID of the user
+	 */
+	public void safeReset(final UUID uuid) {
+		final User user = getUser(uuid);
+		if (user != null) {
+			user.resetLevel();
+		}
+	}
 
-    /**
-     * Execute configuration actions for an alert
-     *
-     * @param user    The user
-     * @param actions The list of actions to execute
-     * @param type    The CheckType that triggered the alert
-     */
-    public void execute(User user, List<String> actions, CheckType type) {
-        execute(user, actions, type, config.getLang().KICK_REASON(), config.getLang().WARNING(), config.getLang().BAN_REASON());
-    }
+	/**
+	 * Fire an alert
+	 *
+	 * @param user  The user to alert
+	 * @param group The user's group
+	 * @param type  The CheckType that triggered the alert
+	 */
+	public void alert(final User user, final Group group, final CheckType type) {
+		execute(user, group.getActions(), type);
+	}
 
-    /**
-     * Execute configuration actions for an alert
-     *
-     * @param user       The user
-     * @param actions    The list of actions to execute
-     * @param type       The CheckType that triggered the alert
-     * @param kickReason The config's kick reason
-     * @param warning    The config's warning format
-     * @param banReason  The config's ban reason
-     */
-    public void execute(final User user, final List<String> actions, final CheckType type, final String kickReason, final List<String> warning, final String banReason) {
-        // Execute synchronously for thread safety when called from AsyncPlayerChatEvent
-        Bukkit.getScheduler().scheduleSyncDelayedTask(AntiCheatReloaded.getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-            	if (user.getPlayer() == null) {
-            		return;
-            	}
-                final String name = user.getName();
-                for (String event : actions) {
-                    event = event.replaceAll("%player%", name).replaceAll("%world%", user.getPlayer().getWorld().getName()).replaceAll("%check%", type.name());
+	/**
+	 * Execute configuration actions for an alert
+	 *
+	 * @param user    The user
+	 * @param actions The list of actions to execute
+	 * @param type    The CheckType that triggered the alert
+	 */
+	public void execute(final User user, final List<String> actions, final CheckType type) {
+		execute(user, actions, type, config.getLang().KICK_REASON(), config.getLang().WARNING(),
+				config.getLang().BAN_REASON());
+	}
 
-                    if (event.startsWith("COMMAND[")) {
-                        for (String cmd : Utilities.getCommands(event)) {
-                            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd);
-                        }
-                    } else if (event.equalsIgnoreCase("KICK")) {
-                        user.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&', kickReason));
-                        AntiCheatReloaded.getPlugin().onPlayerKicked();
-                        String msg = ChatColor.translateAlternateColorCodes('&', config.getLang().KICK_BROADCAST().replaceAll("%player%", name) + " (" + type.getName() + ")");
-                        if (!msg.equals("")) {
-                            manager.log(msg);
-                            manager.playerLog(msg);
-                        }
-                    } else if (event.equalsIgnoreCase("WARN")) {
-                        List<String> message = warning;
-                        for (String string : message) {
-                            if (!string.equals("")) {
-                                user.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', string));
-                            }
-                        }
-                    } else if (event.equalsIgnoreCase("BAN")) {
-                        Bukkit.getBanList(Type.NAME).addBan(user.getPlayer().getName(), ChatColor.translateAlternateColorCodes('&', banReason), null, null);
-                        user.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&', banReason));
-                        String msg = ChatColor.translateAlternateColorCodes('&', config.getLang().BAN_BROADCAST().replaceAll("%player%", name) + " (" + type.getName() + ")");
-                        if (!msg.equals("")) {
-                            manager.log(msg);
-                            manager.playerLog(msg);
-                        }
-                    } else if (event.equalsIgnoreCase("RESET")) {
-                        user.resetLevel();
-                    }
-                }
-            }
-        });
-    }
+	/**
+	 * Execute configuration actions for an alert
+	 *
+	 * @param user       The user
+	 * @param actions    The list of actions to execute
+	 * @param type       The CheckType that triggered the alert
+	 * @param kickReason The config's kick reason
+	 * @param warning    The config's warning format
+	 * @param banReason  The config's ban reason
+	 */
+	public void execute(final User user, final List<String> actions, final CheckType type, final String kickReason,
+			final List<String> warning, final String banReason) {
+		// Execute synchronously for thread safety when called from AsyncPlayerChatEvent
+		Bukkit.getScheduler().scheduleSyncDelayedTask(AntiCheatReloaded.getPlugin(), new Runnable() {
+			@Override
+			public void run() {
+				if (user.getPlayer() == null) {
+					return;
+				}
+				final String name = user.getName();
+				for (String event : actions) {
+					event = event.replaceAll("%player%", name)
+							.replaceAll("%world%", user.getPlayer().getWorld().getName())
+							.replaceAll("%check%", type.name());
+
+					if (event.startsWith("COMMAND[")) {
+						for (String cmd : Utilities.getCommands(event)) {
+							Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd);
+						}
+					} else if (event.equalsIgnoreCase("KICK")) {
+						user.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&', kickReason));
+						AntiCheatReloaded.getPlugin().onPlayerKicked();
+						String msg = ChatColor.translateAlternateColorCodes('&',
+								config.getLang().KICK_BROADCAST().replaceAll("%player%", name) + " (" + type.getName()
+										+ ")");
+						if (!msg.equals("")) {
+							manager.log(msg);
+							manager.playerLog(msg);
+						}
+					} else if (event.equalsIgnoreCase("WARN")) {
+						List<String> message = warning;
+						for (String string : message) {
+							if (!string.equals("")) {
+								user.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+							}
+						}
+					} else if (event.equalsIgnoreCase("BAN")) {
+						Bukkit.getBanList(Type.NAME).addBan(user.getPlayer().getName(),
+								ChatColor.translateAlternateColorCodes('&', banReason), null, null);
+						user.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&', banReason));
+						String msg = ChatColor.translateAlternateColorCodes('&',
+								config.getLang().BAN_BROADCAST().replaceAll("%player%", name) + " (" + type.getName()
+										+ ")");
+						if (!msg.equals("")) {
+							manager.log(msg);
+							manager.playerLog(msg);
+						}
+					} else if (event.equalsIgnoreCase("RESET")) {
+						user.resetLevel();
+					}
+				}
+			}
+		});
+	}
 
 }
