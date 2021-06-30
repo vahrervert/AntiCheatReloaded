@@ -15,10 +15,10 @@ flight:
     accountForBlockPlacement: 1200
     # How many milliseconds to account for TPS drops
     # Increase this if you get false positives when building a tower during TPS drops
-    accountForTpsDrops: 250
+    accountForTpsDrops: 300
     # How many milliseconds to account for teleports
     # Increase this is you debug 'had too little Y dropoff' after teleports
-    accountForTeleports: 400
+    accountForTeleports: 500
   # Checks for climbing behaviour in air
   # Debugs as 'tried to climb air'
   airClimb:
@@ -262,7 +262,7 @@ badpackets:
   # Maximum distance a player can move between packets
   maxDistance: 25.0
   # The amount of milliseconds to compensate for a teleport (50ms = 1 tick)
-  teleportCompensation: 300
+  teleportCompensation: 500
 # MorePackets check settings
 # Checks for an extra amount of packets and modified game timers
 morepackets:
@@ -271,12 +271,12 @@ morepackets:
   # Minimum server TPS needed for MorePackets to be active
   minimumTps: 17.5
   # Maximum amount of lag compensation a player can acquire (50ms = 1 tick)
-  minimumClamp: 1000
+  minimumClamp: 1200
   # The amount of milliseconds offset between packets before flagging (50ms = 1 tick)
-  triggerBalance: 100
+  triggerBalance: 150
   # The amount of milliseconds to compensate for a teleport (50ms = 1 tick)
-  teleportCompensation: 300
-  # Should MorePackets be disabled for 'lagging' players?
+  teleportCompensation: 500
+  # Should this check be disabled for 'lagging' players?
   # This can easily be spoofed by clients!
   disableForLagging: false
   # Maximum ping value before MorePackets stops checking a player (-1 to disable)
@@ -287,7 +287,7 @@ morepackets:
 sneak:
   # Should this check be enabled?
   enabled: true
-  # Should MorePackets be disabled for 'lagging' players?
+  # Should this check be disabled for 'lagging' players?
   # This can easily be spoofed by clients!
   disableForLagging: false
   # Minimum server TPS needed for sneak

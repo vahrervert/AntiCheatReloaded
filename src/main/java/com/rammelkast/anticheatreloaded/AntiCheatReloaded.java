@@ -70,7 +70,8 @@ public final class AntiCheatReloaded extends JavaPlugin {
 		plugin = this;
 		manager = new AntiCheatManager(this, getLogger());
 		
-		final int threads = Math.max(1, Runtime.getRuntime().availableProcessors() / 4);
+		// Base threads on available cores, limit of 4
+		final int threads = Math.min(Runtime.getRuntime().availableProcessors() / 4, 4);
 		executorService = Executors.newFixedThreadPool(threads);
 		Bukkit.getConsoleSender().sendMessage(PREFIX + ChatColor.GRAY + "Pool size is " + threads + " threads");
 		
