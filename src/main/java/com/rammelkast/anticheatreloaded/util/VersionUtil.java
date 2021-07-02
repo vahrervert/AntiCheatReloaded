@@ -96,6 +96,11 @@ public class VersionUtil {
 	}
 
 	public static int getPlayerPing(final Player player) {
+		// May be called with offline (null) player
+		if (player == null) {
+			return -1;
+		}
+		
 		if (!CURRENT_VERSION.isAtLeast(MinecraftVersion.CAVES_CLIFFS_1)) {
 			try {
 				final Object entityPlayer = player.getClass().getMethod("getHandle").invoke(player);
