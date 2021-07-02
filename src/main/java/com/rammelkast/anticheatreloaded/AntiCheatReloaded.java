@@ -70,8 +70,8 @@ public final class AntiCheatReloaded extends JavaPlugin {
 		plugin = this;
 		manager = new AntiCheatManager(this, getLogger());
 		
-		// Base threads on available cores, limit of 4
-		final int threads = Math.min(Runtime.getRuntime().availableProcessors() / 4, 4);
+		// Base threads on available cores, lower limit of 1 and upper limit of 4
+		final int threads = Math.max(Math.min(Runtime.getRuntime().availableProcessors() / 4, 4), 1);
 		executorService = Executors.newFixedThreadPool(threads);
 		Bukkit.getConsoleSender().sendMessage(PREFIX + ChatColor.GRAY + "Pool size is " + threads + " threads");
 		
@@ -182,7 +182,9 @@ public final class AntiCheatReloaded extends JavaPlugin {
 		
 		// Save user levels
 		verboseLog("Saving user levels...");
-		config.getLevels().saveLevelsFromUsers(manager.getUserManager().getUsers());
+		if (config != null) {
+			config.getLevels().saveLevelsFromUsers(manager.getUserManager().getUsers());
+		}
 
 		AntiCheatManager.close();
 		cleanup();
