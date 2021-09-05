@@ -41,7 +41,7 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
 /**
  * @author Rammelkast
  */
-public class FlightCheck {
+public final class FlightCheck {
 
 	public static final Map<UUID, Long> MOVING_EXEMPT = new HashMap<UUID, Long>();
 	public static final Map<UUID, Float> GRAVITY_VIOLATIONS = new HashMap<UUID, Float>();

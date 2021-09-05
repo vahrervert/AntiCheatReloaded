@@ -28,14 +28,14 @@ import com.rammelkast.anticheatreloaded.util.User;
 /**
  * Fired when a player fails an AntiCheatReloaded check
  */
-public class CheckFailEvent extends Event {
+public final class CheckFailEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
     private final User user;
     private final CheckType type;
 
-    public CheckFailEvent(User user, CheckType type) {
+    public CheckFailEvent(final User user, final CheckType type) {
         this.user = user;
         this.type = type;
     }

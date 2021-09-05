@@ -39,7 +39,7 @@ import com.rammelkast.anticheatreloaded.util.MovementManager;
 import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 
-public class KillAuraCheck {
+public final class KillAuraCheck {
 
 	// Angle check
 	public static final Map<UUID, Integer> ANGLE_FLAGS = new HashMap<UUID, Integer>();

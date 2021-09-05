@@ -29,7 +29,7 @@ import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.event.EventListener;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 
-public class CriticalsCheck {
+public final class CriticalsCheck {
 
 	public static void doDamageEvent(EntityDamageByEntityEvent event, Player damager) {
 		if (!(event.getDamager() instanceof Player) || event.getCause() != DamageCause.ENTITY_ATTACK)

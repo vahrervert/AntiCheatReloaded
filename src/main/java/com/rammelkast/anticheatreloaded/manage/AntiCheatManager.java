@@ -133,5 +133,18 @@ public class AntiCheatManager {
         if (configuration.getConfig().enterprise.getValue()) {
             configuration.getEnterprise().database.shutdown();
         }
+        
+        eventchains.clear();
+        eventcache.clear();
+        
+        // Nullify
+        plugin = null;
+        configuration = null;
+        loggingManager = null;
+        userManager = null;
+        checkManager = null;
+        backend = null;
+        eventchains = null;
+        eventcache = null;
     }
 }

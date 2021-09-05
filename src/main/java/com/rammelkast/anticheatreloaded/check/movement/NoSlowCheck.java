@@ -33,7 +33,7 @@ import com.rammelkast.anticheatreloaded.event.EventListener;
 import com.rammelkast.anticheatreloaded.util.MovementManager;
 import com.rammelkast.anticheatreloaded.util.User;
 
-public class NoSlowCheck {
+public final class NoSlowCheck {
 
 	public static final Map<UUID, Long> LAST_RELEASE = new HashMap<UUID, Long>();
 	public static final Map<UUID, Integer> VIOLATIONS = new HashMap<UUID, Integer>();

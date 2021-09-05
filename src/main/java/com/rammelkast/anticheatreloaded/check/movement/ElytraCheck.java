@@ -34,7 +34,7 @@ import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 import com.rammelkast.anticheatreloaded.util.XMaterial;
 
-public class ElytraCheck {
+public final class ElytraCheck {
 
 	public static final HashMap<UUID, Double> JUMP_Y_VALUE = new HashMap<UUID, Double>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);

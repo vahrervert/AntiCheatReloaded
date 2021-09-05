@@ -34,7 +34,7 @@ import com.rammelkast.anticheatreloaded.util.MovementManager;
 import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 
-public class VelocityCheck {
+public final class VelocityCheck {
 
 	public static final Map<UUID, Integer> VIOLATIONS = new HashMap<UUID, Integer>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);

@@ -37,7 +37,7 @@ import com.rammelkast.anticheatreloaded.util.VersionUtil;
  * @author Rammelkast
  *
  */
-public class StrafeCheck {
+public final class StrafeCheck {
 
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 

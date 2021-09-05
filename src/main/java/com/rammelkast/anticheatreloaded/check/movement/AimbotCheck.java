@@ -31,7 +31,7 @@ import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.config.providers.Checks;
 
-public class AimbotCheck {
+public final class AimbotCheck {
 
 	public static final Map<UUID, Float> LAST_DELTA_YAW = new HashMap<UUID, Float>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);

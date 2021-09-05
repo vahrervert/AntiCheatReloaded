@@ -36,7 +36,7 @@ import com.rammelkast.anticheatreloaded.util.MovementManager;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
-public class BoatFlyCheck {
+public final class BoatFlyCheck {
 
 	public static final Map<UUID, Integer> VIOLATIONS = new HashMap<UUID, Integer>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);

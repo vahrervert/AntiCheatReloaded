@@ -1043,6 +1043,14 @@ public final class Utilities {
 				CLIMBABLE.add(XMaterial.WEEPING_VINES_PLANT.parseMaterial());
 			}
 			// End 1.16 objects
+			
+			// Start 1.17 objects
+			if (currentVersion.isAtLeast(MinecraftVersion.CAVES_CLIFFS_1)) {
+				CLIMBABLE.add(XMaterial.CAVE_VINES.parseMaterial());
+				CLIMBABLE.add(XMaterial.CAVE_VINES_PLANT.parseMaterial());
+				CLIMBABLE.add(XMaterial.GLOW_BERRIES.parseMaterial());
+			}
+			// End 1.17 objects
 			// End climbable
 		}
 		// End other versions

@@ -34,7 +34,7 @@ import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
-public class WaterWalkCheck {
+public final class WaterWalkCheck {
 
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 

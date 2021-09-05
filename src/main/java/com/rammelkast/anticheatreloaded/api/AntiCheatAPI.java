@@ -30,14 +30,10 @@ import com.rammelkast.anticheatreloaded.manage.CheckManager;
 import com.rammelkast.anticheatreloaded.manage.UserManager;
 import com.rammelkast.anticheatreloaded.util.Group;
 
-/**
- * Fired when a player fails an AntiCheatReloaded check
- * Will be replaced in ACR 2.0.0
- */
-@Deprecated
+
 public class AntiCheatAPI {
-    private static CheckManager chk = AntiCheatReloaded.getManager().getCheckManager();
-    private static UserManager umr = AntiCheatReloaded.getManager().getUserManager();
+    private static final CheckManager chk = AntiCheatReloaded.getManager().getCheckManager();
+    private static final UserManager umr = AntiCheatReloaded.getManager().getUserManager();
 
     // CheckManager API
 
@@ -46,7 +42,7 @@ public class AntiCheatAPI {
      *
      * @param type Check to start watching for
      */
-    public static void activateCheck(CheckType type, Class<?> caller) {
+    public static void activateCheck(final CheckType type, final Class<?> caller) {
         chk.activateCheck(type, caller.getName());
     }
 
@@ -55,7 +51,7 @@ public class AntiCheatAPI {
      *
      * @param type Check to stop watching for
      */
-    public static void deactivateCheck(CheckType type, Class<?> caller) {
+    public static void deactivateCheck(final CheckType type, final Class<?> caller) {
         chk.deactivateCheck(type, caller.getName());
     }
 
@@ -65,7 +61,7 @@ public class AntiCheatAPI {
      * @param type Type to check
      * @return true if plugin is watching for this check
      */
-    public static boolean isActive(CheckType type) {
+    public static boolean isActive(final CheckType type) {
         return chk.isActive(type);
     }
 
@@ -75,7 +71,7 @@ public class AntiCheatAPI {
      * @param player Player to stop watching
      * @param type   Check to stop watching for
      */
-    public static void exemptPlayer(Player player, CheckType type, Class<?> caller) {
+    public static void exemptPlayer(final Player player, final CheckType type, final Class<?> caller) {
         chk.exemptPlayer(player, type, caller.getName());
     }
 
@@ -85,7 +81,7 @@ public class AntiCheatAPI {
      * @param player Player to start watching
      * @param type   Check to start watching for
      */
-    public static void unexemptPlayer(Player player, CheckType type, Class<?> caller) {
+    public static void unexemptPlayer(final Player player, final CheckType type, final Class<?> caller) {
         chk.unexemptPlayer(player, type, caller.getName());
     }
 
@@ -96,7 +92,7 @@ public class AntiCheatAPI {
      * @param type   Type to check
      * @return true if plugin is ignoring this check on this player
      */
-    public static boolean isExempt(Player player, CheckType type) {
+    public static boolean isExempt(final Player player, final CheckType type) {
         return chk.isExempt(player, type);
     }
 
@@ -107,7 +103,7 @@ public class AntiCheatAPI {
      * @param type   Type to check
      * @return true if plugin will check this player, and that all things allow it to happen.
      */
-    public boolean willCheck(Player player, CheckType type) {
+    public boolean willCheck(final Player player, final CheckType type) {
         return chk.willCheck(player, type);
     }
 
@@ -118,7 +114,7 @@ public class AntiCheatAPI {
      *
      * @param player Player to reset
      */
-    public static void resetPlayer(Player player) {
+    public static void resetPlayer(final Player player) {
         umr.getUser(player.getUniqueId()).resetLevel();
     }
 
@@ -128,7 +124,7 @@ public class AntiCheatAPI {
      * @param player Player whose group to find
      * @return The player's group
      */
-    public static Group getGroup(Player player) {
+    public static Group getGroup(final Player player) {
         return umr.getUser(player.getUniqueId()).getGroup();
     }
 

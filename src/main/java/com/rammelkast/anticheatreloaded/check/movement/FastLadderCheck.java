@@ -32,7 +32,7 @@ import com.rammelkast.anticheatreloaded.config.providers.Checks;
 import com.rammelkast.anticheatreloaded.util.Utilities;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
-public class FastLadderCheck {
+public final class FastLadderCheck {
 
 	public static final Map<UUID, Integer> VIOLATIONS = new HashMap<UUID, Integer>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
