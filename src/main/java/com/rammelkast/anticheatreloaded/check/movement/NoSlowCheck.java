@@ -38,21 +38,24 @@ public final class NoSlowCheck {
 	public static final Map<UUID, Long> LAST_RELEASE = new HashMap<UUID, Long>();
 	public static final Map<UUID, Integer> VIOLATIONS = new HashMap<UUID, Integer>();
 
-	public static void runCheck(Player player, PacketEvent event) {
-		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.NOSLOW))
+	public static void runCheck(final Player player, final PacketEvent event) {
+		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.NOSLOW)) {
 			return;
-		UUID uuid = player.getUniqueId();
-		User user = AntiCheatReloaded.getManager().getUserManager().getUser(uuid);
-		MovementManager movementManager = user.getMovementManager();
-		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+		}
+		
+		final UUID uuid = player.getUniqueId();
+		final User user = AntiCheatReloaded.getManager().getUserManager().getUser(uuid);
+		final MovementManager movementManager = user.getMovementManager();
+		final Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		final long time = System.currentTimeMillis();
 		final long lastRelease = LAST_RELEASE.getOrDefault(uuid, 0L);
 		LAST_RELEASE.put(uuid, time);
-		if (lastRelease == 0L)
+		if (lastRelease == 0L) {
 			return;
+		}
 
-		long difference = time - lastRelease;
-		long minimumDifference = checksConfig.getInteger(CheckType.NOSLOW, "minimumDifference");
+		final long difference = time - lastRelease;
+		final long minimumDifference = checksConfig.getInteger(CheckType.NOSLOW, "minimumDifference");
 		if (difference < minimumDifference
 				&& movementManager.distanceXZ >= checksConfig.getDouble(CheckType.NOSLOW, "minimumDistXZ")) {
 			int violations = VIOLATIONS.getOrDefault(uuid, 1);
@@ -65,7 +68,7 @@ public final class NoSlowCheck {
 		}
 	}
 
-	private static void flag(Player player, PacketEvent event, String message) {
+	private static void flag(final Player player, final PacketEvent event, final String message) {
 		event.setCancelled(true);
 		// We are currently not in the main server thread, so switch
 		AntiCheatReloaded.sendToMainThread(new Runnable() {

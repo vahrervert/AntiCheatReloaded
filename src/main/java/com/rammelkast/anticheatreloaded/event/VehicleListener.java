@@ -27,7 +27,6 @@ import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 
 import com.rammelkast.anticheatreloaded.AntiCheatReloaded;
-import com.rammelkast.anticheatreloaded.util.VersionUtil;
 
 public class VehicleListener extends EventListener {
 
@@ -49,26 +48,15 @@ public class VehicleListener extends EventListener {
 		AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler(ignoreCancelled = true)
 	public void onVehicleDestroy(VehicleDestroyEvent event) {
-		if (VersionUtil.isBountifulUpdate()) {
-			if (event.getVehicle().getPassenger() != null) {
-				Entity entity = event.getVehicle().getPassenger();
+		if (!event.getVehicle().getPassengers().isEmpty()) {
+			for (Entity entity : event.getVehicle().getPassengers()) {
 				if (entity instanceof Player) {
 					getBackend().logEnterExit((Player) entity);
 				}
 			}
-		} else {
-			if (!event.getVehicle().getPassengers().isEmpty()) {
-				for (Entity entity : event.getVehicle().getPassengers()) {
-					if (entity instanceof Player) {
-						getBackend().logEnterExit((Player) entity);
-					}
-				}
-			}
 		}
-
 		AntiCheatReloaded.getManager().addEvent(event.getEventName(), event.getHandlers().getRegisteredListeners());
 	}
 }

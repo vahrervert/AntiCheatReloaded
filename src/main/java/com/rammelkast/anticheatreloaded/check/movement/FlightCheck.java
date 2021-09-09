@@ -45,10 +45,11 @@ public final class FlightCheck {
 
 	public static final Map<UUID, Long> MOVING_EXEMPT = new HashMap<UUID, Long>();
 	public static final Map<UUID, Float> GRAVITY_VIOLATIONS = new HashMap<UUID, Float>();
+	
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 	private static final double GRAVITY_FRICTION = 0.9800000190734863D;
 
-	public static CheckResult runCheck(Player player, Distance distance) {
+	public static CheckResult runCheck(final Player player, final Distance distance) {
 		if (distance.getYDifference() >= AntiCheatReloaded.getManager().getBackend().getMagic().TELEPORT_MIN()
 				|| VersionUtil.isFlying(player) || player.getVehicle() != null
 				|| AntiCheatReloaded.getManager().getBackend().isMovingExempt(player)) {
@@ -58,21 +59,24 @@ public final class FlightCheck {
 			return PASS;
 		}
 
-		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
-		MovementManager movementManager = user.getMovementManager();
-		Backend backend = AntiCheatReloaded.getManager().getBackend();
-		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+		final User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
+		final MovementManager movementManager = user.getMovementManager();
+		final Backend backend = AntiCheatReloaded.getManager().getBackend();
+		final Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 
 		if (movementManager.nearLiquidTicks > 0 || movementManager.halfMovement || Utilities.isNearClimbable(player)
-				|| movementManager.riptideTicks > 0)
+				|| movementManager.riptideTicks > 0) {
 			return PASS;
+		}
 
 		int minAirTicks = 13;
-		if (player.hasPotionEffect(PotionEffectType.JUMP))
+		if (player.hasPotionEffect(PotionEffectType.JUMP)) {
 			minAirTicks += VersionUtil.getPotionLevel(player, PotionEffectType.JUMP) * 3;
+		}
 
-		if (movementManager.halfMovementHistoryCounter > 25)
+		if (movementManager.halfMovementHistoryCounter > 25) {
 			minAirTicks += 5;
+		}
 
 		// Start AirFlight
 		if (checksConfig.isSubcheckEnabled(CheckType.FLIGHT, "airFlight") && movementManager.airTicks > minAirTicks
@@ -82,20 +86,27 @@ public final class FlightCheck {
 			int blockPlaceAccountingTime = (int) (checksConfig.getInteger(CheckType.FLIGHT, "airFlight",
 					"accountForBlockPlacement") + (0.25 * (user.getPing() > 1000 ? 1000 : user.getPing())));
 			// Config default account is 250ms
-			if (AntiCheatReloaded.getPlugin().getTPS() < 18.0)
+			if (AntiCheatReloaded.getPlugin().getTPS() < 18.0) {
 				blockPlaceAccountingTime += checksConfig.getInteger(CheckType.FLIGHT, "airFlight",
 						"accountForTpsDrops");
-			long lastPlacedBlock = AntiCheatReloaded.getManager().getBackend().placedBlock
+			}
+			
+			final long lastPlacedBlock = AntiCheatReloaded.getManager().getBackend().placedBlock
 					.containsKey(player.getUniqueId())
 							? AntiCheatReloaded.getManager().getBackend().placedBlock.get(player.getUniqueId())
 							: (blockPlaceAccountingTime + 1);
 			double maxMotionY = System.currentTimeMillis() - lastPlacedBlock > blockPlaceAccountingTime ? 0 : 0.42;
 			// Fixes snow false positive
 			if (movementManager.motionY < 0.004 && Utilities
-					.isNearHalfblock(distance.getFrom().getBlock().getRelative(BlockFace.DOWN).getLocation()))
+					.isNearHalfblock(distance.getFrom().getBlock().getRelative(BlockFace.DOWN).getLocation())) {
 				maxMotionY += 0.004D;
-			if (Utilities.isNearWater(player) || Utilities.isNearWater(distance.getFrom().clone().subtract(0, 0.51, 0)))
+			}
+			
+			// Fixes water false positive
+			if (Utilities.isNearWater(player) || Utilities.isNearWater(distance.getFrom().clone().subtract(0, 0.51, 0))) {
 				maxMotionY += 0.05;
+			}
+			
 			if (movementManager.motionY > maxMotionY && movementManager.slimeInfluenceTicks <= 0
 					&& !Utilities.isNearClimbable(distance.getTo().clone().subtract(0, 1.25, 0))
 					&& !Utilities.isNearClimbable(distance.getTo().clone().subtract(0, 0.75, 0))

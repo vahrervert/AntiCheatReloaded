@@ -31,21 +31,24 @@ import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.check.CheckType;
 import com.rammelkast.anticheatreloaded.config.providers.Checks;
 
+/**
+ * TODO redo this all - useless check
+ */
 public final class AimbotCheck {
 
 	public static final Map<UUID, Float> LAST_DELTA_YAW = new HashMap<UUID, Float>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 	
-	public static CheckResult runCheck(Player player, PlayerMoveEvent event) {
-		Backend backend = AntiCheatReloaded.getManager().getBackend();
-		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+	public static CheckResult runCheck(final Player player, final PlayerMoveEvent event) {
+		final Backend backend = AntiCheatReloaded.getManager().getBackend();
+		final Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		if (backend.isMovingExempt(player)) {
 			return PASS;
 		}
 		
-		UUID uuid = player.getUniqueId();
-		float dYaw = Math.abs(event.getTo().getYaw() - event.getFrom().getYaw());
-		float dPitch = Math.abs(event.getTo().getPitch() - event.getFrom().getPitch());
+		final UUID uuid = player.getUniqueId();
+		final float dYaw = Math.abs(event.getTo().getYaw() - event.getFrom().getYaw());
+		final float dPitch = Math.abs(event.getTo().getPitch() - event.getFrom().getPitch());
 		// Not interesting
 		if (dYaw < 0.05 && dPitch < 0.05) {
 			return PASS;
@@ -58,11 +61,12 @@ public final class AimbotCheck {
 		}
 		LAST_DELTA_YAW.put(uuid, dYaw);
 		
-		float absoluteYawDifference = Math.abs(dYaw - lastDeltaYaw);
-		int minYaw = checksConfig.getInteger(CheckType.AIMBOT, "minYaw");
-		int maxYaw = checksConfig.getInteger(CheckType.AIMBOT, "maxYaw");
-		if (absoluteYawDifference < 1E-8 && minYaw > 30 && dYaw < maxYaw)
+		final float absoluteYawDifference = Math.abs(dYaw - lastDeltaYaw);
+		final int minYaw = checksConfig.getInteger(CheckType.AIMBOT, "minYaw");
+		final int maxYaw = checksConfig.getInteger(CheckType.AIMBOT, "maxYaw");
+		if (absoluteYawDifference < 1E-8 && minYaw > 30 && dYaw < maxYaw) {
 			return new CheckResult(CheckResult.Result.FAILED, "repeated yaw difference (dYaw=" + dYaw + ")");
+		}
 		return PASS;
 	}
 

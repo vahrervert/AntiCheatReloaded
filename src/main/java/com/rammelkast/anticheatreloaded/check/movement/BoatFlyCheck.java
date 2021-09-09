@@ -41,18 +41,20 @@ public final class BoatFlyCheck {
 	public static final Map<UUID, Integer> VIOLATIONS = new HashMap<UUID, Integer>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
-	public static CheckResult runCheck(Player player, MovementManager movementManager, Location to) {
+	public static CheckResult runCheck(final Player player, final MovementManager movementManager, final Location to) {
 		if (movementManager.distanceXZ <= 0 || movementManager.motionY <= 1E-3
 				|| (System.currentTimeMillis() - movementManager.lastTeleport <= 50) || VersionUtil.isFlying(player)
-				|| !player.isInsideVehicle())
+				|| !player.isInsideVehicle()) {
 			return PASS;
+		}
 
-		UUID uuid = player.getUniqueId();
-		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+		final UUID uuid = player.getUniqueId();
+		final Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		if (player.getVehicle().getType() == EntityType.BOAT) {
-			Block bottom = player.getWorld().getBlockAt(to.getBlockX(), to.getBlockY() - 1, to.getBlockZ());
-			if (!Utilities.cantStandAt(bottom))
+			final Block bottom = player.getWorld().getBlockAt(to.getBlockX(), to.getBlockY() - 1, to.getBlockZ());
+			if (!Utilities.cantStandAt(bottom)) {
 				return PASS;
+			}
 			int violations = VIOLATIONS.getOrDefault(uuid, 1);
 			if (violations++ >= checksConfig.getInteger(CheckType.BOATFLY, "vlBeforeFlag")) {
 				violations = 0;

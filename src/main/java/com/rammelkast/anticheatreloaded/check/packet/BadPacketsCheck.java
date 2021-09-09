@@ -35,48 +35,55 @@ import com.rammelkast.anticheatreloaded.event.EventListener;
 import com.rammelkast.anticheatreloaded.util.MovementManager;
 import com.rammelkast.anticheatreloaded.util.User;
 
-public class BadPacketsCheck {
+public final class BadPacketsCheck {
 
-	public static void runCheck(Player player, PacketEvent event) {
-		Backend backend = AntiCheatReloaded.getManager().getBackend();
+	public static void runCheck(final Player player, final PacketEvent event) {
+		final Backend backend = AntiCheatReloaded.getManager().getBackend();
 		// Confirm if we should even check for BadPackets
 		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.BADPACKETS)
-				|| backend.isMovingExempt(player) || player.isDead())
+				|| backend.isMovingExempt(player) || player.isDead()) {
 			return;
+		}
 
-		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
-		PacketContainer packet = event.getPacket();
-		float pitch = packet.getFloat().read(1);
+		final User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
+		final PacketContainer packet = event.getPacket();
+		final float pitch = packet.getFloat().read(1);
 		// Check for derp
 		if (Math.abs(pitch) > 90) {
 			flag(player, event, "had an illegal pitch");
 			return;
 		}
 
-		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
-		double tps = AntiCheatReloaded.getPlugin().getTPS();
-		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
-				.getMovementManager();
+		final Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+		final double tps = AntiCheatReloaded.getPlugin().getTPS();
+		final MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager()
+				.getUser(player.getUniqueId()).getMovementManager();
 		if (user.isLagging() || tps < checksConfig.getDouble(CheckType.BADPACKETS, "minimumTps")
-				|| (System.currentTimeMillis() - movementManager.lastTeleport <= checksConfig.getInteger(CheckType.BADPACKETS, "teleportCompensation")))
+				|| (System.currentTimeMillis() - movementManager.lastTeleport <= checksConfig
+						.getInteger(CheckType.BADPACKETS, "teleportCompensation"))) {
 			return;
+		}
 
-		double x = packet.getDoubles().read(0);
-		double y = packet.getDoubles().read(1);
-		double z = packet.getDoubles().read(2);
-		float yaw = packet.getFloat().read(0);
+		final double x = packet.getDoubles().read(0);
+		final double y = packet.getDoubles().read(1);
+		final double z = packet.getDoubles().read(2);
+		final float yaw = packet.getFloat().read(0);
 		// Create location from new data
-		Location previous = player.getLocation();
-		Location current = new Location(previous.getWorld(), x, y, z, yaw, pitch);
-		double distance = previous.distanceSquared(current);
+		final Location previous = player.getLocation();
+		final Location current = new Location(previous.getWorld(), x, y, z, yaw, pitch);
+		final double distance = previous.distanceSquared(current);
 		double maxDistance = checksConfig.getDouble(CheckType.BADPACKETS, "maxDistance");
 		// Fix falling false
-		if (movementManager.airTicks >= 40 && movementManager.motionY < 0 && movementManager.lastMotionY < 0)
+		if (movementManager.airTicks >= 40 && movementManager.motionY < 0 && movementManager.lastMotionY < 0) {
 			maxDistance *= 1.5D;
-		boolean hasNewLocation = packet.getBooleans().read(0);
+		}
+		
+		final boolean hasNewLocation = packet.getBooleans().read(0);
 		if (distance > maxDistance) {
-			flag(player, event, "moved too far between packets (distance="
-					+ new BigDecimal(distance).setScale(1, RoundingMode.HALF_UP) + ", max=" + maxDistance + ", at=" + movementManager.airTicks + ")");
+			flag(player, event,
+					"moved too far between packets (distance="
+							+ new BigDecimal(distance).setScale(1, RoundingMode.HALF_UP) + ", max=" + maxDistance
+							+ ", at=" + movementManager.airTicks + ")");
 			return;
 		} else if (distance < 1E-10 && !hasNewLocation) {
 			// TODO this gives false positives when teleporting
@@ -86,7 +93,7 @@ public class BadPacketsCheck {
 		}
 	}
 
-	private static void flag(Player player, PacketEvent event, String message) {
+	private static void flag(final Player player, final PacketEvent event, final String message) {
 		event.setCancelled(true);
 		// We are currently not in the main server thread, so switch
 		AntiCheatReloaded.sendToMainThread(new Runnable() {

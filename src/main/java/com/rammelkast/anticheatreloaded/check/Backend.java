@@ -55,6 +55,7 @@ public class Backend {
 
 	public final Map<UUID, Long> velocitized = new HashMap<UUID, Long>();
 	public final Map<UUID, Long> placedBlock = new HashMap<UUID, Long>();
+	
 	private final Map<UUID, Long> levitatingEnd = new HashMap<UUID, Long>();
 	private final Map<UUID, Integer> chatLevel = new HashMap<UUID, Integer>();
 	private final Map<UUID, Integer> commandLevel = new HashMap<UUID, Integer>();
@@ -77,32 +78,28 @@ public class Backend {
 	private final Map<UUID, Integer> fastSneakViolations = new HashMap<UUID, Integer>();
 	private final Map<UUID, Long> lastSneak = new HashMap<UUID, Long>();
 
+	private final Checks checksConfig;
+	private final AntiCheatManager manager;
 	private Magic magic;
-	private Checks checksConfig;
-	private AntiCheatManager manager;
 	private Lang lang;
 
-	public Backend(AntiCheatManager instance) {
-		magic = instance.getConfiguration().getMagic();
-		checksConfig = instance.getConfiguration().getChecks();
-		manager = instance;
-		lang = manager.getConfiguration().getLang();
+	public Backend(final AntiCheatManager instance) {
+		this.magic = instance.getConfiguration().getMagic();
+		this.checksConfig = instance.getConfiguration().getChecks();
+		this.manager = instance;
+		this.lang = manager.getConfiguration().getLang();
 	}
 
-	public Magic getMagic() {
-		return magic;
+	public void updateConfig(final Configuration config) {
+		this.magic = config.getMagic();
+		this.lang = config.getLang();
 	}
 
-	public void updateConfig(Configuration config) {
-		magic = config.getMagic();
-		lang = config.getLang();
-	}
-
-	public void resetChatLevel(User user) {
+	public void resetChatLevel(final User user) {
 		chatLevel.put(user.getUUID(), 0);
 	}
-
-	public void cleanup(Player player) {
+	
+	public void cleanup(final Player player) {
 		final UUID uuid = player.getUniqueId();
 		blocksDropped.remove(uuid);
 		blockTime.remove(uuid);
@@ -145,36 +142,41 @@ public class Backend {
 		NoSlowCheck.VIOLATIONS.remove(uuid);
 	}
 
-	public CheckResult checkFastBow(Player player, float force) {
+	public Magic getMagic() {
+		return magic;
+	}
+	
+	public CheckResult checkFastBow(final Player player, final float force) {
 		// Ignore magic numbers here, they are minecrafty vanilla stuff.
-		if (!bowWindUp.containsKey(player.getUniqueId())) {
+		if (!this.bowWindUp.containsKey(player.getUniqueId())) {
 			return PASS;
 		}
-		int ticks = (int) ((((System.currentTimeMillis() - bowWindUp.get(player.getUniqueId())) * 20) / 1000) + 3);
-		bowWindUp.remove(player.getUniqueId());
-		float f = (float) ticks / 20.0F;
-		f = (f * f + f * 2.0F) / 3.0F;
-		f = f > 1.0F ? 1.0F : f;
-		double bowError = checksConfig.getDouble(CheckType.FAST_BOW, "bowError");
-		if (Math.abs(force - f) > bowError) {
+		
+		final int ticks = (int) ((((System.currentTimeMillis() - bowWindUp.get(player.getUniqueId())) * 20) / 1000) + 3);
+		this.bowWindUp.remove(player.getUniqueId());
+		float target = (float) ticks / 20.0F;
+		target = (target * target + target * 2.0F) / 3.0F;
+		target = target > 1.0F ? 1.0F : target;
+		final double bowError = checksConfig.getDouble(CheckType.FAST_BOW, "bowError");
+		if (Math.abs(force - target) > bowError) {
 			return new CheckResult(CheckResult.Result.FAILED,
-					"fired their bow too fast (actual force=" + force + ", calculated force=" + f + ")");
+					"fired their bow too fast (force=" + force + ", target=" + target + ")");
 		} else {
 			return PASS;
 		}
 	}
 
-	public CheckResult checkProjectile(Player player) {
-		incrementOld(player, projectilesShot, 10);
-		int projectilesToWait = checksConfig.getInteger(CheckType.FAST_PROJECTILE, "projectilesToWait");
-		if (!projectileTime.containsKey(player.getUniqueId())) {
-			projectileTime.put(player.getUniqueId(), System.currentTimeMillis());
+	public CheckResult checkProjectile(final Player player) {
+		incrementOld(player, this.projectilesShot, 10);
+		final int projectilesToWait = checksConfig.getInteger(CheckType.FAST_PROJECTILE, "projectilesToWait");
+		if (!this.projectileTime.containsKey(player.getUniqueId())) {
+			this.projectileTime.put(player.getUniqueId(), System.currentTimeMillis());
 			return new CheckResult(CheckResult.Result.PASSED);
-		} else if (projectilesShot.get(player.getUniqueId()) == projectilesToWait) {
-			long time = System.currentTimeMillis() - projectileTime.get(player.getUniqueId());
-			int minimumTime = checksConfig.getInteger(CheckType.FAST_PROJECTILE, "minimumTime");
-			projectileTime.remove(player.getUniqueId());
-			projectilesShot.remove(player.getUniqueId());
+		} else if (this.projectilesShot.get(player.getUniqueId()) == projectilesToWait) {
+			final long time = System.currentTimeMillis() - this.projectileTime.get(player.getUniqueId());
+			final int minimumTime = this.checksConfig.getInteger(CheckType.FAST_PROJECTILE, "minimumTime");
+			this.projectileTime.remove(player.getUniqueId());
+			this.projectilesShot.remove(player.getUniqueId());
 			if (time < minimumTime) {
 				return new CheckResult(CheckResult.Result.FAILED,
 						"wound up a bow too fast (actual time=" + time + ", min time=" + minimumTime + ")");

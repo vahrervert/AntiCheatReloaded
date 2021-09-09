@@ -31,7 +31,6 @@ import com.rammelkast.anticheatreloaded.check.CheckResult;
 import com.rammelkast.anticheatreloaded.util.Distance;
 import com.rammelkast.anticheatreloaded.util.MinecraftVersion;
 import com.rammelkast.anticheatreloaded.util.Utilities;
-import com.rammelkast.anticheatreloaded.util.VersionUtil;
 import com.rammelkast.anticheatreloaded.util.XMaterial;
 
 public final class ElytraCheck {
@@ -40,9 +39,10 @@ public final class ElytraCheck {
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
 	public static CheckResult runCheck(Player player, Distance distance) {
-		// No elytra in server version or not relevant
-		if (VersionUtil.isBountifulUpdate() || Utilities.isNearWater(player))
+		// Not relevant
+		if (Utilities.isNearWater(player)) {
 			return PASS;
+		}
 		
 		UUID uuid = player.getUniqueId();
 		if (distance.getYDifference() > AntiCheatReloaded.getManager().getBackend().getMagic().TELEPORT_MIN()) {

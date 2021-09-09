@@ -39,29 +39,32 @@ public final class VelocityCheck {
 	public static final Map<UUID, Integer> VIOLATIONS = new HashMap<UUID, Integer>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
-	public static CheckResult runCheck(Player player, Distance distance) {
-		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
-		MovementManager movementManager = user.getMovementManager();
-		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+	public static CheckResult runCheck(final Player player, final Distance distance) {
+		final User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
+		final MovementManager movementManager = user.getMovementManager();
+		final Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 		final int minimumPercentage = checksConfig.getInteger(CheckType.VELOCITY, "minimumPercentage");
 		final int vlBeforeFlag = checksConfig.getInteger(CheckType.VELOCITY, "vlBeforeFlag");
 		
 		if (movementManager.velocityExpectedMotionY > 0 && !movementManager.onGround) {
 			double percentage = (movementManager.motionY / movementManager.velocityExpectedMotionY) * 100;
-			if (percentage < 0)
+			if (percentage < 0) {
 				percentage = 0;
+			}
 			// Reset expected Y motion
 			movementManager.velocityExpectedMotionY = 0;
 			if (percentage < minimumPercentage) {
-				int vl = VIOLATIONS.getOrDefault(player.getUniqueId(), 0) + 1;
+				final int vl = VIOLATIONS.getOrDefault(player.getUniqueId(), 0) + 1;
 				VIOLATIONS.put(player.getUniqueId(), vl);
-				if (vl >= vlBeforeFlag)
+				if (vl >= vlBeforeFlag) {
 					return new CheckResult(Result.FAILED, "ignored server velocity (pct=" + Utilities.roundDouble(percentage, 2) + ")");
+				}
 			} else {
 				VIOLATIONS.remove(player.getUniqueId());
 			}
-		} else if (movementManager.airTicks > 5 && movementManager.velocityExpectedMotionY > 0)
+		} else if (movementManager.airTicks > 5 && movementManager.velocityExpectedMotionY > 0) {
 			movementManager.velocityExpectedMotionY = 0;
+		}
 		return PASS;
 	}
 

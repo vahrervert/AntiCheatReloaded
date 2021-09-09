@@ -31,15 +31,17 @@ import com.rammelkast.anticheatreloaded.util.Utilities;
 
 public final class CriticalsCheck {
 
-	public static void doDamageEvent(EntityDamageByEntityEvent event, Player damager) {
-		if (!(event.getDamager() instanceof Player) || event.getCause() != DamageCause.ENTITY_ATTACK)
+	public static void doDamageEvent(final EntityDamageByEntityEvent event, final Player damager) {
+		if (!(event.getDamager() instanceof Player) || event.getCause() != DamageCause.ENTITY_ATTACK) {
 			return;
-		Player player = (Player) event.getDamager();
+		}
+		final Player player = (Player) event.getDamager();
 		if (isCritical(player)) {
 			if ((player.getLocation().getY() % 1.0 == 0 || player.getLocation().getY() % 0.5 == 0)
 					&& player.getLocation().clone().subtract(0, 1.0, 0).getBlock().getType().isSolid()) {
 				event.setCancelled(true);
-				EventListener.log(new CheckResult(CheckResult.Result.FAILED, "tried to do a critical without needed conditions")
+				EventListener.log(
+						new CheckResult(CheckResult.Result.FAILED, "tried to do a critical without needed conditions")
 								.getMessage(),
 						player, CheckType.CRITICALS, null);
 			}
@@ -47,7 +49,7 @@ public final class CriticalsCheck {
 	}
 
 	@SuppressWarnings("deprecation")
-	private static boolean isCritical(Player player) {
+	private static boolean isCritical(final Player player) {
 		return player.getFallDistance() > 0.0f && !player.isOnGround() && !player.isInsideVehicle()
 				&& !player.hasPotionEffect(PotionEffectType.BLINDNESS)
 				&& !Utilities.isHoveringOverWater(player.getLocation())

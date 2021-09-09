@@ -281,8 +281,7 @@ public final class PlayerListener extends EventListener {
 		final Player player = event.getPlayer();
 		final PlayerInventory inv = player.getInventory();
 		if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			final ItemStack itemInHand = VersionUtil.isBountifulUpdate() ? VersionUtil.getItemInHand(player)
-					: ((event.getHand() == EquipmentSlot.HAND) ? inv.getItemInMainHand() : inv.getItemInOffHand());
+			final ItemStack itemInHand = ((event.getHand() == EquipmentSlot.HAND) ? inv.getItemInMainHand() : inv.getItemInOffHand());
 
 			if (itemInHand.getType() == Material.BOW) {
 				getBackend().logBowWindUp(player);
@@ -290,12 +289,10 @@ public final class PlayerListener extends EventListener {
 				getBackend().logEatingStart(player);
 			}
 
-			if (!VersionUtil.isBountifulUpdate()) {
-				if (itemInHand.getType() == XMaterial.FIREWORK_ROCKET.parseMaterial()) {
-					ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId());
-					if (player.isGliding()) {
-						ElytraCheck.JUMP_Y_VALUE.put(player.getUniqueId(), 9999.99D);
-					}
+			if (itemInHand.getType() == XMaterial.FIREWORK_ROCKET.parseMaterial()) {
+				ElytraCheck.JUMP_Y_VALUE.remove(player.getUniqueId());
+				if (player.isGliding()) {
+					ElytraCheck.JUMP_Y_VALUE.put(player.getUniqueId(), 9999.99D);
 				}
 			}
 		}

@@ -97,7 +97,7 @@ public class LoggingManager {
         }
     }
 
-    private void logToLogs(String message) { // Yo dawg, you like logs?
+    private void logToLogs(String message) {
         logs.add(ChatColor.stripColor(message));
     }
 

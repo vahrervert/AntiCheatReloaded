@@ -58,17 +58,7 @@ public class VersionUtil {
 		return false;
 	}
 
-	/**
-	 * @return the if server is running Bountiful Update (1.8)
-	 */
-	public static boolean isBountifulUpdate() {
-		return isOfVersion("v1_8");
-	}
-
 	public static boolean isFlying(final Player player) {
-		if (isBountifulUpdate()) {
-			return player.isFlying();
-		}
 		return player.isFlying() || player.isGliding() || player.hasPotionEffect(PotionEffectType.LEVITATION)
 				|| AntiCheatReloaded.getManager().getBackend().justLevitated(player);
 	}
@@ -81,17 +71,13 @@ public class VersionUtil {
 	}
 
 	public static boolean isFrostWalk(final Player player) {
-		if (player.getInventory().getBoots() == null || isBountifulUpdate()) {
+		if (player.getInventory().getBoots() == null) {
 			return false;
 		}
 		return player.getInventory().getBoots().containsEnchantment(Enchantment.FROST_WALKER);
 	}
 
-	@SuppressWarnings("deprecation")
 	public static ItemStack getItemInHand(final Player player) {
-		if (isBountifulUpdate()) {
-			return player.getItemInHand();
-		}
 		return player.getInventory().getItemInMainHand();
 	}
 
@@ -122,29 +108,14 @@ public class VersionUtil {
 	}
 
 	public static boolean isGliding(final Player player) {
-		if (isBountifulUpdate()) {
-			return false;
-		}
 		return player.isGliding();
 	}
 
 	public static boolean isLevitationEffect(final PotionEffect effect) {
-		if (isBountifulUpdate()) {
-			return false;
-		}
 		return effect.getType().equals(PotionEffectType.LEVITATION);
 	}
 
 	public static int getPotionLevel(final Player player, final PotionEffectType type) {
-		if (isBountifulUpdate()) {
-			for (PotionEffect effect : player.getActivePotionEffects()) {
-				if (effect.getType().equals(type)) {
-					return effect.getAmplifier() + 1;
-				}
-			}
-			return 0;
-		}
-
 		if (player.hasPotionEffect(type)) {
 			return player.getPotionEffect(type).getAmplifier() + 1;
 		}
@@ -159,7 +130,7 @@ public class VersionUtil {
 	}
 
 	static {
-		SUPPORTED_VERSIONS = Arrays.asList(new String[] { "v1_17_R1", "v1_16", "v1_15", "v1_14", "v1_13", "v1_12", "v1_8_R3" });
+		SUPPORTED_VERSIONS = Arrays.asList(new String[] { "v1_17_R1", "v1_16", "v1_15", "v1_14", "v1_13", "v1_12" });
 		CURRENT_VERSION = MinecraftVersion.getCurrentVersion();
 	}
 }

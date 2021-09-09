@@ -93,6 +93,8 @@ public final class MovementManager {
 	public int riptideTicks;
 	// Time of last update
 	public long lastUpdate;
+	// Last location
+	public Location lastLocation;
 
 	@SuppressWarnings("deprecation")
 	public void handle(final Player player, final Location from, final Location to, final Distance distance) {
@@ -100,6 +102,8 @@ public final class MovementManager {
 		// This is checked for spoofing by "GroundFlight"
 		// Also seems to make NoFall cheats flag for speed lmao
 		this.onGround = player.isOnGround();
+		
+		this.lastLocation = from;
 
 		final double x = distance.getXDifference();
 		final double z = distance.getZDifference();

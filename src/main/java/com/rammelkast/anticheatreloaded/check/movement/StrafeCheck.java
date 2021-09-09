@@ -41,30 +41,34 @@ public final class StrafeCheck {
 
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
-	public static CheckResult runCheck(Player player, double x, double z, Location from, Location to) {
+	public static CheckResult runCheck(final Player player, final double x, final double z, final Location from,
+			final Location to) {
 		if (!Utilities.cantStandAtExp(from) || !Utilities.cantStandAtExp(to) || Utilities.isNearWater(player)
 				|| Utilities.isNearClimbable(player) || VersionUtil.isFlying(player) || player.isDead()
-				|| Utilities.isHalfblock(to.getBlock().getRelative(BlockFace.DOWN)) || Utilities.isNearHalfblock(to))
+				|| Utilities.isHalfblock(to.getBlock().getRelative(BlockFace.DOWN)) || Utilities.isNearHalfblock(to)) {
 			return PASS;
+		}
 
-		MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId())
-				.getMovementManager();
-		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+		final MovementManager movementManager = AntiCheatReloaded.getManager().getUserManager()
+				.getUser(player.getUniqueId()).getMovementManager();
+		final Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 
 		if (System.currentTimeMillis() - movementManager.lastTeleport <= checksConfig.getInteger(CheckType.STRAFE,
 				"accountForTeleports") || movementManager.elytraEffectTicks >= 20
-				|| movementManager.halfMovementHistoryCounter >= 20 || Utilities.couldBeOnBoat(player, 0.5d, false))
+				|| movementManager.halfMovementHistoryCounter >= 20 || Utilities.couldBeOnBoat(player, 0.5d, false)) {
 			return PASS;
+		}
 
-		Vector oldAcceleration = new Vector(movementManager.lastDistanceX, 0, movementManager.lastDistanceZ);
-		Vector newAcceleration = new Vector(x, 0, z);
+		final Vector oldAcceleration = new Vector(movementManager.lastDistanceX, 0, movementManager.lastDistanceZ);
+		final Vector newAcceleration = new Vector(x, 0, z);
 
-		float angle = newAcceleration.angle(oldAcceleration);
-		double distance = newAcceleration.lengthSquared();
+		final float angle = newAcceleration.angle(oldAcceleration);
+		final double distance = newAcceleration.lengthSquared();
 		if (angle > checksConfig.getDouble(CheckType.STRAFE, "maxAngleChange")
 				&& distance > checksConfig.getDouble(CheckType.STRAFE, "minActivationDistance")
-				&& Utilities.cantStandFar(to.getBlock()))
+				&& Utilities.cantStandFar(to.getBlock())) {
 			return new CheckResult(Result.FAILED, "switched angle in air (angle=" + angle + ", dist=" + distance + ")");
+		}
 		return PASS;
 	}
 

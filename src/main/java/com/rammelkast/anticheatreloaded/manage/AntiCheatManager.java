@@ -32,17 +32,18 @@ import com.rammelkast.anticheatreloaded.config.Configuration;
 /**
  * The internal hub for all managers.
  */
-public class AntiCheatManager {
-    private static AntiCheatReloaded plugin = null;
+public final class AntiCheatManager {
+	
+    private static AntiCheatReloaded plugin;
     private static Configuration configuration;
-    private static UserManager userManager = null;
-    private static CheckManager checkManager = null;
-    private static LoggingManager loggingManager = null;
-    private static Backend backend = null;
+    private static UserManager userManager;
+    private static CheckManager checkManager;
+    private static LoggingManager loggingManager;
+    private static Backend backend;
     private static Map<String, RegisteredListener[]> eventchains = new ConcurrentHashMap<String, RegisteredListener[]>();
     private static Map<String, Long> eventcache = new ConcurrentHashMap<String, Long>();
 
-    public AntiCheatManager(AntiCheatReloaded instance, Logger logger) {
+    public AntiCheatManager(final AntiCheatReloaded instance, final Logger logger) {
         plugin = instance;
         configuration = new Configuration(plugin, this);
         loggingManager = new LoggingManager(plugin, logger, configuration);

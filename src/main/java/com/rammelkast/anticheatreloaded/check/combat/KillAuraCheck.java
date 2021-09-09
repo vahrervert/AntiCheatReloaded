@@ -47,63 +47,71 @@ public final class KillAuraCheck {
 	public static final Map<UUID, Integer> PACKETORDER_FLAGS = new HashMap<UUID, Integer>();
 	private static final CheckResult PASS = new CheckResult(CheckResult.Result.PASSED);
 
-	public static CheckResult checkReach(Player player, Entity target) {
-		if (!(target instanceof LivingEntity))
+	public static CheckResult checkReach(final Player player, final Entity target) {
+		if (!(target instanceof LivingEntity)) {
 			return PASS;
-		User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
-		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+		}
+		
+		final User user = AntiCheatReloaded.getManager().getUserManager().getUser(player.getUniqueId());
+		final Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 
 		// Check if enabled
-		if (!checksConfig.isSubcheckEnabled(CheckType.KILLAURA, "reach"))
+		if (!checksConfig.isSubcheckEnabled(CheckType.KILLAURA, "reach")) {
 			return PASS;
+		}
 
 		double allowedReach = target.getVelocity().length() < 0.08
 				? checksConfig.getDouble(CheckType.KILLAURA, "reach", "baseMaxValue.normal")
 				: checksConfig.getDouble(CheckType.KILLAURA, "reach", "baseMaxValue.velocitized");
-		if (player.getGameMode() == GameMode.CREATIVE)
+		if (player.getGameMode() == GameMode.CREATIVE) {
 			allowedReach += 1.5D;
+		}
 		// Lag compensation
-		double lagExtraReach = checksConfig.getDouble(CheckType.KILLAURA, "reach", "lagCompensation.lagExtraReach");
-		double pingCompensation = checksConfig.getDouble(CheckType.KILLAURA, "reach",
+		final double lagExtraReach = checksConfig.getDouble(CheckType.KILLAURA, "reach", "lagCompensation.lagExtraReach");
+		final double pingCompensation = checksConfig.getDouble(CheckType.KILLAURA, "reach",
 				"lagCompensation.pingCompensation");
 		allowedReach += user.getPing() * pingCompensation;
-		if (user.isLagging())
+		if (user.isLagging()) {
 			allowedReach += lagExtraReach;
+		}
 		if (target instanceof Player) {
-			User targetUser = AntiCheatReloaded.getManager().getUserManager().getUser(target.getUniqueId());
+			final User targetUser = AntiCheatReloaded.getManager().getUserManager().getUser(target.getUniqueId());
 			allowedReach += targetUser.getPing() * pingCompensation;
-			if (targetUser.isLagging())
+			if (targetUser.isLagging()) {
 				allowedReach += lagExtraReach;
+			}
 		}
 		// Velocity compensation
-		double velocityMultiplier = checksConfig.getDouble(CheckType.KILLAURA, "reach", "velocityMultiplier");
+		final double velocityMultiplier = checksConfig.getDouble(CheckType.KILLAURA, "reach", "velocityMultiplier");
 		allowedReach += Math.abs(target.getVelocity().length()) * velocityMultiplier;
-		double reachedDistance = ((LivingEntity) target).getLocation().toVector()
+		final double reachedDistance = ((LivingEntity) target).getLocation().toVector()
 				.distance(player.getLocation().toVector());
-		if (reachedDistance > allowedReach)
+		if (reachedDistance > allowedReach) {
 			return new CheckResult(CheckResult.Result.FAILED, "Reach",
 					"reached too far (distance=" + Utilities.roundDouble(reachedDistance, 6) + ", max=" + Utilities.roundDouble(allowedReach, 6) + ")");
+		}
 		return PASS;
 	}
 
-	public static CheckResult checkAngle(Player player, EntityDamageEvent event) {
-		UUID uuid = player.getUniqueId();
-		Entity entity = event.getEntity();
-		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+	public static CheckResult checkAngle(final Player player, final EntityDamageEvent event) {
+		final UUID uuid = player.getUniqueId();
+		final Entity entity = event.getEntity();
+		final Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 
 		// Check if enabled
-		if (!checksConfig.isSubcheckEnabled(CheckType.KILLAURA, "angle"))
+		if (!checksConfig.isSubcheckEnabled(CheckType.KILLAURA, "angle")) {
 			return PASS;
+		}
 
 		if (entity instanceof LivingEntity) {
-			LivingEntity living = (LivingEntity) entity;
-			Location eyeLocation = player.getEyeLocation();
+			final LivingEntity living = (LivingEntity) entity;
+			final Location eyeLocation = player.getEyeLocation();
 
-			double yawDifference = calculateYawDifference(eyeLocation, living.getLocation());
-			double playerYaw = player.getEyeLocation().getYaw();
+			final double yawDifference = calculateYawDifference(eyeLocation, living.getLocation());
+			final double playerYaw = player.getEyeLocation().getYaw();
 
-			double angleDifference = Math.abs(180 - Math.abs(Math.abs(yawDifference - playerYaw) - 180));
-			int maxDifference = checksConfig.getInteger(CheckType.KILLAURA, "angle", "maxDifference");
+			final double angleDifference = Math.abs(180 - Math.abs(Math.abs(yawDifference - playerYaw) - 180));
+			final int maxDifference = checksConfig.getInteger(CheckType.KILLAURA, "angle", "maxDifference");
 			if (Math.round(angleDifference) > maxDifference) {
 				if (!ANGLE_FLAGS.containsKey(uuid)) {
 					ANGLE_FLAGS.put(uuid, 1);
@@ -121,25 +129,26 @@ public final class KillAuraCheck {
 				ANGLE_FLAGS.put(uuid, flags + 1);
 			}
 		}
-		
 		return PASS;
 	}
 
-	public static CheckResult checkPacketOrder(Player player, Entity entity) {
-		UUID uuid = player.getUniqueId();
-		User user = AntiCheatReloaded.getManager().getUserManager().getUser(uuid);
-		MovementManager movementManager = user.getMovementManager();
-		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+	public static CheckResult checkPacketOrder(final Player player, final Entity entity) {
+		final UUID uuid = player.getUniqueId();
+		final User user = AntiCheatReloaded.getManager().getUserManager().getUser(uuid);
+		final MovementManager movementManager = user.getMovementManager();
+		final Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
 
 		// Check if enabled
-		if (!checksConfig.isSubcheckEnabled(CheckType.KILLAURA, "packetOrder"))
+		if (!checksConfig.isSubcheckEnabled(CheckType.KILLAURA, "packetOrder")) {
 			return PASS;
+		}
 		
 		if (user.isLagging() || (System.currentTimeMillis() - movementManager.lastTeleport) <= 100
-				|| AntiCheatReloaded.getPlugin().getTPS() < checksConfig.getDouble(CheckType.KILLAURA, "packetOrder", "minimumTps"))
+				|| AntiCheatReloaded.getPlugin().getTPS() < checksConfig.getDouble(CheckType.KILLAURA, "packetOrder", "minimumTps")) {
 			return PASS;
+		}
 
-		long elapsed = System.currentTimeMillis() - movementManager.lastUpdate;
+		final long elapsed = System.currentTimeMillis() - movementManager.lastUpdate;
 		if (elapsed < checksConfig.getInteger(CheckType.KILLAURA, "packetOrder", "minElapsedTime")) {
 			if (!PACKETORDER_FLAGS.containsKey(uuid)) {
 				PACKETORDER_FLAGS.put(uuid, 1);
@@ -158,10 +167,10 @@ public final class KillAuraCheck {
 		return PASS;
 	}
 	
-	public static double calculateYawDifference(Location from, Location to) {
-		Location clonedFrom = from.clone();
-		Vector startVector = clonedFrom.toVector();
-		Vector targetVector = to.toVector();
+	public static double calculateYawDifference(final Location from, final Location to) {
+		final Location clonedFrom = from.clone();
+		final Vector startVector = clonedFrom.toVector();
+		final Vector targetVector = to.toVector();
 		clonedFrom.setDirection(targetVector.subtract(startVector));
 		return clonedFrom.getYaw();
 	}

@@ -36,40 +36,41 @@ import com.rammelkast.anticheatreloaded.util.User;
 /**
  * @author Rammelkast
  */
-public class MorePacketsCheck {
+public final class MorePacketsCheck {
 
 	public static final Map<UUID, Long> LAST_PACKET_TIME = new HashMap<UUID, Long>();
 	public static final Map<UUID, Long> EXEMPT_TIMINGS = new HashMap<UUID, Long>();
 	public static final Map<UUID, Double> PACKET_BALANCE = new HashMap<UUID, Double>();
 
-	public static void runCheck(Player player, PacketEvent event) {
+	public static void runCheck(final Player player, final PacketEvent event) {
 		// Confirm if we should even check for MorePackets
-		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
-		double tps = AntiCheatReloaded.getPlugin().getTPS();
+		final Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+		final double tps = AntiCheatReloaded.getPlugin().getTPS();
 		if (!AntiCheatReloaded.getManager().getCheckManager().willCheck(player, CheckType.MOREPACKETS)
 				|| tps < checksConfig.getDouble(CheckType.MOREPACKETS, "minimumTps")) {
 			return;
 		}
 
-		UUID uuid = player.getUniqueId();
-		User user = AntiCheatReloaded.getManager().getUserManager().getUser(uuid);
-		int maxPing = checksConfig.getInteger(CheckType.MOREPACKETS, "maxPing");
-		boolean disableForLagging = checksConfig.getBoolean(CheckType.MOREPACKETS, "disableForLagging");
+		final UUID uuid = player.getUniqueId();
+		final User user = AntiCheatReloaded.getManager().getUserManager().getUser(uuid);
+		final int maxPing = checksConfig.getInteger(CheckType.MOREPACKETS, "maxPing");
+		final boolean disableForLagging = checksConfig.getBoolean(CheckType.MOREPACKETS, "disableForLagging");
 		if (AntiCheatReloaded.getManager().getBackend().isDoing(player, EXEMPT_TIMINGS, -1)
 				|| (maxPing > 0 && user.getPing() > maxPing) || (disableForLagging && user.isLagging())) {
 			return;
 		}
-		long packetTimeNow = System.currentTimeMillis();
-		long lastPacketTime = LAST_PACKET_TIME.getOrDefault(uuid, packetTimeNow - 50L);
+		
+		final long packetTimeNow = System.currentTimeMillis();
+		final long lastPacketTime = LAST_PACKET_TIME.getOrDefault(uuid, packetTimeNow - 50L);
 		double packetBalance = PACKET_BALANCE.getOrDefault(uuid, 0D);
 
-		long rate = packetTimeNow - lastPacketTime;
+		final long rate = packetTimeNow - lastPacketTime;
 		packetBalance += 50;
 		packetBalance -= rate;
-		int triggerBalance = checksConfig.getInteger(CheckType.MOREPACKETS, "triggerBalance");
-		int minimumClamp = checksConfig.getInteger(CheckType.MOREPACKETS, "minimumClamp");
+		final int triggerBalance = checksConfig.getInteger(CheckType.MOREPACKETS, "triggerBalance");
+		final int minimumClamp = checksConfig.getInteger(CheckType.MOREPACKETS, "minimumClamp");
 		if (packetBalance >= triggerBalance) {
-			int ticks = (int) Math.round(packetBalance / 50);
+			final int ticks = (int) Math.round(packetBalance / 50);
 			packetBalance = -1 * (triggerBalance / 2);
 			flag(player, event, "overshot timer by " + ticks + " tick(s)");
 		} else if (packetBalance < -1 * minimumClamp) {
@@ -81,7 +82,7 @@ public class MorePacketsCheck {
 		PACKET_BALANCE.put(uuid, packetBalance);
 	}
 
-	private static void flag(Player player, PacketEvent event, String message) {
+	private static void flag(final Player player, final PacketEvent event, final String message) {
 		event.setCancelled(true);
 		// We are currently not in the main server thread, so switch
 		AntiCheatReloaded.sendToMainThread(new Runnable() {
@@ -94,10 +95,10 @@ public class MorePacketsCheck {
 		});
 	}
 
-	public static void compensate(Player player) {
-		UUID uuid = player.getUniqueId();
-		Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
-		double packetBalance = PACKET_BALANCE.getOrDefault(uuid, 0D);
+	public static void compensate(final Player player) {
+		final UUID uuid = player.getUniqueId();
+		final Checks checksConfig = AntiCheatReloaded.getManager().getConfiguration().getChecks();
+		final double packetBalance = PACKET_BALANCE.getOrDefault(uuid, 0D);
 		PACKET_BALANCE.put(uuid, packetBalance - checksConfig.getInteger(CheckType.MOREPACKETS, "teleportCompensation"));
 	}
 
