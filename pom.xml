@@ -21,6 +21,10 @@
          <id>spigot-public-repo</id>
          <url>https://hub.spigotmc.org/nexus/content/repositories/public/</url>
       </repository>
+      <repository>
+         <id>sonatype</id>
+         <url>https://oss.sonatype.org/content/groups/public/</url>
+      </repository>
    </repositories>
    <build>
       <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
